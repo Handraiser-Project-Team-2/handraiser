@@ -1,0 +1,13 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: handraiser
+    ports:
+      - 5432:5432
+    volumes:
+      - handraiser:/var/lib/postgresql/data 
+volumes:
+  handraiser:
