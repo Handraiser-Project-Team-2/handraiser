@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import backgroundImg from "../images/girl.svg";
 import Logo from "../images/google.png";
-
+import { GoogleLogin, GoogleLogout } from "react-google-login";
 const Div = styled.div`
   display: flex;
   box-sizing: border-box;
@@ -86,6 +86,15 @@ const Footer = styled.div`
 `;
 
 export default function Login() {
+  const responseGoogle = response => {
+    if (response.googleId) {
+      console.log(response)
+      alert("Successfully Login" +" "+ response.profileObj.name)
+      localStorage.setItem("token", response.tokenId)
+    } else {
+      alert("Error email");
+    }
+  };
   return (
     <Div>
       <Pic>
@@ -131,7 +140,7 @@ export default function Login() {
         >
           Login to continue
         </p>
-        <Button>
+        {/* <Button>
           <Cont>
             <img
               src={Logo}
@@ -153,7 +162,15 @@ export default function Login() {
               LOGIN WITH GOOGLE
             </p>
           </Cont>
-        </Button>
+       /></Button> */}
+        <GoogleLogin
+          clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"
+          buttonText="LOGIN WITH GOOGLE"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={"single_host_origin"}
+          hostedDomain="boom.camp"
+        />
         <Footer>
           <p
             style={{
