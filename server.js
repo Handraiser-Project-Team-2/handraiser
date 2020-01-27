@@ -5,7 +5,7 @@ const massive = require("massive");
 
 massive({
   host: "localhost",
-  port: 5432,
+  port: 5433,
   database: "handraiser",
   user: "postgres",
   password: "handraiser"
