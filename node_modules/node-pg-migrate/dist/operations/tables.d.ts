@@ -1,0 +1,14 @@
+import { MigrationOptions } from '../types';
+import { CreateTable, DropTable, AlterTable, RenameTable, AddColumns, DropColumns, AlterColumn, RenameColumn, CreateConstraint, DropConstraint, RenameConstraint } from './tablesTypes';
+export { CreateTable, DropTable, AlterTable, RenameTable, AddColumns, DropColumns, AlterColumn, RenameColumn, CreateConstraint, DropConstraint, RenameConstraint, };
+export declare function dropTable(mOptions: MigrationOptions): DropTable;
+export declare function createTable(mOptions: MigrationOptions): CreateTable;
+export declare function alterTable(mOptions: MigrationOptions): AlterTable;
+export declare function dropColumns(mOptions: MigrationOptions): DropColumns;
+export declare function addColumns(mOptions: MigrationOptions): AddColumns;
+export declare function alterColumn(mOptions: MigrationOptions): AlterColumn;
+export declare function renameTable(mOptions: MigrationOptions): RenameTable;
+export declare function renameColumn(mOptions: MigrationOptions): RenameColumn;
+export declare function renameConstraint(mOptions: MigrationOptions): RenameConstraint;
+export declare function dropConstraint(mOptions: MigrationOptions): DropConstraint;
+export declare function addConstraint(mOptions: MigrationOptions): CreateConstraint;

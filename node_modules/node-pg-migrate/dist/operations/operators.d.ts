@@ -1,0 +1,13 @@
+import { MigrationOptions } from '../types';
+import { CreateOperator, DropOperator, CreateOperatorClass, DropOperatorClass, RenameOperatorClass, CreateOperatorFamily, DropOperatorFamily, AddToOperatorFamily, RenameOperatorFamily, RemoveFromOperatorFamily } from './operatorsTypes';
+export { CreateOperator, DropOperator, CreateOperatorClass, DropOperatorClass, RenameOperatorClass, CreateOperatorFamily, DropOperatorFamily, AddToOperatorFamily, RenameOperatorFamily, RemoveFromOperatorFamily, };
+export declare function dropOperator(mOptions: MigrationOptions): DropOperator;
+export declare function createOperator(mOptions: MigrationOptions): CreateOperator;
+export declare function dropOperatorFamily(mOptions: MigrationOptions): DropOperatorFamily;
+export declare function createOperatorFamily(mOptions: MigrationOptions): CreateOperatorFamily;
+export declare const removeFromOperatorFamily: (mOptions: MigrationOptions) => RemoveFromOperatorFamily;
+export declare const addToOperatorFamily: (mOptions: MigrationOptions) => AddToOperatorFamily;
+export declare function renameOperatorFamily(mOptions: MigrationOptions): RenameOperatorFamily;
+export declare function dropOperatorClass(mOptions: MigrationOptions): DropOperatorClass;
+export declare function createOperatorClass(mOptions: MigrationOptions): CreateOperatorClass;
+export declare function renameOperatorClass(mOptions: MigrationOptions): RenameOperatorClass;
