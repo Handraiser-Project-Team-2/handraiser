@@ -1,12 +1,24 @@
 import React from "react";
 import styled from "styled-components";
-import Background from "../images/undraw_programmer_imem 1 (1).svg";
+import backgroundImg from "../images/girl.svg";
 import Logo from "../images/google.png";
 
 const Div = styled.div`
   display: flex;
   box-sizing: border-box;
   height: 100vh;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    justify-content: center;
+    background-image: url(${backgroundImg});
+    background-size: 142% 158%;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    flex-direction: column;
+    justify-content: center;
+    background-image: url(${backgroundImg});
+    background-size: 140% 125%;
+  }
 `;
 const Main = styled.div`
   width: 33.34%;
@@ -15,6 +27,14 @@ const Main = styled.div`
   justify-content: center;
   align-content: center;
   align-items: center;
+  @media screen and (max-width: 600px) {
+    margin-top: -250px;
+    width: 100%;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    margin-top: -650px;
+    width: 100%;
+  }
 `;
 const Pic = styled.div`
   display: flex;
@@ -22,6 +42,12 @@ const Pic = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   background-color: #7f25d9;
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    display: none;
+  }
 `;
 const Button = styled.button`
   margin-top: 40px;
@@ -31,7 +57,16 @@ const Button = styled.button`
   top: 475px;
   background: linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%);
   border-radius: 100px;
+  border: none;
   cursor: pointer;
+  @media screen and (max-width: 600px) {
+    width: 75%;
+    height: 70px;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    width: 35%;
+    height: 60px;
+  }
 `;
 const Cont = styled.div`
   width: 100%;
@@ -45,6 +80,9 @@ const Footer = styled.div`
   bottom: 0;
   width: 100%;
   text-align: center;
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
 `;
 
 export default function Login() {
@@ -73,7 +111,7 @@ export default function Login() {
           - Jordan B. Peterson
         </span>
 
-        <img src={Background} alt="" />
+        <img src={backgroundImg} alt="" />
       </Pic>
       <Main>
         <h1
@@ -109,7 +147,7 @@ export default function Login() {
               style={{
                 fontFamily: "Roboto",
                 color: "white",
-                fontSize: 15
+                fontSize: "15px"
               }}
             >
               LOGIN WITH GOOGLE
