@@ -11,9 +11,6 @@ exports.up = pgm => {
     email: {
       type: "text"
     },
-    google_id: {
-      type: "integer"
-    },
     profile_id: {
       type: "integer",
       references: '"user_profile"'
