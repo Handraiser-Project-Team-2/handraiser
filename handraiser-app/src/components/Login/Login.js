@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import backgroundImg from "../images/girl.svg";
-import logo from "../images/google.png";
+import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { Link } from "react-router-dom";
 
