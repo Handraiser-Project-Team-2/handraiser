@@ -29,6 +29,7 @@ massive({
 
     app.get("/api/classes", classes.getAllClass);
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
+    app.get("/api/classes/:user_id", classes.getClassByMentor);
 
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
