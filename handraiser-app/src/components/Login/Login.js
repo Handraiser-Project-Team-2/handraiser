@@ -3,6 +3,8 @@ import styled from "styled-components";
 import backgroundImg from "../images/girl.svg";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
+import axios from "axios"
+
 const Div = styled.div`
   display: flex;
   box-sizing: border-box;
@@ -88,9 +90,30 @@ const Footer = styled.div`
 export default function Login() {
   const responseGoogle = response => {
     if (response.googleId) {
-      console.log(response)
-      alert("Successfully Login" +" "+ response.profileObj.name)
-      localStorage.setItem("token", response.tokenId)
+      console.log(response);
+
+      axios({
+        method: "post",
+        url: "http://localhost:5000/api/login",
+        data: {
+          email: response.profileObj.email,
+          last_name: response.profileObj.familyName,
+          first_name: response.profileObj.givenName,
+          image: response.profileObj.imageUrl,
+          googleId: response.profileObj.googleId,
+          middle_name: "temp"
+        }
+      })
+        .then(data => {
+          console.log(data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      // alert("Successfully Login" + " " + response.profileObj.name);
+      // localStorage.setItem("token", response.tokenId);
+
     } else {
       alert("Error email");
     }
