@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import backgroundImg from "../images/girl.svg";
 import logo from "../images/google.png";
+import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { Link } from "react-router-dom";
 
 const Div = styled.div`
   display: flex;
@@ -94,6 +96,15 @@ const Footer = styled.div`
 `;
 
 export default function Login() {
+  const responseGoogle = response => {
+    if (response.googleId) {
+      console.log(response);
+      alert("Successfully Login" + " " + response.profileObj.name);
+      localStorage.setItem("token", response.tokenId);
+    } else {
+      alert("Error email");
+    }
+  };
   return (
     <Div>
       <Pic>
@@ -119,7 +130,6 @@ export default function Login() {
         >
           - Jordan B. Peterson
         </span>
-        <span>j</span>
       </Pic>
       <Main>
         <h1
@@ -139,13 +149,13 @@ export default function Login() {
         >
           Login to continue
         </p>
-        <Button>
+        {/* <Button>
           <Cont>
             <img
-              src={logo}
+              src={Logo}
               alt=""
               style={{
-                paddingTop: 9,
+                paddingTop: 10,
                 width: "40px",
                 height: "30px",
                 borderRadius: "100px"
@@ -161,7 +171,15 @@ export default function Login() {
               LOGIN WITH GOOGLE
             </p>
           </Cont>
-        </Button>
+       /></Button> */}
+        <GoogleLogin
+          clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"
+          buttonText="LOGIN WITH GOOGLE"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={"single_host_origin"}
+          hostedDomain="boom.camp"
+        />
         <Footer>
           <p
             style={{
