@@ -95,10 +95,10 @@ const Footer = styled.div`
   }
 `;
 
-export default function Login() {
+export default function Login(props) {
   const responseGoogle = response => {
     if (response.googleId) {
-      console.log(response);
+      // console.log(response);
 
       axios({
         method: "post",
@@ -113,14 +113,39 @@ export default function Login() {
         }
       })
         .then(data => {
-          console.log(data);
+          const userType = data.data.user_type_id;
+
+          sessionStorage.setItem("token", "Bearer " + data.data.token);
+
+          sessionStorage.setItem(
+            "UserReference",
+            JSON.stringify(data.data.user_id)
+          );
+
+          switch (userType) {
+            case 1:
+              // superAdmin
+              props.history.push("/superadmin");
+              break;
+            case 2:
+              // Admin
+              props.history.push("/admin");
+              break;
+            case 3:
+              // student
+              props.history.push("/student");
+              break;
+            case 4:
+              // mentor
+              props.history.push("/mentor");
+              break;
+            default:
+              break;
+          }
         })
         .catch(err => {
           console.log(err);
         });
-
-      // alert("Successfully Login" + " " + response.profileObj.name);
-      // localStorage.setItem("token", response.tokenId);
     } else {
       alert("Error email");
     }

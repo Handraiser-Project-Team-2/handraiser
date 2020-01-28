@@ -1,5 +1,6 @@
 // const secret = require("../secret");
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const secret = require("../secret")
 
 module.exports = {
   login: (req, res) => {
@@ -21,8 +22,8 @@ module.exports = {
       .findOne({
         email
       })
-      .then(user => {
-        if (!user) {
+      .then(userref => {
+        if (!userref) {
           db.user_profile
             .save({
               first_name,
@@ -34,18 +35,22 @@ module.exports = {
               db.users
                 .save({
                   email,
-                  profile_id: user.profile_id,
+                  profile_id: userref.profile_id,
                   user_type_id: 3,
                   user_status: 1
                 })
                 .then(data => {
                   console.log(data);
-                  res.status(201).json({ data, user });
+
+                  const token = jwt.sign({userid: user.user_id})
+
+                  res.status(201).json({ ...data, token });
                 })
                 .catch(err => {
                   console.log("here", err);
                   res.status(400).end();
                 });
+                
             })
             .catch(err => {
               console.log(err);
@@ -60,7 +65,10 @@ module.exports = {
               email
             })
             .then(data => {
-              res.status(201).json({ data, user });
+
+              const token = jwt.sign({googleId}, secret)
+              res.status(201).json({ ...data, token });
+              
             })
             .catch(err => {
               console.log(err);
