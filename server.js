@@ -5,6 +5,7 @@ const massive = require("massive");
 
 const users = require("./controllers/users");
 const admin = require("./controllers/admins");
+const classes = require("./controllers/class");
 
 massive({
   host: "localhost",
@@ -26,7 +27,13 @@ massive({
 
     // endpoints declaration
     app.post("/api/login", users.login);
-    app.post("/api/admin/keygen", admin.add_mentor);
+
+    // admins endpoints
+    app.post("/api/admin/mentor/key", admin.add_mentor);
+
+    // class endpoints
+    app.get("/api/classes", classes.getAllClass);
+    app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
 
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
