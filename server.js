@@ -3,6 +3,8 @@ const cors = require("cors");
 const massive = require("massive");
 // setup controllers
 
+const users = require("./controllers/users")
+
 massive({
   host: "localhost",
   port: 5433,
@@ -22,6 +24,7 @@ massive({
     const PORT = 5000 || process.env.PORT;
 
     // endpoints declaration
+    app.post('/api/login', users.login);
 
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
