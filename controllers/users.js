@@ -32,17 +32,18 @@ module.exports = {
               image
             })
             .then(user => {
+
               db.users
                 .save({
                   email,
-                  profile_id: userref.profile_id,
+                  profile_id: user.profile_id,
                   user_type_id: 3,
                   user_status: 1
                 })
                 .then(data => {
                   console.log(data);
 
-                  const token = jwt.sign({userid: user.user_id})
+                  const token = jwt.sign({userid: user.user_id}, secret)
 
                   res.status(201).json({ ...data, token });
                 })
