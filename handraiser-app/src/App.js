@@ -1,12 +1,12 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
+import Routes from "./Routes/Routes"
 
-export default function App() {
+function App() {
   return (
-    <div>
-      <Button variant="contained" color="primary">
-        Welcome to Handraiser Project
-      </Button>
+    <div className="app">
+      <Routes />
     </div>
   );
 }
+
+export default App;
