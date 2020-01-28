@@ -4,6 +4,7 @@ import backgroundImg from "../images/girl.svg";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Div = styled.div`
   display: flex;
