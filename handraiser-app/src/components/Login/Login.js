@@ -106,7 +106,14 @@ export default function Login(props) {
         }
       })
         .then(data => {
-          const userType = data.data.data.user_type_id;
+          const userType = data.data.user_type_id;
+
+          sessionStorage.setItem("token", "Bearer " + data.data.token);
+
+          sessionStorage.setItem(
+            "UserReference",
+            JSON.stringify(data.data.user_id)
+          );
 
           switch (userType) {
             case 1:
@@ -132,10 +139,6 @@ export default function Login(props) {
         .catch(err => {
           console.log(err);
         });
-
-      // alert("Successfully Login" + " " + response.profileObj.name);
-      // localStorage.setItem("token", response.tokenId);
-      
     } else {
       alert("Error email");
     }

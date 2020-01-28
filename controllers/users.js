@@ -1,5 +1,6 @@
 // const secret = require("../secret");
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const secret = require("../secret")
 
 module.exports = {
   login: (req, res) => {
@@ -40,12 +41,16 @@ module.exports = {
                 })
                 .then(data => {
                   console.log(data);
-                  res.status(201).json({ userref, data });
+
+                  const token = jwt.sign({userid: user.user_id})
+
+                  res.status(201).json({ ...data, token });
                 })
                 .catch(err => {
                   console.log("here", err);
                   res.status(400).end();
                 });
+                
             })
             .catch(err => {
               console.log(err);
@@ -60,7 +65,10 @@ module.exports = {
               email
             })
             .then(data => {
-              res.status(201).json({ data });
+
+              const token = jwt.sign({googleId}, secret)
+              res.status(201).json({ ...data, token });
+              
             })
             .catch(err => {
               console.log(err);
