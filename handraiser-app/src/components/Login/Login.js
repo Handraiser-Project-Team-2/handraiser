@@ -3,7 +3,6 @@ import styled from "styled-components";
 import backgroundImg from "../images/girl.svg";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
-import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Div = styled.div`
@@ -14,13 +13,19 @@ const Div = styled.div`
     flex-direction: column;
     justify-content: center;
     background-image: url(${backgroundImg});
-    background-size: 142% 148%;
+    background-size: 142% 150%;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
     flex-direction: column;
     justify-content: center;
     background-image: url(${backgroundImg});
-    background-size: 140% 125%;
+    background-size: 140% 132%;
+  }
+  @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+    flex-direction: column;
+    justify-content: center;
+    background-image: url(${backgroundImg});
+    background-size: 142% 158%;
   }
 `;
 const Main = styled.div`
@@ -45,6 +50,8 @@ const Pic = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   background-color: #7f25d9;
+  background-image: url(${backgroundImg});
+  background-size: 100% 120%;
   @media screen and (max-width: 600px) {
     display: none;
   }
@@ -63,11 +70,11 @@ const Button = styled.button`
   border: none;
   cursor: pointer;
   @media screen and (max-width: 600px) {
-    width: 75%;
-    height: 50px;
+    width: 65%;
+    height: 45px;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
-    width: 35%;
+    width: 32%;
     height: 60px;
   }
 `;
@@ -161,14 +168,13 @@ export default function Login(props) {
         <span
           style={{
             color: "white",
-            fontSize: 10,
-            marginLeft: 730
+            fontSize: 15,
+            marginLeft: 685,
+            marginBottom: 800
           }}
         >
           - Jordan B. Peterson
         </span>
-
-        <img src={backgroundImg} alt="" />
       </Pic>
       <Main>
         <h1
@@ -188,29 +194,7 @@ export default function Login(props) {
         >
           Login to continue
         </p>
-        {/* <Button>
-          <Cont>
-            <img
-              src={Logo}
-              alt=""
-              style={{
-                paddingTop: 10,
-                width: "40px",
-                height: "30px",
-                borderRadius: "100px"
-              }}
-            />
-            <p
-              style={{
-                fontFamily: "Roboto",
-                color: "white",
-                fontSize: "15px"
-              }}
-            >
-              LOGIN WITH GOOGLE
-            </p>
-          </Cont>
-       /></Button> */}
+
         <GoogleLogin
           clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"
           buttonText="LOGIN WITH GOOGLE"
@@ -218,7 +202,36 @@ export default function Login(props) {
           onFailure={responseGoogle}
           cookiePolicy={"single_host_origin"}
           hostedDomain="boom.camp"
+          render={renderProps => (
+            <Button
+              onClick={renderProps.onClick}
+              disabled={renderProps.disabled}
+            >
+              <Cont>
+                <img
+                  src={Logo}
+                  alt=""
+                  style={{
+                    paddingTop: 10,
+                    width: "40px",
+                    height: "30px",
+                    borderRadius: "100px"
+                  }}
+                />
+                <p
+                  style={{
+                    fontFamily: "Roboto",
+                    color: "white",
+                    fontSize: "15px"
+                  }}
+                >
+                  LOGIN WITH GOOGLE
+                </p>
+              </Cont>
+            </Button>
+          )}
         />
+
         <Footer>
           <p
             style={{
