@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import backgroundImg from "../images/girl.svg";
 import Logo from "../images/google.png";
+import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 import axios from "axios"
 import {Link } from "react-router-dom"
@@ -13,13 +16,19 @@ const Div = styled.div`
     flex-direction: column;
     justify-content: center;
     background-image: url(${backgroundImg});
-    background-size: 142% 148%;
+    background-size: 142% 150%;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
     flex-direction: column;
     justify-content: center;
     background-image: url(${backgroundImg});
-    background-size: 140% 125%;
+    background-size: 140% 132%;
+  }
+  @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+    flex-direction: column;
+    justify-content: center;
+    background-image: url(${backgroundImg});
+    background-size: 142% 158%;
   }
 `;
 const Main = styled.div`
@@ -44,6 +53,8 @@ const Pic = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   background-color: #7f25d9;
+  background-image: url(${backgroundImg});
+  background-size: 120% 100%;
   @media screen and (max-width: 600px) {
     display: none;
   }
@@ -62,8 +73,8 @@ const Button = styled.button`
   border: none;
   cursor: pointer;
   @media screen and (max-width: 600px) {
-    width: 75%;
-    height: 50px;
+    width: 65%;
+    height: 45px;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
     width: 35%;
@@ -113,7 +124,6 @@ export default function Login() {
 
       // alert("Successfully Login" + " " + response.profileObj.name);
       // localStorage.setItem("token", response.tokenId);
-
     } else {
       alert("Error email");
     }
@@ -136,14 +146,13 @@ export default function Login() {
         <span
           style={{
             color: "white",
-            fontSize: 10,
-            marginLeft: 730
+            fontSize: 15,
+            marginLeft: 700,
+            marginBottom: 800
           }}
         >
           - Jordan B. Peterson
         </span>
-
-        <img src={backgroundImg} alt="" />
       </Pic>
       <Main>
         <h1
