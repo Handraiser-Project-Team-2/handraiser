@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import GoogleLogin from "react-google-login";
 import Login from "./components/Login/Login";
-
 function App() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
