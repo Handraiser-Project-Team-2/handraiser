@@ -6,8 +6,6 @@ import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-import axios from "axios"
-import {Link } from "react-router-dom"
 const Div = styled.div`
   display: flex;
   box-sizing: border-box;
