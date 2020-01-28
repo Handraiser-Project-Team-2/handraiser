@@ -1,12 +1,14 @@
 import React from "react";
-import {Route, BrowserRouter} from "react-router-dom";
-import Login from "../components/Login/Login"
-export default function Routes(){
-    return(
-        <BrowserRouter>
-        <Route exact path="/" component={Login}/>
-        <Route path="superadmin"/>
-        <Route path="admin" />
-        </BrowserRouter>
-    )
-    }
+import { Route, BrowserRouter } from "react-router-dom";
+import Login from "../components/Login/Login";
+export default function Routes() {
+  return (
+    <BrowserRouter>
+      <Route exact path="/" component={Login} />
+      <Route path="/superadmin" />
+      <Route path="/admin" />
+      <Route path="/student" />
+      <Route path="/menor" />
+    </BrowserRouter>
+  );
+}

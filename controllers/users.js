@@ -21,8 +21,8 @@ module.exports = {
       .findOne({
         email
       })
-      .then(user => {
-        if (!user) {
+      .then(userref => {
+        if (!userref) {
           db.user_profile
             .save({
               first_name,
@@ -34,13 +34,13 @@ module.exports = {
               db.users
                 .save({
                   email,
-                  profile_id: user.profile_id,
+                  profile_id: userref.profile_id,
                   user_type_id: 3,
                   user_status: 1
                 })
                 .then(data => {
                   console.log(data);
-                  res.status(201).json({ data, user });
+                  res.status(201).json({ userref, data });
                 })
                 .catch(err => {
                   console.log("here", err);
@@ -60,7 +60,7 @@ module.exports = {
               email
             })
             .then(data => {
-              res.status(201).json({ data, user });
+              res.status(201).json({ data });
             })
             .catch(err => {
               console.log(err);
