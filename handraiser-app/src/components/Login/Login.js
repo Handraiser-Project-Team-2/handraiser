@@ -99,8 +99,28 @@ export default function Login() {
   const responseGoogle = response => {
     if (response.googleId) {
       console.log(response);
-      alert("Successfully Login" + " " + response.profileObj.name);
-      localStorage.setItem("token", response.tokenId);
+
+      axios({
+        method: "post",
+        url: "http://localhost:5000/api/login",
+        data: {
+          email: response.profileObj.email,
+          last_name: response.profileObj.familyName,
+          first_name: response.profileObj.givenName,
+          image: response.profileObj.imageUrl,
+          googleId: response.profileObj.googleId,
+          middle_name: "temp"
+        }
+      })
+        .then(data => {
+          console.log(data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+      // alert("Successfully Login" + " " + response.profileObj.name);
+      // localStorage.setItem("token", response.tokenId);
     } else {
       alert("Error email");
     }
