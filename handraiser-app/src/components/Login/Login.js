@@ -52,7 +52,7 @@ const Pic = styled.div`
   justify-content: flex-end;
   background-color: #7f25d9;
   background-image: url(${backgroundImg});
-  background-size: 120% 100%;
+  background-size: 100% 120%;
   @media screen and (max-width: 600px) {
     display: none;
   }
@@ -75,7 +75,7 @@ const Button = styled.button`
     height: 45px;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
-    width: 35%;
+    width: 32%;
     height: 60px;
   }
 `;
@@ -145,7 +145,7 @@ export default function Login() {
           style={{
             color: "white",
             fontSize: 15,
-            marginLeft: 700,
+            marginLeft: 685,
             marginBottom: 800
           }}
         >
@@ -170,29 +170,7 @@ export default function Login() {
         >
           Login to continue
         </p>
-        {/* <Button>
-          <Cont>
-            <img
-              src={Logo}
-              alt=""
-              style={{
-                paddingTop: 10,
-                width: "40px",
-                height: "30px",
-                borderRadius: "100px"
-              }}
-            />
-            <p
-              style={{
-                fontFamily: "Roboto",
-                color: "white",
-                fontSize: "15px"
-              }}
-            >
-              LOGIN WITH GOOGLE
-            </p>
-          </Cont>
-       /></Button> */}
+
         <GoogleLogin
           clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"
           buttonText="LOGIN WITH GOOGLE"
@@ -200,7 +178,36 @@ export default function Login() {
           onFailure={responseGoogle}
           cookiePolicy={"single_host_origin"}
           hostedDomain="boom.camp"
+          render={renderProps => (
+            <Button
+              onClick={renderProps.onClick}
+              disabled={renderProps.disabled}
+            >
+              <Cont>
+                <img
+                  src={Logo}
+                  alt=""
+                  style={{
+                    paddingTop: 10,
+                    width: "40px",
+                    height: "30px",
+                    borderRadius: "100px"
+                  }}
+                />
+                <p
+                  style={{
+                    fontFamily: "Roboto",
+                    color: "white",
+                    fontSize: "15px"
+                  }}
+                >
+                  LOGIN WITH GOOGLE
+                </p>
+              </Cont>
+            </Button>
+          )}
         />
+
         <Footer>
           <p
             style={{
