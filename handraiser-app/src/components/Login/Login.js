@@ -3,12 +3,9 @@ import styled from "styled-components";
 import backgroundImg from "../images/girl.svg";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
-<<<<<<< HEAD
 import {Link } from "react-router-dom"
-=======
 import axios from "axios"
 
->>>>>>> feat/loginController
 const Div = styled.div`
   display: flex;
   box-sizing: border-box;
