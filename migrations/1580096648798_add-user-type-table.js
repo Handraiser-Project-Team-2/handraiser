@@ -12,6 +12,10 @@ exports.up = pgm => {
       type: "text"
     }
   });
+  pgm.sql(sql`INSERT INTO user_types(user_type) values('superadmin')`);
+  pgm.sql(sql`INSERT INTO user_types(user_type) values('admin')`);
+  pgm.sql(sql`INSERT INTO user_types(user_type) values('student')`);
+  pgm.sql(sql`INSERT INTO user_types(user_type) values('mentor')`);
 };
 
 exports.down = pgm => {};
