@@ -14,9 +14,6 @@ exports.up = pgm => {
     last_name: {
       type: "text"
     },
-    middle_name: {
-      type: "text"
-    },
     image: {
       type: "text"
     }

@@ -1,6 +1,5 @@
 module.exports = {
-  genKey: (item) => {
-    console.log(item)
+  genKey: (item, type) => {
 
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
     var string_length = 8;
@@ -12,7 +11,12 @@ module.exports = {
     
     console.log(randomstring);
 
-     randomstring = randomstring.concat("-K-MT")
+    if(type === "mentor")
+      randomstring = randomstring.concat("-K-MT");
+    if(type === "admin")
+      randomstring = randomstring.concat("-K-AD");
+    if(type === "classroom")
+      randomstring = randomstring.concat("-K-CL")
 
     return randomstring;
   }

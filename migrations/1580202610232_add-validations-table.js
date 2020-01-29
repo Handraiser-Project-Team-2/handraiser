@@ -16,6 +16,10 @@ exports.up = pgm => {
     },
     validation_status: {
       type: "text"
+    },
+    validation_type: {
+      type: "integer",
+      references: "user_types"
     }
   });
 };
