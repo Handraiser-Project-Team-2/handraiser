@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import { TabBox, BtnBox } from "../Styles/Styles";
 
 import { TableCont } from "../Table/Table";
+import { GenerateKey } from "../Generate-Key/Generate";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -30,9 +31,18 @@ function TabPanel(props) {
 export const TabBtn = props => {
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -63,7 +73,11 @@ export const TabBtn = props => {
         </Paper>
         {hide && (
           <BtnBox>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleOpen(props)}
+            >
               Generate Key
             </Button>
           </BtnBox>
@@ -78,6 +92,7 @@ export const TabBtn = props => {
       <TabPanel value={tabValue} index={2}>
         <TableCont tabValue={tabValue} />
       </TabPanel>
+      <GenerateKey handleClose={handleClose} open={open} />
     </React.Fragment>
   );
 };

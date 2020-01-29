@@ -7,12 +7,47 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
 
-import { TabBtn } from "../Tabs/Tabs";
 
-export default function NavBar() {
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
+// COMPONENTS
+import CardPage from "./CardPage";
+import FindClassDialog from './FindClassDialog'
+
+const useStyles = makeStyles(theme => ({
+  
+  fab: {
+    float: "right"
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1)
+  },
+  gridContainer: {
+    paddingTop: "100px"
+  },
+  root: {
+    flexGrow: 1
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary
+  }
+}));
+
+export default function ClassLanding() {
+  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -59,13 +94,30 @@ export default function NavBar() {
           >
             <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
-      <div style={{ paddingTop: "100px", marginRight: "5%", marginLeft: "5%" }}>
-        <TabBtn />
-      </div>
+
+      {/* BODY */}
+      <Container maxWidth="xl">
+        <div className={classes.root}>
+          <Grid container spacing={2} className={classes.gridContainer}>
+            <Grid item xs={12}>
+              <FindClassDialog />
+            </Grid>
+
+            <Container maxWidth="lg" className={classes.flexy}>
+              <CardPage />
+              <CardPage />
+              <CardPage />
+              <CardPage />
+              <CardPage />
+              <CardPage />
+            </Container>
+          </Grid>
+        </div>
+      </Container>
+      {/* END BODY */}
     </React.Fragment>
   );
 }
