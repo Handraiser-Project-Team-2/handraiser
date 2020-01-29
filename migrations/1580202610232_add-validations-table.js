@@ -3,17 +3,19 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("key", {
-    key_id: {
+  pgm.createTable("validations", {
+    validation_id: {
       type: "serial",
       primaryKey: true
     },
-    key_name: {
+    validation_key: {
       type: "text"
     },
-    user_id: {
-      type: "integer",
-      references: '"users"'
+    validation_email: {
+      type: "text"
+    },
+    validation_status: {
+      type: "text"
     }
   });
 };

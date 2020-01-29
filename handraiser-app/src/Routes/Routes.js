@@ -8,6 +8,8 @@ export default function Routes() {
       <Route exact path="/" component={Login} />
       <Route path="/superadmin" component={SuperAdmin} />
       <Route path="/admin" />
+      <Route path="/student" />
+      <Route path="/mentor" />
     </BrowserRouter>
   );
 }
