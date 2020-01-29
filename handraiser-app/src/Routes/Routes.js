@@ -4,7 +4,7 @@ import Login from "../components/Login/Login";
 import Student from "../components/student/StudentUi";
 import Mentor from "../components/mentor/MentorUi";
 import SuperAdmin from "../components/Super-Admin/Super-Admin";
-import Class from '../components/Class/ClassLanding'
+import Class from "../components/Class/ClassLanding";
 
 export default function Routes() {
   return (
@@ -13,12 +13,8 @@ export default function Routes() {
       <Route path="/superadmin" component={SuperAdmin} />
       <Route path="/admin" />
       <Route path="/student" component={Student} />
-<<<<<<< HEAD
       <Route path="/class" component={Class} />
-      <Route path="/mentor" />
-=======
       <Route path="/mentor" component={Mentor} />
->>>>>>> mentor view
     </BrowserRouter>
   );
 }
