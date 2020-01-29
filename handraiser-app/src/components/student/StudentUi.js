@@ -9,6 +9,9 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import TextField from "@material-ui/core/TextField";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import Tabs from "./Tabs/Tabs";
 
@@ -17,45 +20,107 @@ const Nav = styled.div`
   height: 6.5vh;
 `;
 const Div = styled.div`
+  margin: 0 auto;
+  padding: 0;
   display: flex;
   box-sizing: border-box;
   width: 100%;
   height: 93.5vh;
   @media screen and (max-width: 600px) {
-    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+`;
+const Div2 = styled.div`
+  width: 25%;
+  @media screen and (max-width: 600px) {
+    display: none;
   }
 `;
 const Queue = styled.div`
-  width: 35%;
+  width: 25%;
+  border-right: 1px solid lightgrey;
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
 `;
 const Help = styled.div`
   display: flex;
-  width: 65%;
+  width: 50%;
   box-sizing: border-box;
   flex-direction: column;
+  border-right: 1px solid lightgrey;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
 `;
+
 const Subject = styled.div`
-  height: 15vh;
+  height: 10vh;
+  display: flex;
   background-color: #ffffff;
 `;
 const Conversation = styled.div`
-  height: 75vh;
+  height: 70vh;
   background-color: #eaeaea;
 `;
 const Message = styled.div`
   display: flex;
+  justify-content: center;
   height: 20vh;
   background-color: #dddddd;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
 `;
 const TitleName = styled.div`
-  height: 30vh;
-  width: 95vh;
-  background-color: #dddddd;
+  height: 15vh;
+  width: 85%;
+  border-right: 1px solid lightgrey;
+  background-color: #ffffff;
 `;
-const Field = styled.div``;
+const Field = styled.div`
+  justify-content: center;
+`;
+const Option = styled.div`
+  display: flex;
+  align-content: center;
+  align-items: center;
+  border-right: 1px solid lightgrey;
+  width: 15%;
+`;
+const Shared = styled.div`
+  display: flex;
+  margin-top: 33px;
+  padding-bottom: 33px;
+  justify-content: center;
+  border-bottom: 1px solid lightgrey;
+`;
+const More = styled.button`
+  border: transparent;
+  background: transparent;
+  cursor: pointer;
+`;
+const Send = styled.button`
+  background-color: #2fdc5f;
+  color: white;
+  border: transparent;
+  width: 218px;
+  height: 37px;
+  margin-left: 25px;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+const Request = styled.button`
+  background-color: #372476;
+  color: white;
+  border: transparent;
+  width: 218px;
+  height: 37px;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+const Attach = styled.button`
+  border: transparent;
+  background: transparent;
+`;
 
 export default function Student() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -114,15 +179,91 @@ export default function Student() {
         </Queue>
         <Help>
           <Subject>
-            <TitleName></TitleName>
+            <TitleName>
+              <div
+                style={{
+                  marginTop: 15,
+                  paddingLeft: 50
+                }}
+              >
+                <Typography variant="h4">Error in Docker Compose</Typography>
+                <Typography variant="h6">From: Kobe Bryant</Typography>
+              </div>
+            </TitleName>
+            <Option>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%"
+                }}
+              >
+                <More onClick={handleMenu}>
+                  <MoreVertIcon
+                    style={{
+                      fontSize: 35,
+                      color: "#c4c4c4"
+                    }}
+                  />
+                </More>
+              </div>
+            </Option>
           </Subject>
           <Conversation></Conversation>
           <Message>
             <Field>
-              <TextField id="outlined-basic" variant="outlined" fullWidth />
+              <div
+                style={{
+                  marginTop: 20
+                }}
+              >
+                <TextField
+                  id="outlined-textarea"
+                  multiline
+                  variant="outlined"
+                  rows="3"
+                  style={{
+                    width: 800
+                  }}
+                />
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "15px"
+                }}
+              >
+                <div>
+                  <Tooltip title="Attach files">
+                    <Attach onClick={handleMenu}>
+                      <AttachFileIcon
+                        style={{
+                          fontColor: "lightgrey"
+                        }}
+                      />
+                    </Attach>
+                  </Tooltip>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "flex-end"
+                  }}
+                >
+                  <Request>NEW REQUEST</Request>
+                  <Send>SEND</Send>
+                </div>
+              </div>
             </Field>
           </Message>
         </Help>
+        <Div2>
+          <Shared>
+            <Typography variant="h6">Shared Files</Typography>
+          </Shared>
+        </Div2>
       </Div>
     </React.Fragment>
   );
