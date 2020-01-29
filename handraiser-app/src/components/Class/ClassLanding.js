@@ -12,16 +12,14 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 
-
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // COMPONENTS
 import CardPage from "./CardPage";
-import FindClassDialog from './FindClassDialog'
+import FindClassDialog from "./FindClassDialog";
 
 const useStyles = makeStyles(theme => ({
-  
   fab: {
     float: "right"
   },
