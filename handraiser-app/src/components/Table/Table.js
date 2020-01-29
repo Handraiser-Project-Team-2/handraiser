@@ -5,7 +5,7 @@ import Zoom from "@material-ui/core/Zoom";
 import Button from "@material-ui/core/Button";
 import { Tooltip } from "@material-ui/core";
 
-import { RowCont } from "../Styles/Styles";
+import { RowCont, TableStyle } from "../Styles/Styles";
 
 export const TableCont = props => {
   const { tabValue } = props;
@@ -35,7 +35,7 @@ export const TableCont = props => {
         render: rowData => (
           <React.Fragment>
             <RowCont>
-              <Tooltip TransitionComponent={Zoom} title="Delete Contact">
+              <Tooltip TransitionComponent={Zoom} title="Delete">
                 <Button>
                   <DeleteIcon />
                 </Button>
@@ -46,28 +46,34 @@ export const TableCont = props => {
       }
     ],
     data: [
-      { email: "jerommel.astillero@gmail.com", key: "Baran", birthYear: 1987 }
+      { email: "jerommel.astillero@gmail.com", key: "feaw564f1as" },
+      { email: "jerommel.astillero@gmail.com", key: "feaw564f1as" }
     ]
   });
 
-  console.log(props.tabValue);
-
   return (
-    <MaterialTable
-      title=""
-      columns={state.columns}
-      data={state.data}
-      options={{
-        pageSize: 10,
-        sorting: false,
-        pageSizeOptions: [10, 15, 20],
-        actionsColumnIndex: -1,
-        selection: false,
-        paginationType: "stepped",
-        headerStyle: {
-          textAlign: "center"
-        }
-      }}
-    />
+    <TableStyle>
+      <MaterialTable
+        title=""
+        columns={state.columns}
+        data={state.data}
+        options={{
+          pageSize: 5,
+          sorting: false,
+          pageSizeOptions: [5, 10, 15, 20],
+          actionsColumnIndex: -1,
+          selection: false,
+          draggable: false,
+          headerStyle: {
+            textAlign: "center",
+            fontSize: 18
+          },
+          cellStyle: {
+            width: 20,
+            maxWidth: 20
+          }
+        }}
+      />
+    </TableStyle>
   );
 };
