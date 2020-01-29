@@ -10,10 +10,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
+import Tooltip from "@material-ui/core/Tooltip";
+
 import Tabs from "./Tabs/Tabs";
+
 const Nav = styled.div`
   width: 100%;
-  padding-bottom: 65px;
+  height: 6.5vh;
 `;
 const Div = styled.div`
   margin: 0 auto;
@@ -21,8 +25,8 @@ const Div = styled.div`
   display: flex;
   box-sizing: border-box;
   width: 100%;
+  height: 93.5vh;
   @media screen and (max-width: 600px) {
-    box-sizing: border-box;
     justify-content: center;
     width: 100%;
   }
@@ -47,40 +51,33 @@ const Help = styled.div`
   flex-direction: column;
   border-right: 1px solid lightgrey;
   @media screen and (max-width: 600px) {
-    box-sizing: border-box;
     width: 100%;
   }
 `;
+
 const Subject = styled.div`
+  height: 10vh;
   display: flex;
   background-color: #ffffff;
 `;
 const Conversation = styled.div`
-  height: 63vh;
+  height: 70vh;
   background-color: #eaeaea;
 `;
 const Message = styled.div`
   display: flex;
-  padding: 20px;
   justify-content: center;
+  height: 20vh;
   background-color: #dddddd;
 `;
 const TitleName = styled.div`
-  padding: 20px;
+  height: 15vh;
   width: 85%;
   border-right: 1px solid lightgrey;
   background-color: #ffffff;
-  @media screen and (max-width: 600px) {
-    h4 {
-      font-size: 20px;
-    }
-    h6 {
-      font-size: 10px;
-    }
-  }
 `;
 const Field = styled.div`
-  width: 100%;
+  justify-content: center;
 `;
 const Option = styled.div`
   display: flex;
@@ -106,27 +103,25 @@ const Send = styled.button`
   color: white;
   border: transparent;
   width: 218px;
-  padding: 10px;
+  height: 37px;
   margin-left: 25px;
   border-radius: 5px;
   cursor: pointer;
-  @media screen and (max-width: 600px) {
-    box-sizing: border-box;
-    width: 100%;
-  }
 `;
 const Request = styled.button`
   background-color: #372476;
   color: white;
   border: transparent;
   width: 218px;
+  height: 37px;
   border-radius: 5px;
   cursor: pointer;
-  @media screen and (max-width: 600px) {
-    box-sizing: border-box;
-    width: 100%;
-  }
 `;
+const Attach = styled.button`
+  border: transparent;
+  background: transparent;
+`;
+
 export default function Student() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -185,8 +180,15 @@ export default function Student() {
         <Help>
           <Subject>
             <TitleName>
-              <Typography variant="h4">Error in Docker Compose</Typography>
-              <Typography variant="h6">From: Kobe Bryant</Typography>
+              <div
+                style={{
+                  marginTop: 15,
+                  paddingLeft: 50
+                }}
+              >
+                <Typography variant="h4">Error in Docker Compose</Typography>
+                <Typography variant="h6">From: Kobe Bryant</Typography>
+              </div>
             </TitleName>
             <Option>
               <div
@@ -212,26 +214,42 @@ export default function Student() {
             <Field>
               <div
                 style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                  width: "100%"
+                  marginTop: 20
                 }}
               >
                 <TextField
                   id="outlined-textarea"
                   multiline
                   variant="outlined"
-                  fullWidth
                   rows="3"
+                  style={{
+                    width: 800
+                  }}
                 />
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "15px"
+                }}
+              >
+                <div>
+                  <Tooltip title="Attach files">
+                    <Attach onClick={handleMenu}>
+                      <AttachFileIcon
+                        style={{
+                          fontColor: "lightgrey"
+                        }}
+                      />
+                    </Attach>
+                  </Tooltip>
+                </div>
                 <div
                   style={{
-                    width: "100%",
                     display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "15px"
+                    flexDirection: "flex-end"
                   }}
                 >
                   <Request>NEW REQUEST</Request>
