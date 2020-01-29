@@ -32,9 +32,9 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     maxWidth: 345,
-    float: 'left',
+    float: "left",
     margin: theme.spacing(2),
-    boxShadow: '10px 10px 8px #888888'
+    boxShadow: "10px 10px 8px #888888"
   },
   media: {
     height: 140

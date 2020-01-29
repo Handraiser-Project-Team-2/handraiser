@@ -22,13 +22,14 @@ massive({
     app.use(cors());
 
     // port declaration
-    const PORT = 5000 || process.env.PORT;
+    const PORT = 5001 || process.env.PORT;
 
     // endpoints declaration
     app.post("/api/login", users.login);
 
     app.get("/api/classes", classes.getAllClass);
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
+    app.get("/api/classes/:user_id", classes.getClassByMentor);
 
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
