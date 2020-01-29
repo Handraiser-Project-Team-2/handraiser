@@ -45,10 +45,7 @@ export const TableCont = props => {
         )
       }
     ],
-    data: [
-      { email: "jerommel.astillero@gmail.com", key: "feaw564f1as" },
-      { email: "jerommel.astillero@gmail.com", key: "feaw564f1as" }
-    ]
+    data: []
   });
 
   return (
