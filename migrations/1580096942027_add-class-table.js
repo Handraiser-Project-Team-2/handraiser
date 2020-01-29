@@ -10,7 +10,7 @@ exports.up = pgm => {
     },
     user_id: {
       type: "integer",
-      references: '"users"'
+      references: "users"
     },
     class_title: {
       type: "text"
