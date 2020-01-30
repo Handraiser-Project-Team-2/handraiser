@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
-import InQueue from "../in_queue/in_queue";
+import InQueue from "../inQueue/inQueue";
 
 const useStyles = makeStyles(theme => ({
   search: {
