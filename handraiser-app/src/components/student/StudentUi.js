@@ -241,9 +241,7 @@ export default function Student() {
               </div>
             </Option>
           </Subject>
-          <Conversation>
-            <div></div>
-          </Conversation>
+          <Conversation></Conversation>
           <Message>
             <Field>
               <div
@@ -275,7 +273,7 @@ export default function Student() {
                     }}
                   >
                     <Request>NEW REQUEST</Request>
-                    <Send>SEND</Send>
+                    <Send onClick={sendMsg}>SEND</Send>
                   </div>
                 </form>
               </div>

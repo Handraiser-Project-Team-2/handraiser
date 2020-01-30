@@ -15,21 +15,21 @@ const Nav = styled.div`
   width: 100%;
   padding-bottom: 65px;
 `;
+
 const Div = styled.div`
   margin: 0 auto;
   padding: 0;
   display: flex;
   box-sizing: border-box;
   width: 100%;
-  @media screen and (max-width: 600px) {
-    box-sizing: border-box;
-    justify-content: center;
-    width: 100%;
-  }
 `;
 const Div2 = styled.div`
+  margin-top: 15px;
   width: 25%;
   @media screen and (max-width: 600px) {
+    display: none;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
     display: none;
   }
 `;
@@ -38,6 +38,10 @@ const Queue = styled.div`
   border-right: 1px solid lightgrey;
   @media screen and (max-width: 600px) {
     display: none;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    box-sizing: border-box;
+    width: 40%;
   }
 `;
 const Help = styled.div`
@@ -50,7 +54,12 @@ const Help = styled.div`
     box-sizing: border-box;
     width: 100%;
   }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    box-sizing: border-box;
+    width: 100%;
+  }
 `;
+
 const Subject = styled.div`
   display: flex;
   background-color: #ffffff;
@@ -58,6 +67,16 @@ const Subject = styled.div`
 const Conversation = styled.div`
   height: 63vh;
   background-color: #eaeaea;
+  @media screen and (max-width: 600px) {
+    height: 59.5vh;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    box-sizing: border-box;
+    width: 100%;
+    height: 73.5vh;
+  }
 `;
 const Message = styled.div`
   display: flex;
@@ -112,10 +131,14 @@ const Send = styled.button`
   cursor: pointer;
   @media screen and (max-width: 600px) {
     box-sizing: border-box;
-    margin: 0 auto;
+    width: 100%;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    box-sizing: border-box;
     width: 100%;
   }
 `;
+
 export default function Student() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
