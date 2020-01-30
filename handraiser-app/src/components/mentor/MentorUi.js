@@ -10,14 +10,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
-import Tooltip from "@material-ui/core/Tooltip";
-
 import Tabs from "./Tabs/Tabs";
-
 const Nav = styled.div`
   width: 100%;
-  height: 6.5vh;
+  padding-bottom: 65px;
 `;
 const Div = styled.div`
   margin: 0 auto;
@@ -25,8 +21,8 @@ const Div = styled.div`
   display: flex;
   box-sizing: border-box;
   width: 100%;
-  height: 93.5vh;
   @media screen and (max-width: 600px) {
+    box-sizing: border-box;
     justify-content: center;
     width: 100%;
   }
@@ -51,33 +47,40 @@ const Help = styled.div`
   flex-direction: column;
   border-right: 1px solid lightgrey;
   @media screen and (max-width: 600px) {
+    box-sizing: border-box;
     width: 100%;
   }
 `;
-
 const Subject = styled.div`
-  height: 10vh;
   display: flex;
   background-color: #ffffff;
 `;
 const Conversation = styled.div`
-  height: 70vh;
+  height: 63vh;
   background-color: #eaeaea;
 `;
 const Message = styled.div`
   display: flex;
+  padding: 20px;
   justify-content: center;
-  height: 20vh;
   background-color: #dddddd;
 `;
 const TitleName = styled.div`
-  height: 15vh;
+  padding: 20px;
   width: 85%;
   border-right: 1px solid lightgrey;
   background-color: #ffffff;
+  @media screen and (max-width: 600px) {
+    h4 {
+      font-size: 20px;
+    }
+    h6 {
+      font-size: 10px;
+    }
+  }
 `;
 const Field = styled.div`
-  justify-content: center;
+  width: 100%;
 `;
 const Option = styled.div`
   display: flex;
@@ -103,25 +106,16 @@ const Send = styled.button`
   color: white;
   border: transparent;
   width: 218px;
-  height: 37px;
+  padding: 10px;
   margin-left: 25px;
   border-radius: 5px;
   cursor: pointer;
+  @media screen and (max-width: 600px) {
+    box-sizing: border-box;
+    margin: 0 auto;
+    width: 100%;
+  }
 `;
-const Request = styled.button`
-  background-color: #372476;
-  color: white;
-  border: transparent;
-  width: 218px;
-  height: 37px;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-const Attach = styled.button`
-  border: transparent;
-  background: transparent;
-`;
-
 export default function Student() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -145,7 +139,7 @@ export default function Student() {
               <IconButton edge="start" aria-label="menu">
                 <MenuIcon style={{ color: "white" }} />
               </IconButton>
-              <Typography variant="h6">Handraiser Admin</Typography>
+              <Typography variant="h6">Handraiser Mentor</Typography>
             </div>
             <div>
               <IconButton
@@ -180,15 +174,8 @@ export default function Student() {
         <Help>
           <Subject>
             <TitleName>
-              <div
-                style={{
-                  marginTop: 15,
-                  paddingLeft: 50
-                }}
-              >
-                <Typography variant="h4">Error in Docker Compose</Typography>
-                <Typography variant="h6">From: Kobe Bryant</Typography>
-              </div>
+              <Typography variant="h4">Error in Docker Compose</Typography>
+              <Typography variant="h6">From: Ali Connors</Typography>
             </TitleName>
             <Option>
               <div
@@ -214,45 +201,28 @@ export default function Student() {
             <Field>
               <div
                 style={{
-                  marginTop: 20
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  width: "100%"
                 }}
               >
                 <TextField
                   id="outlined-textarea"
                   multiline
                   variant="outlined"
+                  fullWidth
                   rows="3"
-                  style={{
-                    width: 800
-                  }}
                 />
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginTop: "15px"
-                }}
-              >
-                <div>
-                  <Tooltip title="Attach files">
-                    <Attach onClick={handleMenu}>
-                      <AttachFileIcon
-                        style={{
-                          fontColor: "lightgrey"
-                        }}
-                      />
-                    </Attach>
-                  </Tooltip>
-                </div>
                 <div
                   style={{
+                    width: "100%",
                     display: "flex",
-                    flexDirection: "flex-end"
+                    justifyContent: "flex-end",
+                    marginTop: "15px"
                   }}
                 >
-                  <Request>NEW REQUEST</Request>
                   <Send>SEND</Send>
                 </div>
               </div>
