@@ -10,6 +10,11 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import naruto from "../../images/naruto.jpg";
 
+const Div = styled.div`
+  display: flex;
+  border-bottom: 1px solid lightgrey;
+`;
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
@@ -19,7 +24,6 @@ const useStyles = makeStyles(theme => ({
     display: "inline"
   }
 }));
-
 const Button = styled.button`
   border: transparent;
   background: transparent;
@@ -30,12 +34,7 @@ export default function InQueue() {
   const classes = useStyles();
 
   return (
-    <div
-      style={{
-        display: "flex",
-        borderBottom: "1px solid lightgrey"
-      }}
-    >
+    <Div>
       <div
         style={{ backgroundColor: "#7F25D9", width: "9px", height: "72px" }}
       ></div>
@@ -68,6 +67,6 @@ export default function InQueue() {
           />
         </Button>
       </ListItem>
-    </div>
+    </Div>
   );
 }
