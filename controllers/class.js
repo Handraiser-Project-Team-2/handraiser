@@ -33,7 +33,21 @@ function getAllClass(req, res) {
     });
 }
 
+function getClassByMentor(req, res) {
+  const db = req.app.get("db");
+  const { user_id } = req.params;
+
+  db.class
+    .find({ user_id })
+    .then(classes => res.status(200).send(classes))
+    .catch(err => {
+      console.error(err);
+      res.status(500).end();
+    });
+}
+
 module.exports = {
   getAllClass,
-  getStudentsByClass
+  getStudentsByClass,
+  getClassByMentor
 };

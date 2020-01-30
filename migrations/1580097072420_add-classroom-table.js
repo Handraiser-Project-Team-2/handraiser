@@ -18,9 +18,6 @@ exports.up = pgm => {
     },
     date_entered: {
       type: "text"
-    },
-    assistance_status: {
-      type: "text"
     }
   });
 };

@@ -4,7 +4,10 @@ const massive = require("massive");
 // setup controllers
 
 const users = require("./controllers/users");
+const admin = require("./controllers/admins");
 const classes = require("./controllers/class");
+const mentor = require("./controllers/mentor");
+const student = require("./controllers/student");
 
 massive({
   host: "localhost",
@@ -22,13 +25,32 @@ massive({
     app.use(cors());
 
     // port declaration
-    const PORT = 5000 || process.env.PORT;
+    const PORT = 5001 || process.env.PORT;
 
     // endpoints declaration
     app.post("/api/login", users.login);
 
+    // admins endpoints
+    app.post("/api/admin/keygen/mentor", admin.add_mentor);
+    app.post("/api/admin/keygen", admin.add_admin_mentor);
+    app.get("/api/admin/all_list", admin.accessList);
+    app.get("/api/admin/mentor_list", admin.accessList_mentors);
+    app.get("/api/admin/admins_list", admin.accessList_admins);
+    app.post("/api/admin/verify", admin.verify);
+
+    app.post("/api/admin/check/promotions", admin.need_validations);
+
+    // mentor endpoints
+    app.post("/api/mentor/classroom/add", mentor.add_classroom);
+
+    // student endpoints
+    app.post("/api/student/class/register", student.regToClass);
+  
+
+    // class endpoints
     app.get("/api/classes", classes.getAllClass);
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
+    app.get("/api/classes/:user_id", classes.getClassByMentor);
 
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);

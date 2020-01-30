@@ -1,6 +1,6 @@
 // const secret = require("../secret");
 const jwt = require("jsonwebtoken");
-const secret = require("../secret")
+const secret = require("../secret");
 
 module.exports = {
   login: (req, res) => {
@@ -32,7 +32,6 @@ module.exports = {
               image
             })
             .then(user => {
-
               db.users
                 .save({
                   email,
@@ -43,7 +42,7 @@ module.exports = {
                 .then(data => {
                   console.log(data);
 
-                  const token = jwt.sign({userid: user.user_id}, secret)
+                  const token = jwt.sign({ userid: user.user_id }, secret);
 
                   res.status(201).json({ ...data, token });
                 })
@@ -51,7 +50,6 @@ module.exports = {
                   console.log("here", err);
                   res.status(400).end();
                 });
-                
             })
             .catch(err => {
               console.log(err);
@@ -66,10 +64,10 @@ module.exports = {
               email
             })
             .then(data => {
-
-              const token = jwt.sign({googleId}, secret)
-              res.status(201).json({ ...data, token });
               
+              const token = jwt.sign({ googleId }, secret); // please update secret key
+
+              res.status(201).json({ ...data, token });
             })
             .catch(err => {
               console.log(err);
