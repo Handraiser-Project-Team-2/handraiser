@@ -35,7 +35,7 @@ export default function NavBar() {
             <IconButton edge="start" aria-label="menu">
               <MenuIcon style={{ color: "white" }} />
             </IconButton>
-            <Typography variant="h6">Handraiser Admin</Typography>
+            <Typography variant="h6">Handraiser Super Admin</Typography>
           </div>
           <div>
             <IconButton

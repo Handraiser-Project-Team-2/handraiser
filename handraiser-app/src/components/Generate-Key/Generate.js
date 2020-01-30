@@ -30,9 +30,7 @@ export const GenerateKey = props => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Submit
-          </Button>
+          <Button color="primary">Submit</Button>
           <Button onClick={handleClose} color="primary" autoFocus>
             Cancel
           </Button>
