@@ -12,6 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import Tooltip from "@material-ui/core/Tooltip";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
 
 import Tabs from "./Tabs/Tabs";
 
@@ -123,6 +125,7 @@ const Attach = styled.button`
 `;
 
 export default function Student() {
+  let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleMenu = event => {
@@ -131,140 +134,158 @@ export default function Student() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  return (
-    <React.Fragment>
-      <Nav>
-        <AppBar style={{ backgroundColor: "#372476" }}>
-          <Toolbar
-            style={{
-              display: "flex",
-              justifyContent: "space-between"
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <IconButton edge="start" aria-label="menu">
-                <MenuIcon style={{ color: "white" }} />
-              </IconButton>
-              <Typography variant="h6">Handraiser Admin</Typography>
-            </div>
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                edge="end"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle style={{ fontSize: 40 }} />
-              </IconButton>
-            </div>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </Nav>
-      <Div>
-        <Queue>
-          <Tabs />
-        </Queue>
-        <Help>
-          <Subject>
-            <TitleName>
-              <div
-                style={{
-                  marginTop: 15,
-                  paddingLeft: 50
-                }}
-              >
-                <Typography variant="h4">Error in Docker Compose</Typography>
-                <Typography variant="h6">From: Kobe Bryant</Typography>
-              </div>
-            </TitleName>
-            <Option>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%"
-                }}
-              >
-                <More onClick={handleMenu}>
-                  <MoreVertIcon
-                    style={{
-                      fontSize: 35,
-                      color: "#c4c4c4"
-                    }}
-                  />
-                </More>
-              </div>
-            </Option>
-          </Subject>
-          <Conversation></Conversation>
-          <Message>
-            <Field>
-              <div
-                style={{
-                  marginTop: 20
-                }}
-              >
-                <TextField
-                  id="outlined-textarea"
-                  multiline
-                  variant="outlined"
-                  rows="3"
-                  style={{
-                    width: 800
-                  }}
-                />
-              </div>
+  const user_type = sessionStorage.getItem("user_type");
+  if (user_type != 3) {
+    Swal.fire({
+      icon: "error",
+      title: "You cannot acces this page!"
+    }).then(function() {
+      if (user_type == 4) {
+        history.push("/mentor");
+      } else if (user_type == 1) {
+        history.push("/superadmin");
+      }
+    });
+  }
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginTop: "15px"
+  if (user_type != 3) {
+    return null;
+  } else {
+    return (
+      <React.Fragment>
+        <Nav>
+          <AppBar style={{ backgroundColor: "#372476" }}>
+            <Toolbar
+              style={{
+                display: "flex",
+                justifyContent: "space-between"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <IconButton edge="start" aria-label="menu">
+                  <MenuIcon style={{ color: "white" }} />
+                </IconButton>
+                <Typography variant="h6">Handraiser Admin</Typography>
+              </div>
+              <div>
+                <IconButton
+                  aria-label="account of current user"
+                  edge="end"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle style={{ fontSize: 40 }} />
+                </IconButton>
+              </div>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
                 }}
+                open={open}
+                onClose={handleClose}
               >
-                <div>
-                  <Tooltip title="Attach files">
-                    <Attach onClick={handleMenu}>
-                      <AttachFileIcon
-                        style={{
-                          fontColor: "lightgrey"
-                        }}
-                      />
-                    </Attach>
-                  </Tooltip>
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+              </Menu>
+            </Toolbar>
+          </AppBar>
+        </Nav>
+        <Div>
+          <Queue>
+            <Tabs />
+          </Queue>
+          <Help>
+            <Subject>
+              <TitleName>
+                <div
+                  style={{
+                    marginTop: 15,
+                    paddingLeft: 50
+                  }}
+                >
+                  <Typography variant="h4">Error in Docker Compose</Typography>
+                  <Typography variant="h6">From: Kobe Bryant</Typography>
                 </div>
+              </TitleName>
+              <Option>
                 <div
                   style={{
                     display: "flex",
-                    flexDirection: "flex-end"
+                    justifyContent: "flex-end",
+                    width: "100%"
                   }}
                 >
-                  <Request>NEW REQUEST</Request>
-                  <Send>SEND</Send>
+                  <More onClick={handleMenu}>
+                    <MoreVertIcon
+                      style={{
+                        fontSize: 35,
+                        color: "#c4c4c4"
+                      }}
+                    />
+                  </More>
                 </div>
-              </div>
-            </Field>
-          </Message>
-        </Help>
-        <Div2>
-          <Shared>
-            <Typography variant="h6">Shared Files</Typography>
-          </Shared>
-        </Div2>
-      </Div>
-    </React.Fragment>
-  );
+              </Option>
+            </Subject>
+            <Conversation></Conversation>
+            <Message>
+              <Field>
+                <div
+                  style={{
+                    marginTop: 20
+                  }}
+                >
+                  <TextField
+                    id="outlined-textarea"
+                    multiline
+                    variant="outlined"
+                    rows="3"
+                    style={{
+                      width: 800
+                    }}
+                  />
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginTop: "15px"
+                  }}
+                >
+                  <div>
+                    <Tooltip title="Attach files">
+                      <Attach onClick={handleMenu}>
+                        <AttachFileIcon
+                          style={{
+                            fontColor: "lightgrey"
+                          }}
+                        />
+                      </Attach>
+                    </Tooltip>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "flex-end"
+                    }}
+                  >
+                    <Request>NEW REQUEST</Request>
+                    <Send>SEND</Send>
+                  </div>
+                </div>
+              </Field>
+            </Message>
+          </Help>
+          <Div2>
+            <Shared>
+              <Typography variant="h6">Shared Files</Typography>
+            </Shared>
+          </Div2>
+        </Div>
+      </React.Fragment>
+    );
+  }
 }
