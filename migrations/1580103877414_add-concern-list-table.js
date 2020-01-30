@@ -15,7 +15,8 @@ exports.up = pgm => {
       type: "text"
     },
     concern_status: {
-      type: "text"
+      type: "integer",
+      references: "concern_status"
     },
     class_id: {
       type: "integer",

@@ -42,15 +42,16 @@ massive({
 
     // mentor endpoints
     app.post("/api/mentor/classroom/add", mentor.add_classroom);
+    app.get("/api/classes/queue/:class_id", mentor.get_inqueue)
 
     // student endpoints
     app.post("/api/student/class/register", student.regToClass);
-  
+    app.post("/api/student/request/assistance", student.ask_assistance);
+    app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order)
 
     // class endpoints
     app.get("/api/classes", classes.getAllClass);
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
-    
 
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
