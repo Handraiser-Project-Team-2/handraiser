@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -28,6 +28,7 @@ import {
   Div2,
   Shared
 } from "../Styles/Styles";
+import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
 
@@ -46,23 +47,35 @@ export default function Student() {
     evt.preventDefault();
     console.log(name);
   };
-  const user_type = sessionStorage.getItem("user_type");
-  if (user_type !== 4) {
-    Swal.fire({
-      icon: "error",
-      title: "You cannot acces this page!"
-    }).then(function() {
-      if (user_type === 3) {
-        history.push("/student");
-      } else if (user_type === 1) {
-        history.push("/superadmin");
-      }
-    });
-  }
 
-  if (user_type !== 4) {
-    return null;
-  } else {
+  useEffect(() => {
+    console.log(sessionStorage.getItem("token").split(" ")[1]);
+
+    axios
+      .post("http://localhost:5001/api/user/data", {
+        token: sessionStorage.getItem("token").split(" ")[1]
+      })
+      .then(data => {
+        const user_type = data.data.user_type_id;
+
+        if (user_type !== 4) {
+          Swal.fire({
+            icon: "error",
+            title: "You cannot acces this page!"
+          }).then(function() {
+            if (user_type === 3) {
+              history.push("/student");
+            } else if (user_type === 1) {
+              history.push("/superadmin");
+            }
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+  
     return (
       <React.Fragment>
         <Nav>
@@ -179,5 +192,5 @@ export default function Student() {
         </Div>
       </React.Fragment>
     );
-  }
+  // }
 }

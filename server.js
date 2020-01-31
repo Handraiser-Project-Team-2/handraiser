@@ -27,12 +27,13 @@ massive({
     app.use(cors());
 
     // port declaration
-    const PORT = 5000 || process.env.PORT;
+    const PORT = 5001 || process.env.PORT;
 
     // endpoints declaration
 
-    // default login
+    // users endpoints
     app.post("/api/login", users.login);
+    app.post("/api/user/data", users.getUser);
 
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor);

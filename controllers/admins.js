@@ -154,7 +154,9 @@ module.exports = {
             WHERE validation_email = '${data.email}'`
             )
               .then(validate => {
-                console.log(validate);
+                // console.log(validate);
+
+                // change user type here(here)
 
                 res
                   .status(201)
@@ -180,7 +182,6 @@ module.exports = {
 
     const { token } = req.body;
 
-    jwtDecode(token);
     let parseToken = jwtDecode(token);
 
     db.users
