@@ -55,7 +55,7 @@ export const TabBtn = props => {
       email: mentorData
     };
     axios
-      .post(`http://localhost:5001/api/admin/keygen/mentor`, Obj)
+      .post(`http://localhost:5000/api/admin/keygen/mentor`, Obj)
       .then(() => {
         toast.info("registration sucessful!", {
           position: toast.POSITION.TOP_CENTER

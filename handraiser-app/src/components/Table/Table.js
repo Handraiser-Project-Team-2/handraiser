@@ -42,7 +42,7 @@ export const TableCont = props => {
   useEffect(() => {
     (async function() {
       try {
-        const res = await axios("http://localhost:5001/api/admin/mentor_list");
+        const res = await axios("http://localhost:5000/api/admin/mentor_list");
         const data = await res.data;
 
         setTableData({ ...tableData, data: data });

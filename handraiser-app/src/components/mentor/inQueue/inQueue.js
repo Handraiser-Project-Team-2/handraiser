@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function In_Queue() {
+export default function InQueue() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleMenu = event => {
@@ -48,9 +48,9 @@ export default function In_Queue() {
 
   return (
     <List className={classes.root}>
-      {datas.map(data => {
+      {datas.map((data, index) => {
         return (
-          <div>
+          <div key={index}>
             <ListItem
               button
               style={{
@@ -62,6 +62,19 @@ export default function In_Queue() {
               <ListItemAvatar>
                 <Avatar>{data.name.charAt(0)}</Avatar>
               </ListItemAvatar>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>Log Out</MenuItem>
+              </Menu>
               <ListItemText
                 primary={data.concern}
                 secondary={
@@ -86,19 +99,6 @@ export default function In_Queue() {
                   }}
                 />
               </ListItemSecondaryAction>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
             </ListItem>
           </div>
         );
