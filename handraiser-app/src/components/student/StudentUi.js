@@ -10,146 +10,58 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
-import Tooltip from "@material-ui/core/Tooltip";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
+import {
+  Div,
+  Nav,
+  Queue,
+  Help,
+  Subject,
+  TitleName,
+  Option,
+  More,
+  Conversation,
+  Message,
+  Field,
+  Send,
+  Div2,
+  Shared,
+  Request
+} from "../Styles/Styles";
 
 import Tabs from "./Tabs/Tabs";
-
-const Nav = styled.div`
-  width: 100%;
-  height: 6.5vh;
-`;
-const Div = styled.div`
-  margin: 0 auto;
-  padding: 0;
-  display: flex;
-  box-sizing: border-box;
-  width: 100%;
-  height: 93.5vh;
-  @media screen and (max-width: 600px) {
-    justify-content: center;
-    width: 100%;
-  }
-`;
-const Div2 = styled.div`
-  width: 25%;
-  @media screen and (max-width: 600px) {
-    display: none;
-  }
-`;
-const Queue = styled.div`
-  width: 25%;
-  border-right: 1px solid lightgrey;
-  border-top: px solid yellow;
-  @media screen and (max-width: 600px) {
-    display: none;
-  }
-`;
-const Help = styled.div`
-  display: flex;
-  width: 50%;
-  box-sizing: border-box;
-  flex-direction: column;
-  border-right: 1px solid lightgrey;
-  @media screen and (max-width: 600px) {
-    width: 100%;
-  }
-`;
-
-const Subject = styled.div`
-  height: 10vh;
-  display: flex;
-  background-color: #ffffff;
-`;
-const Conversation = styled.div`
-  height: 70vh;
-  background-color: #eaeaea;
-`;
-const Message = styled.div`
-  display: flex;
-  justify-content: center;
-  height: 20vh;
-  background-color: #dddddd;
-`;
-const TitleName = styled.div`
-  height: 15vh;
-  width: 85%;
-  border-right: 1px solid lightgrey;
-  background-color: #ffffff;
-`;
-const Field = styled.div`
-  justify-content: center;
-`;
-const Option = styled.div`
-  display: flex;
-  align-content: center;
-  align-items: center;
-  border-right: 1px solid lightgrey;
-  width: 15%;
-`;
-const Shared = styled.div`
-  display: flex;
-  margin-top: 33px;
-  padding-bottom: 33px;
-  justify-content: center;
-  border-bottom: 1px solid lightgrey;
-`;
-const More = styled.button`
-  border: transparent;
-  background: transparent;
-  cursor: pointer;
-`;
-const Send = styled.button`
-  background-color: #2fdc5f;
-  color: white;
-  border: transparent;
-  width: 218px;
-  height: 37px;
-  margin-left: 25px;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-const Request = styled.button`
-  background-color: #372476;
-  color: white;
-  border: transparent;
-  width: 218px;
-  height: 37px;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-const Attach = styled.button`
-  border: transparent;
-  background: transparent;
-`;
 
 export default function Student() {
   let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [name, setName] = useState("");
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const sendMsg = evt => {
+    evt.preventDefault();
+    console.log(name);
+  };
   const user_type = sessionStorage.getItem("user_type");
-  if (user_type != 3) {
+  if (user_type !== 3) {
     Swal.fire({
       icon: "error",
       title: "You cannot acces this page!"
     }).then(function() {
-      if (user_type == 4) {
+      if (user_type === 4) {
         history.push("/mentor");
-      } else if (user_type == 1) {
+      } else if (user_type === 1) {
         history.push("/superadmin");
       }
     });
   }
 
-  if (user_type != 3) {
+  if (user_type !== 3) {
     return null;
   } else {
     return (
@@ -162,38 +74,6 @@ export default function Student() {
                 justifyContent: "space-between"
               }}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>Log Out</MenuItem>
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </Nav>
-      <Div>
-        <Queue>
-          <Tabs />
-        </Queue>
-        <Help>
-          <Subject>
-            <TitleName>
-              <Typography variant="h4">Error in Docker Compose</Typography>
-              <Typography variant="h6">From: Kobe Bryant</Typography>
-            </TitleName>
-            <Option>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%"
-                }}
-              >
-                <More onClick={handleMenu}>
-                  <MoreVertIcon
-                    style={{
-                      fontSize: 35,
-                      color: "#c4c4c4"
-                    }}
-                  />
-                </More>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <IconButton edge="start" aria-label="menu">
                   <MenuIcon style={{ color: "white" }} />
@@ -221,7 +101,7 @@ export default function Student() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>Log Out</MenuItem>
               </Menu>
             </Toolbar>
           </AppBar>
@@ -233,15 +113,8 @@ export default function Student() {
           <Help>
             <Subject>
               <TitleName>
-                <div
-                  style={{
-                    marginTop: 15,
-                    paddingLeft: 50
-                  }}
-                >
-                  <Typography variant="h4">Error in Docker Compose</Typography>
-                  <Typography variant="h6">From: Kobe Bryant</Typography>
-                </div>
+                <Typography variant="h4">Error in Docker Compose</Typography>
+                <Typography variant="h6">From: Kobe Bryant</Typography>
               </TitleName>
               <Option>
                 <div
@@ -267,47 +140,36 @@ export default function Student() {
               <Field>
                 <div
                   style={{
-                    marginTop: 20
-                  }}
-                >
-                  <TextField
-                    id="outlined-textarea"
-                    multiline
-                    variant="outlined"
-                    rows="3"
-                    style={{
-                      width: 800
-                    }}
-                  />
-                </div>
-
-                <div
-                  style={{
                     display: "flex",
+                    flexWrap: "wrap",
                     justifyContent: "space-between",
-                    marginTop: "15px"
+                    flexDirection: "column",
+                    width: "100%"
                   }}
                 >
-                  <div>
-                    <Tooltip title="Attach files">
-                      <Attach onClick={handleMenu}>
-                        <AttachFileIcon
-                          style={{
-                            fontColor: "lightgrey"
-                          }}
-                        />
-                      </Attach>
-                    </Tooltip>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "flex-end"
-                    }}
-                  >
-                    <Request>NEW REQUEST</Request>
-                    <Send>SEND</Send>
-                  </div>
+                  <form onSubmit={sendMsg}>
+                    <TextField
+                      id="outlined-textarea"
+                      multiline
+                      variant="outlined"
+                      fullWidth
+                      rows="3"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                    />
+
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "15px"
+                      }}
+                    >
+                      <Request>NEW REQUEST</Request>
+                      <Send onClick={sendMsg}>SEND</Send>
+                    </div>
+                  </form>
                 </div>
               </Field>
             </Message>
