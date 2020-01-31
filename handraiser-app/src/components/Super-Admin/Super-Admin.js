@@ -24,8 +24,11 @@ export default function NavBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+<<<<<<< HEAD
 
 <<<<<<< HEAD
+=======
+>>>>>>> 8760dccc9372f861b9a8bbbea67ee9f6d2df9109
   return (
     <React.Fragment>
       <AppBar style={{ backgroundColor: "#372476" }}>
@@ -57,7 +60,10 @@ export default function NavBar() {
             anchorOrigin={{
               vertical: "top",
               horizontal: "right"
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 8760dccc9372f861b9a8bbbea67ee9f6d2df9109
   const user_type = sessionStorage.getItem("user_type");
   if (user_type !== 1) {
     Swal.fire({
@@ -82,7 +88,10 @@ export default function NavBar() {
             style={{
               display: "flex",
               justifyContent: "space-between"
+<<<<<<< HEAD
 >>>>>>> cc3f6fc22721f757a34f7752e08e4b277a2090d7
+=======
+>>>>>>> 8760dccc9372f861b9a8bbbea67ee9f6d2df9109
             }}
           >
             <div style={{ display: "flex", alignItems: "center" }}>
