@@ -17,7 +17,8 @@ exports.up = pgm => {
     },
     user_type_id: {
       type: "integer",
-      references: '"user_types"'
+      references: '"user_types"',
+      onDelete: "CASCADE"
     },
     user_status: {
       type: "integer"

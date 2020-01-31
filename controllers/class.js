@@ -35,11 +35,13 @@ function getAllClass(req, res) {
 
 function getClassByMentor(req, res) {
   const db = req.app.get("db");
-  const { user_id } = req.params;
+  const { token } = req.params;
+
+  const parseToken = jwtDecode(token);
 
   db.class
-    .find({ user_id })
-    .then(classes => res.status(200).send(classes))
+    .find({ user_id:parseToken.userid })
+    .then(classes => res.status(200).json(classes))
     .catch(err => {
       console.error(err);
       res.status(500).end();
