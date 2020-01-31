@@ -30,6 +30,8 @@ massive({
     const PORT = 5001 || process.env.PORT;
 
     // endpoints declaration
+
+    // default login
     app.post("/api/login", users.login);
 
     // admins endpoints
@@ -45,6 +47,7 @@ massive({
     // mentor endpoints
     app.post("/api/mentor/classroom/add", mentor.add_classroom);
     app.get("/api/classes/queue/:class_id", mentor.get_inqueue);
+    app.post("/api/my/classes", mentor.get_my_classroom)
 
     // student endpoints
     app.post("/api/student/class/register", student.regToClass);

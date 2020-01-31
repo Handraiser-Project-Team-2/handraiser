@@ -1,4 +1,6 @@
 const keygen = require("./keyGen");
+const jwtDecode = require("jwt-decode");
+
 
 module.exports = {
   // generate key to an email input (setting/promoting to mentor)
@@ -134,10 +136,13 @@ module.exports = {
   verify: (req, res) => {
     const db = res.app.get("db");
 
-    const { userid, supplied_key } = req.body;
+    const { token, supplied_key } = req.body;
+
+    jwtDecode(token);
+    let parseToken = jwtDecode(token);
 
     db.users
-      .findOne({ user_id: userid })
+      .findOne({ user_id: parseToken.userid })
       .then(data => {
         console.log(data.email);
 
@@ -174,10 +179,13 @@ module.exports = {
   need_validations: (req, res) => {
     const db = res.app.get("db");
 
-    const { userid } = req.body;
+    const { token } = req.body;
+
+    jwtDecode(token);
+    let parseToken = jwtDecode(token);
 
     db.users
-      .findOne({ user_id: userid })
+      .findOne({ user_id: parseToken.userid })
       .then(data => {
         db.validations
           .findOne({ validation_email: data.email })
