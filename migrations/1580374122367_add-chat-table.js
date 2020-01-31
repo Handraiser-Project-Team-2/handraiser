@@ -3,28 +3,24 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("concern_list", {
-    concern_id: {
+  pgm.createTable("chat", {
+    chat_id: {
       type: "serial",
       primaryKey: true
     },
-    concern_title: {
+    message: {
       type: "text"
     },
-    concern_description: {
+    chat_date_created: {
       type: "text"
-    },
-    concern_status: {
-      type: "integer",
-      references: "concern_status"
-    },
-    class_id: {
-      type: "integer",
-      references: '"class"'
     },
     user_id: {
       type: "integer",
-      references: '"users"'
+      references: "users"
+    },
+    chatroom_id: {
+      type: "integer",
+      references: "chatroom"
     }
   });
 };

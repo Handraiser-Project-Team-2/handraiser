@@ -61,26 +61,25 @@ module.exports = {
     const db = req.app.get("db");
 
     db.validations
-    .find({validation_type: 4})
-    .then(data => {
-      res.status(200).json(data);
-    })
-    .catch(err => {
-      res.status(400).end();
-    });
-    
+      .find({ validation_type: 4 })
+      .then(data => {
+        res.status(200).json(data);
+      })
+      .catch(err => {
+        res.status(400).end();
+      });
   },
   accessList_admins: (req, res) => {
     const db = req.app.get("db");
 
     db.validations
-    .find({validation_type: 1})
-    .then(data => {
-      res.status(200).json(data);
-    })
-    .catch(err => {
-      res.status(400).end();
-    });
+      .find({ validation_type: 1 })
+      .then(data => {
+        res.status(200).json(data);
+      })
+      .catch(err => {
+        res.status(400).end();
+      });
   },
   // for super admin
   // generate key to an email input (setting/promoting to user type)
