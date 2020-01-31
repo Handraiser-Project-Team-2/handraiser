@@ -3,19 +3,17 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("user_profile", {
-    profile_id: {
+  pgm.createTable("chatroom", {
+    chatroom_id: {
       type: "serial",
       primaryKey: true
     },
-    first_name: {
+    chatroom_date_created: {
       type: "text"
     },
-    last_name: {
-      type: "text"
-    },
-    image: {
-      type: "text"
+    assisted_id: {
+      type: "integer",
+      references: "assisted_by"
     }
   });
 };
