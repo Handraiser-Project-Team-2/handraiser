@@ -26,20 +26,20 @@ export default function NavBar() {
   };
 
   const user_type = sessionStorage.getItem("user_type");
-  if (user_type != 1) {
+  if (user_type !== 1) {
     Swal.fire({
       icon: "error",
       title: "You cannot acces this page!"
     }).then(function() {
-      if (user_type == 3) {
+      if (user_type === 3) {
         history.push("/student");
-      } else if (user_type == 4) {
+      } else if (user_type === 4) {
         history.push("/mentor");
       }
     });
   }
 
-  if (user_type != 1) {
+  if (user_type !== 1) {
     return null;
   } else {
     return (

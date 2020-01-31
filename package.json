@@ -25,6 +25,7 @@
     "massive": "^5.11.2",
     "node-pg-migrate": "^4.2.1",
     "pg": "^7.17.0",
+    "react-text-mask": "^5.4.3",
     "sweetalert2": "^9.7.1"
   },
   "keywords": [],
