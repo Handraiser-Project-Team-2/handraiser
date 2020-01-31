@@ -29,7 +29,7 @@ export default function NavBar() {
   if (user_type !== 1) {
     Swal.fire({
       icon: "error",
-      title: "You cannot acces this page!"
+      title: "You cannot access this page!"
     }).then(function() {
       if (user_type === 3) {
         history.push("/student");

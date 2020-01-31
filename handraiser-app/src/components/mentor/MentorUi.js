@@ -49,7 +49,7 @@ export default function Student() {
   if (user_type !== 4) {
     Swal.fire({
       icon: "error",
-      title: "You cannot acces this page!"
+      title: "You cannot access this page!"
     }).then(function() {
       if (user_type === 3) {
         history.push("/student");
