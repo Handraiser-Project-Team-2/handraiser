@@ -3,25 +3,24 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-  pgm.createTable("users", {
-    user_id: {
+  pgm.createTable("chat", {
+    chat_id: {
       type: "serial",
       primaryKey: true
     },
-    email: {
+    message: {
       type: "text"
     },
-    profile_id: {
-      type: "integer",
-      references: '"user_profile"'
+    chat_date_created: {
+      type: "text"
     },
-    user_type_id: {
+    user_id: {
       type: "integer",
-      references: '"user_types"',
-      onDelete: "CASCADE"
+      references: "users"
     },
-    user_status: {
-      type: "integer"
+    chatroom_id: {
+      type: "integer",
+      references: "chatroom"
     }
   });
 };

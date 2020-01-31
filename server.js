@@ -9,12 +9,14 @@ const classes = require("./controllers/class");
 const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
 
+require('dotenv').config()
+
 massive({
-  host: "localhost",
-  port: 5433,
-  database: "handraiser",
-  user: "postgres",
-  password: "handraiser"
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS
 })
   .then(db => {
     const app = express();
@@ -25,9 +27,11 @@ massive({
     app.use(cors());
 
     // port declaration
-    const PORT = 5001 || process.env.PORT;
+    const PORT = 5000 || process.env.PORT;
 
     // endpoints declaration
+
+    // default login
     app.post("/api/login", users.login);
 
     // admins endpoints
@@ -42,11 +46,14 @@ massive({
 
     // mentor endpoints
     app.post("/api/mentor/classroom/add", mentor.add_classroom);
+    app.get("/api/classes/queue/:class_id", mentor.get_inqueue);
+    app.post("/api/my/classes", mentor.get_my_classroom)
 
     // student endpoints
     app.post("/api/student/class/register", student.regToClass);
+    app.post("/api/student/request/assistance", student.ask_assistance);
+    app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order);
   
-
     // class endpoints
     app.get("/api/classes", classes.getAllClass);
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
