@@ -7,7 +7,15 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 
 export const GenerateKey = props => {
-  const { handleClose, open } = props;
+  const {
+    handleClose,
+    open,
+    handleMentor,
+    setMentorData,
+    handleAdmin,
+    setAdminData,
+    tabValue
+  } = props;
   return (
     <div>
       <Dialog
@@ -19,22 +27,47 @@ export const GenerateKey = props => {
         <DialogTitle id="alert-dialog-title">
           {"Enter Email Address"}
         </DialogTitle>
-        <DialogContent>
-          <form noValidate autoComplete="off">
-            <TextField
-              id="email"
-              type="email"
-              label="Email"
-              variant="outlined"
-            />
+        {tabValue === 1 ? (
+          <form autoComplete="off" onSubmit={handleMentor}>
+            <DialogContent>
+              <TextField
+                type="email"
+                label="Email"
+                variant="outlined"
+                required
+                onChange={e => setMentorData(e.target.value)}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button type="submit" color="primary">
+                Submit
+              </Button>
+              <Button onClick={handleClose} color="primary" autoFocus>
+                Cancel
+              </Button>
+            </DialogActions>
           </form>
-        </DialogContent>
-        <DialogActions>
-          <Button color="primary">Submit</Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Cancel
-          </Button>
-        </DialogActions>
+        ) : (
+          <form autoComplete="off" onSubmit={handleAdmin}>
+            <DialogContent>
+              <TextField
+                type="email"
+                label="Email"
+                variant="outlined"
+                required
+                onChange={e => setAdminData(e.target.value)}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button type="submit" color="primary">
+                Submit
+              </Button>
+              <Button onClick={handleClose} color="primary" autoFocus>
+                Cancel
+              </Button>
+            </DialogActions>
+          </form>
+        )}
       </Dialog>
     </div>
   );
