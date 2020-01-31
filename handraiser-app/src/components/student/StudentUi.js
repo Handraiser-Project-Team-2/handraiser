@@ -42,6 +42,7 @@ const Div2 = styled.div`
 const Queue = styled.div`
   width: 25%;
   border-right: 1px solid lightgrey;
+  border-top: px solid yellow;
   @media screen and (max-width: 600px) {
     display: none;
   }
@@ -161,6 +162,38 @@ export default function Student() {
                 justifyContent: "space-between"
               }}
             >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>Log Out</MenuItem>
+            </Menu>
+          </Toolbar>
+        </AppBar>
+      </Nav>
+      <Div>
+        <Queue>
+          <Tabs />
+        </Queue>
+        <Help>
+          <Subject>
+            <TitleName>
+              <Typography variant="h4">Error in Docker Compose</Typography>
+              <Typography variant="h6">From: Kobe Bryant</Typography>
+            </TitleName>
+            <Option>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%"
+                }}
+              >
+                <More onClick={handleMenu}>
+                  <MoreVertIcon
+                    style={{
+                      fontSize: 35,
+                      color: "#c4c4c4"
+                    }}
+                  />
+                </More>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <IconButton edge="start" aria-label="menu">
                   <MenuIcon style={{ color: "white" }} />

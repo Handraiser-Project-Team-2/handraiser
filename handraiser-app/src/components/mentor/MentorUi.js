@@ -129,12 +129,13 @@ const Send = styled.button`
   border: transparent;
   width: 218px;
   padding: 10px;
-  margin-left: 25px;
   border-radius: 5px;
   cursor: pointer;
   @media screen and (max-width: 600px) {
     box-sizing: border-box;
     width: 100%;
+    display: flex;
+    justify-content: center;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
     box-sizing: border-box;
@@ -180,6 +181,38 @@ export default function Student() {
                 justifyContent: "space-between"
               }}
             >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>Log Out</MenuItem>
+            </Menu>
+          </Toolbar>
+        </AppBar>
+      </Nav>
+      <Div>
+        <Queue>
+          <Tabs />
+        </Queue>
+        <Help>
+          <Subject>
+            <TitleName>
+              <Typography variant="h4">Error in Docker Compose</Typography>
+              <Typography variant="h6">From: Ali Connors</Typography>
+            </TitleName>
+            <Option>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%"
+                }}
+              >
+                <More onClick={handleMenu}>
+                  <MoreVertIcon
+                    style={{
+                      fontSize: 35,
+                      color: "#c4c4c4"
+                    }}
+                  />
+                </More>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <IconButton edge="start" aria-label="menu">
                   <MenuIcon style={{ color: "white" }} />
