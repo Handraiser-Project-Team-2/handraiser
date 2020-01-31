@@ -24,7 +24,8 @@
     "jwt-decode": "^2.2.0",
     "massive": "^5.11.2",
     "node-pg-migrate": "^4.2.1",
-    "pg": "^7.17.0"
+    "pg": "^7.17.0",
+    "sweetalert2": "^9.7.1"
   },
   "keywords": [],
   "author": "",

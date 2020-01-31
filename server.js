@@ -27,7 +27,7 @@ massive({
     app.use(cors());
 
     // port declaration
-    const PORT = 5001 || process.env.PORT;
+    const PORT = 5000 || process.env.PORT;
 
     // endpoints declaration
 
@@ -53,7 +53,7 @@ massive({
     app.post("/api/student/class/register", student.regToClass);
     app.post("/api/student/request/assistance", student.ask_assistance);
     app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order);
-
+  
     // class endpoints
     app.get("/api/classes", classes.getAllClass);
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
