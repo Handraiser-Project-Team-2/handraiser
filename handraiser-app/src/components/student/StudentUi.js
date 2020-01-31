@@ -37,6 +37,7 @@ const Div2 = styled.div`
 const Queue = styled.div`
   width: 25%;
   border-right: 1px solid lightgrey;
+  border-top: px solid yellow;
   @media screen and (max-width: 600px) {
     display: none;
   }
@@ -207,7 +208,7 @@ export default function Student() {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClose}>Log Out</MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>

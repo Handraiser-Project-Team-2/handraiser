@@ -11,6 +11,7 @@ import Menu from "@material-ui/core/Menu";
 import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Tabs from "./Tabs/Tabs";
+
 const Nav = styled.div`
   width: 100%;
   padding-bottom: 65px;
@@ -126,12 +127,13 @@ const Send = styled.button`
   border: transparent;
   width: 218px;
   padding: 10px;
-  margin-left: 25px;
   border-radius: 5px;
   cursor: pointer;
   @media screen and (max-width: 600px) {
     box-sizing: border-box;
     width: 100%;
+    display: flex;
+    justify-content: center;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
     box-sizing: border-box;
@@ -185,7 +187,7 @@ export default function Student() {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClose}>Log Out</MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
