@@ -24,7 +24,6 @@ module.exports = {
         class_status
       })
       .then(data => {
-
         // add key ref for this classroom
         db.classroom_key
           .save({
@@ -32,7 +31,7 @@ module.exports = {
             classroom_key: keygen.genKey("", "classroom")
           })
           .then(classRef => {
-            res.status(201).json({...data, classRef});
+            res.status(201).json({ ...data, classRef });
           })
           .catch(err => {
             res
@@ -44,5 +43,17 @@ module.exports = {
       .catch(err => {
         res.status(500).json(err);
       });
-  }
+  },
+  get_inqueue: (req, res) => {
+    const db = req.app.get("db");
+
+    db.concern_list
+      .find({ class_id: req.params.class_id })
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(401).end(err);
+      });
+  },
 };

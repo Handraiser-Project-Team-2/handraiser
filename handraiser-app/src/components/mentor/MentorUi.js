@@ -10,6 +10,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
 import Tabs from "./Tabs/Tabs";
 
 const Nav = styled.div`
@@ -142,6 +144,7 @@ const Send = styled.button`
 `;
 
 export default function Student() {
+  let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleMenu = event => {
@@ -150,41 +153,33 @@ export default function Student() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  return (
-    <React.Fragment>
-      <Nav>
-        <AppBar style={{ backgroundColor: "#372476" }}>
-          <Toolbar
-            style={{
-              display: "flex",
-              justifyContent: "space-between"
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <IconButton edge="start" aria-label="menu">
-                <MenuIcon style={{ color: "white" }} />
-              </IconButton>
-              <Typography variant="h6">Handraiser Mentor</Typography>
-            </div>
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                edge="end"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle style={{ fontSize: 40 }} />
-              </IconButton>
-            </div>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
+
+  const user_type = sessionStorage.getItem("user_type");
+  if (user_type != 4) {
+    Swal.fire({
+      icon: "error",
+      title: "You cannot acces this page!"
+    }).then(function() {
+      if (user_type == 3) {
+        history.push("/student");
+      } else if (user_type == 1) {
+        history.push("/superadmin");
+      }
+    });
+  }
+
+  if (user_type != 4) {
+    return null;
+  } else {
+    return (
+      <React.Fragment>
+        <Nav>
+          <AppBar style={{ backgroundColor: "#372476" }}>
+            <Toolbar
+              style={{
+                display: "flex",
+                justifyContent: "space-between"
               }}
-              open={open}
-              onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>Log Out</MenuItem>
@@ -218,48 +213,107 @@ export default function Student() {
                     }}
                   />
                 </More>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <IconButton edge="start" aria-label="menu">
+                  <MenuIcon style={{ color: "white" }} />
+                </IconButton>
+                <Typography variant="h6">Handraiser Mentor</Typography>
               </div>
-            </Option>
-          </Subject>
-          <Conversation></Conversation>
-          <Message>
-            <Field>
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                  width: "100%"
+              <div>
+                <IconButton
+                  aria-label="account of current user"
+                  edge="end"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle style={{ fontSize: 40 }} />
+                </IconButton>
+              </div>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
                 }}
+                open={open}
+                onClose={handleClose}
               >
-                <TextField
-                  id="outlined-textarea"
-                  multiline
-                  variant="outlined"
-                  fullWidth
-                  rows="3"
-                />
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+              </Menu>
+            </Toolbar>
+          </AppBar>
+        </Nav>
+        <Div>
+          <Queue>
+            <Tabs />
+          </Queue>
+          <Help>
+            <Subject>
+              <TitleName>
+                <Typography variant="h4">Error in Docker Compose</Typography>
+                <Typography variant="h6">From: Ali Connors</Typography>
+              </TitleName>
+              <Option>
                 <div
                   style={{
-                    width: "100%",
                     display: "flex",
                     justifyContent: "flex-end",
-                    marginTop: "15px"
+                    width: "100%"
                   }}
                 >
-                  <Send>SEND</Send>
+                  <More onClick={handleMenu}>
+                    <MoreVertIcon
+                      style={{
+                        fontSize: 35,
+                        color: "#c4c4c4"
+                      }}
+                    />
+                  </More>
                 </div>
-              </div>
-            </Field>
-          </Message>
-        </Help>
-        <Div2>
-          <Shared>
-            <Typography variant="h6">Shared Files</Typography>
-          </Shared>
-        </Div2>
-      </Div>
-    </React.Fragment>
-  );
+              </Option>
+            </Subject>
+            <Conversation></Conversation>
+            <Message>
+              <Field>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    width: "100%"
+                  }}
+                >
+                  <TextField
+                    id="outlined-textarea"
+                    multiline
+                    variant="outlined"
+                    fullWidth
+                    rows="3"
+                  />
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "15px"
+                    }}
+                  >
+                    <Send>SEND</Send>
+                  </div>
+                </div>
+              </Field>
+            </Message>
+          </Help>
+          <Div2>
+            <Shared>
+              <Typography variant="h6">Shared Files</Typography>
+            </Shared>
+          </Div2>
+        </Div>
+      </React.Fragment>
+    );
+  }
 }
