@@ -54,21 +54,6 @@ export default function Student() {
     // console.log(name);
   };
 
-  // const user_type = sessionStorage.getItem("user_type");
-
-  // if (user_type !== 3) {
-  //   Swal.fire({
-  //     icon: "error",
-  //     title: "You cannot acces this page!"
-  //   }).then(function() {
-  //     if (user_type === 4) {
-  //       history.push("/mentor");
-  //     } else if (user_type === 1) {
-  //       history.push("/superadmin");
-  //     }
-  //   });
-  // }
-
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
@@ -113,10 +98,13 @@ export default function Student() {
         concern_description: concernDescription
       })
       .then(() => {
-        history.push("/student");
+        setConcernTitle("");
+        setConcernDescription("");
         Swal.fire({
           icon: "success",
           title: "Request sent to the mentor"
+        }).then(() => {
+          history.push("/student");
         });
       });
   };
@@ -171,12 +159,13 @@ export default function Student() {
             <TitleName>
               <TextField
                 id="standard-basic"
+                value={concernTitle}
                 onChange={e => setConcernTitle(e.target.value)}
                 style={{ width: 800 }}
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h6">subject</Typography>
-                <Typography variant="h6">{concernTitle.length}/30</Typography>
+                <Typography>Subject</Typography>
+                <Typography>{concernTitle.length}/30</Typography>
               </div>
             </TitleName>
             <Option>
@@ -217,6 +206,7 @@ export default function Student() {
                     variant="outlined"
                     fullWidth
                     rows="3"
+                    value={concernDescription}
                     onChange={e => setConcernDescription(e.target.value)}
                   />
 

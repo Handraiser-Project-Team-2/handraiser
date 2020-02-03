@@ -20,6 +20,10 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
+  },
+  small: {
+    width: theme.spacing(4),
+    height: theme.spacing(4)
   }
 }));
 
@@ -54,7 +58,7 @@ export default function InQueue() {
         return (
           <div key={index}>
             <ListItem
-              button
+              // button
               style={{
                 borderLeft: "14px solid #8932a8",
                 borderBottom: "0.5px solid #abababde",
@@ -92,8 +96,12 @@ export default function InQueue() {
                   </React.Fragment>
                 }
               />
-              <ListItemSecondaryAction onClick={handleMenu}>
+              <ListItemSecondaryAction style={{ display: "flex" }}>
+                <Avatar variant="square" className={classes.small}>
+                  {concern.queue_order_num}
+                </Avatar>
                 <MoreVertIcon
+                  onClick={handleMenu}
                   style={{
                     fontSize: 35,
                     color: "#c4c4c4",

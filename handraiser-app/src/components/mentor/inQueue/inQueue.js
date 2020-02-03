@@ -11,6 +11,9 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import Grid from "@material-ui/core/Grid";
+import Hidden from "@material-ui/core/Hidden";
+import MentorUi from "../MentorUi";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,11 +25,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue() {
+export default function InQueue(rowDatahandler) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler.rowDatahandler;
 
   useEffect(() => {
     axios({
@@ -43,8 +47,9 @@ export default function InQueue() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const handleConcernData = data => {
-    console.log(data);
+    rowDataHandlerChild2(data);
   };
 
   return (
@@ -59,7 +64,7 @@ export default function InQueue() {
                 borderBottom: "0.5px solid #abababde",
                 padding: "10px 15px"
               }}
-              onClick={e => handleConcernData(data)}
+              onClick={() => handleConcernData(data)}
             >
               <ListItemAvatar>
                 <Avatar>A</Avatar>
@@ -92,8 +97,9 @@ export default function InQueue() {
                   </React.Fragment>
                 }
               />
-              <ListItemSecondaryAction onClick={handleMenu}>
+              <ListItemSecondaryAction>
                 <MoreVertIcon
+                  onClick={handleMenu}
                   style={{
                     fontSize: 35,
                     color: "#c4c4c4",

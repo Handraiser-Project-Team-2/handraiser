@@ -32,8 +32,9 @@ import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
 
-export default function Student() {
+export default function Mentor() {
   let history = useHistory();
+  const [rowData, setRowData] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
@@ -48,10 +49,20 @@ export default function Student() {
     console.log(name);
   };
 
+  const rowDatahandler = rowData => {
+    setRowData(rowData);
+    axios
+      .get(`http://localhost:5001/api/userprofile/${rowData.user_id}`, {})
+      .then(data => {
+        console.log(data.data[0]);
+        setName(data.data[0].first_name + " " + data.data[0].last_name);
+      });
+  };
+
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("/api/user/data", {
+        .post("http://localhost:5001/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
@@ -127,13 +138,13 @@ export default function Student() {
       </Nav>
       <Div>
         <Queue>
-          <Tabs />
+          <Tabs rowDatahandler={rowDatahandler} />
         </Queue>
         <Help>
           <Subject>
             <TitleName>
-              <Typography variant="h4">Error in Docker Compose</Typography>
-              <Typography variant="h6">From: Kobe Bryant</Typography>
+              <Typography variant="h4">{rowData.concern_title}</Typography>
+              <Typography variant="h6">From: {name}</Typography>
             </TitleName>
             <Option>
               <div
@@ -173,8 +184,6 @@ export default function Student() {
                     variant="outlined"
                     fullWidth
                     rows="3"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
                   />
 
                   <div
