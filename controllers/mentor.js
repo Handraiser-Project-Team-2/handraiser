@@ -9,7 +9,6 @@ module.exports = {
 
     console.log(date);
 
-   
     const {
       class_title,
       class_description,
@@ -20,10 +19,9 @@ module.exports = {
     jwtDecode(token);
     let parseToken = jwtDecode(token);
 
- 
     db.class
       .save({
-        user_id:parseToken.user_id,
+        user_id:parseToken.userid,
         class_title,
         class_description,
         class_date_created: date,
@@ -76,8 +74,6 @@ module.exports = {
       .catch(err=>{
         res.status(400).end(err)
       })
-
     // res.status(201).json(parseToken)
-    
   }
 };
