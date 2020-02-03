@@ -21,7 +21,7 @@ module.exports = {
 
     db.class
       .save({
-        user_id:parseToken.userid,
+        user_id: parseToken.userid,
         class_title,
         class_description,
         class_date_created: date,
@@ -63,17 +63,20 @@ module.exports = {
   get_my_classroom: (req, res) => {
     const db = req.app.get("db");
 
-    const {token} = req.body
+    const { token } = req.body;
 
     const parseToken = jwtDecode(token);
 
-    db.class.find({user_id:parseToken.userid})
-      .then(data=>{
+    db.query(
+      `SELECT class.class_id, class.class_title, class.class_description, class.class_date_created, class.class_status, classroom_key.classroom_key
+      FROM class INNER JOIN classroom_key ON class.class_id = classroom_key.class_id WHERE class.user_id = ${parseToken.userid}`
+    )
+      .then(data => {
         res.status(201).json(data);
       })
-      .catch(err=>{
-        res.status(400).end(err)
-      })
+      .catch(err => {
+        res.status(400).end(err);
+      });
     // res.status(201).json(parseToken)
   }
 };
