@@ -111,7 +111,7 @@ export default function NavBar() {
         </div>
       </React.Fragment>
     );
-  }else{
-    return ''
+  } else {
+    return "";
   }
 }
