@@ -61,7 +61,7 @@ export default function Student() {
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("http://localhost:5001/api/user/data", {
+        .post("/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
@@ -95,7 +95,7 @@ export default function Student() {
 
   const sendRequest = () => {
     axios
-      .post(`http://localhost:5001/api/student/request/assistance`, {
+      .post(`/api/student/request/assistance`, {
         class_id: 5,
         user_id: user_id,
         concern_title: concernTitle,
