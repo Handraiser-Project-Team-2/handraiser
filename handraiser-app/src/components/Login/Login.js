@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import styled from "styled-components";
 import backgroundImg from "../images/girl.svg";
 import Logo from "../images/google.png";
@@ -96,6 +96,8 @@ const Footer = styled.div`
 `;
 
 export default function Login(props) {
+
+
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);
@@ -114,7 +116,7 @@ export default function Login(props) {
       })
         .then(data => {
           const userType = data.data.user_type_id;
-
+         localStorage.setItem("name",response.profileObj.givenName)
           sessionStorage.setItem("token", "Bearer " + data.data.token);
 
           switch (userType) {
