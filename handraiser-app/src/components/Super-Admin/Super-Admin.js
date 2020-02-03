@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -9,12 +9,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 import { TabBtn } from "../Tabs/Tabs";
 
 export default function NavBar() {
   let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [state, setState] = useState({ user_type: "" });
   const open = Boolean(anchorEl);
 
   const handleMenu = event => {
@@ -25,23 +27,42 @@ export default function NavBar() {
     setAnchorEl(null);
   };
 
-  const user_type = sessionStorage.getItem("user_type");
-  if (user_type !== 1) {
-    Swal.fire({
-      icon: "error",
-      title: "You cannot access this page!"
-    }).then(function() {
-      if (user_type === 3) {
-        history.push("/student");
-      } else if (user_type === 4) {
-        history.push("/mentor");
-      }
-    });
-  }
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      axios
+        .post("/api/user/data", {
+          token: sessionStorage.getItem("token").split(" ")[1]
+        })
+        .then(data => {
+          setState({ user_type: data.data.user_type_id });
+          const user_type = data.data.user_type_id;
+          if (user_type !== 1) {
+            Swal.fire({
+              icon: "error",
+              title: "You cannot acces this page!"
+            }).then(function() {
+              if (user_type === 3) {
+                history.push("/student");
+              } else if (user_type === 4) {
+                history.push("/mentor");
+              }
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "You cannot acces this page!"
+      }).then(function() {
+        history.push("/");
+      });
+    }
+  }, []);
 
-  if (user_type !== 1) {
-    return null;
-  } else {
+  if (state.user_type === 1) {
     return (
       <React.Fragment>
         <AppBar style={{ backgroundColor: "#372476" }}>
@@ -90,5 +111,7 @@ export default function NavBar() {
         </div>
       </React.Fragment>
     );
+  } else {
+    return "";
   }
 }

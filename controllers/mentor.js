@@ -9,25 +9,23 @@ module.exports = {
 
     console.log(date);
 
-   
     const {
       class_title,
       class_description,
-      class_status, //either (open, close) ? maybe by defualt is open
+      // class_status, //either (open, close) ? maybe by defualt is open
       token //mentor reference
     } = req.body;
 
     jwtDecode(token);
     let parseToken = jwtDecode(token);
 
-
     db.class
       .save({
-        user_id:parseToken.user_id,
+        user_id:parseToken.userid,
         class_title,
         class_description,
         class_date_created: date,
-        class_status
+        class_status: "open" //by default
       })
       .then(data => {
         // add key ref for this classroom
@@ -76,8 +74,6 @@ module.exports = {
       .catch(err=>{
         res.status(400).end(err)
       })
-
     // res.status(201).json(parseToken)
-    
   }
 };

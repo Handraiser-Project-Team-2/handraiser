@@ -24,9 +24,13 @@ export const RowCont = styled.div`
 `;
 
 export const TableStyle = styled.div`
-  @media only screen and (max-width: 425px),
+  @media only screen and (max-width: 900px),
     (height: 1024px) and (width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: landscape),
     (width: 1024px) and (height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: portrait) {
+    table,
+    thead,
+    tbody,
+    th,
     td,
     tr {
       display: block;
@@ -38,20 +42,20 @@ export const TableStyle = styled.div`
       left: -9999px;
     }
     tr {
-      border-bottom: 3px solid lightgray;
+      border: 1px solid lightgray;
       border-radius: 10px;
     }
     td {
       border: none;
       border-bottom: 1px solid #eee;
       position: relative;
-      padding-left: 25%;
+      padding-left: 50%;
     }
     td:before {
       position: absolute;
       top: 10px;
       left: 6px;
-      width: 100%;
+      width: 50%;
       padding: 10px;
       white-space: nowrap;
     }

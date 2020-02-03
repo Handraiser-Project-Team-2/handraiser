@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -28,12 +29,14 @@ import {
   Shared,
   Request
 } from "../Styles/Styles";
+import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
 
 export default function Student() {
   let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [state, setState] = useState({ user_type: "" });
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
   const handleMenu = event => {
@@ -46,23 +49,43 @@ export default function Student() {
     evt.preventDefault();
     console.log(name);
   };
-  const user_type = sessionStorage.getItem("user_type");
-  if (user_type !== 3) {
-    Swal.fire({
-      icon: "error",
-      title: "You cannot access this page!"
-    }).then(function() {
-      if (user_type === 4) {
-        history.push("/mentor");
-      } else if (user_type === 1) {
-        history.push("/superadmin");
-      }
-    });
-  }
 
-  if (user_type !== 3) {
-    return null;
-  } else {
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      axios
+        .post("/api/user/data", {
+          token: sessionStorage.getItem("token").split(" ")[1]
+        })
+        .then(data => {
+          setState({ user_type: data.data.user_type_id });
+          const user_type = data.data.user_type_id;
+          if (user_type !== 3) {
+            Swal.fire({
+              icon: "error",
+              title: "You cannot acces this page!"
+            }).then(function() {
+              if (user_type === 4) {
+                history.push("/mentor");
+              } else if (user_type === 1) {
+                history.push("/superadmin");
+              }
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "You cannot acces this page!"
+      }).then(function() {
+        history.push("/");
+      });
+    }
+  }, []);
+
+  if (state.user_type === 3) {
     return (
       <React.Fragment>
         <Nav>
@@ -181,5 +204,7 @@ export default function Student() {
         </Div>
       </React.Fragment>
     );
+  } else {
+    return "";
   }
 }
