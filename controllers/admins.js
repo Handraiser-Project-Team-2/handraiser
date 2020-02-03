@@ -154,10 +154,7 @@ module.exports = {
             WHERE validation_email = '${data.email}'`
             )
               .then(validate => {
-                // console.log(validate);
-
                 // change user type here(here)
-
                 res
                   .status(201)
                   .json({ ...user, result: "Validation succesful" });
