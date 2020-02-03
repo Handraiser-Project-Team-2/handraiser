@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import teal from "@material-ui/core/colors/teal";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function AddClassDialog() {
+export default function AddClassDialog({ token, fetchMentorClass }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -39,22 +40,36 @@ export default function AddClassDialog() {
 
   const [dateToday] = useState({ data: new Date().toLocaleDateString() });
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    console.log("hello");
-  };
-
   const [state, setState] = useState({
+    token: token,
     class_title: "",
-    class_description: ""
+    class_description: "",
+    class_status: "open"
   });
   const handleChange = e => {
     setState({
       ...state,
       [e.target.name]: e.target.value
     });
-    console.log(state);
   };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    axios({
+      method: "post",
+      url: `/api/mentor/classroom/add`,
+      data: state
+    })
+      .then(data => {
+        console.log(data);
+        handleClose();
+        fetchMentorClass();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       <Fab

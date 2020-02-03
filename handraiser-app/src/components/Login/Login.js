@@ -102,7 +102,7 @@ export default function Login(props) {
 
       axios({
         method: "post",
-        url: "http://localhost:5000/api/login",
+        url: "/api/login",
         data: {
           email: response.profileObj.email,
           last_name: response.profileObj.familyName,
@@ -137,7 +137,7 @@ export default function Login(props) {
               break;
             case 3:
               // student
-              props.history.push("/student");
+              props.history.push("/class");
               break;
             case 4:
               // mentor

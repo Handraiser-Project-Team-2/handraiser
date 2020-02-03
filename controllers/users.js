@@ -90,13 +90,17 @@ module.exports = {
 
     let parseToken = jwtDecode(token);
 
-    db.users
-      .findOne({ user_id: parseToken.userid })
-      .then(data => {
-        res.status(201).json(data);
-      })
-      .catch(err => {
-        res.status(400).end();
-      });
+    db.users.findOne({ user_id: parseToken.userid }).then(data => {
+      if (data) {
+        db.user_profile
+          .findOne({ profile_id: data.profile_id })
+          .then(user => {
+            res.status(201).json({ ...data, ...user });
+          })
+          .catch(err => {
+            res.status(400).end();
+          });
+      }
+    });
   }
 };
