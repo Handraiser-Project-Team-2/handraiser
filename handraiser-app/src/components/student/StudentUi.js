@@ -32,12 +32,17 @@ import {
 import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
+var jwtDecode = require("jwt-decode");
 
 export default function Student() {
   let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [name, setName] = useState("");
+  const [concernDescription, setConcernDescription] = useState("");
+  const [concernTitle, setConcernTitle] = useState("");
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -46,10 +51,10 @@ export default function Student() {
   };
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(name);
+    // console.log(name);
   };
 
-  const user_type = sessionStorage.getItem("user_type");
+  // const user_type = sessionStorage.getItem("user_type");
 
   // if (user_type !== 3) {
   //   Swal.fire({
@@ -65,7 +70,6 @@ export default function Student() {
   // }
 
   useEffect(() => {
-
     if (sessionStorage.getItem("token")) {
       axios
         .post("http://localhost:5001/api/user/data", {
@@ -90,16 +94,32 @@ export default function Student() {
         .catch(err => {
           console.log(err);
         });
-    }else{
+    } else {
       Swal.fire({
         icon: "error",
         title: "You cannot acces this page!"
       }).then(function() {
-          history.push("/");
+        history.push("/");
       });
     }
   }, []);
 
+  const sendRequest = () => {
+    axios
+      .post(`/api/student/request/assistance`, {
+        class_id: 5,
+        user_id: user_id,
+        concern_title: concernTitle,
+        concern_description: concernDescription
+      })
+      .then(() => {
+        history.push("/student");
+        Swal.fire({
+          icon: "success",
+          title: "Request sent to the mentor"
+        });
+      });
+  };
   return (
     <React.Fragment>
       <Nav>
@@ -149,8 +169,15 @@ export default function Student() {
         <Help>
           <Subject>
             <TitleName>
-              <Typography variant="h4">Error in Docker Compose</Typography>
-              <Typography variant="h6">From: Kobe Bryant</Typography>
+              <TextField
+                id="standard-basic"
+                onChange={e => setConcernTitle(e.target.value)}
+                style={{ width: 800 }}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h6">subject</Typography>
+                <Typography variant="h6">{concernTitle.length}/30</Typography>
+              </div>
             </TitleName>
             <Option>
               <div
@@ -190,8 +217,7 @@ export default function Student() {
                     variant="outlined"
                     fullWidth
                     rows="3"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
+                    onChange={e => setConcernDescription(e.target.value)}
                   />
 
                   <div
@@ -202,7 +228,7 @@ export default function Student() {
                       marginTop: "15px"
                     }}
                   >
-                    <Request>NEW REQUEST</Request>
+                    <Request onClick={sendRequest}>NEW REQUEST</Request>
                     <Send onClick={sendMsg}>SEND</Send>
                   </div>
                 </form>

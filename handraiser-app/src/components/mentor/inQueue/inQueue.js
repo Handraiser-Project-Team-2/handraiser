@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,33 +23,33 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InQueue() {
+  const classes = useStyles();
+  const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/classes/queue/5` //5 here is a class_id example
+    }).then(res => {
+      setConcernsData(res.data);
+    });
+  });
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const classes = useStyles();
-  const datas = [
-    {
-      name: "Ali Connors",
-      concern: "Error in docker-compose"
-    },
-    {
-      name: "Alex Jennifer",
-      concern: "Request 500 Node"
-    },
-    {
-      name: "Uzumaki Naruto",
-      concern: "Authentication Glitch"
-    }
-  ];
+  const handleConcernData = data => {
+    console.log(data);
+  };
 
   return (
     <List className={classes.root}>
-      {datas.map((data, index) => {
+      {concernsData.map((data, index) => {
         return (
           <div key={index}>
             <ListItem
@@ -58,9 +59,10 @@ export default function InQueue() {
                 borderBottom: "0.5px solid #abababde",
                 padding: "10px 15px"
               }}
+              onClick={e => handleConcernData(data)}
             >
               <ListItemAvatar>
-                <Avatar>{data.name.charAt(0)}</Avatar>
+                <Avatar>A</Avatar>
               </ListItemAvatar>
               <Menu
                 id="menu-appbar"
@@ -76,7 +78,7 @@ export default function InQueue() {
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>
               </Menu>
               <ListItemText
-                primary={data.concern}
+                primary={data.concern_title}
                 secondary={
                   <React.Fragment>
                     <Typography
@@ -85,7 +87,7 @@ export default function InQueue() {
                       className={classes.inline}
                       color="textPrimary"
                     >
-                      {data.name}
+                      {data.concern_description}
                     </Typography>
                   </React.Fragment>
                 }

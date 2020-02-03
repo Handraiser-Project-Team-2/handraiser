@@ -57,18 +57,18 @@ export default function Student() {
         .then(data => {
           const user_type = data.data.user_type_id;
 
-          if (user_type !== 4) {
-            Swal.fire({
-              icon: "error",
-              title: "You cannot acces this page!"
-            }).then(function() {
-              if (user_type === 3) {
-                history.push("/student");
-              } else if (user_type === 1) {
-                history.push("/superadmin");
-              }
-            });
-          }
+          // if (user_type !== 4) {
+          //   Swal.fire({
+          //     icon: "error",
+          //     title: "You cannot acces this page!"
+          //   }).then(function() {
+          //     if (user_type === 3) {
+          //       history.push("/student");
+          //     } else if (user_type === 1) {
+          //       history.push("/superadmin");
+          //     }
+          //   });
+          // }
         })
         .catch(err => {
           console.log(err);
