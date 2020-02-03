@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -14,11 +14,11 @@ import Container from "@material-ui/core/Container";
 
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-
+import io from "socket.io-client";
 // COMPONENTS
 import CardPage from "./CardPage";
-import FindClassDialog from './FindClassDialog'
-import VerificationDialog from './VerificationDialog'
+import FindClassDialog from "./FindClassDialog";
+import VerificationDialog from "./VerificationDialog";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary
   }
 }));
-
+let socket;
 export default function ClassLanding() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -47,7 +47,11 @@ export default function ClassLanding() {
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
-
+  const ENDPOINT = "localhost:5000";
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    console.log(socket);
+  }, []);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -99,10 +103,9 @@ export default function ClassLanding() {
 
       {/* BODY */}
       <Container maxWidth="xl">
-        
         <div className={classes.root}>
           <Grid container spacing={2} className={classes.gridContainer}>
-          <VerificationDialog />
+            <VerificationDialog />
             <Grid item xs={12}>
               <FindClassDialog />
             </Grid>
