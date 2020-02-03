@@ -57,6 +57,7 @@ export default function ClassLanding() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
 
   useEffect(() => {
     fetchUserData();

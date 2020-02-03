@@ -16,6 +16,6 @@ exports.up = pgm => {
             references: "class"
         }
     })
-};
+}; 
 
 exports.down = pgm => {};
