@@ -8,7 +8,6 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 
@@ -17,8 +16,9 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // COMPONENTS
 import CardPage from "./CardPage";
-import FindClassDialog from './FindClassDialog'
-import VerificationDialog from './VerificationDialog'
+import FindClassDialog from "./FindClassDialog";
+import VerificationDialog from "./VerificationDialog";
+import AddClassDialog from "./AddClassDialog";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -99,11 +99,11 @@ export default function ClassLanding() {
 
       {/* BODY */}
       <Container maxWidth="xl">
-        
         <div className={classes.root}>
           <Grid container spacing={2} className={classes.gridContainer}>
-          <VerificationDialog />
+            <VerificationDialog />
             <Grid item xs={12}>
+              <AddClassDialog />
               <FindClassDialog />
             </Grid>
 

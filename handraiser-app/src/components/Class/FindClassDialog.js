@@ -11,12 +11,17 @@ import Fab from "@material-ui/core/Fab";
 import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import MuiAlert from "@material-ui/lab/Alert";
+import indigo from "@material-ui/core/colors/indigo";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const useStyles = makeStyles(theme => ({
+  title:{
+    backgroundColor: indigo[500],
+    color: 'white'
+  },
   fab: {
     float: "right"
   },
@@ -72,7 +77,7 @@ export default function ResponsiveDialog() {
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">
+        <DialogTitle id="responsive-dialog-title" className={classes.title}>
           {"Enter a new Class"}
         </DialogTitle>
         {/* ALERT */}

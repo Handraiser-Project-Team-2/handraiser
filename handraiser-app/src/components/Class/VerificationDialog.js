@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import red from "@material-ui/core/colors/red";
+import { makeStyles } from "@material-ui/core/styles";
 
 import PropTypes from "prop-types";
 import MaskedInput from "react-text-mask";
@@ -17,6 +18,13 @@ import MuiAlert from "@material-ui/lab/Alert";
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+
+const useStyles = makeStyles(theme => ({
+  title: {
+    backgroundColor: red[500],
+    color: "white"
+  }
+}));
 
 function TextMaskCustom(props) {
   const { inputRef, ...other } = props;
@@ -52,11 +60,8 @@ TextMaskCustom.propTypes = {
 };
 
 export default function VerificationDialog() {
+  const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -76,19 +81,17 @@ export default function VerificationDialog() {
       setValid(true);
     } else {
       handleClose();
-      setInput('')
+      setInput("");
     }
   };
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
       <Dialog open={open} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Are you a Mentor?</DialogTitle>
-        {/* ALERT */}
-        {valid ? <Alert severity="error">Error! Invalid input</Alert> : null}
+        <DialogTitle id="form-dialog-title" className={classes.title}>
+          Authentication required
+        </DialogTitle>
+
         <DialogContent>
           <DialogContentText>
             To access this site, please enter your verification key provided by
@@ -105,6 +108,8 @@ export default function VerificationDialog() {
             autoFocus
           />
         </DialogContent>
+        {/* ALERT */}
+        {valid ? <Alert severity="error">Error! Invalid input</Alert> : null}
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
