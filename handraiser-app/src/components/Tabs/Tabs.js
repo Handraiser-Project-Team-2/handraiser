@@ -5,6 +5,8 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 import { TabBox, BtnBox } from "../Styles/Styles";
 
@@ -32,6 +34,8 @@ export const TabBtn = props => {
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
   const [open, setOpen] = useState(false);
+  const [mentorData, setMentorData] = useState({});
+  const [adminData, setAdminData] = useState({});
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -43,6 +47,47 @@ export const TabBtn = props => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleMentor = e => {
+    e.preventDefault();
+    const Obj = {
+      email: mentorData
+    };
+    axios
+      .post(`http://localhost:5001/api/admin/keygen/mentor`, Obj)
+      .then(() => {
+        toast.info("registration sucessful!", {
+          position: toast.POSITION.TOP_CENTER
+        });
+        setOpen(false);
+      })
+      .catch(err => {
+        toast.error(err.respond.data.error, {
+          position: toast.POSITION.TOP_CENTER
+        });
+      });
+  };
+
+  const handleAdmin = e => {
+    e.preventDefault();
+    const Obj = {
+      email: adminData
+    };
+    axios
+      .post(`http://localhost:5001/api/admin/keygen`, Obj)
+      .then(() => {
+        toast.info("registration sucessful!", {
+          position: toast.POSITION.TOP_CENTER
+        });
+        setOpen(false);
+      })
+      .catch(err => {
+        toast.error(err, {
+          position: toast.POSITION.TOP_CENTER
+        });
+      });
+    console.log(adminData);
   };
 
   return (
@@ -73,13 +118,23 @@ export const TabBtn = props => {
         </Paper>
         {hide && (
           <BtnBox>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleOpen(props)}
-            >
-              Generate Key
-            </Button>
+            {tabValue === 1 ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleOpen(props)}
+              >
+                Generate Key
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleOpen(props)}
+              >
+                Generate Key
+              </Button>
+            )}
           </BtnBox>
         )}
       </TabBox>
@@ -92,7 +147,15 @@ export const TabBtn = props => {
       <TabPanel value={tabValue} index={2}>
         <TableCont tabValue={tabValue} />
       </TabPanel>
-      <GenerateKey handleClose={handleClose} open={open} />
+      <GenerateKey
+        handleClose={handleClose}
+        open={open}
+        handleMentor={handleMentor}
+        setMentorData={setMentorData}
+        handleAdmin={handleAdmin}
+        setAdminData={setAdminData}
+        tabValue={tabValue}
+      />
     </React.Fragment>
   );
 };
