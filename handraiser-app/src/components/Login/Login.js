@@ -102,7 +102,7 @@ export default function Login(props) {
 
       axios({
         method: "post",
-        url: "http://localhost:5000/api/login",
+        url: "/api/login",
         data: {
           email: response.profileObj.email,
           last_name: response.profileObj.familyName,
@@ -113,18 +113,9 @@ export default function Login(props) {
         }
       })
         .then(data => {
-
-          console.log(data);
- 
           const userType = data.data.user_type_id;
 
           sessionStorage.setItem("token", "Bearer " + data.data.token);
-
-          // session  Storage.setItem("user_type", userType);
-          // sessionStorage.setItem(
-          //   "UserReference",
-          //   JSON.stringify(data.data.user_id)
-          // );
 
           switch (userType) {
             case 1:
