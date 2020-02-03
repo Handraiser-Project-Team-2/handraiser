@@ -1,7 +1,6 @@
 const keygen = require("./keyGen");
 const jwtDecode = require("jwt-decode");
 
-
 module.exports = {
   // generate key to an email input (setting/promoting to mentor)
   add_mentor: (req, res) => {

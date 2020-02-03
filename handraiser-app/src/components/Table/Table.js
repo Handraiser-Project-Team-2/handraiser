@@ -8,12 +8,17 @@ import axios from "axios";
 
 import { RowCont, TableStyle } from "../Styles/Styles";
 
-export const TableCont = () => {
+export const TableCont = props => {
+  const { tabValue } = props;
   const [tableData, setTableData] = useState({
     columns: [
       {
         title: "Email",
         field: "validation_email"
+      },
+      {
+        title: "Status",
+        field: ""
       },
       {
         title: "Key",
@@ -42,9 +47,12 @@ export const TableCont = () => {
     (async function() {
       try {
         const res = await axios("http://localhost:5000/api/admin/mentor_list");
-        const data = await res.data;
-
-        setTableData({ ...tableData, data: data });
+        const res2 = await axios("http://localhost:5000/api/admin/admins_list");
+        if (tabValue === 1) {
+          setTableData({ ...tableData, data: res.data });
+        } else if (tabValue === 2) {
+          setTableData({ ...tableData, data: res2.data });
+        }
       } catch (err) {
         console.error(err);
       }
