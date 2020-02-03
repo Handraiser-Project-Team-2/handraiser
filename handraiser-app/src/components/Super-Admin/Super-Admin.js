@@ -24,22 +24,52 @@ export default function NavBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  return (
+    <React.Fragment>
+      <AppBar style={{ backgroundColor: "#372476" }}>
+        <Toolbar
+          style={{
+            display: "flex",
+            justifyContent: "space-between"
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <IconButton edge="start" aria-label="menu">
+              <MenuIcon style={{ color: "white" }} />
+            </IconButton>
+            <Typography variant="h6">Handraiser Super Admin</Typography>
+          </div>
+          <div>
+            <IconButton
+              aria-label="account of current user"
+              edge="end"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle style={{ fontSize: 40 }} />
+            </IconButton>
+          </div>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right"
   const user_type = sessionStorage.getItem("user_type");
-  if (user_type != 1) {
+  if (user_type !== 1) {
     Swal.fire({
       icon: "error",
       title: "You cannot acces this page!"
     }).then(function() {
-      if (user_type == 3) {
+      if (user_type === 3) {
         history.push("/student");
-      } else if (user_type == 4) {
+      } else if (user_type === 4) {
         history.push("/mentor");
       }
     });
   }
 
-  if (user_type != 1) {
+  if (user_type !== 1) {
     return null;
   } else {
     return (

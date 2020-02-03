@@ -27,10 +27,13 @@ massive({
     app.use(cors());
 
     // port declaration
-    const PORT = 5000 || process.env.PORT;
+    const PORT = 5001 || process.env.PORT;
 
     // endpoints declaration
+
+    // users endpoints
     app.post("/api/login", users.login);
+    app.post("/api/user/data", users.getUser);
 
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor);
@@ -45,6 +48,7 @@ massive({
     // mentor endpoints
     app.post("/api/mentor/classroom/add", mentor.add_classroom);
     app.get("/api/classes/queue/:class_id", mentor.get_inqueue);
+    app.post("/api/my/classes", mentor.get_my_classroom)
 
     // student endpoints
     app.post("/api/student/class/register", student.regToClass);

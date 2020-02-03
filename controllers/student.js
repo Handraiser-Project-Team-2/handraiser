@@ -1,8 +1,14 @@
+const jwtDecode = require("jwt-decode");
+
 module.exports = {
   regToClass: (req, res) => {
     const db = req.app.get("db");
 
-    const { class_id, user_id, supplied_key } = req.body;
+    const { class_id, token, supplied_key } = req.body;
+
+    const parseToken = jwtDecode(token);
+
+    let date = new Date();
 
     db.classroom_key
       .findOne({ class_id })
@@ -10,7 +16,7 @@ module.exports = {
         if (data.classroom_key === supplied_key) {
           // succesful key reference
           db.classroom
-            .save({ class_id, user_id }) //add date func here
+            .save({ class_id, user_id: parseToken.userid, date_entered: date }) //add date func here
             .then(data => {
               res.status(201).json(data);
             })
@@ -42,13 +48,14 @@ module.exports = {
         user_id,
         concern_title,
         concern_description,
-        concern_status: "2" //inqueue by default
+        concern_status: 2 //inqueue by default
       })
       .then(data => {
         res.status(201).json(data);
       })
       .catch(err => {
-        res.status(401).end(err);
+        console.log(err)
+        res.status(401).end();
       });
   },
   queue_order: (req, res) => {
@@ -74,7 +81,7 @@ module.exports = {
         res.status(201).json(order_data);
       })
       .catch(err => {
-        res.status(401).end(err);
+        res.status(401).end();
       });
   }
 };

@@ -1,6 +1,7 @@
 // const secret = require("../secret");
 const jwt = require("jsonwebtoken");
 const secret = require("../secret");
+const jwtDecode = require("jwt-decode");
 
 module.exports = {
   login: (req, res) => {
@@ -40,20 +41,20 @@ module.exports = {
                   user_status: 1
                 })
                 .then(data => {
-                  console.log(data);
+                  const token = jwt.sign(
+                    { googleId, userid: user.user_id },
+                    secret
+                  );
 
-                  const token = jwt.sign({ userid: user.user_id }, secret);
+                  // console.log(jwtDecode(token));
 
-                  res.status(201).json({ ...data, token });
+                  res.status(201).json({ token, ...data });
                 })
                 .catch(err => {
-                  console.log("here", err);
                   res.status(400).end();
                 });
             })
             .catch(err => {
-              console.log(err);
-
               res.status(400).end();
             });
         } else {
@@ -64,10 +65,11 @@ module.exports = {
               email
             })
             .then(data => {
-              
-              const token = jwt.sign({ googleId }, secret); // please update secret key
-
-              res.status(201).json({ ...data, token });
+              const token = jwt.sign(
+                { googleId, userid: data.user_id },
+                secret
+              ); // please update secret key
+              res.status(201).json({ token, ...data });
             })
             .catch(err => {
               console.log(err);
@@ -78,6 +80,22 @@ module.exports = {
       })
       .catch(err => {
         console.log(err);
+        res.status(400).end();
+      });
+  },
+  getUser: (req, res) => {
+    const db = req.app.get("db");
+
+    const { token } = req.body;
+
+    let parseToken = jwtDecode(token);
+
+    db.users
+      .findOne({ user_id: parseToken.userid })
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
         res.status(400).end();
       });
   }
