@@ -113,16 +113,18 @@ export default function Login(props) {
         }
       })
         .then(data => {
+
+          console.log(data);
+ 
           const userType = data.data.user_type_id;
 
           sessionStorage.setItem("token", "Bearer " + data.data.token);
 
-          sessionStorage.setItem("user_type", userType);
-
-          sessionStorage.setItem(
-            "UserReference",
-            JSON.stringify(data.data.user_id)
-          );
+          // session  Storage.setItem("user_type", userType);
+          // sessionStorage.setItem(
+          //   "UserReference",
+          //   JSON.stringify(data.data.user_id)
+          // );
 
           switch (userType) {
             case 1:
