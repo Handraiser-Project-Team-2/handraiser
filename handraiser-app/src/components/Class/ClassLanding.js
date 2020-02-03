@@ -20,6 +20,7 @@ import CardPage from "./CardPage";
 import FindClassDialog from "./FindClassDialog";
 import VerificationDialog from "./VerificationDialog";
 import AddClassDialog from "./AddClassDialog";
+import Topbar from "../reusables/Topbar";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -57,7 +58,6 @@ export default function ClassLanding() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
 
   useEffect(() => {
     fetchUserData();
@@ -99,44 +99,7 @@ export default function ClassLanding() {
 
   return (
     <React.Fragment>
-      <AppBar style={{ backgroundColor: "#372476" }}>
-        <Toolbar
-          style={{
-            display: "flex",
-            justifyContent: "space-between"
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton edge="start" aria-label="menu">
-              <MenuIcon style={{ color: "white" }} />
-            </IconButton>
-            <Typography variant="h6">Handraiser Admin</Typography>
-          </div>
-          <div>
-            <IconButton
-              aria-label="account of current user"
-              edge="end"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle style={{ fontSize: 40 }} />
-            </IconButton>
-          </div>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right"
-            }}
-            open={open}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
+      <Topbar />
 
       {/* BODY */}
       <Container maxWidth="xl">
