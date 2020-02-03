@@ -37,9 +37,9 @@ massive({
     app.get("/api/userprofile/:user_id", users.getUserProfile);
 
     // admins endpoints
-    app.post("/api/admin/keygen/mentor", admin.add_mentor);
-    app.post("/api/admin/keygen", admin.add_admin_mentor);
-    app.get("/api/admin/all_list", admin.accessList);
+    app.post("/api/admin/keygen/mentor", admin.add_mentor); //reference a mentor user type to an email
+    app.post("/api/admin/keygen", admin.add_admin_mentor); //register either mentor or admin user type to an email
+    app.get("/api/admin/all_list", admin.accessList); //
     app.get("/api/admin/mentor_list", admin.accessList_mentors);
     app.get("/api/admin/admins_list", admin.accessList_admins);
     app.post("/api/admin/verify", admin.verify);
