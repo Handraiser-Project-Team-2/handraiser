@@ -52,7 +52,7 @@ export default function Mentor() {
   const rowDatahandler = rowData => {
     setRowData(rowData);
     axios
-      .get(`http://localhost:5001/api/userprofile/${rowData.user_id}`, {})
+      .get(`/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
         console.log(data.data[0]);
         setName(data.data[0].first_name + " " + data.data[0].last_name);
@@ -62,7 +62,7 @@ export default function Mentor() {
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("http://localhost:5001/api/user/data", {
+        .post("/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
