@@ -35,6 +35,7 @@ import Tabs from "./Tabs/Tabs";
 export default function Student() {
   let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [state, setState] = useState({ user_type: "" });
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
   const handleMenu = event => {
@@ -55,8 +56,8 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
+          setState({ user_type: data.data.user_type_id });
           const user_type = data.data.user_type_id;
-
           if (user_type !== 4) {
             Swal.fire({
               icon: "error",
@@ -83,121 +84,124 @@ export default function Student() {
     }
   }, []);
 
-  return (
-    <React.Fragment>
-      <Nav>
-        <AppBar style={{ backgroundColor: "#372476" }}>
-          <Toolbar
-            style={{
-              display: "flex",
-              justifyContent: "space-between"
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <IconButton edge="start" aria-label="menu">
-                <MenuIcon style={{ color: "white" }} />
-              </IconButton>
-              <Typography variant="h6">Handraiser Admin</Typography>
-            </div>
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                edge="end"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle style={{ fontSize: 40 }} />
-              </IconButton>
-            </div>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
+  if (state.user_type === 1) {
+    return (
+      <React.Fragment>
+        <Nav>
+          <AppBar style={{ backgroundColor: "#372476" }}>
+            <Toolbar
+              style={{
+                display: "flex",
+                justifyContent: "space-between"
               }}
-              open={open}
-              onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>Log Out</MenuItem>
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </Nav>
-      <Div>
-        <Queue>
-          <Tabs />
-        </Queue>
-        <Help>
-          <Subject>
-            <TitleName>
-              <Typography variant="h4">Error in Docker Compose</Typography>
-              <Typography variant="h6">From: Kobe Bryant</Typography>
-            </TitleName>
-            <Option>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%"
-                }}
-              >
-                <More onClick={handleMenu}>
-                  <MoreVertIcon
-                    style={{
-                      fontSize: 35,
-                      color: "#c4c4c4"
-                    }}
-                  />
-                </More>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <IconButton edge="start" aria-label="menu">
+                  <MenuIcon style={{ color: "white" }} />
+                </IconButton>
+                <Typography variant="h6">Handraiser Admin</Typography>
               </div>
-            </Option>
-          </Subject>
-          <Conversation></Conversation>
-          <Message>
-            <Field>
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                  width: "100%"
+              <div>
+                <IconButton
+                  aria-label="account of current user"
+                  edge="end"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle style={{ fontSize: 40 }} />
+                </IconButton>
+              </div>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
                 }}
+                open={open}
+                onClose={handleClose}
               >
-                <form onSubmit={sendMsg}>
-                  <TextField
-                    id="outlined-textarea"
-                    multiline
-                    variant="outlined"
-                    fullWidth
-                    rows="3"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                  />
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>Log Out</MenuItem>
+              </Menu>
+            </Toolbar>
+          </AppBar>
+        </Nav>
+        <Div>
+          <Queue>
+            <Tabs />
+          </Queue>
+          <Help>
+            <Subject>
+              <TitleName>
+                <Typography variant="h4">Error in Docker Compose</Typography>
+                <Typography variant="h6">From: Kobe Bryant</Typography>
+              </TitleName>
+              <Option>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    width: "100%"
+                  }}
+                >
+                  <More onClick={handleMenu}>
+                    <MoreVertIcon
+                      style={{
+                        fontSize: 35,
+                        color: "#c4c4c4"
+                      }}
+                    />
+                  </More>
+                </div>
+              </Option>
+            </Subject>
+            <Conversation></Conversation>
+            <Message>
+              <Field>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    width: "100%"
+                  }}
+                >
+                  <form onSubmit={sendMsg}>
+                    <TextField
+                      id="outlined-textarea"
+                      multiline
+                      variant="outlined"
+                      fullWidth
+                      rows="3"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                    />
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "15px"
-                    }}
-                  >
-                    <Send onClick={sendMsg}>SEND</Send>
-                  </div>
-                </form>
-              </div>
-            </Field>
-          </Message>
-        </Help>
-        <Div2>
-          <Shared>
-            <Typography variant="h6">Shared Files</Typography>
-          </Shared>
-        </Div2>
-      </Div>
-    </React.Fragment>
-  );
-  // }
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "15px"
+                      }}
+                    >
+                      <Send onClick={sendMsg}>SEND</Send>
+                    </div>
+                  </form>
+                </div>
+              </Field>
+            </Message>
+          </Help>
+          <Div2>
+            <Shared>
+              <Typography variant="h6">Shared Files</Typography>
+            </Shared>
+          </Div2>
+        </Div>
+      </React.Fragment>
+    );
+  } else {
+    return "";
+  }
 }
