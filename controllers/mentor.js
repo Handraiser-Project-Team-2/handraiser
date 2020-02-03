@@ -18,6 +18,7 @@ module.exports = {
 
     jwtDecode(token);
     let parseToken = jwtDecode(token);
+    console.log(parseToken);
 
     db.class
       .save({
@@ -77,6 +78,5 @@ module.exports = {
       .catch(err => {
         res.status(400).end(err);
       });
-    // res.status(201).json(parseToken)
   }
 };

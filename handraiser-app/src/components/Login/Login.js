@@ -48,7 +48,7 @@ export default function Login(props) {
               break;
             case 3:
               // student
-              props.history.push("/student");
+              props.history.push("/class");
               break;
             case 4:
               // mentor
