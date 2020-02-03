@@ -3,7 +3,7 @@
 exports.shorthands = undefined;
 
 exports.up = pgm => {
-    pgm.createTable("+", {
+    pgm.createTable("classroom_key", {
         classkey_id: {
             type: "serial",
             primaryKey: true
