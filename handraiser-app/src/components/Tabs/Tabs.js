@@ -75,7 +75,7 @@ export const TabBtn = props => {
       email: adminData
     };
     axios
-      .post(`http://localhost:5001/api/admin/keygen`, Obj)
+      .post(`http://localhost:5000/api/admin/keygen`, Obj)
       .then(() => {
         toast.info("registration sucessful!", {
           position: toast.POSITION.TOP_CENTER
@@ -87,7 +87,6 @@ export const TabBtn = props => {
           position: toast.POSITION.TOP_CENTER
         });
       });
-    console.log(adminData);
   };
 
   return (
@@ -139,13 +138,13 @@ export const TabBtn = props => {
         )}
       </TabBox>
       <TabPanel value={tabValue} index={0}>
-        <TableCont tabValue={tabValue} />
+        <TableCont />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <TableCont tabValue={tabValue} />
+        <TableCont />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <TableCont tabValue={tabValue} />
+        <TableCont />
       </TabPanel>
       <GenerateKey
         handleClose={handleClose}

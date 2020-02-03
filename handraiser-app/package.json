@@ -16,16 +16,13 @@
     "react-google-login": "^5.0.7",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     "react-toastify": "^5.5.0",
-=======
+
     "react-text-mask": "^5.4.3",
->>>>>>> cc3f6fc22721f757a34f7752e08e4b277a2090d7
-=======
+
     "react-toastify": "^5.5.0",
     "react-text-mask": "^5.4.3",
->>>>>>> 8760dccc9372f861b9a8bbbea67ee9f6d2df9109
     "styled-components": "^5.0.0"
   },
   "scripts": {
