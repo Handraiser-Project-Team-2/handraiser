@@ -1,7 +1,6 @@
 const keygen = require("./keyGen");
 const jwtDecode = require("jwt-decode");
 
-
 module.exports = {
   // generate key to an email input (setting/promoting to mentor)
   add_mentor: (req, res) => {
@@ -187,9 +186,13 @@ module.exports = {
         db.validations
           .findOne({ validation_email: data.email })
           .then(user => {
-            user.validation_status === "true"
-              ? res.status(201).json(false)
-              : res.status(201).json(true);
+            if (user) {
+              user.validation_status === "true"
+                ? res.status(201).json(false)
+                : res.status(201).json(true);
+            }else{
+              res.status(201).json(false)
+            }
           })
           .catch(err => {
             console.log(err);

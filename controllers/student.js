@@ -65,7 +65,7 @@ module.exports = {
       `SELECT * FROM concern_list WHERE concern_status = 2 AND class_id = ${req.params.class_id}`
     )
       .then(data => {
-        console.log(data);
+        // re:looping here please
         let order_data = [];
 
         if (data) {
