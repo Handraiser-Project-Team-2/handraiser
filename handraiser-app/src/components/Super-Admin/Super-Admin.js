@@ -7,13 +7,13 @@ import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
+// import Swal from "sweetalert2";
+// import { useHistory } from "react-router-dom";
 
 import { TabBtn } from "../Tabs/Tabs";
 
 export default function NavBar() {
-  let history = useHistory();
+  // let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 

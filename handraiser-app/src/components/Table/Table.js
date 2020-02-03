@@ -4,12 +4,11 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Zoom from "@material-ui/core/Zoom";
 import Button from "@material-ui/core/Button";
 import { Tooltip } from "@material-ui/core";
-import { toast } from "react-toastify";
 import axios from "axios";
 
 import { RowCont, TableStyle } from "../Styles/Styles";
 
-export const TableCont = props => {
+export const TableCont = () => {
   const [tableData, setTableData] = useState({
     columns: [
       {
@@ -42,11 +41,10 @@ export const TableCont = props => {
   useEffect(() => {
     (async function() {
       try {
-        const res = await axios("http://localhost:5001/api/admin/mentor_list");
+        const res = await axios("http://localhost:5000/api/admin/mentor_list");
         const data = await res.data;
 
         setTableData({ ...tableData, data: data });
-        console.log(data);
       } catch (err) {
         console.error(err);
       }
