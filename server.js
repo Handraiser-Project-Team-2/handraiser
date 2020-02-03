@@ -9,7 +9,7 @@ const classes = require("./controllers/class");
 const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
 
-require('dotenv').config()
+require("dotenv").config();
 
 massive({
   host: process.env.DB_HOST,
@@ -34,14 +34,15 @@ massive({
     // users endpoints
     app.post("/api/login", users.login);
     app.post("/api/user/data", users.getUser);
+    app.get("/api/userprofile/:user_id", users.getUserProfile);
 
     // admins endpoints
-    app.post("/api/admin/keygen/mentor", admin.add_mentor);  //reference a mentor user type to an email
+    app.post("/api/admin/keygen/mentor", admin.add_mentor); //reference a mentor user type to an email
     app.post("/api/admin/keygen", admin.add_admin_mentor); //register either mentor or admin user type to an email
-    app.get("/api/admin/all_list", admin.accessList); // output -> list of all email in need of a validation
-    app.get("/api/admin/mentor_list", admin.accessList_mentors); // list all mentors
-    app.get("/api/admin/admins_list", admin.accessList_admins); // list all admins
-    app.post("/api/admin/verify", admin.verify); // input (userid, key) -> verify reference and validate user promotion
+    app.get("/api/admin/all_list", admin.accessList); //
+    app.get("/api/admin/mentor_list", admin.accessList_mentors);
+    app.get("/api/admin/admins_list", admin.accessList_admins);
+    app.post("/api/admin/verify", admin.verify);
 
     app.post("/api/admin/check/promotions", admin.need_validations); // implicitly check if email need validations
 
