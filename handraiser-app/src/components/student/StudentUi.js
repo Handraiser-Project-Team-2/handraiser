@@ -68,7 +68,7 @@ export default function Student() {
 
     if (sessionStorage.getItem("token")) {
       axios
-        .post("http://localhost:5001/api/user/data", {
+        .post("/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
