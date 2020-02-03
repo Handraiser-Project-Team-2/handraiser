@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -8,17 +8,18 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
+import axios from "axios";
 
-import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+// import { useTheme } from "@material-ui/core/styles";
+// import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // COMPONENTS
 import CardPage from "./CardPage";
 import FindClassDialog from "./FindClassDialog";
 import VerificationDialog from "./VerificationDialog";
+import AddClassDialog from "./AddClassDialog";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -41,12 +42,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ClassLanding() {
+  let token = sessionStorage.getItem("token").split(" ")[1];
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("md"));
+  // const theme = useTheme();
+  // const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -56,6 +58,44 @@ export default function ClassLanding() {
     setAnchorEl(null);
   };
   
+
+  useEffect(() => {
+    fetchUserData();
+    fetchMentorClass();
+  }, []);
+
+  const [tokState] = useState({ token: token });
+  const [data, setData] = useState([]);
+  const fetchUserData = () => {
+    axios({
+      method: "post",
+      url: `/api/user/data`,
+      data: tokState
+    })
+      .then(data => {
+        console.log(data);
+        setData(data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const [classData, setClassData] = useState([]);
+  const fetchMentorClass = () => {
+    axios({
+      method: "post",
+      url: `/api/my/classes`,
+      data: tokState
+    })
+      .then(data => {
+        console.log(data.data);
+        setClassData(data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   return (
     <React.Fragment>
@@ -104,16 +144,15 @@ export default function ClassLanding() {
           <Grid container spacing={2} className={classes.gridContainer}>
             <VerificationDialog />
             <Grid item xs={12}>
+              <AddClassDialog
+                token={token}
+                fetchMentorClass={fetchMentorClass}
+              />
               <FindClassDialog />
             </Grid>
 
             <Container maxWidth="lg" className={classes.flexy}>
-              <CardPage />
-              <CardPage />
-              <CardPage />
-              <CardPage />
-              <CardPage />
-              <CardPage />
+              <CardPage classData={classData} data={data} />
             </Container>
           </Grid>
         </div>
