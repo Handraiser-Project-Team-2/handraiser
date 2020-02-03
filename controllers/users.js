@@ -93,7 +93,14 @@ module.exports = {
     db.users
       .findOne({ user_id: parseToken.userid })
       .then(data => {
+
+        if(data){
+
+        }
+        
         res.status(201).json(data);
+
+
       })
       .catch(err => {
         res.status(400).end();

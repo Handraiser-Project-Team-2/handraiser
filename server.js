@@ -38,27 +38,27 @@ massive({
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor);  //reference a mentor user type to an email
     app.post("/api/admin/keygen", admin.add_admin_mentor); //register either mentor or admin user type to an email
-    app.get("/api/admin/all_list", admin.accessList); // 
-    app.get("/api/admin/mentor_list", admin.accessList_mentors);
-    app.get("/api/admin/admins_list", admin.accessList_admins);
-    app.post("/api/admin/verify", admin.verify);
+    app.get("/api/admin/all_list", admin.accessList); // output -> list of all email in need of a validation
+    app.get("/api/admin/mentor_list", admin.accessList_mentors); // list all mentors
+    app.get("/api/admin/admins_list", admin.accessList_admins); // list all admins
+    app.post("/api/admin/verify", admin.verify); // input (userid, key) -> verify reference and validate user promotion
 
-    app.post("/api/admin/check/promotions", admin.need_validations);
+    app.post("/api/admin/check/promotions", admin.need_validations); // implicitly check if email need validations
 
     // mentor endpoints
-    app.post("/api/mentor/classroom/add", mentor.add_classroom);
-    app.get("/api/classes/queue/:class_id", mentor.get_inqueue);
-    app.post("/api/my/classes", mentor.get_my_classroom)
+    app.post("/api/mentor/classroom/add", mentor.add_classroom); // register a new classroom
+    app.get("/api/classes/queue/:class_id", mentor.get_inqueue);  // get all assistance request
+    app.post("/api/my/classes", mentor.get_my_classroom)  // get all classroom referenced to the current user
 
     // student endpoints
-    app.post("/api/student/class/register", student.regToClass);
-    app.post("/api/student/request/assistance", student.ask_assistance);
-    app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order);
+    app.post("/api/student/class/register", student.regToClass); // register to a open class
+    app.post("/api/student/request/assistance", student.ask_assistance); // request assistance
+    app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order); // get the queue order number of the requested assistance
   
     // class endpoints
-    app.get("/api/classes", classes.getAllClass);
-    app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
-    app.get("/api/classes/:user_id", classes.getClassByMentor);
+    app.get("/api/classes", classes.getAllClass); // get all available classes
+    app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
+    app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
 
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
