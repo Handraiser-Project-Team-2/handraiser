@@ -42,12 +42,9 @@ module.exports = {
                 })
                 .then(data => {
                   const token = jwt.sign(
-                    { googleId, userid: user.user_id },
+                    { googleId, userid: user.profile_id },
                     secret
                   );
-
-                  // console.log(jwtDecode(token));
-
                   res.status(201).json({ token, ...data });
                 })
                 .catch(err => {
@@ -59,7 +56,6 @@ module.exports = {
             });
         } else {
           // already sign up
-
           db.users
             .findOne({
               email
@@ -93,7 +89,14 @@ module.exports = {
     db.users
       .findOne({ user_id: parseToken.userid })
       .then(data => {
+
+        if(data){
+
+        }
+        
         res.status(201).json(data);
+
+
       })
       .catch(err => {
         res.status(400).end();

@@ -17,8 +17,8 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // COMPONENTS
 import CardPage from "./CardPage";
-import FindClassDialog from './FindClassDialog'
-import VerificationDialog from './VerificationDialog'
+import FindClassDialog from "./FindClassDialog";
+import VerificationDialog from "./VerificationDialog";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -55,6 +55,7 @@ export default function ClassLanding() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
 
   return (
     <React.Fragment>
@@ -99,10 +100,9 @@ export default function ClassLanding() {
 
       {/* BODY */}
       <Container maxWidth="xl">
-        
         <div className={classes.root}>
           <Grid container spacing={2} className={classes.gridContainer}>
-          <VerificationDialog />
+            <VerificationDialog />
             <Grid item xs={12}>
               <FindClassDialog />
             </Grid>
