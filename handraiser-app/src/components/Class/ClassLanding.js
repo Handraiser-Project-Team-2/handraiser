@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   },
   gridContainer: {
-    paddingTop: "100px"
+    paddingTop: theme.spacing(3)
   },
   root: {
     flexGrow: 1
