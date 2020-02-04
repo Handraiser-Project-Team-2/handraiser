@@ -44,7 +44,7 @@ massive({
     app.get("/api/admin/admins_list", admin.accessList_admins);
     app.post("/api/admin/verify", admin.verify);
 
-    app.post("/api/admin/check/promotions", admin.need_validations); // implicitly check if email need validations
+    app.post("/api/admin/check/designation", admin.need_validations); // implicitly check if email need validations
 
     // mentor endpoints
     app.post("/api/mentor/classroom/add", mentor.add_classroom); // register a new classroom

@@ -62,6 +62,16 @@ export default function ClassLanding() {
   useEffect(() => {
     fetchUserData();
     fetchMentorClass();
+
+    axios.post({
+      method: "post",
+      url: `/api/my/classes`,
+      data: { token: sessionStorage.getItem("token").split(" ")[1] }
+    }).then(data=>{
+      console.log(data)
+    }).catch(err=>{
+      console.log(err)
+    })
   }, []);
 
   const [tokState] = useState({ token: token });
