@@ -46,22 +46,22 @@ massive({
     app.get("/api/admin/admins_list", admin.accessList_admins);
     app.post("/api/admin/verify", admin.verify);
 
-    app.post("/api/admin/check/promotions", admin.need_validations);
+    app.post("/api/admin/check/promotions", admin.need_validations); // implicitly check if email need validations
 
     // mentor endpoints
-    app.post("/api/mentor/classroom/add", mentor.add_classroom);
-    app.get("/api/classes/queue/:class_id", mentor.get_inqueue);
-    app.post("/api/my/classes", mentor.get_my_classroom);
+    app.post("/api/mentor/classroom/add", mentor.add_classroom); // register a new classroom
+    app.get("/api/classes/queue/:class_id", mentor.get_inqueue);  // get all assistance request
+    app.post("/api/my/classes", mentor.get_my_classroom)  // get all classroom referenced to the current user
 
     // student endpoints
-    app.post("/api/student/class/register", student.regToClass);
-    app.post("/api/student/request/assistance", student.ask_assistance);
-    app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order);
-
+    app.post("/api/student/class/register", student.regToClass); // register to a open class
+    app.post("/api/student/request/assistance", student.ask_assistance); // request assistance
+    app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order); // get the queue order number of the requested assistance
+  
     // class endpoints
-    app.get("/api/classes", classes.getAllClass);
-    app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
-    app.get("/api/classes/:user_id", classes.getClassByMentor);
+    app.get("/api/classes", classes.getAllClass); // get all available classes
+    app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
+    app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
 
     io.on("connection", socket => {
       console.log("Online");

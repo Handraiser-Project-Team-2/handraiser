@@ -4,13 +4,6 @@ import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import Topbar from "../reusables/Topbar";
 
 import {
@@ -55,7 +48,6 @@ export default function Student() {
 
   const sendMsg = evt => {
     evt.preventDefault();
-    // console.log(name);
   };
 
   useEffect(() => {
@@ -65,8 +57,13 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
+          console.log(data)
           setState({ user_type: data.data.user_type_id });
+          
           const user_type = data.data.user_type_id;
+
+          console.log(user_type);
+
           if (user_type !== 3) {
             Swal.fire({
               icon: "error",
@@ -116,46 +113,7 @@ export default function Student() {
   if (state.user_type === 3) {
     return (
       <React.Fragment>
-        <Nav>
-          <AppBar style={{ backgroundColor: "#372476" }}>
-            <Toolbar
-              style={{
-                display: "flex",
-                justifyContent: "space-between"
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <IconButton edge="start" aria-label="menu">
-                  <MenuIcon style={{ color: "white" }} />
-                </IconButton>
-                <Typography variant="h6">Handraiser Admin</Typography>
-              </div>
-              <div>
-                <IconButton
-                  aria-label="account of current user"
-                  edge="end"
-                  onClick={handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle style={{ fontSize: 40 }} />
-                </IconButton>
-              </div>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Log Out</MenuItem>
-              </Menu>
-            </Toolbar>
-          </AppBar>
-        </Nav>
+        <Topbar />
         <Div>
           <Queue>
             <Tabs />
