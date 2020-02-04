@@ -83,7 +83,7 @@ module.exports = {
       });
   },
   // for super admin
-  // generate key to an email input (setting/promoting to user type)
+  // + key to an email input (setting/promoting to user type)
   add_admin_mentor: (req, res) => {
     const db = res.app.get("db");
 
@@ -178,7 +178,10 @@ module.exports = {
 
     const { token } = req.body;
 
+    console.log("tokens", token)
+
     let parseToken = jwtDecode(token);
+    console.log(parseToken);
 
     db.users
       .findOne({ user_id: parseToken.userid })
@@ -190,8 +193,8 @@ module.exports = {
               user.validation_status === "true"
                 ? res.status(201).json(false)
                 : res.status(201).json(true);
-            }else{
-              res.status(201).json(false)
+            } else {
+              res.status(201).json(false);
             }
           })
           .catch(err => {

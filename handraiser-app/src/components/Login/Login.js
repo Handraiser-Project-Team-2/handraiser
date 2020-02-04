@@ -24,7 +24,7 @@ export default function Login(props) {
 
       axios({
         method: "post",
-        url: "/api/login",
+        url: "http://localhost:5000/api/login",
         data: {
           email: response.profileObj.email,
           last_name: response.profileObj.familyName,
