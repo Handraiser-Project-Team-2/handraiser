@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 
+import io from "socket.io-client";
 // import { useTheme } from "@material-ui/core/styles";
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -42,11 +35,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+let socket;
 export default function ClassLanding() {
   let token = sessionStorage.getItem("token").split(" ")[1];
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const [verfication, setVerification] = useState(false);
   const [userType, setUserType] = useState("3");
   // const theme = useTheme();
@@ -56,13 +48,6 @@ export default function ClassLanding() {
     setUserType(e.data.user_type_id);
   };
 
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const checkValidations = () => {
     console.log(sessionStorage.getItem("token").split(" ")[1]);
