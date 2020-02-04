@@ -114,7 +114,7 @@ export default function ClassLanding() {
         <div className={classes.root}>
           <Grid container spacing={2} className={classes.gridContainer}>
             {verfication ? (
-              <VerificationDialog changeUserType={changeUserType} />
+              <VerificationDialog changeUserType={changeUserType} fetchUserData={fetchUserData} fetchMentorClass={fetchMentorClass}  />
             ) : (
               ""
             )}
