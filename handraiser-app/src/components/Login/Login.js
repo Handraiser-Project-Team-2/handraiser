@@ -4,96 +4,16 @@ import backgroundImg from "../images/girl.svg";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import axios from "axios";
-
-const Div = styled.div`
-  display: flex;
-  box-sizing: border-box;
-  height: 100vh;
-  @media screen and (max-width: 600px) {
-    flex-direction: column;
-    justify-content: center;
-    background-image: url(${backgroundImg});
-    background-size: 142% 150%;
-  }
-  @media (min-width: 768px) and (max-width: 1024px) {
-    flex-direction: column;
-    justify-content: center;
-    background-image: url(${backgroundImg});
-    background-size: 140% 132%;
-  }
-  @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
-    flex-direction: column;
-    justify-content: center;
-    background-image: url(${backgroundImg});
-    background-size: 142% 158%;
-  }
-`;
-const Main = styled.div`
-  width: 33.34%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  @media screen and (max-width: 600px) {
-    margin-top: -300px;
-    width: 100%;
-  }
-  @media (min-width: 768px) and (max-width: 1024px) {
-    margin-top: -650px;
-    width: 100%;
-  }
-`;
-const Pic = styled.div`
-  display: flex;
-  width: 67.7%;
-  flex-direction: column;
-  justify-content: flex-end;
-  background-color: #7f25d9;
-  background-image: url(${backgroundImg});
-  background-size: 100% 120%;
-  @media screen and (max-width: 600px) {
-    display: none;
-  }
-  @media (min-width: 768px) and (max-width: 1024px) {
-    display: none;
-  }
-`;
-const Button = styled.button`
-  margin-top: 40px;
-  width: 369px;
-  height: 75px;
-  left: 985px;
-  top: 475px;
-  background: linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%);
-  border-radius: 100px;
-  border: none;
-  cursor: pointer;
-  @media screen and (max-width: 600px) {
-    width: 65%;
-    height: 45px;
-  }
-  @media (min-width: 768px) and (max-width: 1024px) {
-    width: 32%;
-    height: 60px;
-  }
-`;
-const Cont = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;
-
-const Footer = styled.div`
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  @media screen and (max-width: 600px) {
-    display: none;
-  }
-`;
+import {
+  LoginDiv,
+  LoginPic,
+  LoginMain,
+  LoginButton,
+  LoginCont,
+  LoginFooter,
+  Continue,
+  Title
+} from "../Styles/Styles";
 
 export default function Login(props) {
 
@@ -115,6 +35,8 @@ export default function Login(props) {
         }
       })
         .then(data => {
+          console.log(data);
+
           const userType = data.data.user_type_id;
          localStorage.setItem("name",response.profileObj.givenName)
           sessionStorage.setItem("token", "Bearer " + data.data.token);
@@ -148,8 +70,8 @@ export default function Login(props) {
     }
   };
   return (
-    <Div>
-      <Pic>
+    <LoginDiv>
+      <LoginPic>
         <p
           style={{
             fontFamily: "Oxygen",
@@ -161,28 +83,20 @@ export default function Login(props) {
           The first step of learning
           <br /> is admitting our insufficiency
           <br />{" "}
+          <span
+            style={{
+              display: "flex",
+              color: "white",
+              fontSize: 15,
+              justifyContent: "flex-end"
+            }}
+          >
+            - Jordan B. Peterson
+          </span>
         </p>
-        <span
-          style={{
-            color: "white",
-            fontSize: 15,
-            marginLeft: 685,
-            marginBottom: 800
-          }}
-        >
-          - Jordan B. Peterson
-        </span>
-      </Pic>
-      <Main>
-        <h1
-          style={{
-            fontFamily: "Roboto",
-            color: "#330066",
-            fontSize: 40
-          }}
-        >
-          HANDRAISER
-        </h1>
+      </LoginPic>
+      <LoginMain>
+        <Title>HANDRAISER</Title>
         <p
           style={{
             color: "#BDBDBD",
@@ -200,11 +114,11 @@ export default function Login(props) {
           cookiePolicy={"single_host_origin"}
           hostedDomain="boom.camp"
           render={renderProps => (
-            <Button
+            <LoginButton
               onClick={renderProps.onClick}
               disabled={renderProps.disabled}
             >
-              <Cont>
+              <LoginCont>
                 <img
                   src={Logo}
                   alt=""
@@ -215,21 +129,13 @@ export default function Login(props) {
                     borderRadius: "100px"
                   }}
                 />
-                <p
-                  style={{
-                    fontFamily: "Roboto",
-                    color: "white",
-                    fontSize: "15px"
-                  }}
-                >
-                  LOGIN WITH GOOGLE
-                </p>
-              </Cont>
-            </Button>
+                <Continue>LOGIN WITH GOOGLE</Continue>
+              </LoginCont>
+            </LoginButton>
           )}
         />
 
-        <Footer>
+        <LoginFooter>
           <p
             style={{
               color: "#BDBDBD",
@@ -239,8 +145,8 @@ export default function Login(props) {
           >
             BOOM CAMP / BATCH 2 / TEAM 2 / 2020
           </p>
-        </Footer>
-      </Main>
-    </Div>
+        </LoginFooter>
+      </LoginMain>
+    </LoginDiv>
   );
 }

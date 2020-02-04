@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import TextField from "@material-ui/core/TextField";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
+import Topbar from "../reusables/Topbar";
+
 import {
   Div,
   Nav,
@@ -32,22 +33,29 @@ import {
 import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
+var jwtDecode = require("jwt-decode");
 
 export default function Student() {
   let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
   const open = Boolean(anchorEl);
+  const [concernDescription, setConcernDescription] = useState("");
+  const [concernTitle, setConcernTitle] = useState("");
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
   const [name, setName] = useState("");
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(name);
+    // console.log(name);
   };
 
   useEffect(() => {
@@ -84,6 +92,26 @@ export default function Student() {
       });
     }
   }, []);
+
+  const sendRequest = () => {
+    axios
+      .post(`/api/student/request/assistance`, {
+        class_id: 5,
+        user_id: user_id,
+        concern_title: concernTitle,
+        concern_description: concernDescription
+      })
+      .then(() => {
+        setConcernTitle("");
+        setConcernDescription("");
+        Swal.fire({
+          icon: "success",
+          title: "Request sent to the mentor"
+        }).then(() => {
+          history.push("/student");
+        });
+      });
+  };
 
   if (state.user_type === 3) {
     return (
@@ -135,8 +163,18 @@ export default function Student() {
           <Help>
             <Subject>
               <TitleName>
-                <Typography variant="h4">Error in Docker Compose</Typography>
-                <Typography variant="h6">From: Kobe Bryant</Typography>
+                <TextField
+                  id="standard-basic"
+                  value={concernTitle}
+                  onChange={e => setConcernTitle(e.target.value)}
+                  style={{ width: 800 }}
+                />
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Typography>Subject</Typography>
+                  <Typography>{concernTitle.length}/30</Typography>
+                </div>
               </TitleName>
               <Option>
                 <div
@@ -176,8 +214,8 @@ export default function Student() {
                       variant="outlined"
                       fullWidth
                       rows="3"
-                      value={name}
-                      onChange={e => setName(e.target.value)}
+                      value={concernDescription}
+                      onChange={e => setConcernDescription(e.target.value)}
                     />
 
                     <div
@@ -188,7 +226,7 @@ export default function Student() {
                         marginTop: "15px"
                       }}
                     >
-                      <Request>NEW REQUEST</Request>
+                      <Request onClick={sendRequest}>NEW REQUEST</Request>
                       <Send onClick={sendMsg}>SEND</Send>
                     </div>
                   </form>

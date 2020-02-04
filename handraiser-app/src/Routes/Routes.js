@@ -5,7 +5,7 @@ import Student from "../components/student/StudentUi";
 import Mentor from "../components/mentor/MentorUi";
 import SuperAdmin from "../components/Super-Admin/Super-Admin";
 import Class from "../components/Class/ClassLanding";
-import Chat from "../components/Chat/Chat"
+
 export default function Routes() {
   return (
     <BrowserRouter>
@@ -15,7 +15,6 @@ export default function Routes() {
       <Route path="/student" component={Student} />
       <Route path="/class" component={Class} />
       <Route path="/mentor" component={Mentor} />
-      <Route path="/chat" component={Mentor} />
     </BrowserRouter>
   );
 }

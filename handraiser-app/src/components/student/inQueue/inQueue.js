@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import Axios from "axios";
+var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,11 +20,16 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
+  },
+  small: {
+    width: theme.spacing(4),
+    height: theme.spacing(4)
   }
 }));
 
 export default function InQueue() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [concernsData, setConcernsData] = useState([]);
   const open = Boolean(anchorEl);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -31,28 +38,27 @@ export default function InQueue() {
     setAnchorEl(null);
   };
   const classes = useStyles();
-  const datas = [
-    {
-      name: "Ali Connors",
-      concern: "Error in docker-compose"
-    },
-    {
-      name: "Alex Jennifer",
-      concern: "Request 500 Node"
-    },
-    {
-      name: "Uzumaki Naruto",
-      concern: "Authentication Glitch"
-    }
-  ];
 
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
+
+  useEffect(() => {
+    Axios({
+      method: "get",
+      url: `/api/student/queue/order/5/${user_id}` //5 here is a class_id example
+    }).then(res => {
+      setConcernsData(res.data);
+    });
+  });
+
+  // console.log(concernsData);
   return (
     <List className={classes.root}>
-      {datas.map((data, index) => {
+      {concernsData.map((concern, index) => {
         return (
           <div key={index}>
             <ListItem
-              button
+              // button
               style={{
                 borderLeft: "14px solid #8932a8",
                 borderBottom: "0.5px solid #abababde",
@@ -60,7 +66,7 @@ export default function InQueue() {
               }}
             >
               <ListItemAvatar>
-                <Avatar>{data.name.charAt(0)}</Avatar>
+                <Avatar>A</Avatar>
               </ListItemAvatar>
               <Menu
                 id="menu-appbar"
@@ -76,7 +82,7 @@ export default function InQueue() {
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>
               </Menu>
               <ListItemText
-                primary={data.concern}
+                primary={concern.concern.concern_title}
                 secondary={
                   <React.Fragment>
                     <Typography
@@ -85,13 +91,17 @@ export default function InQueue() {
                       className={classes.inline}
                       color="textPrimary"
                     >
-                      {data.name}
+                      {concern.concern.concern_description}
                     </Typography>
                   </React.Fragment>
                 }
               />
-              <ListItemSecondaryAction onClick={handleMenu}>
+              <ListItemSecondaryAction style={{ display: "flex" }}>
+                <Avatar variant="square" className={classes.small}>
+                  {concern.queue_order_num}
+                </Avatar>
                 <MoreVertIcon
+                  onClick={handleMenu}
                   style={{
                     fontSize: 35,
                     color: "#c4c4c4",
