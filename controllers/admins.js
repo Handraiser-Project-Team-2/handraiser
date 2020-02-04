@@ -142,8 +142,6 @@ module.exports = {
     db.users
       .findOne({ user_id: parseToken.userid })
       .then(data => {
-        console.log(data.email);
-
         db.validations.findOne({ validation_email: data.email }).then(user => {
           if (user.validation_key === supplied_key) {
             // then verify status
@@ -153,17 +151,29 @@ module.exports = {
             WHERE validation_email = '${data.email}'`
             )
               .then(validate => {
-                // change user type here(here)
-                res
-                  .status(201)
-                  .json({ ...user, result: "Validation succesful" });
+                // then change user type here(here)
+                db.query(
+                `UPDATE users
+                SET user_type_id = ${user.validation_type}
+                WHERE email = '${data.email}'`
+                )
+                  .then(feed => {
+                    res.status(201).json({
+                      ...user,
+                      ...data,
+                      result: "Validation succesful"
+                    });
+                  })
+                  .catch(err => {
+                    res.status(422).end();
+                  });
               })
               .catch(err => {
                 console.log(err);
                 res.status(400).end();
               });
           } else {
-            res.status(500).json({ result: "Invalid key supplied" });
+            res.status(422).json({ result: "Invalid key supplied" });
           }
         });
       })
@@ -178,10 +188,7 @@ module.exports = {
 
     const { token } = req.body;
 
-    console.log("tokens", token)
-
     let parseToken = jwtDecode(token);
-    console.log(parseToken);
 
     db.users
       .findOne({ user_id: parseToken.userid })
