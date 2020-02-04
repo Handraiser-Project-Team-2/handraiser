@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 
+import io from "socket.io-client";
 // import { useTheme } from "@material-ui/core/styles";
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -34,11 +35,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+let socket;
 export default function ClassLanding() {
   let token = sessionStorage.getItem("token").split(" ")[1];
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const [verfication, setVerification] = useState(false);
   const [userType, setUserType] = useState("3");
   // const theme = useTheme();
@@ -48,13 +48,6 @@ export default function ClassLanding() {
     setUserType(e.data.user_type_id);
   };
 
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const checkValidations = () => {
     console.log(sessionStorage.getItem("token").split(" ")[1]);
