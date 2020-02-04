@@ -1,8 +1,10 @@
+const http = require("http");
+const socketIO = require("socket.io");
 const express = require("express");
-const cors = require("cors");
 const massive = require("massive");
+const cors = require("cors");
+const router = require("./router");
 // setup controllers
-
 const users = require("./controllers/users");
 const admin = require("./controllers/admins");
 const classes = require("./controllers/class");
@@ -10,7 +12,6 @@ const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
 
 require("dotenv").config();
-
 massive({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -19,16 +20,17 @@ massive({
   password: process.env.DB_PASS
 })
   .then(db => {
+   // port declaration
+   const PORT = 5000 || process.env.PORT;
     const app = express();
 
-    // middlewares
     app.set("db", db);
-    app.use(express.json());
     app.use(cors());
-
-    // port declaration
-    const PORT = 5000 || process.env.PORT;
-
+    app.use(express.json());
+    //WEBSOCKET START
+    const server = http.Server(app);
+    const io = socketIO(server);
+    app.use(router);
     // endpoints declaration
 
     // users endpoints
@@ -61,7 +63,13 @@ massive({
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
     app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
 
-    app.listen(PORT, () => {
+    io.on("connection", socket => {
+      console.log("Online");
+      socket.on('disconnect', () =>{
+        console.log("Offline");
+      })
+    });
+    server.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
     });
   })

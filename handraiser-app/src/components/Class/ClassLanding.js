@@ -12,13 +12,17 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 
+
+import io from "socket.io-client";
 // import { useTheme } from "@material-ui/core/styles";
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 
 // COMPONENTS
 import CardPage from "./CardPage";
 import FindClassDialog from "./FindClassDialog";
 import VerificationDialog from "./VerificationDialog";
+
 import AddClassDialog from "./AddClassDialog";
 import Topbar from "../reusables/Topbar";
 
@@ -41,16 +45,21 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary
   }
 }));
-
+let socket;
 export default function ClassLanding() {
   let token = sessionStorage.getItem("token").split(" ")[1];
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
+
+  const ENDPOINT = "localhost:5000";
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    console.log(socket);
+  }, []);
   // const theme = useTheme();
   // const matches = useMediaQuery(theme.breakpoints.up("md"));
-
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
