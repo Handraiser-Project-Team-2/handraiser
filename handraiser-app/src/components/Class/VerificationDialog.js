@@ -99,6 +99,8 @@ export default function VerificationDialog(props) {
         if (data.data.result === "Validation succesful") {
           handleClose();
           props.changeUserType(data)
+          props.fetchMentorClass();
+          props.fetchUserData();
         };
       })
       .catch(err => {

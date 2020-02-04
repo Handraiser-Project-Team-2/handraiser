@@ -57,13 +57,13 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
     e.preventDefault();
     axios({
       method: "post",
-      url: `/api/mentor/classroom/add`,
+      url: `http://localhost:5000/api/mentor/classroom/add`,
       data: state
     })
       .then(data => {
         console.log(data);
-        handleClose();
         fetchMentorClass();
+        handleClose();
       })
       .catch(err => {
         console.log(err);
