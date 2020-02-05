@@ -12,7 +12,7 @@ export default function Routes() {
       <Route exact path="/" component={Login} />
       <Route path="/superadmin" component={SuperAdmin} />
       <Route path="/admin" />
-      <Route path="/student" component={Student} />
+      <Route path="/student/:class_id" component={Student} />
       <Route path="/class" component={Class} />
       <Route path="/mentor" component={Mentor} />
     </BrowserRouter>

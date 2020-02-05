@@ -20,8 +20,8 @@ massive({
   password: process.env.DB_PASS
 })
   .then(db => {
-   // port declaration
-   const PORT = 5000 || process.env.PORT;
+    // port declaration
+    const PORT = 5000 || process.env.PORT;
     const app = express();
 
     app.set("db", db);
@@ -50,14 +50,16 @@ massive({
 
     // mentor endpoints
     app.post("/api/mentor/classroom/add", mentor.add_classroom); // register a new classroom
-    app.get("/api/classes/queue/:class_id", mentor.get_inqueue);  // get all assistance request
-    app.post("/api/my/classes", mentor.get_my_classroom)  // get all classroom referenced to the current user
+    app.get("/api/classes/queue/:class_id", mentor.get_inqueue); // get all assistance request
+    app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
 
     // student endpoints
     app.post("/api/student/class/register", student.regToClass); // register to a open class
     app.post("/api/student/request/assistance", student.ask_assistance); // request assistance
     app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order); // get the queue order number of the requested assistance
-  
+    app.post("/api/student/get/class", student.get_my_classroom);
+    app.post("/api/student/classes", classes.getClassDetails);
+
     // class endpoints
     app.get("/api/classes", classes.getAllClass); // get all available classes
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
@@ -65,9 +67,9 @@ massive({
 
     io.on("connection", socket => {
       console.log("Online");
-      socket.on('disconnect', () =>{
+      socket.on("disconnect", () => {
         console.log("Offline");
-      })
+      });
     });
     server.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
