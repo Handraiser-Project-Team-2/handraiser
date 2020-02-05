@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import Profile from "../images/1966.png";
+import Curry from "../images/i.png";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
+import Avatar from "@material-ui/core/Avatar";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
@@ -47,7 +49,7 @@ export default function Student() {
   };
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(name);
+    return <span>(name)</span>;
   };
 
   useEffect(() => {
@@ -157,7 +159,75 @@ export default function Student() {
                 </div>
               </Option>
             </Subject>
-            <Conversation></Conversation>
+            <Conversation>
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: "10px",
+                  marginRight: "15px",
+                  padding: "10px",
+                  flexDirection: "row-reverse"
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    marginLeft: "10px",
+                    alignItems: "flex-end"
+                  }}
+                >
+                  <Avatar src={Profile}></Avatar>
+                </div>
+
+                <div
+                  style={{
+                    marginLeft: "10px",
+                    backgroundColor: "white",
+                    maxWidth: "450px",
+                    border: "1px solid lightgrey",
+                    padding: "10px 20px 10px 20px",
+                    borderRadius: "10px"
+                  }}
+                >
+                  <span id="display">Hello</span>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: "10px",
+                  marginRight: "15px",
+                  padding: "10px",
+                  flexDirection: "row"
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    marginLeft: "10px",
+                    alignItems: "flex-end"
+                  }}
+                >
+                  <Avatar src={Curry}></Avatar>
+                </div>
+
+                <div
+                  style={{
+                    marginLeft: "10px",
+                    backgroundColor: "white",
+                    maxWidth: "450px",
+                    border: "1px solid lightgrey",
+                    padding: "10px 20px 10px 20px",
+                    borderRadius: "10px"
+                  }}
+                >
+                  <span>
+                    Curry to Igoudala! Back to Curry! Igoudala with the layup...
+                    OHHHH!!!! BLOCKED BY JAMES!!!
+                  </span>
+                </div>
+              </div>
+            </Conversation>
             <Message>
               <Field>
                 <div
