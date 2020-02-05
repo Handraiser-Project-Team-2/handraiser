@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 
+import io from "socket.io-client";
 // import { useTheme } from "@material-ui/core/styles";
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -42,26 +35,39 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+let socket;
 export default function ClassLanding() {
   let token = sessionStorage.getItem("token").split(" ")[1];
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-
+  const [verfication, setVerification] = useState(false);
+  const [userType, setUserType] = useState("3");
   // const theme = useTheme();
   // const matches = useMediaQuery(theme.breakpoints.up("md"));
 
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
+  const changeUserType = e => {
+    setUserType(e.data.user_type_id);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+
+  const checkValidations = () => {
+    console.log(sessionStorage.getItem("token").split(" ")[1]);
+    axios({
+      method: "post",
+      url: `/api/admin/check/designation`,
+      data: { token: sessionStorage.getItem("token").split(" ")[1] }
+    })
+      .then(data => {
+        setVerification(data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
     fetchUserData();
     fetchMentorClass();
+    checkValidations();
   }, []);
 
   const [tokState] = useState({ token: token });
@@ -75,6 +81,7 @@ export default function ClassLanding() {
       .then(data => {
         console.log(data);
         setData(data.data);
+        changeUserType(data);
       })
       .catch(err => {
         console.log(err);
@@ -82,6 +89,8 @@ export default function ClassLanding() {
   };
 
   const [classData, setClassData] = useState([]);
+
+  // get all class relative to this mentor(if user is verified)
   const fetchMentorClass = () => {
     axios({
       method: "post",
@@ -100,20 +109,25 @@ export default function ClassLanding() {
   return (
     <React.Fragment>
       <Topbar />
-
       {/* BODY */}
       <Container maxWidth="xl">
         <div className={classes.root}>
           <Grid container spacing={2} className={classes.gridContainer}>
-            <VerificationDialog />
+            {verfication ? (
+              <VerificationDialog changeUserType={changeUserType} fetchUserData={fetchUserData} fetchMentorClass={fetchMentorClass}  />
+            ) : (
+              ""
+            )}
             <Grid item xs={12}>
-              <AddClassDialog
-                token={token}
-                fetchMentorClass={fetchMentorClass}
-              />
-              <FindClassDialog />
+              {userType === 3 ? (
+                <FindClassDialog />
+              ) : (
+                <AddClassDialog
+                  token={token}
+                  fetchMentorClass={fetchMentorClass}
+                />
+              )}
             </Grid>
-
             <Container maxWidth="lg" className={classes.flexy}>
               <CardPage classData={classData} data={data} />
             </Container>

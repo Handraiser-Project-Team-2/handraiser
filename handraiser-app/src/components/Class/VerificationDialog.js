@@ -14,6 +14,7 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 
 import MuiAlert from "@material-ui/lab/Alert";
+import axios from "axios";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -46,8 +47,8 @@ function TextMaskCustom(props) {
         /[A-Za-z0-9]/,
         "-",
         /[A-Za-z0-9]/,
-        /[A-Za-z0-9]/,
         "-",
+        /[A-Za-z0-9]/,
         /[A-Za-z0-9]/
       ]}
       placeholderChar={"\u2000"}
@@ -59,7 +60,7 @@ TextMaskCustom.propTypes = {
   inputRef: PropTypes.func.isRequired
 };
 
-export default function VerificationDialog() {
+export default function VerificationDialog(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -78,13 +79,35 @@ export default function VerificationDialog() {
   const [valid, setValid] = useState(null);
   const handleSubmit = () => {
     if (/\s/.test(input) || input === ``) {
-      setValid(true);
+      //given a space or empty then
+      setValid(true); //if true error
     } else {
-      handleClose();
+      // for valid input
+      checkKey();
       setInput("");
     }
   };
-  
+
+  const checkKey = () => {
+    axios({
+      method: `post`,
+      url: ` http://localhost:5000/api/admin/verify`,
+      data: { token: sessionStorage.getItem("token"), supplied_key: input }
+    })
+      .then(data => {
+        // if successful close dialog and return success response
+        if (data.data.result === "Validation succesful") {
+          handleClose();
+          props.changeUserType(data)
+          props.fetchMentorClass();
+          props.fetchUserData();
+        };
+      })
+      .catch(err => {
+        if (err.response.data.result === "Invalid key supplied") setValid(true); //if true error
+        console.log(err);
+      });
+  };
 
   return (
     <div>
