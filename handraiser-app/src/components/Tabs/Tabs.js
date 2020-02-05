@@ -11,6 +11,7 @@ import axios from "axios";
 import { TabBox, BtnBox } from "../Styles/Styles";
 
 import { TableCont } from "../Table/Table";
+import { StudentTable } from "../Table-Student/Table-student";
 import { GenerateKey } from "../Generate-Key/Generate";
 
 function TabPanel(props) {
@@ -43,11 +44,16 @@ export const TabBtn = props => {
 
   const handleOnChange = e => {
     setUserData({ [e.target.name]: e.target.value });
+    if (tabValue === 1) {
+      setType("mentor");
+    } else {
+      setType("admin");
+    }
   };
 
-  const handleSelect = e => {
-    setType(e.target.value);
-  };
+  // const handleSelect = e => {
+  //   setType(e.target.value);
+  // };
 
   const handleOpen = () => {
     setOpen(true);
@@ -111,6 +117,7 @@ export const TabBtn = props => {
               </Button>
             ) : (
               <Button
+                value="admin"
                 variant="contained"
                 color="primary"
                 onClick={() => handleOpen(props)}
@@ -122,7 +129,7 @@ export const TabBtn = props => {
         )}
       </TabBox>
       <TabPanel value={tabValue} index={0}>
-        <TableCont tabValue={tabValue} />
+        <StudentTable tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
         <TableCont tabValue={tabValue} />
@@ -133,11 +140,12 @@ export const TabBtn = props => {
       <GenerateKey
         handleClose={handleClose}
         open={open}
-        handleSelect={handleSelect}
+        // handleSelect={handleSelect}
         handleAdd={handleAdd}
         setUserData={setUserData}
-        type={type}
+        setType={setType}
         handleOnChange={handleOnChange}
+        tabValue={tabValue}
       />
     </React.Fragment>
   );

@@ -1,6 +1,6 @@
 import React,{useState} from "react";
 import styled from "styled-components";
-import backgroundImg from "../images/girl.svg";
+import backgroundImg from "../images/programmer_1.png";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import axios from "axios";
@@ -123,9 +123,9 @@ export default function Login(props) {
                   src={Logo}
                   alt=""
                   style={{
-                    paddingTop: 10,
+                    paddingTop: 8,
                     width: "40px",
-                    height: "30px",
+                    height: "40px",
                     borderRadius: "100px"
                   }}
                 />
