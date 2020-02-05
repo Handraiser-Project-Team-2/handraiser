@@ -28,14 +28,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InQueue(props) {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState();
   const [concernsData, setConcernsData] = useState([]);
   const open = Boolean(anchorEl);
+  
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl();
   };
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export default function InQueue(props) {
     })
       .then(res => {
         setConcernsData(res.data);
+
       })
       .catch(err => {
         console.log(err);
@@ -59,7 +61,7 @@ export default function InQueue(props) {
   
   return (
     <List className={classes.root}>
-      {concernsData.map((data, concern, index) => {
+      {concernsData ? concernsData.map((val, data, index) => {
         return (
           <div key={index}>
             <ListItem
@@ -80,12 +82,13 @@ export default function InQueue(props) {
                   vertical: "top",
                   horizontal: "right"
                 }}
+                open={open}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>
               </Menu>
               <ListItemText
-                primary={concern.concern.concern_title}
+                primary={val.concern.concern_title}
                 secondary={
                   <React.Fragment>
                     <Typography
@@ -94,7 +97,7 @@ export default function InQueue(props) {
                       className={classes.inline}
                       color="textPrimary"
                     >
-                      {concern.concern.concern_description}
+                      {val.concern.concern_description}
                     </Typography>
                   </React.Fragment>
                 }
@@ -127,7 +130,7 @@ export default function InQueue(props) {
             </ListItem>
           </div>
         );
-      })}
+      }):''}
     </List>
   );
 }
