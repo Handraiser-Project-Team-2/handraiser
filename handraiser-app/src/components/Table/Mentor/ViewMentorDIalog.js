@@ -23,30 +23,31 @@ export default function ViewMentorDialog({ data }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const [profileData, setProfileData] = useState([]);
 
-  useEffect(() => {
+  const handleClickOpen = () => {
+    setOpen(true);
+    fetchProfileData();
+  };
+
+  const fetchProfileData = () => {
     axios({
       method: "post",
       url: `/api/userprofile/`,
       data: { email: data.validation_email }
     })
       .then(data => {
-        console.log(data.data);
+        console.log(data.data)
         setProfileData(data.data);
       })
       .catch(err => {
         console.log(err);
       });
-  }, []);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div>
