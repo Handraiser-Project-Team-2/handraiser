@@ -24,7 +24,7 @@ export const RowCont = styled.div`
 `;
 
 export const TableStyle = styled.div`
-  @media only screen and (max-width: 500px),
+  @media only screen and (max-width: 768px),
     (height: 1024px) and (width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: landscape),
     (width: 1024px) and (height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: portrait) {
     table,
@@ -37,7 +37,9 @@ export const TableStyle = styled.div`
     }
 
     thead tr {
-      display: none;
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
     }
 
     tr {
@@ -46,31 +48,36 @@ export const TableStyle = styled.div`
     }
 
     td {
+      display: flex;
+      align-content: center;
+      flex-direction: row;
       border: none;
       position: relative;
-      padding-left: 60px;
+      padding-left: 70px;
     }
 
     td:before {
       position: absolute;
-      align-items: center;
       top: 6px;
       left: 6px;
-      width: 20%;
+      width: 45%;
       padding: 10px;
+      white-space: nowrap;
     }
-
     td:nth-of-type(1):before {
-      content: "Email:";
+      content: "  ";
     }
     td:nth-of-type(2):before {
-      content: "Status:";
+      content: "Email:  ";
     }
     td:nth-of-type(3):before {
-      content: "Key:";
+      content: "Status: ";
     }
     td:nth-of-type(4):before {
-      content: "Action:";
+      content: "Key: ";
+    }
+    td:nth-of-type(5):before {
+      content: "Action: ";
     }
   }
 `;
