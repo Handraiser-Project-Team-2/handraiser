@@ -35,7 +35,10 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
 
   const handleClose = () => {
     setOpen(false);
-    setState({ class_title: "", class_description: "" });
+
+    setState(prevState => {
+      return { ...prevState, class_title: "", class_description: "" };
+    });
   };
 
   const [dateToday] = useState({ data: new Date().toLocaleDateString() });
@@ -55,15 +58,16 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
 
   const handleSubmit = e => {
     e.preventDefault();
+    console.log("token", token);
     axios({
       method: "post",
-      url: `/api/mentor/classroom/add`,
+      url: `http://localhost:5000/api/mentor/classroom/add`,
       data: state
     })
       .then(data => {
         console.log(data);
-        handleClose();
         fetchMentorClass();
+        handleClose();
       })
       .catch(err => {
         console.log(err);

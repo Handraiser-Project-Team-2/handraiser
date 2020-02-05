@@ -37,10 +37,6 @@ export default function InQueue() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const classes = useStyles();
-
-  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  const user_id = decoded.userid;
 
   useEffect(() => {
     Axios({
@@ -51,10 +47,15 @@ export default function InQueue() {
     });
   });
 
+  const classes = useStyles();
+
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
+
   // console.log(concernsData);
   return (
     <List className={classes.root}>
-      {concernsData.map((concern, index) => {
+      {concernsData.map((data, concern, index) => {
         return (
           <div key={index}>
             <ListItem
@@ -75,8 +76,6 @@ export default function InQueue() {
                   vertical: "top",
                   horizontal: "right"
                 }}
-                open={open}
-                onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>
@@ -96,12 +95,24 @@ export default function InQueue() {
                   </React.Fragment>
                 }
               />
-              <ListItemSecondaryAction style={{ display: "flex" }}>
-                <Avatar variant="square" className={classes.small}>
-                  {concern.queue_order_num}
-                </Avatar>
+
+              <ListItemText
+                primary={data.concern}
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.inline}
+                      color="textPrimary"
+                    >
+                      {data.name}
+                    </Typography>
+                  </React.Fragment>
+                }
+              />
+              <ListItemSecondaryAction onClick={handleMenu}>
                 <MoreVertIcon
-                  onClick={handleMenu}
                   style={{
                     fontSize: 35,
                     color: "#c4c4c4",

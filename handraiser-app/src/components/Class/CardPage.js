@@ -77,7 +77,7 @@ export default function CardPage({ classData, data }) {
             </CardContent>
           </CardActionArea>
           <CardActions className={classes.actions}>
-            <Typography variant="overline" display="block" gutterBottom>
+            <Typography variant="caption" display="block" gutterBottom>
               Class code: {row.classroom_key}
             </Typography>
           </CardActions>

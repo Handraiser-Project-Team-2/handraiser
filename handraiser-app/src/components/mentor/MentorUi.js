@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Avatar from "@material-ui/core/Avatar";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
 import {
@@ -61,18 +62,18 @@ export default function Mentor() {
         .then(data => {
           const user_type = data.data.user_type_id;
 
-          // if (user_type !== 4) {
-          //   Swal.fire({
-          //     icon: "error",
-          //     title: "You cannot acces this page!"
-          //   }).then(function() {
-          //     if (user_type === 3) {
-          //       history.push("/student");
-          //     } else if (user_type === 1) {
-          //       history.push("/superadmin");
-          //     }
-          //   });
-          // }
+          if (user_type !== 4) {
+            Swal.fire({
+              icon: "error",
+              title: "You cannot acces this page!"
+            }).then(function() {
+              if (user_type === 3) {
+                history.push("/student");
+              } else if (user_type === 1) {
+                history.push("/superadmin");
+              }
+            });
+          }
         })
         .catch(err => {
           console.log(err);
@@ -162,5 +163,5 @@ export default function Mentor() {
       </Div>
     </React.Fragment>
   );
-  // }
-}
+   }
+
