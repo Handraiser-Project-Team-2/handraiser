@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Profile from "../images/1966.png";
-import Curry from "../images/i.png";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar";
-import MenuIcon from "@material-ui/icons/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
+import Topbar from "../reusables/Topbar";
+
 import {
   Div,
   Nav,
@@ -34,22 +29,28 @@ import {
 import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
+var jwtDecode = require("jwt-decode");
 
 export default function Student() {
   let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
   const open = Boolean(anchorEl);
+  const [concernDescription, setConcernDescription] = useState("");
+  const [concernTitle, setConcernTitle] = useState("");
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
   const [name, setName] = useState("");
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const sendMsg = evt => {
     evt.preventDefault();
-    return <span>(name)</span>;
   };
 
   useEffect(() => {
@@ -59,8 +60,13 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
+          console.log(data);
           setState({ user_type: data.data.user_type_id });
+
           const user_type = data.data.user_type_id;
+
+          console.log(user_type);
+
           if (user_type !== 3) {
             Swal.fire({
               icon: "error",
@@ -87,49 +93,30 @@ export default function Student() {
     }
   }, []);
 
+  const sendRequest = () => {
+    axios
+      .post(`/api/student/request/assistance`, {
+        class_id: 5,
+        user_id: user_id,
+        concern_title: concernTitle,
+        concern_description: concernDescription
+      })
+      .then(() => {
+        setConcernTitle("");
+        setConcernDescription("");
+        Swal.fire({
+          icon: "success",
+          title: "Request sent to the mentor"
+        }).then(() => {
+          history.push("/student");
+        });
+      });
+  };
+
   if (state.user_type === 3) {
     return (
       <React.Fragment>
-        <Nav>
-          <AppBar style={{ backgroundColor: "#372476" }}>
-            <Toolbar
-              style={{
-                display: "flex",
-                justifyContent: "space-between"
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <IconButton edge="start" aria-label="menu">
-                  <MenuIcon style={{ color: "white" }} />
-                </IconButton>
-                <Typography variant="h6">Handraiser Admin</Typography>
-              </div>
-              <div>
-                <IconButton
-                  aria-label="account of current user"
-                  edge="end"
-                  onClick={handleMenu}
-                  color="inherit"
-                >
-                  <AccountCircle style={{ fontSize: 40 }} />
-                </IconButton>
-              </div>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Log Out</MenuItem>
-              </Menu>
-            </Toolbar>
-          </AppBar>
-        </Nav>
+        <Topbar />
         <Div>
           <Queue>
             <Tabs />
@@ -137,8 +124,18 @@ export default function Student() {
           <Help>
             <Subject>
               <TitleName>
-                <Typography variant="h4">Error in Docker Compose</Typography>
-                <Typography variant="h6">From: Kobe Bryant</Typography>
+                <TextField
+                  id="standard-basic"
+                  value={concernTitle}
+                  onChange={e => setConcernTitle(e.target.value)}
+                  style={{ width: 700 }}
+                />
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Typography>Subject</Typography>
+                  <Typography>{concernTitle.length}/30</Typography>
+                </div>
               </TitleName>
               <Option>
                 <div
@@ -176,7 +173,7 @@ export default function Student() {
                     alignItems: "flex-end"
                   }}
                 >
-                  <Avatar src={Profile}></Avatar>
+                  <Avatar></Avatar>
                 </div>
 
                 <div
@@ -208,7 +205,7 @@ export default function Student() {
                     alignItems: "flex-end"
                   }}
                 >
-                  <Avatar src={Curry}></Avatar>
+                  <Avatar></Avatar>
                 </div>
 
                 <div
@@ -246,8 +243,8 @@ export default function Student() {
                       variant="outlined"
                       fullWidth
                       rows="3"
-                      value={name}
-                      onChange={e => setName(e.target.value)}
+                      value={concernDescription}
+                      onChange={e => setConcernDescription(e.target.value)}
                     />
 
                     <div
@@ -258,7 +255,7 @@ export default function Student() {
                         marginTop: "15px"
                       }}
                     >
-                      <Request>NEW REQUEST</Request>
+                      <Request onClick={sendRequest}>NEW REQUEST</Request>
                       <Send onClick={sendMsg}>SEND</Send>
                     </div>
                   </form>

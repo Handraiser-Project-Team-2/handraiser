@@ -1,4 +1,6 @@
-import React from "react";
+import React,{useState} from "react";
+import styled from "styled-components";
+import backgroundImg from "../images/programmer_1.png";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import axios from "axios";
@@ -14,6 +16,8 @@ import {
 } from "../Styles/Styles";
 
 export default function Login(props) {
+
+
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);
@@ -31,8 +35,10 @@ export default function Login(props) {
         }
       })
         .then(data => {
-          const userType = data.data.user_type_id;
+          console.log(data);
 
+          const userType = data.data.user_type_id;
+         localStorage.setItem("name",response.profileObj.givenName)
           sessionStorage.setItem("token", "Bearer " + data.data.token);
 
           switch (userType) {
@@ -46,11 +52,11 @@ export default function Login(props) {
               break;
             case 3:
               // student
-              props.history.push("/student");
+              props.history.push("/class");
               break;
             case 4:
               // mentor
-              props.history.push("/mentor");
+              props.history.push("/class");
               break;
             default:
               break;

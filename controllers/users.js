@@ -42,12 +42,9 @@ module.exports = {
                 })
                 .then(data => {
                   const token = jwt.sign(
-                    { googleId, userid: user.user_id },
+                    { googleId, userid: user.profile_id },
                     secret
                   );
-
-                  // console.log(jwtDecode(token));
-
                   res.status(201).json({ token, ...data });
                 })
                 .catch(err => {
@@ -59,7 +56,6 @@ module.exports = {
             });
         } else {
           // already sign up
-
           db.users
             .findOne({
               email
@@ -90,8 +86,28 @@ module.exports = {
 
     let parseToken = jwtDecode(token);
 
-    db.users
-      .findOne({ user_id: parseToken.userid })
+    db.users.findOne({ user_id: parseToken.userid }).then(data => {
+      if (data) {
+        db.user_profile
+          .findOne({ profile_id: data.profile_id })
+          .then(user => {
+            res.status(201).json({ ...data, ...user });
+          })
+          .catch(err => {
+            res.status(400).end();
+          });
+      }
+    });
+  },
+  
+  getUserProfile: (req, res) => {
+    const db = req.app.get("db");
+
+    const { user_id } = req.params;
+
+    db.query(
+      `SELECT * FROM user_profile inner join users on user_profile.profile_id = users.profile_id where user_id = ${user_id}`
+    )
       .then(data => {
         res.status(201).json(data);
       })

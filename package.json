@@ -25,7 +25,9 @@
     "massive": "^5.11.2",
     "node-pg-migrate": "^4.2.1",
     "pg": "^7.17.0",
+    "react-hook-form": "^4.8.2",
     "react-text-mask": "^5.4.3",
+    "socket.io": "^2.3.0",
     "sweetalert2": "^9.7.1"
   },
   "keywords": [],

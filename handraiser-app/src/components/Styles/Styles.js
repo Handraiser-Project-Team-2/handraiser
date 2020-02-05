@@ -24,45 +24,49 @@ export const RowCont = styled.div`
 `;
 
 export const TableStyle = styled.div`
-  @media only screen and (max-width: 425px),
+  @media only screen and (max-width: 500px),
     (height: 1024px) and (width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: landscape),
     (width: 1024px) and (height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: portrait) {
     td,
     tr {
       display: block;
     }
+
     thead tr {
       display: none;
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
     }
+
     tr {
       border-bottom: 3px solid lightgray;
       border-radius: 10px;
     }
+
     td {
       border: none;
-      border-bottom: 1px solid #eee;
       position: relative;
-      padding-left: 25%;
+      padding-left: 60px;
     }
+
     td:before {
       position: absolute;
-      top: 10px;
+      align-items: center;
+      top: 6px;
       left: 6px;
-      width: 100%;
+      width: 20%;
       padding: 10px;
-      white-space: nowrap;
     }
+
     td:nth-of-type(1):before {
-      content: "Email";
+      content: "Email:";
     }
     td:nth-of-type(2):before {
-      content: "Key";
+      content: "Status:";
     }
     td:nth-of-type(3):before {
-      content: "Action";
+      content: "Key:";
+    }
+    td:nth-of-type(4):before {
+      content: "Action:";
     }
   }
 `;
@@ -79,7 +83,6 @@ export const Div = styled.div`
   width: 100%;
 `;
 export const Div2 = styled.div`
-  margin-top: 15px;
   width: 25%;
   @media (min-width: 100px) and (max-width: 600px) {
     display: none;
@@ -119,7 +122,7 @@ export const Subject = styled.div`
   background-color: #ffffff;
 `;
 export const Conversation = styled.div`
-  height: 38.7em;
+  height: 39.7em;
   overflow: auto;
   background-color: #eaeaea;
 `;
@@ -159,12 +162,12 @@ export const Option = styled.div`
   align-content: center;
   align-items: center;
   border-right: 1px solid lightgrey;
-  width: 15%;
+  width: 145px;
 `;
 export const Shared = styled.div`
   display: flex;
   margin-top: 33px;
-  padding-bottom: 33px;
+  padding-bottom: 31px;
   justify-content: center;
   border-bottom: 1px solid lightgrey;
   @media (min-width: 100px) and (max-width: 600px) {

@@ -26,13 +26,14 @@ function TabPanel(props) {
     </Typography>
   );
 }
-const TabBtn = props => {
+const TabBtn = rowDatahandler => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
   return (
     <React.Fragment>
       <Paper color="primary" style={{ height: "83px" }}>
@@ -70,7 +71,7 @@ const TabBtn = props => {
       </Paper>
 
       <TabPanel value={tabValue} index={0}>
-        <InQueue />
+        <InQueue rowDatahandler={rowDatahandler} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}></TabPanel>
       <TabPanel value={tabValue} index={2}></TabPanel>

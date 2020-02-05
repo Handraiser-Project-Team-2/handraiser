@@ -34,11 +34,19 @@ export const TabBtn = props => {
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
   const [open, setOpen] = useState(false);
-  const [mentorData, setMentorData] = useState({});
-  const [adminData, setAdminData] = useState({});
+  const [userData, setUserData] = useState({});
+  const [type, setType] = useState("");
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
+  };
+
+  const handleOnChange = e => {
+    setUserData({ [e.target.name]: e.target.value });
+  };
+
+  const handleSelect = e => {
+    setType(e.target.value);
   };
 
   const handleOpen = () => {
@@ -49,33 +57,9 @@ export const TabBtn = props => {
     setOpen(false);
   };
 
-  const handleMentor = e => {
-    e.preventDefault();
-    const Obj = {
-      email: mentorData
-    };
+  const handleAdd = () => {
     axios
-      .post(`http://localhost:5000/api/admin/keygen/mentor`, Obj)
-      .then(() => {
-        toast.info("registration sucessful!", {
-          position: toast.POSITION.TOP_CENTER
-        });
-        setOpen(false);
-      })
-      .catch(err => {
-        toast.error(err.respond.data.error, {
-          position: toast.POSITION.TOP_CENTER
-        });
-      });
-  };
-
-  const handleAdmin = e => {
-    e.preventDefault();
-    const Obj = {
-      email: adminData
-    };
-    axios
-      .post(`http://localhost:5000/api/admin/keygen`, Obj)
+      .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
       .then(() => {
         toast.info("registration sucessful!", {
           position: toast.POSITION.TOP_CENTER
@@ -138,22 +122,22 @@ export const TabBtn = props => {
         )}
       </TabBox>
       <TabPanel value={tabValue} index={0}>
-        <TableCont />
+        <TableCont tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <TableCont />
+        <TableCont tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <TableCont />
+        <TableCont tabValue={tabValue} />
       </TabPanel>
       <GenerateKey
         handleClose={handleClose}
         open={open}
-        handleMentor={handleMentor}
-        setMentorData={setMentorData}
-        handleAdmin={handleAdmin}
-        setAdminData={setAdminData}
-        tabValue={tabValue}
+        handleSelect={handleSelect}
+        handleAdd={handleAdd}
+        setUserData={setUserData}
+        type={type}
+        handleOnChange={handleOnChange}
       />
     </React.Fragment>
   );
