@@ -28,14 +28,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InQueue(props) {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState();
   const [concernsData, setConcernsData] = useState([]);
   const open = Boolean(anchorEl);
+  
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl();
   };
 
   useEffect(() => {
@@ -44,12 +45,8 @@ export default function InQueue(props) {
       url: `/api/student/queue/order/${props.classReference}/${user_id}`
     })
       .then(res => {
-
         setConcernsData(res.data);
 
-        // res.data.map((data, v, i)=>{
-        //   return console.log(i)
-        // })
       })
       .catch(err => {
         console.log(err);
@@ -85,6 +82,7 @@ export default function InQueue(props) {
                   vertical: "top",
                   horizontal: "right"
                 }}
+                open={open}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>
