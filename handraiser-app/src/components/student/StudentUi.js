@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
@@ -57,9 +60,9 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          console.log(data)
+          console.log(data);
           setState({ user_type: data.data.user_type_id });
-          
+
           const user_type = data.data.user_type_id;
 
           console.log(user_type);
@@ -125,7 +128,7 @@ export default function Student() {
                   id="standard-basic"
                   value={concernTitle}
                   onChange={e => setConcernTitle(e.target.value)}
-                  style={{ width: 800 }}
+                  style={{ width: 700 }}
                 />
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
@@ -153,7 +156,75 @@ export default function Student() {
                 </div>
               </Option>
             </Subject>
-            <Conversation></Conversation>
+            <Conversation>
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: "10px",
+                  marginRight: "15px",
+                  padding: "10px",
+                  flexDirection: "row-reverse"
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    marginLeft: "10px",
+                    alignItems: "flex-end"
+                  }}
+                >
+                  <Avatar></Avatar>
+                </div>
+
+                <div
+                  style={{
+                    marginLeft: "10px",
+                    backgroundColor: "white",
+                    maxWidth: "450px",
+                    border: "1px solid lightgrey",
+                    padding: "10px 20px 10px 20px",
+                    borderRadius: "10px"
+                  }}
+                >
+                  <span id="display">Hello</span>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: "10px",
+                  marginRight: "15px",
+                  padding: "10px",
+                  flexDirection: "row"
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    marginLeft: "10px",
+                    alignItems: "flex-end"
+                  }}
+                >
+                  <Avatar></Avatar>
+                </div>
+
+                <div
+                  style={{
+                    marginLeft: "10px",
+                    backgroundColor: "white",
+                    maxWidth: "450px",
+                    border: "1px solid lightgrey",
+                    padding: "10px 20px 10px 20px",
+                    borderRadius: "10px"
+                  }}
+                >
+                  <span>
+                    Curry to Igoudala! Back to Curry! Igoudala with the layup...
+                    OHHHH!!!! BLOCKED BY JAMES!!!
+                  </span>
+                </div>
+              </div>
+            </Conversation>
             <Message>
               <Field>
                 <div
