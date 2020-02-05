@@ -42,16 +42,16 @@ export const StudentTable = props => {
     data: []
   });
 
-  useEffect(() => {
-    (async function() {
-      try {
-        const all = await axios("");
-        setTableData({ ...tableData, data: all.data });
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [tableData]);
+  // useEffect(() => {
+  //   (async function() {
+  //     try {
+  //       const all = await axios("");
+  //       setTableData({ ...tableData, data: all.data });
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   })();
+  // }, [tableData]);
 
   return (
     <TableStyle>
