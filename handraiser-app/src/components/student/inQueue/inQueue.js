@@ -44,7 +44,12 @@ export default function InQueue(props) {
       url: `/api/student/queue/order/${props.classReference}/${user_id}`
     })
       .then(res => {
+
         setConcernsData(res.data);
+
+        // res.data.map((data, v, i)=>{
+        //   return console.log(i)
+        // })
       })
       .catch(err => {
         console.log(err);
@@ -59,7 +64,7 @@ export default function InQueue(props) {
   
   return (
     <List className={classes.root}>
-      {concernsData.map((data, concern, index) => {
+      {concernsData ? concernsData.map((val, data, index) => {
         return (
           <div key={index}>
             <ListItem
@@ -85,7 +90,7 @@ export default function InQueue(props) {
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>
               </Menu>
               <ListItemText
-                primary={concern.concern.concern_title}
+                primary={val.concern.concern_title}
                 secondary={
                   <React.Fragment>
                     <Typography
@@ -94,7 +99,7 @@ export default function InQueue(props) {
                       className={classes.inline}
                       color="textPrimary"
                     >
-                      {concern.concern.concern_description}
+                      {val.concern.concern_description}
                     </Typography>
                   </React.Fragment>
                 }
@@ -127,7 +132,7 @@ export default function InQueue(props) {
             </ListItem>
           </div>
         );
-      })}
+      }):''}
     </List>
   );
 }
