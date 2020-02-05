@@ -17,8 +17,6 @@ module.exports = {
       googleId
     } = req.body;
 
-    console.log(req.body);
-
     db.users
       .findOne({
         email
@@ -99,7 +97,7 @@ module.exports = {
       }
     });
   },
-  
+
   getUserProfile: (req, res) => {
     const db = req.app.get("db");
 

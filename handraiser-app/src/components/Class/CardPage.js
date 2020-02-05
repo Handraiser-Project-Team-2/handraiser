@@ -9,6 +9,7 @@ import Avatar from "@material-ui/core/Avatar";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   actions: {
@@ -46,13 +47,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+
 export default function CardPage({ classData, data }) {
   const classes = useStyles();
+  let history = useHistory();
+
+  const cardClick = (e) => {
+    history.push(`/student/${e}`);
+  }
 
   return (
     <>
       {classData.map(row => (
-        <Card className={classes.card} key={row.class_id}>
+        <Card className={classes.card} key={row.class_id} onClick={()=>{cardClick(row.class_id)}}>
           <CardActionArea>
             <CardContent className={classes.title}>
               <Typography gutterBottom variant="h5" component="h2">
@@ -78,7 +85,7 @@ export default function CardPage({ classData, data }) {
           </CardActionArea>
           <CardActions className={classes.actions}>
             <Typography variant="caption" display="block" gutterBottom>
-              Class code: {row.classroom_key}
+               Class code: {row.classroom_key}
             </Typography>
           </CardActions>
         </Card>

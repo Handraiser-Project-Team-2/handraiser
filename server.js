@@ -58,6 +58,8 @@ massive({
     app.post("/api/student/class/register", student.regToClass); // register to a open class
     app.post("/api/student/request/assistance", student.ask_assistance); // request assistance
     app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order); // get the queue order number of the requested assistance
+    app.post("/api/student/get/class", student.get_my_classroom);
+    app.post("/api/student/classes", classes.getClassDetails);
 
     // class endpoints
     app.get("/api/classes", classes.getAllClass); // get all available classes
