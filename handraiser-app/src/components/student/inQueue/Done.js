@@ -11,6 +11,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,17 +25,17 @@ const useStyles = makeStyles(theme => ({
 
 export default function InQueue(rowDatahandler) {
   const classes = useStyles();
+  var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
   const [concernsData, setConcernsData] = useState([{ count: 0 }]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
-  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler.rowDatahandler;
-
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5001/api/classes/queue/5` //5 here is a class_id example
+      url: `http://localhost:5001/api/student/concern_list/user/${user_id}` //5 here is a class_id example
     }).then(res => {
       // console
       setConcernsData(res.data);
@@ -48,9 +49,9 @@ export default function InQueue(rowDatahandler) {
     setAnchorEl(null);
   };
 
-  const handleConcernData = data => {
-    rowDataHandlerChild2(data);
-  };
+  //   const handleConcernData = data => {
+  //     rowDataHandlerChild2(data);
+  //   };
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
@@ -70,7 +71,7 @@ export default function InQueue(rowDatahandler) {
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px"
                 }}
-                onClick={() => handleConcernData(data)}
+                // onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
                   <Avatar src={image}></Avatar>
@@ -106,11 +107,11 @@ export default function InQueue(rowDatahandler) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square" className={classes.small}>
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status == 1 ? "Hot" : "Queue"}
+                      {data.concern_status == 3 ? "Done" : ""}
                     </p>
                   </Avatar>
                   <MoreVertIcon
-                    // onClick={handleMenu}
+                    onClick={handleMenu}
                     style={{
                       fontSize: 35,
                       color: "#c4c4c4",

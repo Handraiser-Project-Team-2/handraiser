@@ -49,12 +49,27 @@ massive({
     // mentor endpoints
     app.post("/api/mentor/classroom/add", mentor.add_classroom);
     app.get("/api/classes/queue/:class_id", mentor.get_inqueue);
+    app.get("/api/classes/done/:class_id", mentor.get_done);
     app.post("/api/my/classes", mentor.get_my_classroom);
+    app.patch(
+      "/api/assistance/:assisted_id/:class_id/:user_student_id",
+      mentor.done
+    );
+    app.get("/api/classes/all/:class_id", mentor.get_all);
 
     // student endpoints
     app.post("/api/student/class/register", student.regToClass);
     app.post("/api/student/request/assistance", student.ask_assistance);
     app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order);
+    app.get("/api/student/queue/order/:class_id", student.queue_order_all);
+    app.delete("/api/student/request/:concern_id", student.delete);
+
+    app.patch("/api/concern_list/:concern_id", student.updateConcern);
+    app.post("/api/assisted_by", student.assisted_by);
+    app.get("/api/assisted_by/:user_student_id", student.GetAssisted_by);
+    app.get("/api/concern_list/:concern_id", student.getConcern);
+    // app.patch("/api/student/concern_list/:concern_id", student.updateConcern);
+    app.get("/api/student/concern_list/user/:user_id", student.getUserConcern);
 
     // class endpoints
     app.get("/api/classes", classes.getAllClass);

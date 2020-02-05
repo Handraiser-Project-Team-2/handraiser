@@ -81,7 +81,7 @@ export default function Student() {
           }
         })
         .catch(err => {
-          console.log(err);
+          // console.log(err);
         });
     } else {
       Swal.fire({
@@ -108,7 +108,8 @@ export default function Student() {
           icon: "success",
           title: "Request sent to the mentor"
         }).then(() => {
-          history.push("/student");
+          // history.push("/student");
+          window.location = "/student";
         });
       });
   };

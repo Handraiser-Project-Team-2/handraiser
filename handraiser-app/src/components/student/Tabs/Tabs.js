@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import InputBase from "@material-ui/core/InputBase";
 import InQueue from "../inQueue/inQueue";
+import InQueueAll from "../inQueue/inQueue_all";
+import Done from "../inQueue/Done";
 import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles(theme => ({}));
@@ -56,7 +58,7 @@ const TabBtn = props => {
           textColor="primary"
         >
           <Tab
-            label="IN QUEUE"
+            label="MY REQUESTS"
             onClick={() => setHide(hide === false ? hide : !hide)}
             style={{ width: "2px" }}
           />
@@ -65,7 +67,7 @@ const TabBtn = props => {
             onClick={() => setHide(hide === true ? hide : !hide)}
           />
           <Tab
-            label="ALL"
+            label="ALL QUEUE"
             onClick={() => setHide(hide === true ? hide : !hide)}
           />
         </Tabs>
@@ -74,8 +76,12 @@ const TabBtn = props => {
       <TabPanel value={tabValue} index={0}>
         <InQueue />
       </TabPanel>
-      <TabPanel value={tabValue} index={1}></TabPanel>
-      <TabPanel value={tabValue} index={2}></TabPanel>
+      <TabPanel value={tabValue} index={1}>
+        <Done />
+      </TabPanel>
+      <TabPanel value={tabValue} index={2}>
+        <InQueueAll />
+      </TabPanel>
     </React.Fragment>
   );
 };

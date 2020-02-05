@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import InputBase from "@material-ui/core/InputBase";
 import InQueue from "../inQueue/inQueue";
+import Done from "../inQueue/Done";
+import AllConcern from "../inQueue/AllConcern";
 import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles(theme => ({}));
@@ -75,8 +77,12 @@ const TabBtn = rowDatahandler => {
       <TabPanel value={tabValue} index={0}>
         <InQueue rowDatahandler={rowDatahandler} />
       </TabPanel>
-      <TabPanel value={tabValue} index={1}></TabPanel>
-      <TabPanel value={tabValue} index={2}></TabPanel>
+      <TabPanel value={tabValue} index={1}>
+        <Done />
+      </TabPanel>
+      <TabPanel value={tabValue} index={2}>
+        <AllConcern />
+      </TabPanel>
     </React.Fragment>
   );
 };

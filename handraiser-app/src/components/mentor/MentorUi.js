@@ -38,23 +38,103 @@ export default function Mentor() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
+  const [concern_title, setConcern_title] = useState("");
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(name);
+    // console.log(name);
+  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  //   axios.patch(
+  //     `http://localhost:5001/api/concern_list/${rowData.concern_id}`,
+  //     {
+  //       concern_id: rowData.concern_id,
+  //       concern_status: 1
+  //     }
+  //   );
+  // };
+
+  const handleDone = rowData => {
+    setAnchorEl(null);
+    // setConcern_title("");
+    axios
+      .patch(`http://localhost:5001/api/concern_list/${rowData.concern_id}`, {
+        concern_id: rowData.concern_id,
+        concern_title: rowData.concern_title,
+        concern_description: rowData.concern_description,
+        concern_status: 3
+      })
+      .then(data => {
+        axios
+          .get(`http://localhost:5001/api/assisted_by/${data.data.user_id}`, {})
+          .then(data => {
+            axios.patch(
+              `http://localhost:5001/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+              {
+                assisted_id: data.data[0].assisted_id,
+                user_student_id: data.data[0].user_id,
+                class_id: data.data[0].class_id,
+                assist_status: "done"
+              }
+            );
+          });
+      });
+  };
+
+  const handleBackQueue = rowData => {
+    setAnchorEl(null);
+    axios.patch(
+      `http://localhost:5001/api/concern_list/${rowData.concern_id}`,
+      {
+        concern_id: rowData.concern_id,
+        concern_title: rowData.concern_title,
+        concern_description: rowData.concern_description,
+        concern_status: 2
+      }
+    );
   };
 
   const rowDatahandler = rowData => {
+    console.log(rowData);
     setRowData(rowData);
+    axios
+      .patch(`http://localhost:5001/api/concern_list/${rowData.concern_id}`, {
+        concern_id: rowData.concern_id,
+        concern_title: rowData.concern_title,
+        concern_description: rowData.concern_description,
+        concern_status: 1
+      })
+      .then(data => {
+        axios
+          .get(`http://localhost:5001/api/assisted_by/${rowData.user_id}`, {})
+          .then(data => {
+            if (data.data.length == 0) {
+              axios.post(`http://localhost:5001/api/assisted_by`, {
+                assist_status: "ongoing",
+                class_id: rowData.class_id,
+                user_mentor_id: 3, //mock user_mentor_id data
+                user_student_id: rowData.user_id
+              });
+            } else {
+              axios.patch(
+                `http://localhost:5001/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                {
+                  assisted_id: data.data[0].assisted_id,
+                  user_student_id: data.data[0].user_id,
+                  class_id: data.data[0].class_id,
+                  assist_status: "ongoing"
+                }
+              );
+            }
+          });
+      });
     axios
       .get(`http://localhost:5001/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
-        console.log(data.data[0]);
         setName(data.data[0].first_name + " " + data.data[0].last_name);
       });
   };
@@ -82,7 +162,7 @@ export default function Mentor() {
           // }
         })
         .catch(err => {
-          console.log(err);
+          // console.log(err);
         });
     } else {
       Swal.fire({
@@ -128,10 +208,12 @@ export default function Mentor() {
                 horizontal: "right"
               }}
               open={open}
-              onClose={handleClose}
+              // onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>Log Out</MenuItem>
+              <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
+              <MenuItem onClick={e => handleBackQueue(rowData)}>
+                Back to Queue
+              </MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
@@ -143,7 +225,9 @@ export default function Mentor() {
         <Help>
           <Subject>
             <TitleName>
-              <Typography variant="h4">{rowData.concern_title}</Typography>
+              <Typography variant="h4">
+                Concern: {rowData.concern_title}
+              </Typography>
               <Typography variant="h6">From: {name}</Typography>
             </TitleName>
             <Option>
