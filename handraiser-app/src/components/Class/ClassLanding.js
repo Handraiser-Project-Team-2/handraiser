@@ -144,7 +144,7 @@ export default function ClassLanding(props) {
                 />
               )}
             </Grid>
-            {data.length === 0 ? (
+            {data.length > 0 ? (
               <Container maxWidth="lg" className={classes.flexy}>
                 <CardPage classData={classData} data={data} />
               </Container>
