@@ -76,8 +76,6 @@ export default function InQueue(rowDatahandler) {
                   vertical: "top",
                   horizontal: "right"
                 }}
-                open={open}
-                onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>
@@ -97,9 +95,9 @@ export default function InQueue(rowDatahandler) {
                   </React.Fragment>
                 }
               />
-              <ListItemSecondaryAction>
+
+              <ListItemSecondaryAction onClick={handleMenu}>
                 <MoreVertIcon
-                  onClick={handleMenu}
                   style={{
                     fontSize: 35,
                     color: "#c4c4c4",

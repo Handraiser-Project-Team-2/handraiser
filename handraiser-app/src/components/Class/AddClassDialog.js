@@ -66,8 +66,8 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
     })
       .then(data => {
         console.log(data);
-        handleClose();
         fetchMentorClass();
+        handleClose();
       })
       .catch(err => {
         console.log(err);

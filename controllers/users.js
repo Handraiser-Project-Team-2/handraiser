@@ -112,5 +112,24 @@ module.exports = {
       .catch(err => {
         res.status(400).end();
       });
-  }
+  },
+
+  getUserProfileByEmail: (req, res) => {
+    const db = req.app.get("db");
+
+    const { email } = req.body;
+
+    db.users.findOne({ email: email }).then(data => {
+      if (data) {
+        db.user_profile
+          .findOne({ profile_id: data.profile_id })
+          .then(user => {
+            res.status(201).json({ ...data, ...user });
+          })
+          .catch(err => {
+            res.status(400).end();
+          });
+      }
+    });
+  },
 };

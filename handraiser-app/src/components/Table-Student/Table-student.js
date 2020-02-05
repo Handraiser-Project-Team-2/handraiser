@@ -7,10 +7,7 @@ import axios from "axios";
 
 import { RowCont, TableStyle } from "../Styles/Styles";
 
-// COMPONENTS
-import ViewMentorDialog from "./Mentor/ViewMentorDIalog";
-
-export const TableCont = props => {
+export const StudentTable = props => {
   const { tabValue } = props;
   const [tableData, setTableData] = useState({
     columns: [
@@ -20,23 +17,11 @@ export const TableCont = props => {
       },
       {
         title: "Email",
-        field: "validation_email",
-        render: row =>
-          row.validation_status === "true" ? (
-            <ViewMentorDialog data={row} />
-          ) : (
-            row.validation_email
-          )
+        field: "validation_email"
       },
       {
         title: "Status",
-        field: "validation_status",
-        render: row =>
-          row.validation_status === "true" ? "Verified" : "Not yet Verified"
-      },
-      {
-        title: "Key",
-        field: "validation_key"
+        field: "validation_status"
       },
       {
         title: "Action",
@@ -60,21 +45,8 @@ export const TableCont = props => {
   useEffect(() => {
     (async function() {
       try {
-        const mentor = await axios(
-          "http://localhost:5000/api/admin/mentor_list"
-        );
-        const admin = await axios(
-          "http://localhost:5000/api/admin/admins_list"
-        );
-        const all = await axios("http://localhost:5000/api/admin/all_list");
-
-        if (tabValue === 1) {
-          setTableData({ ...tableData, data: mentor.data });
-        } else if (tabValue === 2) {
-          setTableData({ ...tableData, data: admin.data });
-        } else if (tabValue === 0) {
-          setTableData({ ...tableData, data: all.data });
-        }
+        const all = await axios("");
+        setTableData({ ...tableData, data: all.data });
       } catch (err) {
         console.error(err);
       }

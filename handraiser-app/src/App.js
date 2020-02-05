@@ -1,6 +1,7 @@
 import React from "react";
 import Routes from "./Routes/Routes";
 import UserContextProvider from "./components/Contexts/UserContext";
+import "./App.css";
 
 function App() {
   return (

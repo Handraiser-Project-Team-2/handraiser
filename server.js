@@ -37,6 +37,7 @@ massive({
     app.post("/api/login", users.login);
     app.post("/api/user/data", users.getUser);
     app.get("/api/userprofile/:user_id", users.getUserProfile);
+    app.post("/api/userprofile/", users.getUserProfileByEmail);
 
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor); //reference a mentor user type to an email
