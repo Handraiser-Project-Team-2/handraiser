@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
-
 import io from "socket.io-client";
 // import { useTheme } from "@material-ui/core/styles";
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -14,6 +13,7 @@ import FindClassDialog from "./FindClassDialog";
 import VerificationDialog from "./VerificationDialog";
 import AddClassDialog from "./AddClassDialog";
 import Topbar from "../reusables/Topbar";
+import NoClass from "./NoClass";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -47,7 +47,6 @@ export default function ClassLanding() {
   const changeUserType = e => {
     setUserType(e.data.user_type_id);
   };
-
 
   const checkValidations = () => {
     console.log(sessionStorage.getItem("token").split(" ")[1]);
@@ -114,7 +113,11 @@ export default function ClassLanding() {
         <div className={classes.root}>
           <Grid container spacing={2} className={classes.gridContainer}>
             {verfication ? (
-              <VerificationDialog changeUserType={changeUserType} fetchUserData={fetchUserData} fetchMentorClass={fetchMentorClass}  />
+              <VerificationDialog
+                changeUserType={changeUserType}
+                fetchUserData={fetchUserData}
+                fetchMentorClass={fetchMentorClass}
+              />
             ) : (
               ""
             )}
@@ -128,9 +131,13 @@ export default function ClassLanding() {
                 />
               )}
             </Grid>
-            <Container maxWidth="lg" className={classes.flexy}>
-              <CardPage classData={classData} data={data} />
-            </Container>
+            {data.length === 0 ? (
+              <Container maxWidth="lg" className={classes.flexy}>
+                <CardPage classData={classData} data={data} />
+              </Container>
+            ) : (
+              <NoClass />
+            )}
           </Grid>
         </div>
       </Container>
