@@ -8,7 +8,6 @@ import axios from "axios";
 import { RowCont, TableStyle } from "../Styles/Styles";
 
 export const StudentTable = props => {
-  const { tabValue } = props;
   const [tableData, setTableData] = useState({
     columns: [
       {
@@ -42,16 +41,16 @@ export const StudentTable = props => {
     data: []
   });
 
-  useEffect(() => {
-    (async function() {
-      try {
-        const all = await axios("");
-        setTableData({ ...tableData, data: all.data });
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [tableData]);
+  //   useEffect(() => {
+  //     (async function() {
+  //       try {
+  //         const all = await axios("");
+  //         setTableData({ ...tableData, data: all.data });
+  //       } catch (err) {
+  //         console.error(err);
+  //       }
+  //     })();
+  //   }, []);
 
   return (
     <TableStyle>
@@ -65,7 +64,6 @@ export const StudentTable = props => {
           pageSizeOptions: [5, 10, 15, 20],
           actionsColumnIndex: -1,
           draggable: false,
-          paginationType: "stepped",
           headerStyle: {
             textAlign: "center",
             fontSize: 18

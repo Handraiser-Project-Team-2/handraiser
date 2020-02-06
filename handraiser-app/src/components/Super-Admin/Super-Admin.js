@@ -51,7 +51,7 @@ export default function NavBar() {
       <React.Fragment>
         <Topbar />
         <div
-          style={{ paddingTop: "100px", marginRight: "5%", marginLeft: "5%" }}
+          style={{ paddingTop: "30px", marginRight: "5%", marginLeft: "5%" }}
         >
           <TabBtn />
         </div>

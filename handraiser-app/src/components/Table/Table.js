@@ -45,29 +45,43 @@ export const TableCont = props => {
     ],
     data: []
   });
+  const [mentorURL, setMentorURL] = useState(
+    "http://localhost:5000/api/admin/mentor_list"
+  );
+  const [adminURL, setAdminURL] = useState(
+    "http://localhost:5000/api/admin/admins_list"
+  );
+  const [isError, setIsError] = useState(false);
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
 
   useEffect(() => {
-    (async function() {
+    const fetchData = async () => {
+      setIsError(false);
       try {
-        const mentor = await axios(
-          "http://localhost:5000/api/admin/mentor_list"
-        );
-        const admin = await axios(
-          "http://localhost:5000/api/admin/admins_list"
-        );
-        const all = await axios("http://localhost:5000/api/admin/all_list");
+        const mentor = await axios.get(mentorURL, {
+          cancelToken: source.token
+        });
+        const admin = await axios.get(adminURL, { cancelToken: source.token });
 
         if (tabValue === 1) {
           setTableData({ ...tableData, data: mentor.data });
         } else if (tabValue === 2) {
           setTableData({ ...tableData, data: admin.data });
-        } else if (tabValue === 0) {
-          setTableData({ ...tableData, data: all.data });
         }
       } catch (err) {
-        console.error(err);
+        if (axios.isCancel(err)) {
+          console.log("", err.message);
+        } else {
+          setIsError(true);
+        }
       }
-    })();
+    };
+    fetchData();
+
+    return () => {
+      source.cancel("");
+    };
   }, [tableData]);
 
   return (
@@ -82,7 +96,6 @@ export const TableCont = props => {
           pageSizeOptions: [5, 10, 15, 20],
           actionsColumnIndex: -1,
           draggable: false,
-          paginationType: "stepped",
           headerStyle: {
             textAlign: "center",
             fontSize: 18

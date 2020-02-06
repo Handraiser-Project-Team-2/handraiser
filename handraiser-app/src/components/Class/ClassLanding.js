@@ -5,8 +5,8 @@ import Container from "@material-ui/core/Container";
 import axios from "axios";
 
 import io from "socket.io-client";
-// import { useTheme } from "@material-ui/core/styles";
-// import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // COMPONENTS
 import CardPage from "./CardPage";
@@ -41,13 +41,12 @@ export default function ClassLanding() {
   const classes = useStyles();
   const [verfication, setVerification] = useState(false);
   const [userType, setUserType] = useState("3");
-  // const theme = useTheme();
-  // const matches = useMediaQuery(theme.breakpoints.up("md"));
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   const changeUserType = e => {
     setUserType(e.data.user_type_id);
   };
-
 
   const checkValidations = () => {
     console.log(sessionStorage.getItem("token").split(" ")[1]);
@@ -114,7 +113,11 @@ export default function ClassLanding() {
         <div className={classes.root}>
           <Grid container spacing={2} className={classes.gridContainer}>
             {verfication ? (
-              <VerificationDialog changeUserType={changeUserType} fetchUserData={fetchUserData} fetchMentorClass={fetchMentorClass}  />
+              <VerificationDialog
+                changeUserType={changeUserType}
+                fetchUserData={fetchUserData}
+                fetchMentorClass={fetchMentorClass}
+              />
             ) : (
               ""
             )}
