@@ -44,7 +44,6 @@ export default function InQueue(props) {
   const [concernDescription, setConcernDescription] = useState("");
   const open = Boolean(anchorEl);
 
-<<<<<<< HEAD
   const classes = useStyles();
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
@@ -59,8 +58,6 @@ export default function InQueue(props) {
     });
   }, []); //class_id
 
-=======
->>>>>>> a6ed63ca30cba46a508b1a9be0de792f3b55c932
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -97,7 +94,6 @@ export default function InQueue(props) {
       });
   };
 
-<<<<<<< HEAD
   const handleCloseEdit = () => {
     setOpenEdit(false);
   };
@@ -240,87 +236,5 @@ export default function InQueue(props) {
         })}
       </List>
     </Paper>
-=======
-  const classes = useStyles();
-  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  const user_id = decoded.userid;
-
-  return (
-    <List className={classes.root}>
-      {concernsData
-        ? concernsData.map((val, data, index) => {
-            return (
-              <div key={val.concern.concern_id}>
-                <ListItem
-                  // button
-                  style={{
-                    borderLeft: "14px solid #8932a8",
-                    borderBottom: "0.5px solid #abababde",
-                    padding: "10px 15px"
-                  }}
-                >
-                  <ListItemAvatar>
-                    <Avatar>A</Avatar>
-                  </ListItemAvatar>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right"
-                    }}
-                    open={open}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>Log Out</MenuItem>
-                  </Menu>
-                  <ListItemText
-                    primary={val.concern.concern_title}
-                    secondary={
-                      <React.Fragment>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          className={classes.inline}
-                          color="textPrimary"
-                        >
-                          {val.concern.concern_description}
-                        </Typography>
-                      </React.Fragment>
-                    }
-                  />
-
-                  <ListItemText
-                    primary={data.concern}
-                    secondary={
-                      <React.Fragment>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          className={classes.inline}
-                          color="textPrimary"
-                        >
-                          {data.name}
-                        </Typography>
-                      </React.Fragment>
-                    }
-                  />
-                  <ListItemSecondaryAction onClick={handleMenu}>
-                    <MoreVertIcon
-                      style={{
-                        fontSize: 35,
-                        color: "#c4c4c4",
-                        cursor: "pointer"
-                      }}
-                    />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </div>
-            );
-          })
-        : ""}
-    </List>
->>>>>>> a6ed63ca30cba46a508b1a9be0de792f3b55c932
   );
 }

@@ -11,13 +11,6 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
-<<<<<<< HEAD
-=======
-import Grid from "@material-ui/core/Grid";
-import Hidden from "@material-ui/core/Hidden";
-import MentorUi from "../MentorUi";
-import { useParams } from "react-router-dom";
->>>>>>> a6ed63ca30cba46a508b1a9be0de792f3b55c932
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,22 +28,13 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
-<<<<<<< HEAD
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
-=======
-  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler.rowDatahandler;
-  let { class_id } = useParams();
->>>>>>> a6ed63ca30cba46a508b1a9be0de792f3b55c932
 
   useEffect(() => {
     axios({
       method: "get",
-<<<<<<< HEAD
       url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
-=======
-      url: `/api/classes/queue/${class_id}` //5 here is a class_id example
->>>>>>> a6ed63ca30cba46a508b1a9be0de792f3b55c932
     }).then(res => {
       // console
       setConcernsData(res.data);
