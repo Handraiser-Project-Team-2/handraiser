@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InQueue(props) {
-  const [anchorEl, setAnchorEl] = useState();
+  const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState([]);
   const open = Boolean(anchorEl);
   
@@ -36,7 +36,7 @@ export default function InQueue(props) {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl();
+    setAnchorEl(null);
   };
 
   useEffect(() => {
@@ -46,7 +46,6 @@ export default function InQueue(props) {
     })
       .then(res => {
         setConcernsData(res.data);
-
       })
       .catch(err => {
         console.log(err);
@@ -63,7 +62,7 @@ export default function InQueue(props) {
     <List className={classes.root}>
       {concernsData ? concernsData.map((val, data, index) => {
         return (
-          <div key={index}>
+          <div key={val.concern.concern_id}>
             <ListItem
               // button
               style={{
@@ -83,6 +82,7 @@ export default function InQueue(props) {
                   horizontal: "right"
                 }}
                 open={open}
+                onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>
