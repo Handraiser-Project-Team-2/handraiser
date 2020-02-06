@@ -8,7 +8,6 @@ import blueGrey from "@material-ui/core/colors/blueGrey";
 import Avatar from "@material-ui/core/Avatar";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 import CardActions from "@material-ui/core/CardActions";
-import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
 
@@ -73,14 +72,12 @@ export default function CardPage({ classData, data }) {
   return (
     <>
       {classData.map(row => (
-        <Card
-          className={classes.card}
-          key={row.class_id}
-          onClick={() => {
-            cardClick(row.class_id);
-          }}
-        >
-          <CardActionArea>
+        <Card className={classes.card} key={row.class_id}>
+          <CardActionArea
+            onClick={() => {
+              cardClick(row.class_id);
+            }}
+          >
             <CardContent className={classes.title}>
               <Typography gutterBottom variant="h5" component="h2">
                 {row.class_title}
@@ -89,7 +86,7 @@ export default function CardPage({ classData, data }) {
                 variant="square"
                 className={classes.square}
                 alt="Remy Sharp"
-                src={data.image}
+                src={data.user_type_id === 3 ? row.image : data.image}
               />
             </CardContent>
 
@@ -105,10 +102,12 @@ export default function CardPage({ classData, data }) {
           </CardActionArea>
           <CardActions className={classes.actions}>
             <Typography variant="caption" display="block" gutterBottom>
-              { cstate &&
-              cstate.user_type_id === 4
+              {cstate && cstate.user_type_id === 3
+                ? `Mentor: ${row.first_name} ${row.last_name}`
+                : null}
+              {cstate && cstate.user_type_id === 4
                 ? `Class code: ${row.classroom_key}`
-                : ""}
+                : null}
             </Typography>
           </CardActions>
         </Card>

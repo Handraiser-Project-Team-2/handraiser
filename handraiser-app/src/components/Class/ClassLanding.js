@@ -50,7 +50,6 @@ export default function ClassLanding(props) {
   };
 
   const checkValidations = () => {
-    console.log(sessionStorage.getItem("token").split(" ")[1]);
     axios({
       method: "post",
       url: `/api/admin/check/designation`,
@@ -97,7 +96,6 @@ export default function ClassLanding(props) {
       data: tokState
     })
       .then(data => {
-        console.log(data.data);
         setClassData(data.data);
       })
       .catch(err => {
@@ -105,6 +103,7 @@ export default function ClassLanding(props) {
       });
   };
 
+  // get all class relative to student
   const fetchMyClass = () => {
     axios({
       method: "post",
