@@ -103,8 +103,8 @@ module.exports = {
     const parseToken = jwtDecode(token);
 
     db.query(
-      `SELECT class.class_id,  class.class_title, class.class_description, class.class_date_created, class.class_status
-      FROM class INNER JOIN classroom ON classroom.class_id = class.class_id
+      `SELECT class.class_id,  class.class_title, class.class_description, class.class_date_created, class.class_status, user_profile.first_name, user_profile.last_name, user_profile.image
+      FROM class INNER JOIN classroom ON classroom.class_id = class.class_id INNER JOIN user_profile ON user_profile.profile_id = class.user_id
       WHERE classroom.user_id = ${parseToken.userid}`
     )
       .then(data => {
