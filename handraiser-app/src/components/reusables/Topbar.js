@@ -11,8 +11,9 @@ import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
-var jwtDecode = require("jwt-decode");
 import { UserContext } from "../Contexts/UserContext";
+
+  var jwtDecode = require("jwt-decode");
 
 export default function Topbar() {
   let history = useHistory();
