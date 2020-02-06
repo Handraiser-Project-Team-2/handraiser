@@ -256,5 +256,29 @@ module.exports = {
         // res.status(500).end();
         res.status(400).end();
       });
+  },
+  queue_order_done: (req, res) => {
+    const db = req.app.get("db");
+
+    db.query(
+      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} order by concern_id ASC`
+    )
+      .then(data => {
+        // re:looping here please
+        let order_data = [];
+        if (data) {
+          data.map((concern, index) => {
+            // filter concern by current user
+            if (parseInt(concern.user_id) === parseInt(req.params.user_id)) {
+              // then get its index for determining queue order
+              order_data.push({ concern, queue_order_num: index });
+            }
+          });
+        }
+        res.status(201).json(order_data);
+      })
+      .catch(err => {
+        res.status(401).end();
+      });
   }
 };

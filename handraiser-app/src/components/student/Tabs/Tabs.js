@@ -35,6 +35,7 @@ const TabBtn = props => {
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
   return (
     <React.Fragment>
       <Paper color="primary" style={{ height: "83px" }}>
@@ -72,7 +73,7 @@ const TabBtn = props => {
       </Paper>
 
       <TabPanel value={tabValue} index={0}>
-        <InQueue  classReference = {props.classReference} />
+        <InQueue classReference={props.classReference} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
         <Done />

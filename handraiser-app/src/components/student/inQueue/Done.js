@@ -27,20 +27,10 @@ export default function InQueue(rowDatahandler) {
   const classes = useStyles();
   var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const [concernsData, setConcernsData] = useState([{ count: 0 }]);
+  const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://localhost:5000/api/student/concern_list/user/${user_id}` //5 here is a class_id example
-    }).then(res => {
-      // console
-      setConcernsData(res.data);
-    });
-  }, []);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -52,6 +42,15 @@ export default function InQueue(rowDatahandler) {
   //   const handleConcernData = data => {
   //     rowDataHandlerChild2(data);
   //   };
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/student/queue/order/done/5/${user_id}` //5 here is a class_id example
+    }).then(res => {
+      // console
+      setConcernsData(res.data);
+    });
+  }, []);
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
@@ -65,7 +64,6 @@ export default function InQueue(rowDatahandler) {
           return (
             <div key={index}>
               <ListItem
-                button
                 style={{
                   borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
@@ -107,7 +105,7 @@ export default function InQueue(rowDatahandler) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square" className={classes.small}>
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status == 3 ? "Done" : ""}
+                      {data.concern_status === 3 ? "Done" : "Queue"}
                     </p>
                   </Avatar>
                   <MoreVertIcon

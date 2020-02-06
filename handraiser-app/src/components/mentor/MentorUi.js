@@ -178,48 +178,6 @@ export default function Mentor() {
 
   return (
     <React.Fragment>
-      {/* <Nav>
-        <AppBar style={{ backgroundColor: "#372476" }}>
-          <Toolbar
-            style={{
-              display: "flex",
-              justifyContent: "space-between"
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <IconButton edge="start" aria-label="menu">
-                <MenuIcon style={{ color: "white" }} />
-              </IconButton>
-              <Typography variant="h6">Handraiser Admin</Typography>
-            </div>
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                edge="end"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle style={{ fontSize: 40 }} />
-              </IconButton>
-            </div>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
-              }}
-              open={open}
-              // onClose={handleClose}
-            >
-              <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
-              <MenuItem onClick={e => handleBackQueue(rowData)}>
-                Back to Queue
-              </MenuItem>
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </Nav> */}
       <Topbar />
       <Menu
         id="menu-appbar"

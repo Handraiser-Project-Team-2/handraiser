@@ -50,8 +50,6 @@ massive({
     app.post("/api/admin/check/designation", admin.need_validations); // implicitly check if email need validations
 
     // mentor endpoints
-    app.post("/api/mentor/classroom/add", mentor.add_classroom);
-    app.get("/api/classes/queue/:class_id", mentor.get_inqueue);
     app.get("/api/classes/done/:class_id", mentor.get_done);
     app.post("/api/my/classes", mentor.get_my_classroom);
     app.patch(
@@ -59,11 +57,11 @@ massive({
       mentor.done
     );
     app.get("/api/classes/all/:class_id", mentor.get_all);
+    app.post("/api/mentor/classroom/add", mentor.add_classroom); // register a new classroom
+    app.get("/api/classes/queue/:class_id", mentor.get_inqueue); // get all assistance request
+    app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
 
     // student endpoints
-    app.post("/api/student/class/register", student.regToClass);
-    app.post("/api/student/request/assistance", student.ask_assistance);
-    app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order);
     app.get("/api/student/queue/order/:class_id", student.queue_order_all);
     app.delete("/api/student/request/:concern_id", student.delete);
 
@@ -71,15 +69,15 @@ massive({
     app.post("/api/assisted_by", student.assisted_by);
     app.get("/api/assisted_by/:user_student_id", student.GetAssisted_by);
     app.get("/api/concern_list/:concern_id", student.getConcern);
-    app.get("/api/student/concern_list/user/:user_id", student.getUserConcern);
-    app.post("/api/mentor/classroom/add", mentor.add_classroom); // register a new classroom
-    app.get("/api/classes/queue/:class_id", mentor.get_inqueue); // get all assistance request
-    app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
+    app.get("/api/student/concern_list/user/:user_id", student.getUserConcern); // get all user request
 
-    // student endpoints
     app.post("/api/student/class/register", student.regToClass); // register to a open class
     app.post("/api/student/request/assistance", student.ask_assistance); // request assistance
     app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order); // get the queue order number of the requested assistance
+    app.get(
+      "/api/student/queue/order/done/:class_id/:user_id",
+      student.queue_order_done
+    ); // get all done request assistance
     app.post("/api/student/get/class", student.get_my_classroom);
     app.post("/api/student/classes", classes.getClassDetails);
 
