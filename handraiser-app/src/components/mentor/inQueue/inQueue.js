@@ -76,6 +76,8 @@ export default function InQueue(rowDatahandler) {
                   vertical: "top",
                   horizontal: "right"
                 }}
+                open={open}
+                onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>

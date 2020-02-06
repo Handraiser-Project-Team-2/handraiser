@@ -11,10 +11,11 @@ import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
-var jwtDecode = require("jwt-decode");
+
 import { UserContext } from "../Contexts/UserContext";
 
 export default function Topbar() {
+  var jwtDecode = require("jwt-decode");
   let history = useHistory();
   const [user, setUser] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -34,8 +35,8 @@ export default function Topbar() {
 
   const Logout = () => {
     sessionStorage.setItem("token", "");
-    setData();
     history.push("/");
+    setData();
   };
 
   const sendMsg = evt => {
