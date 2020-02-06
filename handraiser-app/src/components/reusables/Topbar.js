@@ -16,6 +16,7 @@ import { UserContext } from "../Contexts/UserContext";
   var jwtDecode = require("jwt-decode");
 
 export default function Topbar() {
+  var jwtDecode = require("jwt-decode");
   let history = useHistory();
   const [user, setUser] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);

@@ -12,7 +12,6 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Axios from "axios";
 
-var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InQueue(props) {
+  var jwtDecode = require("jwt-decode");
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState([]);
   const open = Boolean(anchorEl);
