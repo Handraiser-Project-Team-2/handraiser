@@ -86,7 +86,7 @@ export default function Mentor() {
         history.push("/");
       });
     }
-  }, []);
+  });
 
   return (
     <React.Fragment>

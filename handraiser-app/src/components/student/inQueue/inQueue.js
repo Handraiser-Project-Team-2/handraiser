@@ -32,7 +32,7 @@ export default function InQueue(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState([]);
   const open = Boolean(anchorEl);
-  
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,85 +53,85 @@ export default function InQueue(props) {
       });
   }, []);
 
-
   const classes = useStyles();
-
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  
+
   return (
     <List className={classes.root}>
-      {concernsData ? concernsData.map((val, data, index) => {
-        return (
-          <div key={val.concern.concern_id}>
-            <ListItem
-              // button
-              style={{
-                borderLeft: "14px solid #8932a8",
-                borderBottom: "0.5px solid #abababde",
-                padding: "10px 15px"
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar>A</Avatar>
-              </ListItemAvatar>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Log Out</MenuItem>
-              </Menu>
-              <ListItemText
-                primary={val.concern.concern_title}
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={classes.inline}
-                      color="textPrimary"
-                    >
-                      {val.concern.concern_description}
-                    </Typography>
-                  </React.Fragment>
-                }
-              />
-
-              <ListItemText
-                primary={data.concern}
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={classes.inline}
-                      color="textPrimary"
-                    >
-                      {data.name}
-                    </Typography>
-                  </React.Fragment>
-                }
-              />
-              <ListItemSecondaryAction onClick={handleMenu}>
-                <MoreVertIcon
+      {concernsData
+        ? concernsData.map((val, data, index) => {
+            return (
+              <div key={val.concern.concern_id}>
+                <ListItem
+                  // button
                   style={{
-                    fontSize: 35,
-                    color: "#c4c4c4",
-                    cursor: "pointer"
+                    borderLeft: "14px solid #8932a8",
+                    borderBottom: "0.5px solid #abababde",
+                    padding: "10px 15px"
                   }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          </div>
-        );
-      }):''}
+                >
+                  <ListItemAvatar>
+                    <Avatar>A</Avatar>
+                  </ListItemAvatar>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right"
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                  </Menu>
+                  <ListItemText
+                    primary={val.concern.concern_title}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          className={classes.inline}
+                          color="textPrimary"
+                        >
+                          {val.concern.concern_description}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+
+                  <ListItemText
+                    primary={data.concern}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          className={classes.inline}
+                          color="textPrimary"
+                        >
+                          {data.name}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                  <ListItemSecondaryAction onClick={handleMenu}>
+                    <MoreVertIcon
+                      style={{
+                        fontSize: 35,
+                        color: "#c4c4c4",
+                        cursor: "pointer"
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </div>
+            );
+          })
+        : ""}
     </List>
   );
 }
