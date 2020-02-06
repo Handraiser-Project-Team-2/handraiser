@@ -6,20 +6,14 @@ module.exports = {
     const db = req.app.get("db");
 
     let date = new Date();
-
-    console.log(date);
-
     const {
       class_title,
       class_description,
       // class_status, //either (open, close) ? maybe by defualt is open
       token //mentor reference
     } = req.body;
-
     jwtDecode(token);
     let parseToken = jwtDecode(token);
-    console.log(parseToken);
-
     db.class
       .save({
         user_id: parseToken.userid,

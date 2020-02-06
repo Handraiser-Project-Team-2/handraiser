@@ -29,8 +29,8 @@ export default function Topbar() {
 
   const Logout = () => {
     sessionStorage.setItem("token", "");
-    setData();
     history.push("/");
+    setData();
   };
 
   const sendMsg = evt => {
