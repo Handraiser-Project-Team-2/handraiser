@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -10,12 +10,14 @@ import Menu from "@material-ui/core/Menu";
 import { Nav } from "../Styles/Styles";
 import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
+import { UserContext } from "../Contexts/UserContext";
 
 export default function Topbar() {
   let history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
+  const { setData } = useContext(UserContext);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -27,6 +29,7 @@ export default function Topbar() {
 
   const Logout = () => {
     sessionStorage.setItem("token", "");
+    setData();
     history.push("/");
   };
 
