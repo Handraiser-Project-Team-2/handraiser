@@ -4,8 +4,8 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 import io from "socket.io-client";
-// import { useTheme } from "@material-ui/core/styles";
-// import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // COMPONENTS
 import CardPage from "./CardPage";
@@ -42,8 +42,6 @@ export default function ClassLanding(props) {
   const classes = useStyles();
   const [verfication, setVerification] = useState(false);
   const [userType, setUserType] = useState();
-  //here
-  // const { userData } = useContext(UserContext);
 
   const changeUserType = e => {
     setUserType(e.data.user_type_id);

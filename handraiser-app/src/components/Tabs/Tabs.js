@@ -14,23 +14,6 @@ import { TableCont } from "../Table/Table";
 import { StudentTable } from "../Table-Student/Table-student";
 import { GenerateKey } from "../Generate-Key/Generate";
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box style={{ paddingTop: "20px" }}>{children}</Box>}
-    </Typography>
-  );
-}
-
 export const TabBtn = props => {
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
@@ -38,22 +21,37 @@ export const TabBtn = props => {
   const [userData, setUserData] = useState({});
   const [type, setType] = useState("");
 
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+      <Typography
+        component="div"
+        role="tabpanel"
+        hidden={value !== index}
+        id={`full-width-tabpanel-${index}`}
+        aria-labelledby={`full-width-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box style={{ paddingTop: "20px" }}>{children}</Box>
+        )}
+      </Typography>
+    );
+  }
+
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  const handleOnChange = e => {
+  const handleOnChange = (e, tab) => {
     setUserData({ [e.target.name]: e.target.value });
-    if (tabValue === 1) {
+    if (tab === 1) {
       setType("mentor");
     } else {
       setType("admin");
     }
   };
-
-  // const handleSelect = e => {
-  //   setType(e.target.value);
-  // };
 
   const handleOpen = () => {
     setOpen(true);
@@ -87,9 +85,8 @@ export const TabBtn = props => {
             value={tabValue}
             onChange={handleChange}
             indicatorColor="primary"
-            textColor="primary"
+            textColor="inherit"
             variant="fullWidth"
-            aria-label="full width tabs example"
           >
             <Tab
               label="Students"
@@ -140,7 +137,6 @@ export const TabBtn = props => {
       <GenerateKey
         handleClose={handleClose}
         open={open}
-        // handleSelect={handleSelect}
         handleAdd={handleAdd}
         setUserData={setUserData}
         setType={setType}
