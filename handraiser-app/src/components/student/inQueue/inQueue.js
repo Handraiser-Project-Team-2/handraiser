@@ -63,7 +63,6 @@ export default function InQueue() {
         `http://localhost:5001/api/concern_list/${concern.concern.concern_id}`
       )
       .then(data => {
-        console.log(data.data[0]);
         axios.patch(
           `http://localhost:5001/api/concern_list/${data.data[0].concern_id}`,
           {
@@ -95,7 +94,6 @@ export default function InQueue() {
   }, []); //class_id
 
   const handleRemoveReq = concern => {
-    console.log(concern);
     axios
       .delete(
         `http://localhost:5001/api/student/request/${concern.concern.concern_id}`,
