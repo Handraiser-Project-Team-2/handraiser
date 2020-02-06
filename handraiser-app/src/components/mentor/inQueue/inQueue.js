@@ -29,17 +29,17 @@ export default function InQueue(rowDatahandler) {
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
-  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler.rowDatahandler;
+  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/queue/5` //5 here is a class_id example
+      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
     }).then(res => {
       // console
       setConcernsData(res.data);
     });
-  }, []);
+  }, [rowDatahandler.search]);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -52,6 +52,7 @@ export default function InQueue(rowDatahandler) {
     rowDataHandlerChild2(data);
   };
 
+  // console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>

@@ -71,9 +71,10 @@ module.exports = {
   },
   queue_order: (req, res) => {
     const db = req.app.get("db");
+    const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} order by concern_id ASC`
+      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         // re:looping here please
@@ -97,9 +98,10 @@ module.exports = {
   },
   queue_order_all: (req, res) => {
     const db = req.app.get("db");
+    const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} order by concern_id ASC`
+      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         console.log(data);
@@ -196,8 +198,8 @@ module.exports = {
     const parseToken = jwtDecode(token);
 
     db.query(
-      `SELECT class.class_id,  class.class_title, class.class_description, class.class_date_created, class.class_status
-      FROM class INNER JOIN classroom ON classroom.class_id = class.class_id
+      `SELECT class.class_id,  class.class_title, class.class_description, class.class_date_created, class.class_status, user_profile.first_name, user_profile.last_name, user_profile.image
+      FROM class INNER JOIN classroom ON classroom.class_id = class.class_id INNER JOIN user_profile ON user_profile.profile_id = class.user_id
       WHERE classroom.user_id = ${parseToken.userid}`
     )
       .then(data => {
@@ -259,9 +261,10 @@ module.exports = {
   },
   queue_order_done: (req, res) => {
     const db = req.app.get("db");
+    const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} order by concern_id ASC`
+      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         // re:looping here please

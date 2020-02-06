@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Avatar from "@material-ui/core/Avatar";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -33,14 +33,17 @@ import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
 import Topbar from "../reusables/Topbar";
+var jwtDecode = require("jwt-decode");
 
 export default function Mentor() {
   let history = useHistory();
+  let { class_id } = useParams();
   const [rowData, setRowData] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
-  const [concern_title, setConcern_title] = useState("");
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid; //mentor_user_id if mentor is logged in
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -118,7 +121,8 @@ export default function Mentor() {
               axios.post(`http://localhost:5000/api/assisted_by`, {
                 assist_status: "ongoing",
                 class_id: rowData.class_id,
-                user_mentor_id: 3, //mock user_mentor_id data
+                user_mentor_id: 3, //mock user_mentor_id data //used for checking
+                // user_mentor_id: user_id,    <<----------- correct way: uncomment if data is available
                 user_student_id: rowData.user_id
               });
             } else {
@@ -196,7 +200,7 @@ export default function Mentor() {
       </Menu>
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} />
+          <Tabs rowDatahandler={rowDatahandler} class_id={class_id} />
         </Queue>
         <Help>
           <Subject>

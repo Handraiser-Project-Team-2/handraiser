@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue() {
+export default function InQueue(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState([]);
   const [image, setImage] = useState("");
@@ -47,7 +47,7 @@ export default function InQueue() {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/student/queue/order/5` //5 here is a class_id example
+      url: `http://localhost:5000/api/student/queue/order/${props.classReference}?search=${props.search}` //5 here is a class_id example
     }).then(res => {
       setConcernsData(res.data);
     });

@@ -43,6 +43,20 @@ export default function InQueue(props) {
   const [concernDescription, setConcernDescription] = useState("");
   const open = Boolean(anchorEl);
 
+  const classes = useStyles();
+
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/student/queue/order/${props.classReference}/${user_id}?search=${props.search}` //5 here is a class_id example
+    }).then(res => {
+      setConcernsData(res.data);
+    });
+  }, []); //class_id
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -73,6 +87,9 @@ export default function InQueue(props) {
             concern_status: data.data[0].concern_status
           }
         );
+      })
+      .then(() => {
+        window.location = `/student/${props.classReference}`;
       });
   };
 
@@ -80,31 +97,20 @@ export default function InQueue(props) {
     setOpenEdit(false);
   };
 
-  const classes = useStyles();
-
-  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  const user_id = decoded.userid;
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://localhost:5000/api/student/queue/order/5/${user_id}` //5 here is a class_id example
-    }).then(res => {
-      setConcernsData(res.data);
-    });
-  }, []); //class_id
-
   const handleRemoveReq = concern => {
+    setAnchorEl(null);
     axios
       .delete(
         `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
         {}
       )
       .then(() => {
+        window.location = `/student/${props.classReference}`;
         alert("Your concern has been removed from the queue");
-        window.location = "/student";
       });
   };
+
+  // console.log(props.classReference);
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
@@ -165,7 +171,9 @@ export default function InQueue(props) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square" className={classes.small}>
                     <p style={{ fontSize: 12 }}>
-                      {concern.queue_order_num == 0
+                      {concern.concern.concern_status == 1
+                        ? "being helped"
+                        : concern.queue_order_num == 1
                         ? "next"
                         : concern.queue_order_num}
                     </p>

@@ -32,6 +32,7 @@ const TabBtn = props => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
+  const [search, setSearch] = useState("");
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -47,7 +48,12 @@ const TabBtn = props => {
               marginRight: "13px"
             }}
           >
-            <TextField id="outlined-basic" placeholder="Search..." fullWidth />
+            <TextField
+              id="outlined-basic"
+              placeholder="Search..."
+              fullWidth
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
         </form>
         <Tabs
@@ -73,13 +79,13 @@ const TabBtn = props => {
       </Paper>
 
       <TabPanel value={tabValue} index={0}>
-        <InQueue classReference={props.classReference} />
+        <InQueue classReference={props.classReference} search={search} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <Done />
+        <Done classReference={props.classReference} search={search} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <InQueueAll />
+        <InQueueAll classReference={props.classReference} search={search} />
       </TabPanel>
     </React.Fragment>
   );

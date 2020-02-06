@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue(rowDatahandler) {
+export default function InQueue({ class_id, search }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([{ count: 0 }]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -32,7 +32,7 @@ export default function InQueue(rowDatahandler) {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/all/5` //5 here is a class_id example
+      url: `http://localhost:5000/api/classes/all/${class_id}?search=${search}`
     }).then(res => {
       // console
       setConcernsData(res.data);
@@ -104,7 +104,11 @@ export default function InQueue(rowDatahandler) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square" className={classes.small}>
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status == 3 ? "Done" : "Queue"}
+                      {data.concern_status === 3
+                        ? "Done"
+                        : data.concern_status === 1
+                        ? "Hot"
+                        : "Queue"}
                     </p>
                   </Avatar>
                   <MoreVertIcon

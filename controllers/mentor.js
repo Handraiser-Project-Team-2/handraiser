@@ -51,11 +51,11 @@ module.exports = {
   },
   get_inqueue: (req, res) => {
     const db = req.app.get("db");
-
+    const { search } = req.query;
     // db.concern_list
     //   .find({ class_id: req.params.class_id })
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} order by concern_id ASC`
+      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         res.status(201).json(data);
@@ -66,8 +66,10 @@ module.exports = {
   },
   get_done: (req, res) => {
     const db = req.app.get("db");
+    const { search } = req.query;
+
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} order by concern_id ASC`
+      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         res.status(201).json(data);
@@ -78,8 +80,10 @@ module.exports = {
   },
   get_all: (req, res) => {
     const db = req.app.get("db");
+    const { search } = req.query;
+
     db.query(
-      `SELECT * FROM concern_list WHERE class_id = ${req.params.class_id} order by concern_id ASC`
+      `SELECT * FROM concern_list WHERE class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         res.status(201).json(data);

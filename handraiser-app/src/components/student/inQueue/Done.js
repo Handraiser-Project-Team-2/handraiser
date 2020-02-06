@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue(rowDatahandler) {
+export default function InQueue(props) {
   const classes = useStyles();
   var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
@@ -31,6 +31,15 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/student/done/order/${props.classReference}/${user_id}?search=${props.search}` //5 here is a class_id example
+    }).then(res => {
+      setConcernsData(res.data);
+    });
+  }, []);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -42,20 +51,13 @@ export default function InQueue(rowDatahandler) {
   //   const handleConcernData = data => {
   //     rowDataHandlerChild2(data);
   //   };
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://localhost:5000/api/student/queue/order/done/5/${user_id}` //5 here is a class_id example
-    }).then(res => {
-      // console
-      setConcernsData(res.data);
-    });
-  }, []);
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
+          console.log(concernsData);
+          console.log(data.concern.concern_title);
           axios
             .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
             .then(data => {
@@ -88,7 +90,7 @@ export default function InQueue(rowDatahandler) {
                   <MenuItem onClick={handleClose}>Log Out</MenuItem>
                 </Menu>
                 <ListItemText
-                  primary={data.concern_title}
+                  primary={data.concern.concern_title}
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -97,7 +99,7 @@ export default function InQueue(rowDatahandler) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        {data.concern_description}
+                        {data.concern.concern_description}
                       </Typography>
                     </React.Fragment>
                   }
@@ -105,7 +107,7 @@ export default function InQueue(rowDatahandler) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square" className={classes.small}>
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status === 3 ? "Done" : "Queue"}
+                      {data.concern.concern_status === 3 ? "Done" : ""}
                     </p>
                   </Avatar>
                   <MoreVertIcon

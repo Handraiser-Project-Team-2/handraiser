@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue(rowDatahandler) {
+export default function InQueue({ class_id, search }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([{ count: 0 }]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -32,7 +32,7 @@ export default function InQueue(rowDatahandler) {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/done/5` //5 here is a class_id example
+      url: `http://localhost:5000/api/classes/done/${class_id}?search=${search}`
     }).then(res => {
       // console
       setConcernsData(res.data);

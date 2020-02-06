@@ -51,7 +51,6 @@ massive({
 
     // mentor endpoints
     app.get("/api/classes/done/:class_id", mentor.get_done);
-    app.post("/api/my/classes", mentor.get_my_classroom);
     app.patch(
       "/api/assistance/:assisted_id/:class_id/:user_student_id",
       mentor.done
@@ -75,7 +74,7 @@ massive({
     app.post("/api/student/request/assistance", student.ask_assistance); // request assistance
     app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order); // get the queue order number of the requested assistance
     app.get(
-      "/api/student/queue/order/done/:class_id/:user_id",
+      "/api/student/done/order/:class_id/:user_id",
       student.queue_order_done
     ); // get all done request assistance
     app.post("/api/student/get/class", student.get_my_classroom);
