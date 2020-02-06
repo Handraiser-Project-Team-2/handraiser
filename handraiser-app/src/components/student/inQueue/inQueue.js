@@ -63,7 +63,7 @@ export default function InQueue(props) {
     <List className={classes.root}>
       {concernsData ? concernsData.map((val, data, index) => {
         return (
-          <div key={index}>
+          <div key={val.concern.concern_id}>
             <ListItem
               // button
               style={{
