@@ -8,14 +8,6 @@ export const UserContext = createContext({
 const UserContextProvider = props => {
   const [userData, setData] = useState();
 
-  // useEffect(() => {
-  //   if (sessionStorage.getItem("token") || userData) {
-  //     // setTimeout(() => {
-  //     fetchUserData();
-  //     // }, 1000);
-  //   }
-  // }, [sessionStorage.getItem("token")]);
-
   const fetchUserData = () => {
     axios({
       method: "post",
