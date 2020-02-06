@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -9,6 +9,7 @@ import Avatar from "@material-ui/core/Avatar";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 import CardActions from "@material-ui/core/CardActions";
 import { useHistory } from "react-router-dom";
+import { UserContext } from "../Contexts/UserContext";
 
 const useStyles = makeStyles(theme => ({
   actions: {
@@ -49,9 +50,23 @@ const useStyles = makeStyles(theme => ({
 export default function CardPage({ classData, data }) {
   const classes = useStyles();
   let history = useHistory();
+  const { cstate, getData } = useContext(UserContext);
+
+  useEffect(() => {
+    if (!cstate) {
+      getData();
+    }
+  }, [cstate]);
 
   const cardClick = e => {
-    history.push(`/student/${e}`);
+    if (cstate) {
+      if (cstate.user_type_id === 3) {
+        history.push(`/student/${e}`);
+      }
+      if (cstate.user_type_id === 4) {
+        history.push(`/mentor/${e}`);
+      }
+    }
   };
 
   return (
@@ -87,10 +102,10 @@ export default function CardPage({ classData, data }) {
           </CardActionArea>
           <CardActions className={classes.actions}>
             <Typography variant="caption" display="block" gutterBottom>
-              {data.user_type_id === 3
+              {cstate && cstate.user_type_id === 3
                 ? `Mentor: ${row.first_name} ${row.last_name}`
                 : null}
-              {data.user_type_id === 4
+              {cstate && cstate.user_type_id === 4
                 ? `Class code: ${row.classroom_key}`
                 : null}
             </Typography>

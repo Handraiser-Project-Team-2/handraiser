@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import backgroundImg from "../images/programmer_1.png";
-
 //Table Styles
 export const TabBox = styled.div`
   display: flex;
@@ -10,7 +9,6 @@ export const TabBox = styled.div`
     flex-direction: column;
   }
 `;
-
 export const BtnBox = styled.div`
   display: flex;
   @media screen and (max-width: 425px) {
@@ -18,62 +16,53 @@ export const BtnBox = styled.div`
     padding-top: 10px;
   }
 `;
-
 export const RowCont = styled.div`
   text-align: center;
 `;
-
 export const TableStyle = styled.div`
-  @media only screen and (max-width: 768px),
+  @media only screen and (max-width: 750px),
     (height: 1024px) and (width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: landscape),
     (width: 1024px) and (height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: portrait) {
     td,
     tr {
       display: block;
     }
-
     thead tr {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
+      display: none;
     }
-
     tr {
-      border-bottom: 3px solid lightgray;
+      border: 1px solid lightgray;
       border-radius: 10px;
     }
-
     td {
       display: flex;
-      align-content: center;
       flex-direction: row;
       border: none;
       position: relative;
-      padding-left: 70px;
+      padding-left: 60px;
     }
-
     td:before {
       position: absolute;
+      align-items: center;
       top: 6px;
       left: 6px;
-      width: 45%;
+      width: 20%;
       padding: 10px;
-      white-space: nowrap;
     }
     td:nth-of-type(1):before {
-      content: "  ";
+      content: " ";
     }
     td:nth-of-type(2):before {
-      content: "Email:  ";
+      content: "Email:";
     }
     td:nth-of-type(3):before {
-      content: "Status: ";
+      content: "Status:";
     }
     td:nth-of-type(4):before {
-      content: "Key: ";
+      content: "Key:";
     }
     td:nth-of-type(5):before {
-      content: "Action: ";
+      content: "Action:";
     }
   }
 `;
@@ -101,10 +90,10 @@ export const Div2 = styled.div`
 export const Queue = styled.div`
   width: 25%;
   border-right: 1px solid lightgrey;
-  @media (min-width: 100px) and (max-width: 600px) {
+  @media (min-width: 100px) and (max-width: 768px) {
     display: none;
   }
-  @media (min-width: 601px) and (max-width: 1024px) {
+  @media (min-width: 769px) and (max-width: 1024px) {
     box-sizing: border-box;
     width: 40%;
   }
@@ -129,9 +118,12 @@ export const Subject = styled.div`
   background-color: #ffffff;
 `;
 export const Conversation = styled.div`
-  height: 39.7em;
+  height: 636.1px;
   overflow: auto;
   background-color: #eaeaea;
+  @media (min-width: 300px) and (max-width: 1700px) {
+    height: 545px;
+  }
 `;
 export const Message = styled.div`
   display: flex;
@@ -144,22 +136,6 @@ export const TitleName = styled.div`
   width: 85%;
   border-right: 1px solid lightgrey;
   background-color: #ffffff;
-  @media (min-width: 100px) and (max-width: 600px) {
-    h4 {
-      font-size: 15px;
-    }
-    h6 {
-      font-size: 5px;
-    }
-  }
-  @media (min-width: 600px) and (max-width: 1024px) {
-    h4 {
-      font-size: 25px;
-    }
-    h6 {
-      font-size: 15px;
-    }
-  }
 `;
 export const Field = styled.div`
   width: 100%;
@@ -222,28 +198,38 @@ export const Request = styled.button`
     width: 100%;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
-    box-sizing: border-box;
     width: 100%;
+    box-sizing: border-box;
   }
 `;
-
 //Login Styles
 export const LoginDiv = styled.div`
   display: flex;
   box-sizing: border-box;
   height: 100vh;
-  @media (min-width: 100px) and (max-width: 600px) {
+  @media (min-width: 100px) and (max-width: 400px) {
     background-image: url(${backgroundImg});
-    background-size: 150%;
+    background-size: 145%;
     background-repeat: no-repeat;
-    background-position: bottom;
+    background-position: -60px bottom;
   }
-  @media (min-width: 601px) and (max-width: 1024px) {
+  @media (min-width: 400px) and (max-width: 600px) {
+    background-image: url(${backgroundImg});
+    background-size: 145%;
+    background-repeat: no-repeat;
+    background-position: -85px bottom;
+  }
+  @media (min-width: 600px) and (max-width: 940px) {
     justify-content: center;
     background-image: url(${backgroundImg});
     background-size: 135%;
     background-repeat: no-repeat;
-    background-position: bottom;
+    background-position: -115px bottom;
+  }
+  @media (min-width: 1024px) and (max-width: 1500px) {
+    display: flex;
+    box-sizing: border-box;
+    height: 100vh;
   }
 `;
 export const LoginMain = styled.div`
@@ -257,17 +243,9 @@ export const LoginMain = styled.div`
     margin-top: -400px;
     width: 100%;
   }
-  @media (min-width: 601px) and (max-width: 1024px) {
-    margin-top: -650px;
+  @media (min-width: 600px) and (max-width: 940px) {
+    margin-top: -600px;
     width: 100%;
-  }
-  @media (min-width: 1025px) and (max-width: 1245px) {
-    width: 33.34%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
   }
 `;
 export const LoginPic = styled.div`
@@ -278,17 +256,17 @@ export const LoginPic = styled.div`
   background-color: #7f25d9;
   background-image: url(${backgroundImg});
   background-size: cover;
-  background-position: center;
+  background-position: -174px center;
   p {
     padding-bottom: 850px;
   }
   @media screen and (max-width: 600px) {
     display: none;
   }
-  @media (min-width: 601px) and (max-width: 1024px) {
+  @media (min-width: 600px) and (max-width: 940px) {
     display: none;
   }
-  @media (min-width: 1025px) and (max-width: 1470px) {
+  @media (min-width: 940px) and (max-width: 1024px) {
     display: flex;
     width: 67.7%;
     flex-direction: column;
@@ -296,9 +274,19 @@ export const LoginPic = styled.div`
     background-color: #7f25d9;
     background-image: url(${backgroundImg});
     background-size: cover;
-    p {
-      padding-bottom: 850px;
-    }
+    background-repeat: no-repeat;
+    background-position: -450px bottom;
+  }
+  @media (min-width: 1024px) and (max-width: 1500px) {
+    display: flex;
+    width: 67.7%;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-color: #7f25d9;
+    background-image: url(${backgroundImg});
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: -350px bottom;
   }
 `;
 export const LoginButton = styled.button`
@@ -322,7 +310,6 @@ export const LoginCont = styled.div`
   flex-direction: row;
   justify-content: center;
 `;
-
 export const LoginFooter = styled.div`
   position: fixed;
   bottom: 0;
@@ -332,7 +319,6 @@ export const LoginFooter = styled.div`
     display: none;
   }
 `;
-
 export const Continue = styled.p`
   font-family: "Roboto";
   color: white;
@@ -342,13 +328,24 @@ export const Continue = styled.p`
     font-size: 12.5px;
   }
 `;
-
 export const Title = styled.h1`
-  font-family: "Roboto";
+  font-family: Roboto;
   color: #330066;
   font-size: 40px;
   @media (min-width: 56px) and (max-width: 300px) {
     font-size: 25px;
     padding-top: 6px;
+  }
+`;
+export const Quotes = styled.div`
+  font-family: Oxygen;
+  color: white;
+  font-size: 30px;
+  align-self: center;
+  margin-bottom: 820px;
+  @media (min-width: 940px) and (max-width: 1750px) {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 750px;
   }
 `;

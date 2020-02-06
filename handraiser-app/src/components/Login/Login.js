@@ -12,7 +12,8 @@ import {
   LoginCont,
   LoginFooter,
   Continue,
-  Title
+  Title,
+  Quotes
 } from "../Styles/Styles";
 
 export default function Login(props) {
@@ -68,14 +69,7 @@ export default function Login(props) {
   return (
     <LoginDiv>
       <LoginPic>
-        <p
-          style={{
-            fontFamily: "Oxygen",
-            color: "white",
-            fontSize: "30px",
-            alignSelf: "center"
-          }}
-        >
+        <Quotes>
           The first step of learning
           <br /> is admitting our insufficiency
           <br />{" "}
@@ -89,7 +83,7 @@ export default function Login(props) {
           >
             - Jordan B. Peterson
           </span>
-        </p>
+        </Quotes>
       </LoginPic>
       <LoginMain>
         <Title>HANDRAISER</Title>

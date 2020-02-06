@@ -59,6 +59,7 @@ massive({
     app.post("/api/mentor/classroom/add", mentor.add_classroom); // register a new classroom
     app.get("/api/classes/queue/:class_id", mentor.get_inqueue); // get all assistance request
     app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
+    app.post("/api/my/classes/email", mentor.get_my_classroom_by_email); // get all classroom referenced to the current user by email
 
     // student endpoints
     app.get("/api/student/queue/order/:class_id", student.queue_order_all);

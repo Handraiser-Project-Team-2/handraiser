@@ -35,7 +35,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InQueue(props) {
-  const [anchorEl, setAnchorEl] = useState();
+  var jwtDecode = require("jwt-decode");
+  const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState([]);
   const [image, setImage] = useState("");
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -61,7 +62,7 @@ export default function InQueue(props) {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl();
+    setAnchorEl(null);
   };
 
   const handleClickOpen = concern => {

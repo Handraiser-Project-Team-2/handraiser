@@ -4,8 +4,8 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 import io from "socket.io-client";
-// import { useTheme } from "@material-ui/core/styles";
-// import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // COMPONENTS
 import CardPage from "./CardPage";
@@ -14,6 +14,7 @@ import VerificationDialog from "./VerificationDialog";
 import AddClassDialog from "./AddClassDialog";
 import Topbar from "../reusables/Topbar";
 import NoClass from "./NoClass";
+import { UserContext } from "../Contexts/UserContext";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -41,7 +42,6 @@ export default function ClassLanding(props) {
   const classes = useStyles();
   const [verfication, setVerification] = useState(false);
   const [userType, setUserType] = useState();
-  //here
 
   const changeUserType = e => {
     setUserType(e.data.user_type_id);
@@ -60,7 +60,6 @@ export default function ClassLanding(props) {
         console.log(err);
       });
   };
-
   useEffect(() => {
     fetchUserData();
     userType === 3 ? fetchMyClass() : fetchMentorClass();
