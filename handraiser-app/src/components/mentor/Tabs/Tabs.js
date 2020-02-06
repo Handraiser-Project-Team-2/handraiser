@@ -37,7 +37,7 @@ const TabBtn = ({ class_id, rowDatahandler }) => {
     setTabValue(newValue);
   };
 
-  console.log(search);
+  // console.log(search);
   return (
     <React.Fragment>
       <Paper color="primary" style={{ height: "83px" }}>
