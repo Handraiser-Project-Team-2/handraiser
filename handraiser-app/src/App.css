@@ -28,6 +28,7 @@
 .MuiTableRow-root:hover {
   background: lightgrey !important;
 }
+
 ::-webkit-scrollbar {
   width: 5px;
 }

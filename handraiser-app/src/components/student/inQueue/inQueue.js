@@ -27,10 +27,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue() {
+export default function InQueue(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState([]);
   const open = Boolean(anchorEl);
+  
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -41,23 +42,27 @@ export default function InQueue() {
   useEffect(() => {
     Axios({
       method: "get",
-      url: `/api/student/queue/order/5/${user_id}` //5 here is a class_id example
-    }).then(res => {
-      setConcernsData(res.data);
-    });
-  });
+      url: `/api/student/queue/order/${props.classReference}/${user_id}`
+    })
+      .then(res => {
+        setConcernsData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
 
   const classes = useStyles();
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-
-  // console.log(concernsData);
+  
   return (
     <List className={classes.root}>
-      {concernsData.map((data, concern, index) => {
+      {concernsData ? concernsData.map((val, data, index) => {
         return (
-          <div key={index}>
+          <div key={val.concern.concern_id}>
             <ListItem
               // button
               style={{
@@ -76,12 +81,14 @@ export default function InQueue() {
                   vertical: "top",
                   horizontal: "right"
                 }}
+                open={open}
+                onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>
               </Menu>
               <ListItemText
-                primary={concern.concern.concern_title}
+                primary={val.concern.concern_title}
                 secondary={
                   <React.Fragment>
                     <Typography
@@ -90,7 +97,7 @@ export default function InQueue() {
                       className={classes.inline}
                       color="textPrimary"
                     >
-                      {concern.concern.concern_description}
+                      {val.concern.concern_description}
                     </Typography>
                   </React.Fragment>
                 }
@@ -123,7 +130,7 @@ export default function InQueue() {
             </ListItem>
           </div>
         );
-      })}
+      }):''}
     </List>
   );
 }

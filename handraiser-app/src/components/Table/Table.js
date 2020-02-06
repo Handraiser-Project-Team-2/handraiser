@@ -7,6 +7,9 @@ import axios from "axios";
 
 import { RowCont, TableStyle } from "../Styles/Styles";
 
+// COMPONENTS
+import ViewMentorDialog from "./Mentor/ViewMentorDIalog";
+
 export const TableCont = props => {
   const { tabValue } = props;
   const [tableData, setTableData] = useState({
@@ -17,11 +20,19 @@ export const TableCont = props => {
       },
       {
         title: "Email",
-        field: "validation_email"
+        field: "validation_email",
+        render: row =>
+          row.validation_status === "true" ? (
+            <ViewMentorDialog data={row} />
+          ) : (
+            row.validation_email
+          )
       },
       {
         title: "Status",
-        field: "validation_status"
+        field: "validation_status",
+        render: row =>
+          row.validation_status === "true" ? "Verified" : "Not yet Verified"
       },
       {
         title: "Key",
