@@ -79,7 +79,7 @@ export const TableCont = props => {
         console.error(err);
       }
     })();
-  }, [tableData]);
+  }, [tabValue]);
 
   return (
     <TableStyle>
