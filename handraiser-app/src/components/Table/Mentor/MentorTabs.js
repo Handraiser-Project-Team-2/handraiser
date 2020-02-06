@@ -9,15 +9,15 @@ import MentorProfile from "./MentorProfile";
 import MentorClass from "./MentorClass";
 
 const useStyles = makeStyles({
-  tab:{
-    color: 'black'
+  tab: {
+    color: "black"
   },
   root: {
     flexGrow: 1
   }
 });
 
-export default function MentorTabs({profileData}) {
+export default function MentorTabs({ profileData, classData }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -41,7 +41,11 @@ export default function MentorTabs({profileData}) {
       </Paper>
 
       {/* Tab Body */}
-      {value === 0 ? <MentorProfile profileData={profileData} /> : <MentorClass profileData={profileData} />}
+      {value === 0 ? (
+        <MentorProfile profileData={profileData} classData={classData} />
+      ) : (
+        <MentorClass profileData={profileData} classData={classData} />
+      )}
     </>
   );
 }
