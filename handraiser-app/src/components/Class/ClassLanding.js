@@ -143,7 +143,7 @@ export default function ClassLanding(props) {
                 />
               )}
             </Grid>
-            {!classData.length === 0 ? (
+            {classData.length === 0 ? (
               <NoClass />
             ) : (
               <Container maxWidth="lg" className={classes.flexy}>
