@@ -5,14 +5,19 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
-  statsCont:{
+  gridCont: {
+    marginTop: theme.spacing(1),
+    backgroundColor: "#eaeaea"
+  },
+  statsCont: {
     marginTop: theme.spacing(12)
   },
   profileCont: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    backgroundColor: "#f4f4f4"
   },
   avatar: {
     width: theme.spacing(20),
@@ -24,11 +29,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MentorProfile({ profileData }) {
+export default function MentorProfile({ profileData, classData }) {
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} className={classes.gridCont}>
         <Grid item xs={12} sm={4}>
           <div className={classes.profileCont}>
             <Avatar
@@ -57,25 +63,25 @@ export default function MentorProfile({ profileData }) {
             alignItems="center"
             className={classes.statsCont}
           >
-            <Grid item xs={12} sm={4} style={{textAlign: 'center'}}>
+            <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
               <Typography variant="h3" gutterBottom>
-                12
+                {Object.keys(classData).length}
               </Typography>
               <Typography variant="h5" gutterBottom>
                 Class Attended
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={4} style={{textAlign: 'center'}}>
+            <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
               <Typography variant="h3" gutterBottom>
-                2323
+                0
               </Typography>
               <Typography variant="h5" gutterBottom>
                 Students Helped
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={4} style={{textAlign: 'center'}}>
+            <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
               <Typography variant="h3" gutterBottom>
-                2323
+                0
               </Typography>
               <Typography variant="h5" gutterBottom>
                 Students Handled

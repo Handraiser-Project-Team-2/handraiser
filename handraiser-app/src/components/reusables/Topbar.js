@@ -4,19 +4,24 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { Nav } from "../Styles/Styles";
 import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
+import Avatar from "@material-ui/core/Avatar";
+var jwtDecode = require("jwt-decode");
 import { UserContext } from "../Contexts/UserContext";
 
 export default function Topbar() {
   let history = useHistory();
+  const [user, setUser] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
+  var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
   const { setData } = useContext(UserContext);
 
   const handleMenu = event => {
@@ -35,8 +40,13 @@ export default function Topbar() {
 
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(name);
   };
+
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/userprofile/${user_id}`).then(res => {
+      setUser(res.data[0].image);
+    });
+  }, []);
 
   return (
     <Nav>
@@ -60,7 +70,7 @@ export default function Topbar() {
               onClick={handleMenu}
               color="inherit"
             >
-              <AccountCircle style={{ fontSize: 40 }} />
+              <Avatar alt="" src={user} />
             </IconButton>
           </div>
           <Menu
