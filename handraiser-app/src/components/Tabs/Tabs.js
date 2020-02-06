@@ -11,6 +11,7 @@ import axios from "axios";
 import { TabBox, BtnBox } from "../Styles/Styles";
 
 import { TableCont } from "../Table/Table";
+import { StudentTable } from "../Table-Student/Table-student";
 import { GenerateKey } from "../Generate-Key/Generate";
 
 function TabPanel(props) {
@@ -34,12 +35,25 @@ export const TabBtn = props => {
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
   const [open, setOpen] = useState(false);
-  const [mentorData, setMentorData] = useState({});
-  const [adminData, setAdminData] = useState({});
+  const [userData, setUserData] = useState({});
+  const [type, setType] = useState("");
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  const handleOnChange = e => {
+    setUserData({ [e.target.name]: e.target.value });
+    if (tabValue === 1) {
+      setType("mentor");
+    } else {
+      setType("admin");
+    }
+  };
+
+  // const handleSelect = e => {
+  //   setType(e.target.value);
+  // };
 
   const handleOpen = () => {
     setOpen(true);
@@ -49,33 +63,9 @@ export const TabBtn = props => {
     setOpen(false);
   };
 
-  const handleMentor = e => {
-    e.preventDefault();
-    const Obj = {
-      email: mentorData
-    };
+  const handleAdd = () => {
     axios
-      .post(`http://localhost:5000/api/admin/keygen/mentor`, Obj)
-      .then(() => {
-        toast.info("registration sucessful!", {
-          position: toast.POSITION.TOP_CENTER
-        });
-        setOpen(false);
-      })
-      .catch(err => {
-        toast.error(err.respond.data.error, {
-          position: toast.POSITION.TOP_CENTER
-        });
-      });
-  };
-
-  const handleAdmin = e => {
-    e.preventDefault();
-    const Obj = {
-      email: adminData
-    };
-    axios
-      .post(`http://localhost:5000/api/admin/keygen`, Obj)
+      .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
       .then(() => {
         toast.info("registration sucessful!", {
           position: toast.POSITION.TOP_CENTER
@@ -127,6 +117,7 @@ export const TabBtn = props => {
               </Button>
             ) : (
               <Button
+                value="admin"
                 variant="contained"
                 color="primary"
                 onClick={() => handleOpen(props)}
@@ -138,21 +129,22 @@ export const TabBtn = props => {
         )}
       </TabBox>
       <TabPanel value={tabValue} index={0}>
-        <TableCont />
+        <StudentTable tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <TableCont />
+        <TableCont tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <TableCont />
+        <TableCont tabValue={tabValue} />
       </TabPanel>
       <GenerateKey
         handleClose={handleClose}
         open={open}
-        handleMentor={handleMentor}
-        setMentorData={setMentorData}
-        handleAdmin={handleAdmin}
-        setAdminData={setAdminData}
+        // handleSelect={handleSelect}
+        handleAdd={handleAdd}
+        setUserData={setUserData}
+        setType={setType}
+        handleOnChange={handleOnChange}
         tabValue={tabValue}
       />
     </React.Fragment>

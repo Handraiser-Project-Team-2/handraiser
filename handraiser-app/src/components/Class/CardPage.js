@@ -7,9 +7,14 @@ import Typography from "@material-ui/core/Typography";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import Avatar from "@material-ui/core/Avatar";
 import deepOrange from "@material-ui/core/colors/deepOrange";
-import naruto from "../images/naruto.jpg";
+import CardActions from "@material-ui/core/CardActions";
+import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
+  actions: {
+    backgroundColor: blueGrey[100]
+  },
   square: {
     color: theme.palette.getContrastText(deepOrange[500]),
     backgroundColor: deepOrange[500],
@@ -31,6 +36,7 @@ const useStyles = makeStyles(theme => ({
     minHeight: 80
   },
   card: {
+    minWidth: 345,
     maxWidth: 345,
     float: "left",
     margin: theme.spacing(2),
@@ -41,30 +47,49 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MediaCard() {
+
+export default function CardPage({ classData, data }) {
   const classes = useStyles();
+  let history = useHistory();
+
+  const cardClick = (e) => {
+    history.push(`/student/${e}`);
+  }
 
   return (
-    <Card className={classes.card}>
-      <CardActionArea>
-        <CardContent className={classes.title}>
-          <Typography gutterBottom variant="h5" component="h2">
-            Machine Learning Fundamentals
-          </Typography>
-          <Avatar
-            variant="square"
-            className={classes.square}
-            alt="Remy Sharp"
-            src={naruto}
-          />
-        </CardContent>
+    <>
+      {classData.map(row => (
+        <Card className={classes.card} key={row.class_id} onClick={()=>{cardClick(row.class_id)}}>
+          <CardActionArea>
+            <CardContent className={classes.title}>
+              <Typography gutterBottom variant="h5" component="h2">
+                {row.class_title}
+              </Typography>
+              <Avatar
+                variant="square"
+                className={classes.square}
+                alt="Remy Sharp"
+                src={data.image}
+              />
+            </CardContent>
 
-        <CardContent className={classes.description}>
-          <Typography variant="body1" component="p" style={{ color: "white" }}>
-            Class Description
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+            <CardContent className={classes.description}>
+              <Typography
+                variant="body1"
+                component="p"
+                style={{ color: "white" }}
+              >
+                {row.class_description}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions className={classes.actions}>
+            <Typography variant="caption" display="block" gutterBottom>
+               Class code: {row.classroom_key}
+            </Typography>
+          </CardActions>
+        </Card>
+      ))}
+    </>
   );
 }

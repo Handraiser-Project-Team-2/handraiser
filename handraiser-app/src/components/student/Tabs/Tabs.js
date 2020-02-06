@@ -50,8 +50,6 @@ const TabBtn = props => {
           </div>
         </form>
         <Tabs
-          variant="scrollable"
-          scrollButtons="on"
           value={tabValue}
           onChange={handleChange}
           indicatorColor="primary"
@@ -74,7 +72,7 @@ const TabBtn = props => {
       </Paper>
 
       <TabPanel value={tabValue} index={0}>
-        <InQueue />
+        <InQueue  classReference = {props.classReference} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
         <Done />

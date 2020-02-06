@@ -47,7 +47,7 @@ export default function InQueue() {
   useEffect(() => {
     axios({
       method: "get",
-      url: `/api/student/queue/order/5` //5 here is a class_id example
+      url: `http://localhost:5000/api/student/queue/order/5` //5 here is a class_id example
     }).then(res => {
       setConcernsData(res.data);
     });
@@ -60,7 +60,7 @@ export default function InQueue() {
         {concernsData.map((concern, index) => {
           axios
             .get(
-              `http://localhost:5001/api/userprofile/${concern.concern.user_id}`,
+              `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
               {}
             )
             .then(data => {

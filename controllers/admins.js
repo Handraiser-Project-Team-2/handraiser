@@ -1,7 +1,6 @@
 const keygen = require("./keyGen");
 const jwtDecode = require("jwt-decode");
 
-
 module.exports = {
   // generate key to an email input (setting/promoting to mentor)
   add_mentor: (req, res) => {
@@ -84,7 +83,7 @@ module.exports = {
       });
   },
   // for super admin
-  // generate key to an email input (setting/promoting to user type)
+  // + key to an email input (setting/promoting to user type)
   add_admin_mentor: (req, res) => {
     const db = res.app.get("db");
 
@@ -143,8 +142,6 @@ module.exports = {
     db.users
       .findOne({ user_id: parseToken.userid })
       .then(data => {
-        console.log(data.email);
-
         db.validations.findOne({ validation_email: data.email }).then(user => {
           if (user.validation_key === supplied_key) {
             // then verify status
@@ -154,17 +151,29 @@ module.exports = {
             WHERE validation_email = '${data.email}'`
             )
               .then(validate => {
-                // change user type here(here)
-                res
-                  .status(201)
-                  .json({ ...user, result: "Validation succesful" });
+                // then change user type here(here)
+                db.query(
+                `UPDATE users
+                SET user_type_id = ${user.validation_type}
+                WHERE email = '${data.email}'`
+                )
+                  .then(feed => {
+                    res.status(201).json({
+                      ...user,
+                      ...data,
+                      result: "Validation succesful"
+                    });
+                  })
+                  .catch(err => {
+                    res.status(422).end();
+                  });
               })
               .catch(err => {
                 console.log(err);
                 res.status(400).end();
               });
           } else {
-            res.status(500).json({ result: "Invalid key supplied" });
+            res.status(422).json({ result: "Invalid key supplied" });
           }
         });
       })
@@ -187,9 +196,13 @@ module.exports = {
         db.validations
           .findOne({ validation_email: data.email })
           .then(user => {
-            user.validation_status === "true"
-              ? res.status(201).json(false)
-              : res.status(201).json(true);
+            if (user) {
+              user.validation_status === "true"
+                ? res.status(201).json(false)
+                : res.status(201).json(true);
+            } else {
+              res.status(201).json(false);
+            }
           })
           .catch(err => {
             console.log(err);

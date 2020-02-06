@@ -5,17 +5,18 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import { useForm } from "react-hook-form";
 
 export const GenerateKey = props => {
   const {
     handleClose,
     open,
-    handleMentor,
-    setMentorData,
-    handleAdmin,
-    setAdminData,
-    tabValue
+    handleAdd,
+    handleOnChange,
+    tabValue,
+    type
   } = props;
+  const { register, handleSubmit, errors, setError, clearError } = useForm();
   return (
     <div>
       <Dialog
@@ -27,48 +28,74 @@ export const GenerateKey = props => {
         <DialogTitle id="alert-dialog-title">
           {"Enter Email Address"}
         </DialogTitle>
-        {tabValue === 1 ? (
-          <form autoComplete="off" onSubmit={handleMentor}>
-            <DialogContent>
+        <form autoComplete="off" onSubmit={handleSubmit(handleAdd)}>
+          <DialogContent>
+            {tabValue === 1 ? (
               <TextField
-                type="email"
+                error={!!errors.email}
+                name="email"
                 label="Email"
                 variant="outlined"
-                required
-                onChange={e => setMentorData(e.target.value)}
+                onChange={e => {
+                  handleOnChange(e);
+                  if (!emailRegex.test(e.target.value)) {
+                    setError("disableBtn", "notMatch", "disabled");
+                    return setError(
+                      "email",
+                      "notMatch",
+                      "Email must be valid!"
+                    );
+                  }
+                  clearError("disableBtn");
+                  clearError("email");
+                }}
+                inputRef={register({
+                  required: "Email Address is required"
+                })}
+                helperText={errors.email ? errors.email.message : ""}
               />
-            </DialogContent>
-            <DialogActions>
-              <Button type="submit" color="primary">
-                Submit
-              </Button>
-              <Button onClick={handleClose} color="primary" autoFocus>
-                Cancel
-              </Button>
-            </DialogActions>
-          </form>
-        ) : (
-          <form autoComplete="off" onSubmit={handleAdmin}>
-            <DialogContent>
+            ) : (
               <TextField
-                type="email"
+                error={!!errors.email}
+                name="email"
                 label="Email"
                 variant="outlined"
-                required
-                onChange={e => setAdminData(e.target.value)}
+                onChange={e => {
+                  handleOnChange(e);
+                  if (!emailRegex.test(e.target.value)) {
+                    setError("disableBtn", "notMatch", "disabled");
+                    return setError(
+                      "email",
+                      "notMatch",
+                      "Email must be valid!"
+                    );
+                  }
+                  clearError("disableBtn");
+                  clearError("email");
+                }}
+                inputRef={register({
+                  required: "Email Address is required"
+                })}
+                helperText={errors.email ? errors.email.message : ""}
               />
-            </DialogContent>
-            <DialogActions>
-              <Button type="submit" color="primary">
-                Submit
-              </Button>
-              <Button onClick={handleClose} color="primary" autoFocus>
-                Cancel
-              </Button>
-            </DialogActions>
-          </form>
-        )}
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button
+              type="submit"
+              color="primary"
+              disabled={!!errors.disableBtn}
+            >
+              Submit
+            </Button>
+            <Button onClick={handleClose} color="primary" autoFocus>
+              Cancel
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );
 };
+
+const emailRegex = /^(([^<>(),;:\s@]+([^<>(),;:\s@]+)*)|(.+))@(([^<>()[,;:\s@]+)+[^<>()[.,;:\s@]{2,})$/i;

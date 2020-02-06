@@ -34,19 +34,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue() {
-  const [anchorEl, setAnchorEl] = useState(null);
+export default function InQueue(props) {
+  const [anchorEl, setAnchorEl] = useState();
   const [concernsData, setConcernsData] = useState([]);
   const [image, setImage] = useState("");
   const [openEdit, setOpenEdit] = React.useState(false);
   const [concernTitle, setConcernTitle] = useState("");
   const [concernDescription, setConcernDescription] = useState("");
   const open = Boolean(anchorEl);
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl();
   };
 
   const handleClickOpen = concern => {
@@ -60,11 +61,11 @@ export default function InQueue() {
     setOpenEdit(false);
     axios
       .get(
-        `http://localhost:5001/api/concern_list/${concern.concern.concern_id}`
+        `http://localhost:5000/api/concern_list/${concern.concern.concern_id}`
       )
       .then(data => {
         axios.patch(
-          `http://localhost:5001/api/concern_list/${data.data[0].concern_id}`,
+          `http://localhost:5000/api/concern_list/${data.data[0].concern_id}`,
           {
             concern_id: data.data[0].concern_id,
             concern_title: concernTitle,
@@ -87,7 +88,7 @@ export default function InQueue() {
   useEffect(() => {
     axios({
       method: "get",
-      url: `/api/student/queue/order/5/${user_id}` //5 here is a class_id example
+      url: `http://localhost:5000/api/student/queue/order/5/${user_id}` //5 here is a class_id example
     }).then(res => {
       setConcernsData(res.data);
     });
@@ -96,7 +97,7 @@ export default function InQueue() {
   const handleRemoveReq = concern => {
     axios
       .delete(
-        `http://localhost:5001/api/student/request/${concern.concern.concern_id}`,
+        `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
         {}
       )
       .then(() => {
@@ -105,14 +106,13 @@ export default function InQueue() {
       });
   };
 
-  // console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((concern, index) => {
           axios
             .get(
-              `http://localhost:5001/api/userprofile/${concern.concern.user_id}`,
+              `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
               {}
             )
             .then(data => {

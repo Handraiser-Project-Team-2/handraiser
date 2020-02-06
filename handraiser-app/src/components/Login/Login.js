@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import styled from "styled-components";
+import backgroundImg from "../images/programmer_1.png";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import axios from "axios";
@@ -20,7 +22,7 @@ export default function Login(props) {
 
       axios({
         method: "post",
-        url: "http://localhost:5001/api/login",
+        url: "http://localhost:5000/api/login",
         data: {
           email: response.profileObj.email,
           last_name: response.profileObj.familyName,
@@ -32,7 +34,7 @@ export default function Login(props) {
       })
         .then(data => {
           const userType = data.data.user_type_id;
-
+          localStorage.setItem("name", response.profileObj.givenName);
           sessionStorage.setItem("token", "Bearer " + data.data.token);
 
           switch (userType) {
@@ -46,11 +48,11 @@ export default function Login(props) {
               break;
             case 3:
               // student
-              props.history.push("/student");
+              props.history.push("/class");
               break;
             case 4:
               // mentor
-              props.history.push("/mentor");
+              props.history.push("/class");
               break;
             default:
               break;
@@ -117,9 +119,9 @@ export default function Login(props) {
                   src={Logo}
                   alt=""
                   style={{
-                    paddingTop: 10,
+                    paddingTop: 8,
                     width: "40px",
-                    height: "30px",
+                    height: "40px",
                     borderRadius: "100px"
                   }}
                 />

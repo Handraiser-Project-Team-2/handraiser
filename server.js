@@ -1,8 +1,10 @@
+const http = require("http");
+const socketIO = require("socket.io");
 const express = require("express");
-const cors = require("cors");
 const massive = require("massive");
+const cors = require("cors");
+const router = require("./router");
 // setup controllers
-
 const users = require("./controllers/users");
 const admin = require("./controllers/admins");
 const classes = require("./controllers/class");
@@ -10,7 +12,6 @@ const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
 
 require("dotenv").config();
-
 massive({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -19,22 +20,24 @@ massive({
   password: process.env.DB_PASS
 })
   .then(db => {
+    // port declaration
+    const PORT = 5000 || process.env.PORT;
     const app = express();
 
-    // middlewares
     app.set("db", db);
-    app.use(express.json());
     app.use(cors());
-
-    // port declaration
-    const PORT = 5001 || process.env.PORT;
-
+    app.use(express.json());
+    //WEBSOCKET START
+    const server = http.Server(app);
+    const io = socketIO(server);
+    app.use(router);
     // endpoints declaration
 
     // users endpoints
     app.post("/api/login", users.login);
     app.post("/api/user/data", users.getUser);
     app.get("/api/userprofile/:user_id", users.getUserProfile);
+    app.post("/api/userprofile/", users.getUserProfileByEmail);
 
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor); //reference a mentor user type to an email
@@ -44,7 +47,7 @@ massive({
     app.get("/api/admin/admins_list", admin.accessList_admins);
     app.post("/api/admin/verify", admin.verify);
 
-    app.post("/api/admin/check/promotions", admin.need_validations);
+    app.post("/api/admin/check/designation", admin.need_validations); // implicitly check if email need validations
 
     // mentor endpoints
     app.post("/api/mentor/classroom/add", mentor.add_classroom);
@@ -68,15 +71,30 @@ massive({
     app.post("/api/assisted_by", student.assisted_by);
     app.get("/api/assisted_by/:user_student_id", student.GetAssisted_by);
     app.get("/api/concern_list/:concern_id", student.getConcern);
-    // app.patch("/api/student/concern_list/:concern_id", student.updateConcern);
     app.get("/api/student/concern_list/user/:user_id", student.getUserConcern);
+    app.post("/api/mentor/classroom/add", mentor.add_classroom); // register a new classroom
+    app.get("/api/classes/queue/:class_id", mentor.get_inqueue); // get all assistance request
+    app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
+
+    // student endpoints
+    app.post("/api/student/class/register", student.regToClass); // register to a open class
+    app.post("/api/student/request/assistance", student.ask_assistance); // request assistance
+    app.get("/api/student/queue/order/:class_id/:user_id", student.queue_order); // get the queue order number of the requested assistance
+    app.post("/api/student/get/class", student.get_my_classroom);
+    app.post("/api/student/classes", classes.getClassDetails);
 
     // class endpoints
-    app.get("/api/classes", classes.getAllClass);
-    app.get("/api/classes/students/:class_id", classes.getStudentsByClass);
-    app.get("/api/classes/:user_id", classes.getClassByMentor);
+    app.get("/api/classes", classes.getAllClass); // get all available classes
+    app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
+    app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
 
-    app.listen(PORT, () => {
+    io.on("connection", socket => {
+      console.log("Online");
+      socket.on("disconnect", () => {
+        console.log("Offline");
+      });
+    });
+    server.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
     });
   })

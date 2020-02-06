@@ -11,12 +11,19 @@ import Fab from "@material-ui/core/Fab";
 import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import MuiAlert from "@material-ui/lab/Alert";
+import indigo from "@material-ui/core/colors/indigo";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const useStyles = makeStyles(theme => ({
+  title: {
+    backgroundColor: indigo[500],
+    color: "white"
+  },
   fab: {
     float: "right"
   },
@@ -25,7 +32,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ResponsiveDialog() {
+export default function ResponsiveDialog(props) {
+  let history = useHistory();
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
@@ -43,16 +52,32 @@ export default function ResponsiveDialog() {
   const [input, setInput] = useState("");
   const handleInput = e => {
     setInput(e.target.value);
-    console.log(e.target.value);
   };
 
   const [valid, setValid] = useState(null);
   const handleSubmit = () => {
     if (input === ``) {
-      setValid(true);
-    }else{
-      handleClose();
+      setValid(true); //show error
+    } else {
+      registerToClass();
     }
+  };
+
+  const registerToClass = () => {
+    console.log(input)
+    axios({
+      method: "post",
+      url: "http://localhost:5000/api/student/class/register",
+      data: { token: sessionStorage.getItem("token"), supplied_key: input }
+    })
+      .then(data => {
+        handleClose();
+        history.push(`/student/${data.data.class_id}`);
+      })
+      .catch(err => {
+        console.log(err);
+        setValid(true); //show error
+      });
   };
 
   return (
@@ -64,7 +89,7 @@ export default function ResponsiveDialog() {
         onClick={handleClickOpen}
       >
         <SearchIcon className={classes.extendedIcon} />
-        Find Class
+        Class Registration
       </Fab>
       <Dialog
         fullScreen={fullScreen}
@@ -72,7 +97,7 @@ export default function ResponsiveDialog() {
         onClose={handleClose}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">
+        <DialogTitle id="responsive-dialog-title" className={classes.title}>
           {"Enter a new Class"}
         </DialogTitle>
         {/* ALERT */}

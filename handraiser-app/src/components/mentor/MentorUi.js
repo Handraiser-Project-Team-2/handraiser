@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Avatar from "@material-ui/core/Avatar";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MenuIcon from "@material-ui/icons/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+
 import {
   Div,
   Nav,
@@ -31,6 +32,7 @@ import {
 import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
+import Topbar from "../reusables/Topbar";
 
 export default function Mentor() {
   let history = useHistory();
@@ -62,7 +64,7 @@ export default function Mentor() {
     setAnchorEl(null);
     // setConcern_title("");
     axios
-      .patch(`http://localhost:5001/api/concern_list/${rowData.concern_id}`, {
+      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
         concern_title: rowData.concern_title,
         concern_description: rowData.concern_description,
@@ -70,10 +72,10 @@ export default function Mentor() {
       })
       .then(data => {
         axios
-          .get(`http://localhost:5001/api/assisted_by/${data.data.user_id}`, {})
+          .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
           .then(data => {
             axios.patch(
-              `http://localhost:5001/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+              `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
               {
                 assisted_id: data.data[0].assisted_id,
                 user_student_id: data.data[0].user_id,
@@ -88,7 +90,7 @@ export default function Mentor() {
   const handleBackQueue = rowData => {
     setAnchorEl(null);
     axios.patch(
-      `http://localhost:5001/api/concern_list/${rowData.concern_id}`,
+      `http://localhost:5000/api/concern_list/${rowData.concern_id}`,
       {
         concern_id: rowData.concern_id,
         concern_title: rowData.concern_title,
@@ -102,7 +104,7 @@ export default function Mentor() {
     console.log(rowData);
     setRowData(rowData);
     axios
-      .patch(`http://localhost:5001/api/concern_list/${rowData.concern_id}`, {
+      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
         concern_title: rowData.concern_title,
         concern_description: rowData.concern_description,
@@ -110,10 +112,10 @@ export default function Mentor() {
       })
       .then(data => {
         axios
-          .get(`http://localhost:5001/api/assisted_by/${rowData.user_id}`, {})
+          .get(`http://localhost:5000/api/assisted_by/${rowData.user_id}`, {})
           .then(data => {
             if (data.data.length == 0) {
-              axios.post(`http://localhost:5001/api/assisted_by`, {
+              axios.post(`http://localhost:5000/api/assisted_by`, {
                 assist_status: "ongoing",
                 class_id: rowData.class_id,
                 user_mentor_id: 3, //mock user_mentor_id data
@@ -121,7 +123,7 @@ export default function Mentor() {
               });
             } else {
               axios.patch(
-                `http://localhost:5001/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
                 {
                   assisted_id: data.data[0].assisted_id,
                   user_student_id: data.data[0].user_id,
@@ -133,7 +135,7 @@ export default function Mentor() {
           });
       });
     axios
-      .get(`http://localhost:5001/api/userprofile/${rowData.user_id}`, {})
+      .get(`http://localhost:5000/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
       });
@@ -142,7 +144,7 @@ export default function Mentor() {
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("http://localhost:5001/api/user/data", {
+        .post("http://localhost:5000/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
@@ -176,7 +178,7 @@ export default function Mentor() {
 
   return (
     <React.Fragment>
-      <Nav>
+      {/* <Nav>
         <AppBar style={{ backgroundColor: "#372476" }}>
           <Toolbar
             style={{
@@ -217,7 +219,23 @@ export default function Mentor() {
             </Menu>
           </Toolbar>
         </AppBar>
-      </Nav>
+      </Nav> */}
+      <Topbar />
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right"
+        }}
+        open={open}
+        // onClose={handleClose}
+      >
+        <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
+        <MenuItem onClick={e => handleBackQueue(rowData)}>
+          Back to Queue
+        </MenuItem>
+      </Menu>
       <Div>
         <Queue>
           <Tabs rowDatahandler={rowDatahandler} />
@@ -292,5 +310,4 @@ export default function Mentor() {
       </Div>
     </React.Fragment>
   );
-  // }
 }

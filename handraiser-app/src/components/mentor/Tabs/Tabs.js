@@ -51,8 +51,6 @@ const TabBtn = rowDatahandler => {
           </div>
         </form>
         <Tabs
-          variant="scrollable"
-          scrollButtons="on"
           value={tabValue}
           onChange={handleChange}
           indicatorColor="primary"

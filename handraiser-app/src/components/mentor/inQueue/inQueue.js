@@ -34,7 +34,7 @@ export default function InQueue(rowDatahandler) {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5001/api/classes/queue/5` //5 here is a class_id example
+      url: `http://localhost:5000/api/classes/queue/5` //5 here is a class_id example
     }).then(res => {
       // console
       setConcernsData(res.data);
@@ -57,7 +57,7 @@ export default function InQueue(rowDatahandler) {
       <List className={classes.root}>
         {concernsData.map((data, index) => {
           axios
-            .get(`http://localhost:5001/api/userprofile/${data.user_id}`, {})
+            .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
             .then(data => {
               setImage(data.data[0].image);
             });

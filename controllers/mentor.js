@@ -18,6 +18,7 @@ module.exports = {
 
     jwtDecode(token);
     let parseToken = jwtDecode(token);
+    console.log(parseToken);
 
     db.class
       .save({
@@ -131,14 +132,15 @@ module.exports = {
 
     const parseToken = jwtDecode(token);
 
-    db.class
-      .find({ user_id: parseToken.userid })
+    db.query(
+      `SELECT class.class_id, class.class_title, class.class_description, class.class_date_created, class.class_status, classroom_key.classroom_key
+      FROM class INNER JOIN classroom_key ON class.class_id = classroom_key.class_id WHERE class.user_id = ${parseToken.userid}`
+    )
       .then(data => {
         res.status(201).json(data);
       })
       .catch(err => {
         res.status(400).end(err);
       });
-    // res.status(201).json(parseToken)
   }
 };
