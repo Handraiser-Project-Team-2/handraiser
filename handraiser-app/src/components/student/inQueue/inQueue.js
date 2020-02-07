@@ -15,10 +15,8 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
-var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,10 +25,6 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
-  },
-  small: {
-    width: theme.spacing(4),
-    height: theme.spacing(4)
   }
 }));
 
@@ -43,6 +37,7 @@ export default function InQueue(props) {
   const [concernTitle, setConcernTitle] = useState("");
   const [concernDescription, setConcernDescription] = useState("");
   const open = Boolean(anchorEl);
+  const [concern, setConcern] = useState("");
 
   const classes = useStyles();
 
@@ -56,23 +51,24 @@ export default function InQueue(props) {
     }).then(res => {
       setConcernsData(res.data);
     });
-  }, []); //class_id
+  }, [props.search]); //class_id
 
-  const handleMenu = event => {
+  const handleMenu = (event, concern) => {
+    setConcern(concern);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const handleClickOpen = concern => {
+  const handleClickOpen = () => {
     setAnchorEl(null);
     setOpenEdit(true);
     setConcernTitle(concern.concern.concern_title);
     setConcernDescription(concern.concern.concern_description);
   };
 
-  const handleSaveEdit = concern => {
+  const handleSaveEdit = () => {
     setOpenEdit(false);
     axios
       .get(
@@ -98,7 +94,7 @@ export default function InQueue(props) {
     setOpenEdit(false);
   };
 
-  const handleRemoveReq = concern => {
+  const handleRemoveReq = () => {
     setAnchorEl(null);
     axios
       .delete(
@@ -111,20 +107,19 @@ export default function InQueue(props) {
       });
   };
 
-  // console.log(props.classReference);
-
+  // console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((concern, index) => {
-          axios
-            .get(
-              `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
-              {}
-            )
-            .then(data => {
-              setImage(data.data[0].image);
-            });
+          // axios
+          //   .get(
+          //     `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
+          //     {}
+          //   )
+          //   .then(data => {
+          //     setImage(data.data[0].image);
+          //   });
           return (
             <div key={index}>
               <ListItem
@@ -147,10 +142,10 @@ export default function InQueue(props) {
                   open={open}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={() => handleRemoveReq(concern)}>
+                  <MenuItem onClick={() => handleRemoveReq()}>
                     Remove request
                   </MenuItem>
-                  <MenuItem onClick={() => handleClickOpen(concern)}>
+                  <MenuItem onClick={() => handleClickOpen()}>
                     Edit Request
                   </MenuItem>
                 </Menu>
@@ -166,11 +161,57 @@ export default function InQueue(props) {
                       >
                         {concern.concern.concern_description}
                       </Typography>
+
+                      {/* ----------------------dialog------------------- */}
+                      <Dialog
+                        open={openEdit}
+                        onClose={handleClose}
+                        aria-labelledby="form-dialog-title"
+                      >
+                        <DialogTitle id="form-dialog-title">
+                          Edit request
+                        </DialogTitle>
+                        <DialogContent>
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Concern Title"
+                            type="text"
+                            fullWidth
+                            value={concernTitle}
+                            onChange={e => setConcernTitle(e.target.value)}
+                          />
+                          <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="Concern Description"
+                            type="text"
+                            fullWidth
+                            value={concernDescription}
+                            onChange={e =>
+                              setConcernDescription(e.target.value)
+                            }
+                          />
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleCloseEdit} color="primary">
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={() => handleSaveEdit()}
+                            color="primary"
+                          >
+                            Save
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
                     </React.Fragment>
                   }
                 />
                 <ListItemSecondaryAction style={{ display: "flex" }}>
-                  <Avatar variant="square" className={classes.small}>
+                  <Avatar variant="square">
                     <p style={{ fontSize: 12 }}>
                       {concern.concern.concern_status == 1
                         ? "being helped"
@@ -180,7 +221,7 @@ export default function InQueue(props) {
                     </p>
                   </Avatar>
                   <MoreVertIcon
-                    onClick={handleMenu}
+                    onClick={event => handleMenu(event, concern)}
                     style={{
                       fontSize: 35,
                       color: "#c4c4c4",
@@ -188,48 +229,6 @@ export default function InQueue(props) {
                     }}
                   />
                 </ListItemSecondaryAction>
-
-                {/* ----------------------dialog------------------- */}
-                <Dialog
-                  open={openEdit}
-                  onClose={handleClose}
-                  aria-labelledby="form-dialog-title"
-                >
-                  <DialogTitle id="form-dialog-title">Edit request</DialogTitle>
-                  <DialogContent>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      label="Concern Title"
-                      type="text"
-                      fullWidth
-                      value={concernTitle}
-                      onChange={e => setConcernTitle(e.target.value)}
-                    />
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      label="Concern Description"
-                      type="text"
-                      fullWidth
-                      value={concernDescription}
-                      onChange={e => setConcernDescription(e.target.value)}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleCloseEdit} color="primary">
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={() => handleSaveEdit(concern)}
-                      color="primary"
-                    >
-                      Save
-                    </Button>
-                  </DialogActions>
-                </Dialog>
               </ListItem>
             </div>
           );

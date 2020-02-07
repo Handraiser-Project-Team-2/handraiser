@@ -24,9 +24,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function InQueue(rowDatahandler) {
   const classes = useStyles();
-  const [concernsData, setConcernsData] = useState([{ count: 0 }]);
+  const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
+  const [load, setLoad] = useState(false);
   const open = Boolean(anchorEl);
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
@@ -57,11 +58,14 @@ export default function InQueue(rowDatahandler) {
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
-          axios
-            .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
-            .then(data => {
-              setImage(data.data[0].image);
-            });
+          // axios
+          //   .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
+          //   .then(
+          //     data => {
+          //       setImage(data.data[0].image);
+          //     },
+          //     [load]
+          //   );
           return (
             <div key={index}>
               <ListItem

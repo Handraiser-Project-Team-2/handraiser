@@ -39,7 +39,7 @@ export default function InQueue(props) {
     }).then(res => {
       setConcernsData(res.data);
     });
-  }, []);
+  }, [props.search]);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -56,13 +56,14 @@ export default function InQueue(props) {
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
-          console.log(concernsData);
-          console.log(data.concern.concern_title);
-          axios
-            .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
-            .then(data => {
-              setImage(data.data[0].image);
-            });
+          // axios
+          //   .get(
+          //     `http://localhost:5000/api/userprofile/${data.concern.user_id}`,
+          //     {}
+          //   )
+          //   .then(data => {
+          //     setImage(data.data[0].image);
+          //   });
           return (
             <div key={index}>
               <ListItem

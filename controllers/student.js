@@ -74,7 +74,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
+      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} AND concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         // re:looping here please
@@ -101,7 +101,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
+      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} AND concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         console.log(data);
@@ -123,6 +123,32 @@ module.exports = {
         res.status(401).end();
       });
   },
+  queue_order_done: (req, res) => {
+    const db = req.app.get("db");
+    const { search } = req.query;
+
+    db.query(
+      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} AND concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC`
+    )
+      .then(data => {
+        // re:looping here please
+        let order_data = [];
+        if (data) {
+          data.map((concern, index) => {
+            // filter concern by current user
+            if (parseInt(concern.user_id) === parseInt(req.params.user_id)) {
+              // then get its index for determining queue order
+              order_data.push({ concern, queue_order_num: index });
+            }
+          });
+        }
+        res.status(201).json(order_data);
+      })
+      .catch(err => {
+        res.status(401).end();
+      });
+  },
+
   // updateConcernStatus
   updateConcern: (req, res) => {
     const db = req.app.get("db");
@@ -257,31 +283,6 @@ module.exports = {
         console.error(err);
         // res.status(500).end();
         res.status(400).end();
-      });
-  },
-  queue_order_done: (req, res) => {
-    const db = req.app.get("db");
-    const { search } = req.query;
-
-    db.query(
-      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
-    )
-      .then(data => {
-        // re:looping here please
-        let order_data = [];
-        if (data) {
-          data.map((concern, index) => {
-            // filter concern by current user
-            if (parseInt(concern.user_id) === parseInt(req.params.user_id)) {
-              // then get its index for determining queue order
-              order_data.push({ concern, queue_order_num: index });
-            }
-          });
-        }
-        res.status(201).json(order_data);
-      })
-      .catch(err => {
-        res.status(401).end();
       });
   }
 };

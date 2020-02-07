@@ -51,21 +51,21 @@ export default function InQueue(props) {
     }).then(res => {
       setConcernsData(res.data);
     });
-  }, []); //class_id
+  }, [props.search]); //class_id
 
   //   console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((concern, index) => {
-          axios
-            .get(
-              `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
-              {}
-            )
-            .then(data => {
-              setImage(data.data[0].image);
-            });
+          // axios
+          //   .get(
+          //     `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
+          //     {}
+          //   )
+          //   .then(data => {
+          //     setImage(data.data[0].image);
+          //   });
           return (
             <div key={index}>
               <ListItem
@@ -112,7 +112,7 @@ export default function InQueue(props) {
                     <p style={{ fontSize: 12 }}>
                       {concern.concern.concern_status == 1
                         ? "being helped"
-                        : concern.queue_order_num == 1
+                        : concern.queue_order_num == 0
                         ? "next"
                         : concern.queue_order_num}
                     </p>

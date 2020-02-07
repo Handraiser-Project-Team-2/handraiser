@@ -38,10 +38,11 @@ var jwtDecode = require("jwt-decode");
 export default function Mentor() {
   let history = useHistory();
   let { class_id } = useParams();
-  const [rowData, setRowData] = useState({});
+  const [rowData, setRowData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
+  const [concernTitle, setConcernTitle] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
   const handleMenu = event => {
@@ -52,20 +53,22 @@ export default function Mentor() {
     evt.preventDefault();
     // console.log(name);
   };
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  //   axios.patch(
-  //     `http://localhost:5001/api/concern_list/${rowData.concern_id}`,
-  //     {
-  //       concern_id: rowData.concern_id,
-  //       concern_status: 1
-  //     }
-  //   );
-  // };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleDone = rowData => {
+    if (rowData.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "No concern selected!",
+        text: "Please select a concern."
+      });
+    }
+    setConcernTitle("");
+    setName("");
     setAnchorEl(null);
-    // setConcern_title("");
     axios
       .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
@@ -91,20 +94,37 @@ export default function Mentor() {
   };
 
   const handleBackQueue = rowData => {
+    if (rowData.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "No concern selected!",
+        text: "Please select a concern."
+      });
+    }
+    setConcernTitle("");
+    setName("");
     setAnchorEl(null);
-    axios.patch(
-      `http://localhost:5000/api/concern_list/${rowData.concern_id}`,
-      {
+    axios
+      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
         concern_title: rowData.concern_title,
         concern_description: rowData.concern_description,
         concern_status: 2
-      }
-    );
+      })
+      .then(data => {
+        axios
+          .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
+          .then(data => {
+            axios.delete(
+              `http://localhost:5000/api/assisted_by/${data.data[0].user_student_id}`,
+              {}
+            );
+          });
+      });
   };
 
   const rowDatahandler = rowData => {
-    console.log(rowData);
+    setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
       .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
@@ -180,6 +200,8 @@ export default function Mentor() {
     }
   });
 
+  // console.log(rowData);
+
   return (
     <React.Fragment>
       <Topbar />
@@ -191,7 +213,7 @@ export default function Mentor() {
           horizontal: "right"
         }}
         open={open}
-        // onClose={handleClose}
+        onClose={handleClose}
       >
         <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
         <MenuItem onClick={e => handleBackQueue(rowData)}>
@@ -205,9 +227,7 @@ export default function Mentor() {
         <Help>
           <Subject>
             <TitleName>
-              <Typography variant="h4">
-                Concern: {rowData.concern_title}
-              </Typography>
+              <Typography variant="h4">Concern: {concernTitle}</Typography>
               <Typography variant="h6">From: {name}</Typography>
             </TitleName>
             <Option>
