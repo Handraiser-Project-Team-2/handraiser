@@ -4,7 +4,15 @@ import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Avatar from "@material-ui/core/Avatar";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MenuIcon from "@material-ui/icons/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+
 import {
   Div,
   Nav,
@@ -25,30 +33,114 @@ import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
 import Topbar from "../reusables/Topbar";
+var jwtDecode = require("jwt-decode");
 
 export default function Mentor() {
   let history = useHistory();
+  let { class_id } = useParams();
   const [rowData, setRowData] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid; //mentor_user_id if mentor is logged in
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(name);
+    // console.log(name);
+  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  //   axios.patch(
+  //     `http://localhost:5001/api/concern_list/${rowData.concern_id}`,
+  //     {
+  //       concern_id: rowData.concern_id,
+  //       concern_status: 1
+  //     }
+  //   );
+  // };
+
+  const handleDone = rowData => {
+    setAnchorEl(null);
+    // setConcern_title("");
+    axios
+      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
+        concern_id: rowData.concern_id,
+        concern_title: rowData.concern_title,
+        concern_description: rowData.concern_description,
+        concern_status: 3
+      })
+      .then(data => {
+        axios
+          .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
+          .then(data => {
+            axios.patch(
+              `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+              {
+                assisted_id: data.data[0].assisted_id,
+                user_student_id: data.data[0].user_id,
+                class_id: data.data[0].class_id,
+                assist_status: "done"
+              }
+            );
+          });
+      });
+  };
+
+  const handleBackQueue = rowData => {
+    setAnchorEl(null);
+    axios.patch(
+      `http://localhost:5000/api/concern_list/${rowData.concern_id}`,
+      {
+        concern_id: rowData.concern_id,
+        concern_title: rowData.concern_title,
+        concern_description: rowData.concern_description,
+        concern_status: 2
+      }
+    );
   };
 
   const rowDatahandler = rowData => {
+    console.log(rowData);
     setRowData(rowData);
     axios
-      .get(`/api/userprofile/${rowData.user_id}`, {})
+      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
+        concern_id: rowData.concern_id,
+        concern_title: rowData.concern_title,
+        concern_description: rowData.concern_description,
+        concern_status: 1
+      })
       .then(data => {
-        console.log(data.data[0]);
+        axios
+          .get(`http://localhost:5000/api/assisted_by/${rowData.user_id}`, {})
+          .then(data => {
+            if (data.data.length == 0) {
+              axios.post(`http://localhost:5000/api/assisted_by`, {
+                assist_status: "ongoing",
+                class_id: rowData.class_id,
+                user_mentor_id: 3, //mock user_mentor_id data //used for checking
+                // user_mentor_id: user_id,    <<----------- correct way: uncomment if data is available
+                user_student_id: rowData.user_id
+              });
+            } else {
+              axios.patch(
+                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                {
+                  assisted_id: data.data[0].assisted_id,
+                  user_student_id: data.data[0].user_id,
+                  class_id: data.data[0].class_id,
+                  assist_status: "ongoing"
+                }
+              );
+            }
+          });
+      });
+    axios
+      .get(`http://localhost:5000/api/userprofile/${rowData.user_id}`, {})
+      .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
       });
   };
@@ -56,27 +148,27 @@ export default function Mentor() {
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("/api/user/data", {
+        .post("http://localhost:5000/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
           const user_type = data.data.user_type_id;
 
-          if (user_type !== 4) {
-            Swal.fire({
-              icon: "error",
-              title: "You cannot acces this page!"
-            }).then(function() {
-              if (user_type === 3) {
-                history.push("/student");
-              } else if (user_type === 1) {
-                history.push("/superadmin");
-              }
-            });
-          }
+          // if (user_type !== 4) {
+          //   Swal.fire({
+          //     icon: "error",
+          //     title: "You cannot acces this page!"
+          //   }).then(function() {
+          //     if (user_type === 3) {
+          //       history.push("/student");
+          //     } else if (user_type === 1) {
+          //       history.push("/superadmin");
+          //     }
+          //   });
+          // }
         })
         .catch(err => {
-          console.log(err);
+          // console.log(err);
         });
     } else {
       Swal.fire({
@@ -91,14 +183,31 @@ export default function Mentor() {
   return (
     <React.Fragment>
       <Topbar />
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right"
+        }}
+        open={open}
+        // onClose={handleClose}
+      >
+        <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
+        <MenuItem onClick={e => handleBackQueue(rowData)}>
+          Back to Queue
+        </MenuItem>
+      </Menu>
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} />
+          <Tabs rowDatahandler={rowDatahandler} class_id={class_id} />
         </Queue>
         <Help>
           <Subject>
             <TitleName>
-              <Typography variant="h4">{rowData.concern_title}</Typography>
+              <Typography variant="h4">
+                Concern: {rowData.concern_title}
+              </Typography>
               <Typography variant="h6">From: {name}</Typography>
             </TitleName>
             <Option>
@@ -163,5 +272,4 @@ export default function Mentor() {
       </Div>
     </React.Fragment>
   );
-   }
-
+}

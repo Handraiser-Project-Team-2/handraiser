@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import InputBase from "@material-ui/core/InputBase";
 import InQueue from "../inQueue/inQueue";
+import Done from "../inQueue/Done";
+import AllConcern from "../inQueue/AllConcern";
 import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles(theme => ({}));
@@ -26,14 +28,16 @@ function TabPanel(props) {
     </Typography>
   );
 }
-const TabBtn = rowDatahandler => {
+const TabBtn = ({ class_id, rowDatahandler }) => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
+  const [search, setSearch] = useState("");
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
+  // console.log(search);
   return (
     <React.Fragment>
       <Paper color="primary" style={{ height: "83px" }}>
@@ -45,7 +49,12 @@ const TabBtn = rowDatahandler => {
               marginRight: "13px"
             }}
           >
-            <TextField id="outlined-basic" placeholder="Search..." fullWidth />
+            <TextField
+              id="outlined-basic"
+              placeholder="Search..."
+              fullWidth
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
         </form>
         <Tabs
@@ -71,10 +80,18 @@ const TabBtn = rowDatahandler => {
       </Paper>
 
       <TabPanel value={tabValue} index={0}>
-        <InQueue rowDatahandler={rowDatahandler} />
+        <InQueue
+          rowDatahandler={rowDatahandler}
+          class_id={class_id}
+          search={search}
+        />
       </TabPanel>
-      <TabPanel value={tabValue} index={1}></TabPanel>
-      <TabPanel value={tabValue} index={2}></TabPanel>
+      <TabPanel value={tabValue} index={1}>
+        <Done class_id={class_id} search={search} />
+      </TabPanel>
+      <TabPanel value={tabValue} index={2}>
+        <AllConcern class_id={class_id} search={search} />
+      </TabPanel>
     </React.Fragment>
   );
 };

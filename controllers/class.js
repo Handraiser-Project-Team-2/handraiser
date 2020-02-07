@@ -40,7 +40,7 @@ function getClassByMentor(req, res) {
   const parseToken = jwtDecode(token);
 
   db.class
-    .find({ user_id:parseToken.userid })
+    .find({ user_id: parseToken.userid })
     .then(classes => res.status(200).json(classes))
     .catch(err => {
       console.error(err);

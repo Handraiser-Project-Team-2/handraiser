@@ -44,7 +44,6 @@ export default function Student() {
   const [name, setName] = useState("");
   const { userData } = useContext(UserContext);
 
-
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -59,7 +58,7 @@ export default function Student() {
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("/api/user/data", {
+        .post("http://localhost:5000/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
@@ -84,7 +83,7 @@ export default function Student() {
           }
         })
         .catch(err => {
-          console.log(err);
+          // console.log(err);
         });
     } else {
       Swal.fire({
@@ -94,7 +93,7 @@ export default function Student() {
         history.push("/");
       });
     }
-    console.log(userData)
+    console.log(userData);
   }, [userData]);
 
   const sendRequest = () => {
@@ -105,7 +104,7 @@ export default function Student() {
         concern_title: concernTitle,
         concern_description: concernDescription
       })
-      .then((data) => {
+      .then(data => {
         setConcernTitle("");
         setConcernDescription("");
         Swal.fire({
@@ -125,165 +124,163 @@ export default function Student() {
       });
   };
 
-  if (state.user_type === 3) {
-    return (
-      <React.Fragment>
-        <Topbar />
-        <Div>
-          <Queue>
-            <Tabs classReference={class_id} />
-          </Queue>
-          <Help>
-            <Subject>
-              <TitleName>
-                <TextField
-                  id="standard-basic"
-                  value={concernTitle}
-                  onChange={e => setConcernTitle(e.target.value)}
-                  style={{ width: 700 }}
-                />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Typography>Subject</Typography>
-                  <Typography>{concernTitle.length}/30</Typography>
-                </div>
-              </TitleName>
-              <Option>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    width: "100%"
-                  }}
-                >
-                  <More onClick={handleMenu}>
-                    <MoreVertIcon
-                      style={{
-                        fontSize: 35,
-                        color: "#c4c4c4"
-                      }}
-                    />
-                  </More>
-                </div>
-              </Option>
-            </Subject>
-            <Conversation>
+  // if (state.user_type === 3) {
+  return (
+    <React.Fragment>
+      <Topbar />
+      <Div>
+        <Queue>
+          <Tabs classReference={class_id} />
+        </Queue>
+        <Help>
+          <Subject>
+            <TitleName>
+              <TextField
+                id="standard-basic"
+                value={concernTitle}
+                onChange={e => setConcernTitle(e.target.value)}
+                style={{ width: 700 }}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography>Subject</Typography>
+                <Typography>{concernTitle.length}/30</Typography>
+              </div>
+            </TitleName>
+            <Option>
               <div
                 style={{
                   display: "flex",
-                  marginTop: "10px",
-                  marginRight: "15px",
-                  padding: "10px",
-                  flexDirection: "row-reverse"
+                  justifyContent: "flex-end",
+                  width: "100%"
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    marginLeft: "10px",
-                    alignItems: "flex-end"
-                  }}
-                >
-                  <Avatar></Avatar>
-                </div>
-
-                <div
-                  style={{
-                    marginLeft: "10px",
-                    backgroundColor: "white",
-                    maxWidth: "450px",
-                    border: "1px solid lightgrey",
-                    padding: "10px 20px 10px 20px",
-                    borderRadius: "10px"
-                  }}
-                >
-                  <span id="display">Hello</span>
-                </div>
+                <More onClick={handleMenu}>
+                  <MoreVertIcon
+                    style={{
+                      fontSize: 35,
+                      color: "#c4c4c4"
+                    }}
+                  />
+                </More>
               </div>
+            </Option>
+          </Subject>
+          <Conversation>
+            <div
+              style={{
+                display: "flex",
+                marginTop: "10px",
+                marginRight: "15px",
+                padding: "10px",
+                flexDirection: "row-reverse"
+              }}
+            >
               <div
                 style={{
                   display: "flex",
-                  marginTop: "10px",
-                  marginRight: "15px",
-                  padding: "10px",
-                  flexDirection: "row"
+                  marginLeft: "10px",
+                  alignItems: "flex-end"
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    marginLeft: "10px",
-                    alignItems: "flex-end"
-                  }}
-                >
-                  <Avatar></Avatar>
-                </div>
-
-                <div
-                  style={{
-                    marginLeft: "10px",
-                    backgroundColor: "white",
-                    maxWidth: "450px",
-                    border: "1px solid lightgrey",
-                    padding: "10px 20px 10px 20px",
-                    borderRadius: "10px"
-                  }}
-                >
-                  <span>
-                    Curry to Igoudala! Back to Curry! Igoudala with the layup...
-                    OHHHH!!!! BLOCKED BY JAMES!!!
-                  </span>
-                </div>
+                <Avatar></Avatar>
               </div>
-            </Conversation>
-            <Message>
-              <Field>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "space-between",
-                    flexDirection: "column",
-                    width: "100%"
-                  }}
-                >
-                  <form onSubmit={sendMsg}>
-                    <TextField
-                      id="outlined-textarea"
-                      multiline
-                      variant="outlined"
-                      fullWidth
-                      rows="3"
-                      value={concernDescription}
-                      onChange={e => setConcernDescription(e.target.value)}
-                    />
 
-                    <div
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "15px"
-                      }}
-                    >
-                      <Request onClick={sendRequest}>NEW REQUEST</Request>
-                      <Send onClick={sendMsg}>SEND</Send>
-                    </div>
-                  </form>
-                </div>
-              </Field>
-            </Message>
-          </Help>
-          <Div2>
-            <Shared>
-              <Typography variant="h6">Shared Files</Typography>
-            </Shared>
-          </Div2>
-        </Div>
-      </React.Fragment>
-    );
-  } else {
-    return "";
-  }
+              <div
+                style={{
+                  marginLeft: "10px",
+                  backgroundColor: "white",
+                  maxWidth: "450px",
+                  border: "1px solid lightgrey",
+                  padding: "10px 20px 10px 20px",
+                  borderRadius: "10px"
+                }}
+              >
+                <span id="display">Hello</span>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                marginTop: "10px",
+                marginRight: "15px",
+                padding: "10px",
+                flexDirection: "row"
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  marginLeft: "10px",
+                  alignItems: "flex-end"
+                }}
+              >
+                <Avatar></Avatar>
+              </div>
+
+              <div
+                style={{
+                  marginLeft: "10px",
+                  backgroundColor: "white",
+                  maxWidth: "450px",
+                  border: "1px solid lightgrey",
+                  padding: "10px 20px 10px 20px",
+                  borderRadius: "10px"
+                }}
+              >
+                <span>
+                  Curry to Igoudala! Back to Curry! Igoudala with the layup...
+                  OHHHH!!!! BLOCKED BY JAMES!!!
+                </span>
+              </div>
+            </div>
+          </Conversation>
+          <Message>
+            <Field>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  width: "100%"
+                }}
+              >
+                <form onSubmit={sendMsg}>
+                  <TextField
+                    id="outlined-textarea"
+                    multiline
+                    variant="outlined"
+                    fullWidth
+                    rows="3"
+                    value={concernDescription}
+                    onChange={e => setConcernDescription(e.target.value)}
+                  />
+
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "15px"
+                    }}
+                  >
+                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    <Send onClick={sendMsg}>SEND</Send>
+                  </div>
+                </form>
+              </div>
+            </Field>
+          </Message>
+        </Help>
+        <Div2>
+          <Shared>
+            <Typography variant="h6">Shared Files</Typography>
+          </Shared>
+        </Div2>
+      </Div>
+    </React.Fragment>
+  );
+  // } else {
+  //   return "";
+  // }
 }

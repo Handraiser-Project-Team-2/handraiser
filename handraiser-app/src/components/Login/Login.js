@@ -34,8 +34,6 @@ export default function Login(props) {
         }
       })
         .then(data => {
-          console.log(data);
-
           const userType = data.data.user_type_id;
           localStorage.setItem("name", response.profileObj.givenName);
           sessionStorage.setItem("token", "Bearer " + data.data.token);
