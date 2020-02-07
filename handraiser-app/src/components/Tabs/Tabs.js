@@ -5,7 +5,8 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 import { TabBox, BtnBox } from "../Styles/Styles";
@@ -65,14 +66,14 @@ export const TabBtn = props => {
     axios
       .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
       .then(() => {
-        toast.info("registration sucessful!", {
-          position: toast.POSITION.TOP_CENTER
+        toast.success("Registration Sucessful!", {
+          position: toast.POSITION.TOP_RIGHT
         });
         setOpen(false);
       })
       .catch(err => {
         toast.error(err, {
-          position: toast.POSITION.TOP_CENTER
+          position: toast.POSITION.TOP_RIGHT
         });
       });
   };
@@ -143,6 +144,7 @@ export const TabBtn = props => {
         handleOnChange={handleOnChange}
         tabValue={tabValue}
       />
+      <ToastContainer />
     </React.Fragment>
   );
 };
