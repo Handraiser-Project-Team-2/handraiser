@@ -174,7 +174,7 @@ export default function InQueue(props) {
                     <p style={{ fontSize: 12 }}>
                       {concern.concern.concern_status == 1
                         ? "being helped"
-                        : concern.queue_order_num == 1
+                        : concern.queue_order_num == 0
                         ? "next"
                         : concern.queue_order_num}
                     </p>
