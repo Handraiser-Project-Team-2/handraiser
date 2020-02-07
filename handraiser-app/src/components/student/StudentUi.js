@@ -42,7 +42,7 @@ export default function Student() {
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
-  const { userData } = useContext(UserContext);
+  const { cstate, getData } = useContext(UserContext);
 
 
   const handleMenu = event => {
@@ -94,8 +94,15 @@ export default function Student() {
         history.push("/");
       });
     }
-    console.log(userData)
-  }, [userData]);
+
+    if(!cstate){
+      getData();
+    }
+    if(cstate){
+      console.log(cstate.email)
+    }
+
+  }, [cstate]);
 
   const sendRequest = () => {
     axios
