@@ -26,7 +26,6 @@ export default function InQueue(rowDatahandler) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([{ count: 0 }]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
@@ -35,10 +34,14 @@ export default function InQueue(rowDatahandler) {
     axios({
       method: "get",
       url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
-    }).then(res => {
-      // console
-      setConcernsData(res.data);
-    });
+    })
+      .then(res => {
+        console.log(res.data);
+        setConcernsData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }, [rowDatahandler.search]);
 
   const handleMenu = event => {
@@ -57,11 +60,6 @@ export default function InQueue(rowDatahandler) {
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
-          axios
-            .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
-            .then(data => {
-              setImage(data.data[0].image);
-            });
           return (
             <div key={index}>
               <ListItem
@@ -74,7 +72,7 @@ export default function InQueue(rowDatahandler) {
                 onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
+                  <Avatar src={data.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"

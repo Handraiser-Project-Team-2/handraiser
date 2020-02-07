@@ -52,8 +52,10 @@ export default function InQueue(props) {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/student/queue/order/${props.classReference}/${user_id}?search=${props.search}` //5 here is a class_id example
+      url: `http://localhost:5000/api/student/queue/order/${props.classReference}/${user_id}?search=${props.search}`
     }).then(res => {
+      console.log(res.data)
+
       setConcernsData(res.data);
     });
   }, []); //class_id
@@ -117,14 +119,6 @@ export default function InQueue(props) {
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((concern, index) => {
-          axios
-            .get(
-              `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
-              {}
-            )
-            .then(data => {
-              setImage(data.data[0].image);
-            });
           return (
             <div key={index}>
               <ListItem
@@ -135,7 +129,7 @@ export default function InQueue(props) {
                 }}
               >
                 <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
+                  <Avatar src={concern.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
