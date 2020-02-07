@@ -1,6 +1,5 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import backgroundImg from "../images/programmer_1.png";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import axios from "axios";
@@ -12,12 +11,11 @@ import {
   LoginCont,
   LoginFooter,
   Continue,
-  Title
+  Title,
+  Quotes
 } from "../Styles/Styles";
 
 export default function Login(props) {
-
-
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);
@@ -38,7 +36,7 @@ export default function Login(props) {
           console.log(data);
 
           const userType = data.data.user_type_id;
-         localStorage.setItem("name",response.profileObj.givenName)
+          localStorage.setItem("name", response.profileObj.givenName);
           sessionStorage.setItem("token", "Bearer " + data.data.token);
 
           switch (userType) {
@@ -72,14 +70,7 @@ export default function Login(props) {
   return (
     <LoginDiv>
       <LoginPic>
-        <p
-          style={{
-            fontFamily: "Oxygen",
-            color: "white",
-            fontSize: "30px",
-            alignSelf: "center"
-          }}
-        >
+        <Quotes>
           The first step of learning
           <br /> is admitting our insufficiency
           <br />{" "}
@@ -93,7 +84,7 @@ export default function Login(props) {
           >
             - Jordan B. Peterson
           </span>
-        </p>
+        </Quotes>
       </LoginPic>
       <LoginMain>
         <Title>HANDRAISER</Title>

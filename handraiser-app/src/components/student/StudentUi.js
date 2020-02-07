@@ -8,7 +8,9 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
 import Topbar from "../reusables/Topbar";
-
+import Chatfield from "../reusables/Chatfield";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import {
   Div,
   Nav,
@@ -60,12 +62,9 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          console.log(data);
           setState({ user_type: data.data.user_type_id });
 
           const user_type = data.data.user_type_id;
-
-          console.log(user_type);
 
           if (user_type !== 3) {
             Swal.fire({
@@ -128,7 +127,7 @@ export default function Student() {
                   id="standard-basic"
                   value={concernTitle}
                   onChange={e => setConcernTitle(e.target.value)}
-                  style={{ width: 700 }}
+                  fullWidth
                 />
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
@@ -154,77 +153,22 @@ export default function Student() {
                     />
                   </More>
                 </div>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                </Menu>
               </Option>
             </Subject>
-            <Conversation>
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: "10px",
-                  marginRight: "15px",
-                  padding: "10px",
-                  flexDirection: "row-reverse"
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    marginLeft: "10px",
-                    alignItems: "flex-end"
-                  }}
-                >
-                  <Avatar></Avatar>
-                </div>
-
-                <div
-                  style={{
-                    marginLeft: "10px",
-                    backgroundColor: "white",
-                    maxWidth: "450px",
-                    border: "1px solid lightgrey",
-                    padding: "10px 20px 10px 20px",
-                    borderRadius: "10px"
-                  }}
-                >
-                  <span id="display">Hello</span>
-                </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: "10px",
-                  marginRight: "15px",
-                  padding: "10px",
-                  flexDirection: "row"
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    marginLeft: "10px",
-                    alignItems: "flex-end"
-                  }}
-                >
-                  <Avatar></Avatar>
-                </div>
-
-                <div
-                  style={{
-                    marginLeft: "10px",
-                    backgroundColor: "white",
-                    maxWidth: "450px",
-                    border: "1px solid lightgrey",
-                    padding: "10px 20px 10px 20px",
-                    borderRadius: "10px"
-                  }}
-                >
-                  <span>
-                    Curry to Igoudala! Back to Curry! Igoudala with the layup...
-                    OHHHH!!!! BLOCKED BY JAMES!!!
-                  </span>
-                </div>
-              </div>
-            </Conversation>
+            <Chatfield />
             <Message>
               <Field>
                 <div
@@ -241,10 +185,14 @@ export default function Student() {
                       id="outlined-textarea"
                       multiline
                       variant="outlined"
+                      placeholder="Enter message..."
                       fullWidth
-                      rows="3"
+                      rows="2"
                       value={concernDescription}
                       onChange={e => setConcernDescription(e.target.value)}
+                      style={{
+                        backgroundColor: "white"
+                      }}
                     />
 
                     <div

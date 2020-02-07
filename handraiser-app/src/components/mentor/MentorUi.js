@@ -25,6 +25,7 @@ import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
 import Topbar from "../reusables/Topbar";
+import Chatfield from "../reusables/Chatfield";
 
 export default function Mentor() {
   let history = useHistory();
@@ -45,12 +46,10 @@ export default function Mentor() {
 
   const rowDatahandler = rowData => {
     setRowData(rowData);
-    axios
-      .get(`/api/userprofile/${rowData.user_id}`, {})
-      .then(data => {
-        console.log(data.data[0]);
-        setName(data.data[0].first_name + " " + data.data[0].last_name);
-      });
+    axios.get(`/api/userprofile/${rowData.user_id}`, {}).then(data => {
+      console.log(data.data[0]);
+      setName(data.data[0].first_name + " " + data.data[0].last_name);
+    });
   };
 
   useEffect(() => {
@@ -120,7 +119,7 @@ export default function Mentor() {
               </div>
             </Option>
           </Subject>
-          <Conversation></Conversation>
+          <Chatfield />
           <Message>
             <Field>
               <div
@@ -138,7 +137,7 @@ export default function Mentor() {
                     multiline
                     variant="outlined"
                     fullWidth
-                    rows="3"
+                    rows="2"
                   />
 
                   <div
@@ -163,5 +162,4 @@ export default function Mentor() {
       </Div>
     </React.Fragment>
   );
-   }
-
+}

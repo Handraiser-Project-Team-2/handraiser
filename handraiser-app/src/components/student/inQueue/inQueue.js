@@ -31,6 +31,7 @@ export default function InQueue() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState([]);
   const open = Boolean(anchorEl);
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,6 +77,8 @@ export default function InQueue() {
                   vertical: "top",
                   horizontal: "right"
                 }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>

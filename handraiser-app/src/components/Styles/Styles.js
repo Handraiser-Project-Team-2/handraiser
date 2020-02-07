@@ -84,22 +84,19 @@ export const Div = styled.div`
 `;
 export const Div2 = styled.div`
   width: 25%;
-  @media (min-width: 100px) and (max-width: 600px) {
-    display: none;
-  }
-  @media (min-width: 601px) and (max-width: 1024px) {
+  @media screen and (max-width: 1024px) {
     display: none;
   }
 `;
 export const Queue = styled.div`
   width: 25%;
   border-right: 1px solid lightgrey;
-  @media (min-width: 100px) and (max-width: 600px) {
+  @media (min-width: 100px) and (max-width: 768px) {
     display: none;
   }
-  @media (min-width: 601px) and (max-width: 1024px) {
+  @media (min-width: 768px) and (max-width: 1024px) {
     box-sizing: border-box;
-    width: 40%;
+    width: 30%;
   }
 `;
 export const Help = styled.div`
@@ -108,11 +105,7 @@ export const Help = styled.div`
   box-sizing: border-box;
   flex-direction: column;
   border-right: 1px solid lightgrey;
-  @media (min-width: 100px) and (max-width: 600px) {
-    box-sizing: border-box;
-    width: 100%;
-  }
-  @media (min-width: 601px) and (max-width: 1024px) {
+  @media screen and (max-width: 1024px) {
     box-sizing: border-box;
     width: 100%;
   }
@@ -122,9 +115,22 @@ export const Subject = styled.div`
   background-color: #ffffff;
 `;
 export const Conversation = styled.div`
-  height: 39.7em;
+  height: 655px;
   overflow: auto;
   background-color: #eaeaea;
+  border-radius: 10px 10px 0 0;
+  @media screen and (max-width: 1700px) {
+    height: 568px;
+  }
+  @media (height: 1024px) {
+    height: 698px;
+  }
+  @media (height: 1366px) {
+    height: 1040px;
+  }
+  @media (width: 2560px) and (height: 1490px) {
+    height: 1160px;
+  }
 `;
 export const Message = styled.div`
   display: flex;
@@ -134,24 +140,11 @@ export const Message = styled.div`
 `;
 export const TitleName = styled.div`
   padding: 20px;
-  width: 85%;
+  width: 815px;
   border-right: 1px solid lightgrey;
   background-color: #ffffff;
-  @media (min-width: 100px) and (max-width: 600px) {
-    h4 {
-      font-size: 15px;
-    }
-    h6 {
-      font-size: 5px;
-    }
-  }
-  @media (min-width: 600px) and (max-width: 1024px) {
-    h4 {
-      font-size: 25px;
-    }
-    h6 {
-      font-size: 15px;
-    }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    width: 95%;
   }
 `;
 export const Field = styled.div`
@@ -170,11 +163,11 @@ export const Shared = styled.div`
   padding-bottom: 31px;
   justify-content: center;
   border-bottom: 1px solid lightgrey;
-  @media (min-width: 100px) and (max-width: 600px) {
+  @media (min-width: 100px) and (max-width: 1024px) {
     display: none;
   }
-  @media screen and (max-width: 1440px) {
-    margin-top: 15px;
+  @media (min-width: 1024px) and (max-width: 1440px) {
+    margin-top: 35px;
     h6 {
       font-size: 20px;
     }
@@ -189,15 +182,11 @@ export const Send = styled.button`
   background-color: #2fdc5f;
   color: white;
   border: transparent;
-  width: 218px;
+  width: 150px;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-  @media screen and (max-width: 600px) {
-    box-sizing: border-box;
-    width: 100%;
-  }
-  @media (min-width: 768px) and (max-width: 1024px) {
+  @media screen and (max-width: 1024px) {
     box-sizing: border-box;
     width: 100%;
   }
@@ -206,17 +195,13 @@ export const Request = styled.button`
   background-color: #372476;
   color: white;
   border: transparent;
-  width: 218px;
+  width: 150px;
   border-radius: 5px;
   margin-right: 15px;
   cursor: pointer;
-  @media screen and (max-width: 600px) {
-    box-sizing: border-box;
+  @media screen and (max-width: 1024px) {
     width: 100%;
-  }
-  @media (min-width: 768px) and (max-width: 1024px) {
     box-sizing: border-box;
-    width: 100%;
   }
 `;
 
@@ -225,18 +210,31 @@ export const LoginDiv = styled.div`
   display: flex;
   box-sizing: border-box;
   height: 100vh;
-  @media (min-width: 100px) and (max-width: 600px) {
+  @media (min-width: 100px) and (max-width: 400px) {
     background-image: url(${backgroundImg});
-    background-size: 150%;
+    background-size: 145%;
     background-repeat: no-repeat;
-    background-position: bottom;
+    background-position: -60px bottom;
   }
-  @media (min-width: 601px) and (max-width: 1024px) {
+  @media (min-width: 400px) and (max-width: 600px) {
+    background-image: url(${backgroundImg});
+    background-size: 145%;
+    background-repeat: no-repeat;
+    background-position: -85px bottom;
+  }
+  @media (min-width: 600px) and (max-width: 900px) {
     justify-content: center;
     background-image: url(${backgroundImg});
     background-size: 135%;
     background-repeat: no-repeat;
-    background-position: bottom;
+    background-position: -115px bottom;
+  }
+  @media (height: 1366px) {
+    justify-content: center;
+    background-image: url(${backgroundImg});
+    background-size: 135%;
+    background-repeat: no-repeat;
+    background-position: -115px bottom;
   }
 `;
 export const LoginMain = styled.div`
@@ -250,17 +248,16 @@ export const LoginMain = styled.div`
     margin-top: -400px;
     width: 100%;
   }
-  @media (min-width: 601px) and (max-width: 1024px) {
-    margin-top: -650px;
+  @media (min-width: 600px) and (max-width: 900px) {
+    margin-top: -600px;
     width: 100%;
   }
-  @media (min-width: 1025px) and (max-width: 1245px) {
-    width: 33.34%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
+  @media (height: 1366px) {
+    margin-top: -750px;
+    width: 100%;
+  }
+  @media (height: 1490px) {
+    margin-top: -80px;
   }
 `;
 export const LoginPic = styled.div`
@@ -268,20 +265,21 @@ export const LoginPic = styled.div`
   width: 67.7%;
   flex-direction: column;
   justify-content: flex-end;
-  background-color: #7f25d9;
-  background-image: url(${backgroundImg});
-  background-size: cover;
-  background-position: center;
+  background-image: url(${backgroundImg}),
+    linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: bottom;
   p {
     padding-bottom: 850px;
   }
   @media screen and (max-width: 600px) {
     display: none;
   }
-  @media (min-width: 601px) and (max-width: 1024px) {
+  @media (min-width: 600px) and (max-width: 900px) {
     display: none;
   }
-  @media (min-width: 1025px) and (max-width: 1470px) {
+  @media (min-width: 900px) and (max-width: 1440px) {
     display: flex;
     width: 67.7%;
     flex-direction: column;
@@ -289,9 +287,34 @@ export const LoginPic = styled.div`
     background-color: #7f25d9;
     background-image: url(${backgroundImg});
     background-size: cover;
-    p {
-      padding-bottom: 850px;
-    }
+    background-repeat: no-repeat;
+    background-position: -400px bottom;
+  }
+  @media (width: 1440px) and (height: 894px) {
+    display: flex;
+    width: 67.7%;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-color: #7f25d9;
+    background-image: url(${backgroundImg}),
+      linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
+  }
+  @media (height: 1366px) {
+    display: none;
+  }
+  @media (height: 1490px) {
+    display: flex;
+    width: 67.7%;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-image: url(${backgroundImg}),
+      linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
   }
 `;
 export const LoginButton = styled.button`
@@ -327,7 +350,7 @@ export const LoginFooter = styled.div`
 `;
 
 export const Continue = styled.p`
-  font-family: "Roboto";
+  font-family: Roboto;
   color: white;
   font-size: 15px;
   margin-top: 13px;
@@ -337,11 +360,27 @@ export const Continue = styled.p`
 `;
 
 export const Title = styled.h1`
-  font-family: "Roboto";
+  font-family: Roboto;
   color: #330066;
   font-size: 40px;
   @media (min-width: 56px) and (max-width: 300px) {
     font-size: 25px;
     padding-top: 6px;
+  }
+`;
+
+export const Quotes = styled.div`
+  font-family: Oxygen;
+  color: white;
+  font-size: 30px;
+  align-self: center;
+  margin-bottom: 820px;
+  @media (min-width: 900px) and (max-width: 1750px) {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 750px;
+  }
+  @media (height: 1490px) {
+    margin-bottom: 1200px;
   }
 `;
