@@ -93,8 +93,7 @@ export default function Student() {
         history.push("/");
       });
     }
-    console.log(userData);
-  }, [userData]);
+  }, [cstate]);
 
   const sendRequest = () => {
     axios
