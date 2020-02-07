@@ -22,24 +22,22 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue(rowDatahandler) {
+export default function InQueue({ class_id, search }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([{ count: 0 }]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
-  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
-
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
+      url: `http://localhost:5000/api/classes/all/${class_id}?search=${search}`
     }).then(res => {
       // console
       setConcernsData(res.data);
     });
-  }, [rowDatahandler.search]);
+  }, []);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -48,11 +46,10 @@ export default function InQueue(rowDatahandler) {
     setAnchorEl(null);
   };
 
-  const handleConcernData = data => {
-    rowDataHandlerChild2(data);
-  };
+  //   const handleConcernData = data => {
+  //     rowDataHandlerChild2(data);
+  //   };
 
-  // console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
@@ -71,7 +68,7 @@ export default function InQueue(rowDatahandler) {
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px"
                 }}
-                onClick={() => handleConcernData(data)}
+                // onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
                   <Avatar src={image}></Avatar>
@@ -107,11 +104,15 @@ export default function InQueue(rowDatahandler) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square" className={classes.small}>
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status == 1 ? "Hot" : "Queue"}
+                      {data.concern_status === 3
+                        ? "Done"
+                        : data.concern_status === 1
+                        ? "Hot"
+                        : "Queue"}
                     </p>
                   </Avatar>
                   <MoreVertIcon
-                    // onClick={handleMenu}
+                    onClick={handleMenu}
                     style={{
                       fontSize: 35,
                       color: "#c4c4c4",
