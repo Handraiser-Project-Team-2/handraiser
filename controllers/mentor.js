@@ -6,20 +6,14 @@ module.exports = {
     const db = req.app.get("db");
 
     let date = new Date();
-
-    console.log(date);
-
     const {
       class_title,
       class_description,
       // class_status, //either (open, close) ? maybe by defualt is open
       token //mentor reference
     } = req.body;
-
     jwtDecode(token);
     let parseToken = jwtDecode(token);
-    console.log(parseToken);
-
     db.class
       .save({
         user_id: parseToken.userid,
@@ -71,6 +65,23 @@ module.exports = {
     db.query(
       `SELECT class.class_id, class.class_title, class.class_description, class.class_date_created, class.class_status, classroom_key.classroom_key
       FROM class INNER JOIN classroom_key ON class.class_id = classroom_key.class_id WHERE class.user_id = ${parseToken.userid}`
+    )
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(400).end(err);
+      });
+  },
+
+  get_my_classroom_by_email: (req, res) => {
+    const db = req.app.get("db");
+
+    const { email } = req.body;
+
+    db.query(
+      `SELECT class.class_id, class.class_title, class.class_description, class.class_date_created, class.class_status, classroom_key.classroom_key
+      FROM users INNER JOIN class ON class.user_id = users.user_id INNER JOIN classroom_key ON class.class_id = classroom_key.class_id  WHERE users.email = '${email}'`
     )
       .then(data => {
         res.status(201).json(data);

@@ -11,7 +11,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Axios from "axios";
-var jwtDecode = require("jwt-decode");
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,10 +27,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue() {
+export default function InQueue(props) {
+  var jwtDecode = require("jwt-decode");
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState([]);
   const open = Boolean(anchorEl);
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -41,89 +43,95 @@ export default function InQueue() {
   useEffect(() => {
     Axios({
       method: "get",
-      url: `/api/student/queue/order/5/${user_id}` //5 here is a class_id example
-    }).then(res => {
-      setConcernsData(res.data);
-    });
-  });
+      url: `/api/student/queue/order/${props.classReference}/${user_id}`
+    })
+      .then(res => {
+        setConcernsData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 
   const classes = useStyles();
-
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
 
-  // console.log(concernsData);
   return (
     <List className={classes.root}>
-      {concernsData.map((data, concern, index) => {
-        return (
-          <div key={index}>
-            <ListItem
-              // button
-              style={{
-                borderLeft: "14px solid #8932a8",
-                borderBottom: "0.5px solid #abababde",
-                padding: "10px 15px"
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar>A</Avatar>
-              </ListItemAvatar>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Log Out</MenuItem>
-              </Menu>
-              <ListItemText
-                primary={concern.concern.concern_title}
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={classes.inline}
-                      color="textPrimary"
-                    >
-                      {concern.concern.concern_description}
-                    </Typography>
-                  </React.Fragment>
-                }
-              />
-
-              <ListItemText
-                primary={data.concern}
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={classes.inline}
-                      color="textPrimary"
-                    >
-                      {data.name}
-                    </Typography>
-                  </React.Fragment>
-                }
-              />
-              <ListItemSecondaryAction onClick={handleMenu}>
-                <MoreVertIcon
+      {concernsData
+        ? concernsData.map((val, data, index) => {
+            return (
+              <div key={val.concern.concern_id}>
+                <ListItem
+                  // button
                   style={{
-                    fontSize: 35,
-                    color: "#c4c4c4",
-                    cursor: "pointer"
+                    borderLeft: "14px solid #8932a8",
+                    borderBottom: "0.5px solid #abababde",
+                    padding: "10px 15px"
                   }}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          </div>
-        );
-      })}
+                >
+                  <ListItemAvatar>
+                    <Avatar>A</Avatar>
+                  </ListItemAvatar>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right"
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                  </Menu>
+                  <ListItemText
+                    primary={val.concern.concern_title}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          className={classes.inline}
+                          color="textPrimary"
+                        >
+                          {val.concern.concern_description}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+
+                  <ListItemText
+                    primary={data.concern}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          className={classes.inline}
+                          color="textPrimary"
+                        >
+                          {data.name}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                  <ListItemSecondaryAction onClick={handleMenu}>
+                    <MoreVertIcon
+                      style={{
+                        fontSize: 35,
+                        color: "#c4c4c4",
+                        cursor: "pointer"
+                      }}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              </div>
+            );
+          })
+        : ""}
     </List>
   );
 }

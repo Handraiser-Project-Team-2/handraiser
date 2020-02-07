@@ -14,6 +14,7 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import MentorUi from "../MentorUi";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,11 +32,12 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler.rowDatahandler;
+  let { class_id } = useParams();
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `/api/classes/queue/5` //5 here is a class_id example
+      url: `/api/classes/queue/${class_id}` //5 here is a class_id example
     }).then(res => {
       setConcernsData(res.data);
     });
@@ -76,6 +78,8 @@ export default function InQueue(rowDatahandler) {
                   vertical: "top",
                   horizontal: "right"
                 }}
+                open={open}
+                onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>Log Out</MenuItem>

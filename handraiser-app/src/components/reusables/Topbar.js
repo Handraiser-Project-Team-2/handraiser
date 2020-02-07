@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -11,9 +11,12 @@ import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
-var jwtDecode = require("jwt-decode");
+import { UserContext } from "../Contexts/UserContext";
+
+  var jwtDecode = require("jwt-decode");
 
 export default function Topbar() {
+  var jwtDecode = require("jwt-decode");
   let history = useHistory();
   const [user, setUser] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -21,6 +24,7 @@ export default function Topbar() {
   const [name, setName] = useState("");
   var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
+  const { setData } = useContext(UserContext);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -33,6 +37,7 @@ export default function Topbar() {
   const Logout = () => {
     sessionStorage.setItem("token", "");
     history.push("/");
+    setData();
   };
 
   const sendMsg = evt => {

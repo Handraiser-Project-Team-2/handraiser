@@ -70,7 +70,7 @@ const TabBtn = props => {
       </Paper>
 
       <TabPanel value={tabValue} index={0}>
-        <InQueue />
+        <InQueue  classReference = {props.classReference} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}></TabPanel>
       <TabPanel value={tabValue} index={2}></TabPanel>

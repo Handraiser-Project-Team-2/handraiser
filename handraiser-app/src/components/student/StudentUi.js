@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
@@ -6,9 +6,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Topbar from "../reusables/Topbar";
-
 import {
   Div,
   Nav,
@@ -29,10 +28,12 @@ import {
 import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
+import { UserContext } from "../Contexts/UserContext";
 var jwtDecode = require("jwt-decode");
 
 export default function Student() {
   let history = useHistory();
+  let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
   const open = Boolean(anchorEl);
@@ -41,6 +42,8 @@ export default function Student() {
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
+  const { userData } = useContext(UserContext);
+
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -91,25 +94,34 @@ export default function Student() {
         history.push("/");
       });
     }
-  }, []);
+    console.log(userData)
+  }, [userData]);
 
   const sendRequest = () => {
     axios
-      .post(`/api/student/request/assistance`, {
-        class_id: 5,
+      .post(`http://localhost:5000/api/student/request/assistance`, {
+        class_id: class_id,
         user_id: user_id,
         concern_title: concernTitle,
         concern_description: concernDescription
       })
-      .then(() => {
+      .then((data) => {
         setConcernTitle("");
         setConcernDescription("");
         Swal.fire({
           icon: "success",
           title: "Request sent to the mentor"
-        }).then(() => {
-          history.push("/student");
-        });
+        })
+          .then(() => {
+            window.location.reload();
+            // history.push(`/student/${class_id}`);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 
@@ -119,7 +131,7 @@ export default function Student() {
         <Topbar />
         <Div>
           <Queue>
-            <Tabs />
+            <Tabs classReference={class_id} />
           </Queue>
           <Help>
             <Subject>
