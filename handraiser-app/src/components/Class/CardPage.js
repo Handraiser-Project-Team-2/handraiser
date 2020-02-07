@@ -136,11 +136,13 @@ export default function CardPage({ classData, data }) {
                 ? `Class code: ${row.classroom_key}`
                 : null}
             </Typography>
-            <CopyToClipboard onCopy={onCopy} text={row.classroom_key}>
-              <IconButton aria-label="delete" className={classes.copyIcon}>
-                <FileCopyIcon fontSize="small" />
-              </IconButton>
-            </CopyToClipboard>
+            {cstate && cstate.user_type_id === 4 ? (
+              <CopyToClipboard onCopy={onCopy} text={row.classroom_key}>
+                <IconButton aria-label="delete" className={classes.copyIcon}>
+                  <FileCopyIcon fontSize="small" />
+                </IconButton>
+              </CopyToClipboard>
+            ) : null}
           </CardActions>
         </Card>
       ))}
