@@ -84,7 +84,7 @@ export const Div = styled.div`
 `;
 export const Div2 = styled.div`
   width: 25%;
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1440px) {
     display: none;
   }
 `;
@@ -94,9 +94,9 @@ export const Queue = styled.div`
   @media (min-width: 100px) and (max-width: 768px) {
     display: none;
   }
-  @media (min-width: 768px) and (max-width: 1024px) {
+  @media (min-width: 768px) and (max-width: 1440px) {
     box-sizing: border-box;
-    width: 30%;
+    width: 60%;
   }
 `;
 export const Help = styled.div`
@@ -163,14 +163,8 @@ export const Shared = styled.div`
   padding-bottom: 31px;
   justify-content: center;
   border-bottom: 1px solid lightgrey;
-  @media (min-width: 100px) and (max-width: 1024px) {
+  @media (min-width: 100px) and (max-width: 1440px) {
     display: none;
-  }
-  @media (min-width: 1024px) and (max-width: 1440px) {
-    margin-top: 35px;
-    h6 {
-      font-size: 20px;
-    }
   }
 `;
 export const More = styled.button`

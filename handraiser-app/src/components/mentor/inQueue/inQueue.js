@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -11,6 +12,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import "status-indicator/styles.css";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,7 +28,6 @@ export default function InQueue(rowDatahandler) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([{ count: 0 }]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
@@ -35,10 +36,14 @@ export default function InQueue(rowDatahandler) {
     axios({
       method: "get",
       url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
-    }).then(res => {
-      // console
-      setConcernsData(res.data);
-    });
+    })
+      .then(res => {
+        console.log(res.data);
+        setConcernsData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }, [rowDatahandler.search]);
 
   const handleMenu = event => {
@@ -57,11 +62,6 @@ export default function InQueue(rowDatahandler) {
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
-          axios
-            .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
-            .then(data => {
-              setImage(data.data[0].image);
-            });
           return (
             <div key={index}>
               <ListItem
@@ -74,7 +74,16 @@ export default function InQueue(rowDatahandler) {
                 onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
+                  <status-indicator
+                    positive
+                    pulse
+                    style={{
+                      position: "absolute",
+                      marginTop: "30px",
+                      marginLeft: "35px"
+                    }}
+                  ></status-indicator>
+                  <Avatar src={data.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"

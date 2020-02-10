@@ -44,8 +44,8 @@ export default function Student() {
   const [concernTitle, setConcernTitle] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-
-  const { userData } = useContext(UserContext);
+  const [name, setName] = useState("");
+  const { cstate, getData } = useContext(UserContext);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -93,8 +93,7 @@ export default function Student() {
         history.push("/");
       });
     }
-    console.log(userData);
-  }, [userData]);
+  }, [cstate]);
 
   const sendRequest = () => {
     axios
@@ -167,10 +166,7 @@ export default function Student() {
                 </div>
               </Option>
             </Subject>
-            <Chatfield
-              concernDescription={concernDescription}
-              setConcernDescription={setConcernDescription}
-            />
+            <Chatfield />
             <Message>
               <Field>
                 <div

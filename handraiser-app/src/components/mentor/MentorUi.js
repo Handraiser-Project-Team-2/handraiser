@@ -13,6 +13,10 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
+import HandShakeImage from "../images/HandshakeEmoji.png";
+import { makeStyles } from "@material-ui/core/styles";
+import teal from "@material-ui/core/colors/teal";
+
 import {
   Div,
   Nav,
@@ -36,7 +40,20 @@ import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 var jwtDecode = require("jwt-decode");
 
+const useStyles = makeStyles(theme => ({
+  handshake: {
+    marginLeft: theme.spacing(3),
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+    backgroundColor: teal[500],
+    "&:hover": {
+      cursor: "pointer"
+    }
+  }
+}));
+
 export default function Mentor() {
+  const classes = useStyles();
   let history = useHistory();
   let { class_id } = useParams();
   const [rowData, setRowData] = useState({});
@@ -47,6 +64,9 @@ export default function Mentor() {
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const sendMsg = evt => {
@@ -192,7 +212,7 @@ export default function Mentor() {
           horizontal: "right"
         }}
         open={open}
-        // onClose={handleClose}
+        onClose={handleClose}
       >
         <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
         <MenuItem onClick={e => handleBackQueue(rowData)}>
@@ -207,16 +227,21 @@ export default function Mentor() {
           <Subject>
             <TitleName>
               <Typography
-                variant="h5"
+                variant="h6"
                 style={{
                   paddingTop: "5px"
                 }}
               >
                 Concern: {rowData.concern_title}
               </Typography>
-              <Typography variant="h7">From: {name}</Typography>
+              <Typography variant="span">From: {name}</Typography>
             </TitleName>
             <Option>
+              <Avatar
+                alt="I"
+                src={HandShakeImage}
+                className={classes.handshake}
+              />
               <div
                 style={{
                   display: "flex",

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
+import styled from "styled-components";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -58,14 +59,6 @@ export default function InQueue(props) {
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((concern, index) => {
-          axios
-            .get(
-              `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
-              {}
-            )
-            .then(data => {
-              setImage(data.data[0].image);
-            });
           return (
             <div key={index}>
               <ListItem
@@ -76,7 +69,16 @@ export default function InQueue(props) {
                 }}
               >
                 <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
+                  <status-indicator
+                    positive
+                    pulse
+                    style={{
+                      position: "absolute",
+                      marginTop: "30px",
+                      marginLeft: "35px"
+                    }}
+                  ></status-indicator>
+                  <Avatar src={concern.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
