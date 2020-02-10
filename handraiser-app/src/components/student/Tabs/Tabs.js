@@ -65,7 +65,6 @@ const TabBtn = props => {
           <Tab
             label="MY REQUESTS"
             onClick={() => setHide(hide === false ? hide : !hide)}
-            style={{ width: "2px" }}
           />
           <Tab
             label="CLOSED"

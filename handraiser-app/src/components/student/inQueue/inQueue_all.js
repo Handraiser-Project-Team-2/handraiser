@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
+import styled from "styled-components";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -68,6 +69,15 @@ export default function InQueue(props) {
                 }}
               >
                 <ListItemAvatar>
+                  <status-indicator
+                    positive
+                    pulse
+                    style={{
+                      position: "absolute",
+                      marginTop: "30px",
+                      marginLeft: "35px"
+                    }}
+                  ></status-indicator>
                   <Avatar src={concern.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
@@ -102,7 +112,7 @@ export default function InQueue(props) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square">
                     <p style={{ fontSize: 12 }}>
-                      {concern.concern.concern_status == 1
+                      {concern.concern.concern_status === 1
                         ? "being helped"
                         : concern.queue_order_num == 0
                         ? "next"

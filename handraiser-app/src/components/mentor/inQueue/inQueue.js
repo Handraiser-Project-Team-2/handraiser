@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -11,6 +12,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import "status-indicator/styles.css";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,18 +35,23 @@ export default function InQueue(rowDatahandler) {
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
   useEffect(() => {
+    update(rowDatahandler.search);
+  }, [rowDatahandler.search]);
+
+  // here
+  const update = (data) => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
+      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
     })
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data)
         setConcernsData(res.data);
       })
       .catch(err => {
         console.log(err);
       });
-  }, [rowDatahandler.search]);
+  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -57,7 +64,6 @@ export default function InQueue(rowDatahandler) {
     rowDataHandlerChild2(data);
   };
 
-  // console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
@@ -74,6 +80,15 @@ export default function InQueue(rowDatahandler) {
                 onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
+                  <status-indicator
+                    positive
+                    pulse
+                    style={{
+                      position: "absolute",
+                      marginTop: "30px",
+                      marginLeft: "35px"
+                    }}
+                  ></status-indicator>
                   <Avatar src={data.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
@@ -107,7 +122,7 @@ export default function InQueue(rowDatahandler) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square" className={classes.small}>
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status == 1 ? "Hot" : "Queue"}
+                      {data.concern_status === 1 ? "Hot" : "Queue"}
                     </p>
                   </Avatar>
                   <MoreVertIcon
