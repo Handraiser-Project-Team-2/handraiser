@@ -31,6 +31,7 @@ import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
 import Topbar from "../reusables/Topbar";
+import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
 var jwtDecode = require("jwt-decode");
 
@@ -188,7 +189,7 @@ export default function Mentor() {
     } else {
       Swal.fire({
         icon: "error",
-        title: "You cannot acces this page!"
+        title: "You cannot access this page!"
       }).then(function() {
         history.push("/");
       });
@@ -219,9 +220,13 @@ export default function Mentor() {
         </Queue>
         <Help>
           <Subject>
-            <TitleName>
-              <Typography variant="h4">Concern: {concernTitle}</Typography>
-              <Typography variant="h6">From: {name}</Typography>
+            <TitleName
+              style={{
+                paddingTop: "25px"
+              }}
+            >
+              <Typography variant="h5">Concern: {concernTitle}</Typography>
+              <Typography variant="span">From: {name}</Typography>
             </TitleName>
             <Option>
               <div
@@ -242,6 +247,26 @@ export default function Mentor() {
               </div>
             </Option>
           </Subject>
+          <Chatfield />
+          <Message>
+            <Field>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  width: "100%"
+                }}
+              >
+                <form onSubmit={sendMsg}>
+                  <TextField
+                    id="outlined-textarea"
+                    multiline
+                    variant="outlined"
+                    fullWidth
+                    rows="2"
+                  />
           {rowData.concern_status === 2 ? <Handshake data={rowData} rowDatahandler={rowDatahandler}/> : ""}
 
           <Conversation></Conversation>
