@@ -299,30 +299,15 @@ export default function Mentor() {
             </Option>
           </Subject>
           <Chatfield />
-          <Message>
-            <Field>
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                  width: "100%"
-                }}
-              >
-                <form onSubmit={sendMsg}>
-                  <TextField
-                    id="outlined-textarea"
-                    multiline
-                    variant="outlined"
-                    fullWidth
-                    rows="2"
-                  />
-          {rowData.concern_status === 2 ? <Handshake data={rowData} rowDatahandler={rowDatahandler}/> : ""}
+          {rowData.concern_status === 2 ? (
+            <Handshake data={rowData} rowDatahandler={rowDatahandler} />
+          ) : (
+            ""
+          )}
 
-          <Conversation></Conversation>
-
-          {rowData.concern_status === 2 ? '':(
+          {rowData.concern_status === 2 ? (
+            ""
+          ) : (
             <Message>
               <Field>
                 <div
