@@ -45,7 +45,10 @@ export const TabBtn = props => {
   };
 
   const handleOnChange = (e, tab) => {
-    setUserData({ [e.target.name]: e.target.value });
+    let email = e.target.name;
+    let value = e.target.value;
+    userData[email] = value;
+    setUserData(userData);
     if (tab === 1) {
       setType("mentor");
     } else {
