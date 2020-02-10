@@ -26,6 +26,7 @@
     "massive": "^5.11.2",
     "node-pg-migrate": "^4.2.1",
     "pg": "^7.17.0",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-hook-form": "^4.8.2",
     "react-text-mask": "^5.4.3",
     "socket.io": "^2.3.0",

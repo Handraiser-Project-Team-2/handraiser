@@ -13,7 +13,7 @@ import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
 import { UserContext } from "../Contexts/UserContext";
 
-  var jwtDecode = require("jwt-decode");
+var jwtDecode = require("jwt-decode");
 
 export default function Topbar() {
   var jwtDecode = require("jwt-decode");
