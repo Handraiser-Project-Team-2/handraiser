@@ -10,19 +10,6 @@ export default function Handshake(props) {
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
   const accept = data => {
-    // axios
-    //   .patch(`http://localhost:5000/api/concern_list/${data.concern_id}`, {
-    //     concern_id: data.concern_id,
-    //     concern_title: data.concern_title,
-    //     concern_description: data.concern_description,
-    //     concern_status: 1
-    //   })
-    //   .then(data => {
-    //     props.datahandler(data.data);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
 
     axios
       .patch(`http://localhost:5000/api/concern_list/${data.concern_id}`, {
