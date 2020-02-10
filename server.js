@@ -10,6 +10,7 @@ const admin = require("./controllers/admins");
 const classes = require("./controllers/class");
 const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
+const authorization = require("./controllers/authorization");
 
 require("dotenv").config();
 massive({
@@ -27,10 +28,14 @@ massive({
     app.set("db", db);
     app.use(cors());
     app.use(express.json());
+
+    // app.use(authorization.authorization_check);
+
     //WEBSOCKET START
     const server = http.Server(app);
     const io = socketIO(server);
     app.use(router);
+
     // endpoints declaration
 
     // users endpoints
