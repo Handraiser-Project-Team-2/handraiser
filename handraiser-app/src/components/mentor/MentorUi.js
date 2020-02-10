@@ -6,11 +6,10 @@ import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-
+import Avatar from "@material-ui/core/Avatar";
 import HandShakeImage from "../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
-import teal from '@material-ui/core/colors/teal';
-
+import teal from "@material-ui/core/colors/teal";
 
 import {
   Div,
@@ -59,9 +58,6 @@ export default function Mentor() {
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   const sendMsg = evt => {
@@ -257,7 +253,6 @@ export default function Mentor() {
                 alt="I"
                 src={HandShakeImage}
                 className={classes.handshake}
-                
               />
               <div
                 style={{
