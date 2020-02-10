@@ -11,8 +11,7 @@ import {
   LoginCont,
   LoginFooter,
   Continue,
-  Title,
-  Quotes
+  Title
 } from "../Styles/Styles";
 
 export default function Login(props) {
@@ -33,8 +32,6 @@ export default function Login(props) {
         }
       })
         .then(data => {
-          console.log(data);
-
           const userType = data.data.user_type_id;
           localStorage.setItem("name", response.profileObj.givenName);
           sessionStorage.setItem("token", "Bearer " + data.data.token);
@@ -69,23 +66,7 @@ export default function Login(props) {
   };
   return (
     <LoginDiv>
-      <LoginPic>
-        <Quotes>
-          The first step of learning
-          <br /> is admitting our insufficiency
-          <br />{" "}
-          <span
-            style={{
-              display: "flex",
-              color: "white",
-              fontSize: 15,
-              justifyContent: "flex-end"
-            }}
-          >
-            - Jordan B. Peterson
-          </span>
-        </Quotes>
-      </LoginPic>
+      <LoginPic></LoginPic>
       <LoginMain>
         <Title>HANDRAISER</Title>
         <p
@@ -127,15 +108,7 @@ export default function Login(props) {
         />
 
         <LoginFooter>
-          <p
-            style={{
-              color: "#BDBDBD",
-              fontSize: 15,
-              fontFamily: "Oxygen"
-            }}
-          >
-            BOOM CAMP / BATCH 2 / TEAM 2 / 2020
-          </p>
+          <p>BOOM CAMP / BATCH 2 / TEAM 2 / 2020</p>
         </LoginFooter>
       </LoginMain>
     </LoginDiv>

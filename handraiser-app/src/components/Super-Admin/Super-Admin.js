@@ -16,15 +16,12 @@ export default function NavBar() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          
-          console.log(data);
-
           setState({ user_type: data.data.user_type_id });
           const user_type = data.data.user_type_id;
           if (user_type !== 1) {
             Swal.fire({
               icon: "error",
-              title: "You cannot acces this page!"
+              title: "You cannot access this page!"
             }).then(function() {
               if (user_type === 3) {
                 history.push("/student");
@@ -40,7 +37,7 @@ export default function NavBar() {
     } else {
       Swal.fire({
         icon: "error",
-        title: "You cannot acces this page!"
+        title: "You cannot access this page!"
       }).then(function() {
         history.push("/");
       });
@@ -52,7 +49,7 @@ export default function NavBar() {
       <React.Fragment>
         <Topbar />
         <div
-          style={{ paddingTop: "100px", marginRight: "5%", marginLeft: "5%" }}
+          style={{ paddingTop: "30px", marginRight: "5%", marginLeft: "5%" }}
         >
           <TabBtn />
         </div>

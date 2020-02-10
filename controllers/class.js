@@ -40,7 +40,7 @@ function getClassByMentor(req, res) {
   const parseToken = jwtDecode(token);
 
   db.class
-    .find({ user_id:parseToken.userid })
+    .find({ user_id: parseToken.userid })
     .then(classes => res.status(200).json(classes))
     .catch(err => {
       console.error(err);
@@ -48,8 +48,23 @@ function getClassByMentor(req, res) {
     });
 }
 
+function getClassDetails(req, res){
+  const db =req.app.get("db");
+  const {token, class_id} = req.body;
+  
+    db.class
+    .findOne({class_id})
+    .then(data=>{
+      res.status(201).json({...data})
+    })
+    .catch(err=>{
+      res.status(422).end()
+    })
+}
+
 module.exports = {
   getAllClass,
   getStudentsByClass,
-  getClassByMentor
+  getClassByMentor,
+  getClassDetails
 };

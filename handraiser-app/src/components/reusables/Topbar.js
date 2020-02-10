@@ -1,31 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import Drawer from "@material-ui/core/Drawer";
 import { Nav } from "../Styles/Styles";
 import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
-import Drawer from "@material-ui/core/Drawer";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import axios from "axios";
+import Avatar from "@material-ui/core/Avatar";
+import { UserContext } from "../Contexts/UserContext";
 import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+
+var jwtDecode = require("jwt-decode");
 
 export default function Topbar() {
-  let history = useHistory();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const [name, setName] = useState("");
   const [state, setState] = React.useState({
     top: false,
     left: false,
     bottom: false,
     right: false
   });
+  var jwtDecode = require("jwt-decode");
+  let history = useHistory();
+  const [user, setUser] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const [name, setName] = useState("");
+  var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
+  const { setData } = useContext(UserContext);
+
   const toggleDrawer = (side, open) => event => {
     if (
       event.type === "keydown" &&
@@ -36,6 +49,25 @@ export default function Topbar() {
 
     setState({ ...state, [side]: open });
   };
+
+  const sideList = side => (
+    <div
+      role="presentation"
+      onClick={toggleDrawer(side, false)}
+      onKeyDown={toggleDrawer(side, false)}
+    >
+      <List>
+        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -48,32 +80,19 @@ export default function Topbar() {
   const Logout = () => {
     sessionStorage.setItem("token", "");
     history.push("/");
+    setData();
   };
 
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(name);
   };
 
-  const sideList = side => (
-    <div
-      style={{
-        width: "250px"
-      }}
-      role="presentation"
-      onClick={toggleDrawer(side, false)}
-      onKeyDown={toggleDrawer(side, false)}
-    >
-      {" "}
-      <List>
-        {["Click Here", "Me too!"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/userprofile/${user_id}`).then(res => {
+      setUser(res.data[0].image);
+    });
+  }, []);
+
   return (
     <Nav>
       <AppBar style={{ backgroundColor: "#372476" }}>
@@ -103,7 +122,7 @@ export default function Topbar() {
               onClick={handleMenu}
               color="inherit"
             >
-              <AccountCircle style={{ fontSize: 40 }} />
+              <Avatar alt="" src={user} />
             </IconButton>
           </div>
           <Menu

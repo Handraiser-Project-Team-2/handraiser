@@ -70,40 +70,30 @@ const Div = styled.div`
   }
 `;
 
-export default function Chatfield() {
+export default function Chatfield(props) {
+  if (props.concernDescription.length > 0) {
+    return (
+      <Conversation>
+        <Cont>
+          <Profile>
+            <Avatar></Avatar>
+          </Profile>
+          <Sender>
+            <Div>
+              <span></span>
+              <span></span>
+              <span></span>
+            </Div>
+            <Div></Div>
+          </Sender>
+        </Cont>
+      </Conversation>
+    );
+  }
   return (
     <Conversation>
-      <Cont>
-        <Profile>
-          <Avatar></Avatar>
-        </Profile>
-        <Sender>
-          <span>Hello</span>
-        </Sender>
-      </Cont>
-      <Cont2>
-        <Profile>
-          <Avatar></Avatar>
-        </Profile>
-        <Receiver>
-          <span>
-            Curry to Igoudala! Back to Curry! Igoudala with the layup...
-            OHHHH!!!! BLOCKED BY JAMES!!!
-          </span>
-        </Receiver>
-      </Cont2>
-      <Cont>
-        <Profile>
-          <Avatar></Avatar>
-        </Profile>
-        <Sender>
-          <Div>
-            <span></span>
-            <span></span>
-            <span></span>
-          </Div>
-        </Sender>
-      </Cont>
+      <Cont></Cont>
+      <Cont2></Cont2>
     </Conversation>
   );
 }

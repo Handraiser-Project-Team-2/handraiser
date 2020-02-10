@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import InputBase from "@material-ui/core/InputBase";
 import InQueue from "../inQueue/inQueue";
+import InQueueAll from "../inQueue/inQueue_all";
+import Done from "../inQueue/Done";
 import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles(theme => ({}));
@@ -30,9 +32,11 @@ const TabBtn = props => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
+  const [search, setSearch] = useState("");
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
   return (
     <React.Fragment>
       <Paper color="primary" style={{ height: "83px" }}>
@@ -44,7 +48,12 @@ const TabBtn = props => {
               marginRight: "13px"
             }}
           >
-            <TextField id="outlined-basic" placeholder="Search..." fullWidth />
+            <TextField
+              id="outlined-basic"
+              placeholder="Search..."
+              fullWidth
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
         </form>
         <Tabs
@@ -54,7 +63,7 @@ const TabBtn = props => {
           textColor="primary"
         >
           <Tab
-            label="IN QUEUE"
+            label="MY REQUESTS"
             onClick={() => setHide(hide === false ? hide : !hide)}
           />
           <Tab
@@ -62,17 +71,21 @@ const TabBtn = props => {
             onClick={() => setHide(hide === true ? hide : !hide)}
           />
           <Tab
-            label="ALL"
+            label="ALL QUEUE"
             onClick={() => setHide(hide === true ? hide : !hide)}
           />
         </Tabs>
       </Paper>
 
       <TabPanel value={tabValue} index={0}>
-        <InQueue />
+        <InQueue classReference={props.classReference} search={search} />
       </TabPanel>
-      <TabPanel value={tabValue} index={1}></TabPanel>
-      <TabPanel value={tabValue} index={2}></TabPanel>
+      <TabPanel value={tabValue} index={1}>
+        <Done classReference={props.classReference} search={search} />
+      </TabPanel>
+      <TabPanel value={tabValue} index={2}>
+        <InQueueAll classReference={props.classReference} search={search} />
+      </TabPanel>
     </React.Fragment>
   );
 };

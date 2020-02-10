@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
@@ -6,11 +6,12 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
+import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
+import { useHistory, useParams } from "react-router-dom";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import {
   Div,
   Nav,
@@ -29,12 +30,13 @@ import {
   Request
 } from "../Styles/Styles";
 import axios from "axios";
-
 import Tabs from "./Tabs/Tabs";
+import { UserContext } from "../Contexts/UserContext";
 var jwtDecode = require("jwt-decode");
 
 export default function Student() {
   let history = useHistory();
+  let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
   const open = Boolean(anchorEl);
@@ -42,7 +44,8 @@ export default function Student() {
   const [concernTitle, setConcernTitle] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const [name, setName] = useState("");
+
+  const { userData } = useContext(UserContext);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -50,15 +53,15 @@ export default function Student() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const sendMsg = evt => {
     evt.preventDefault();
+    console.log(concernDescription);
   };
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("/api/user/data", {
+        .post("http://localhost:5000/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
@@ -69,7 +72,7 @@ export default function Student() {
           if (user_type !== 3) {
             Swal.fire({
               icon: "error",
-              title: "You cannot acces this page!"
+              title: "You cannot access this page!"
             }).then(function() {
               if (user_type === 4) {
                 history.push("/mentor");
@@ -80,35 +83,44 @@ export default function Student() {
           }
         })
         .catch(err => {
-          console.log(err);
+          // console.log(err);
         });
     } else {
       Swal.fire({
         icon: "error",
-        title: "You cannot acces this page!"
+        title: "You cannot access this page!"
       }).then(function() {
         history.push("/");
       });
     }
-  }, []);
+    console.log(userData);
+  }, [userData]);
 
   const sendRequest = () => {
     axios
-      .post(`/api/student/request/assistance`, {
-        class_id: 5,
+      .post(`http://localhost:5000/api/student/request/assistance`, {
+        class_id: class_id,
         user_id: user_id,
         concern_title: concernTitle,
         concern_description: concernDescription
       })
-      .then(() => {
+      .then(data => {
         setConcernTitle("");
         setConcernDescription("");
         Swal.fire({
           icon: "success",
           title: "Request sent to the mentor"
-        }).then(() => {
-          history.push("/student");
-        });
+        })
+          .then(() => {
+            window.location.reload();
+            // history.push(`/student/${class_id}`);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 
@@ -118,7 +130,7 @@ export default function Student() {
         <Topbar />
         <Div>
           <Queue>
-            <Tabs />
+            <Tabs classReference={class_id} />
           </Queue>
           <Help>
             <Subject>
@@ -153,22 +165,12 @@ export default function Student() {
                     />
                   </More>
                 </div>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right"
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>Log Out</MenuItem>
-                </Menu>
               </Option>
             </Subject>
-            <Chatfield />
+            <Chatfield
+              concernDescription={concernDescription}
+              setConcernDescription={setConcernDescription}
+            />
             <Message>
               <Field>
                 <div
@@ -185,16 +187,11 @@ export default function Student() {
                       id="outlined-textarea"
                       multiline
                       variant="outlined"
-                      placeholder="Enter message..."
                       fullWidth
                       rows="2"
                       value={concernDescription}
                       onChange={e => setConcernDescription(e.target.value)}
-                      style={{
-                        backgroundColor: "white"
-                      }}
                     />
-
                     <div
                       style={{
                         width: "100%",

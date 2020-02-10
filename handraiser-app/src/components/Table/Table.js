@@ -1,24 +1,38 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Zoom from "@material-ui/core/Zoom";
 import Button from "@material-ui/core/Button";
 import { Tooltip } from "@material-ui/core";
 import axios from "axios";
 
 import { RowCont, TableStyle } from "../Styles/Styles";
 
+// COMPONENTS
+import ViewMentorDialog from "./Mentor/ViewMentorDIalog";
+
 export const TableCont = props => {
   const { tabValue } = props;
   const [tableData, setTableData] = useState({
     columns: [
       {
+        title: "",
+        field: ""
+      },
+      {
         title: "Email",
-        field: "validation_email"
+        field: "validation_email",
+        render: row =>
+          row.validation_status === "true" ? (
+            <ViewMentorDialog data={row} />
+          ) : (
+            row.validation_email
+          )
       },
       {
         title: "Status",
-        field: ""
+        field: "validation_status",
+        render: row =>
+          row.validation_status === "true" ? "Verified" : "Not yet Verified"
       },
       {
         title: "Key",
@@ -30,7 +44,7 @@ export const TableCont = props => {
         render: rowData => (
           <React.Fragment>
             <RowCont>
-              <Tooltip TransitionComponent={Zoom} title="Delete">
+              <Tooltip title="Delete">
                 <Button>
                   <DeleteIcon />
                 </Button>
@@ -42,22 +56,44 @@ export const TableCont = props => {
     ],
     data: []
   });
+  const [mentorURL, setMentorURL] = useState(
+    "http://localhost:5000/api/admin/mentor_list"
+  );
+  const [adminURL, setAdminURL] = useState(
+    "http://localhost:5000/api/admin/admins_list"
+  );
+  const [isError, setIsError] = useState(false);
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
 
   useEffect(() => {
-    (async function() {
+    const fetchData = async () => {
+      setIsError(false);
       try {
-        const res = await axios("http://localhost:5000/api/admin/mentor_list");
-        const res2 = await axios("http://localhost:5000/api/admin/admins_list");
+        const mentor = await axios.get(mentorURL, {
+          cancelToken: source.token
+        });
+        const admin = await axios.get(adminURL, { cancelToken: source.token });
+
         if (tabValue === 1) {
-          setTableData({ ...tableData, data: res.data });
+          setTableData({ ...tableData, data: mentor.data });
         } else if (tabValue === 2) {
-          setTableData({ ...tableData, data: res2.data });
+          setTableData({ ...tableData, data: admin.data });
         }
       } catch (err) {
-        console.error(err);
+        if (axios.isCancel(err)) {
+          console.log("", err.message);
+        } else {
+          setIsError(true);
+        }
       }
-    })();
-  }, []);
+    };
+    fetchData();
+
+    return () => {
+      source.cancel("");
+    };
+  }, [tableData]);
 
   return (
     <TableStyle>
@@ -70,17 +106,15 @@ export const TableCont = props => {
           sorting: false,
           pageSizeOptions: [5, 10, 15, 20],
           actionsColumnIndex: -1,
-          selection: false,
           draggable: false,
-          paging: false,
           headerStyle: {
             textAlign: "center",
             fontSize: 18
           },
           cellStyle: {
             textAlign: "center",
-            width: 20,
-            maxWidth: 20
+            width: 5,
+            maxWidth: 50
           }
         }}
       />

@@ -119,8 +119,8 @@ export const Conversation = styled.div`
   overflow: auto;
   background-color: #eaeaea;
   border-radius: 10px 10px 0 0;
-  @media screen and (max-width: 1700px) {
-    height: 568px;
+  @media (max-height: 894px) {
+    height: 567.5px;
   }
   @media (height: 1024px) {
     height: 698px;
@@ -128,8 +128,8 @@ export const Conversation = styled.div`
   @media (height: 1366px) {
     height: 1040px;
   }
-  @media (width: 2560px) and (height: 1490px) {
-    height: 1160px;
+  @media (height: 1051px) {
+    height: 725px;
   }
 `;
 export const Message = styled.div`
@@ -245,7 +245,7 @@ export const LoginMain = styled.div`
   align-content: center;
   align-items: center;
   @media (min-width: 100px) and (max-width: 600px) {
-    margin-top: -400px;
+    margin-top: -350px;
     width: 100%;
   }
   @media (min-width: 600px) and (max-width: 900px) {
@@ -273,22 +273,20 @@ export const LoginPic = styled.div`
   p {
     padding-bottom: 850px;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 900px) {
     display: none;
   }
-  @media (min-width: 600px) and (max-width: 900px) {
-    display: none;
-  }
-  @media (min-width: 900px) and (max-width: 1440px) {
+  @media (min-width: 900px) and (max-width: 1400px) {
     display: flex;
     width: 67.7%;
     flex-direction: column;
     justify-content: flex-end;
     background-color: #7f25d9;
-    background-image: url(${backgroundImg});
-    background-size: cover;
+    background-image: url(${backgroundImg}),
+      linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%);
+    background-size: 950px;
     background-repeat: no-repeat;
-    background-position: -400px bottom;
+    background-position: bottom;
   }
   @media (width: 1440px) and (height: 894px) {
     display: flex;
@@ -319,17 +317,15 @@ export const LoginPic = styled.div`
 `;
 export const LoginButton = styled.button`
   margin-top: 40px;
-  width: 275px;
+  width: 250px;
   padding: 10px;
   background: linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%);
   border-radius: 100px;
   border: none;
   cursor: pointer;
-  @media screen and (max-width: 600px) {
-    width: 230px;
-  }
-  @media (min-width: 600px) and (max-width: 768px) {
-    width: 260px;
+  @media screen and (max-width: 300px) {
+    width: 160px;
+    padding: 6px;
   }
 `;
 export const LoginCont = styled.div`
@@ -344,7 +340,11 @@ export const LoginFooter = styled.div`
   bottom: 0;
   width: 100%;
   text-align: center;
-  @media screen and (max-width: 1024px) {
+  p {
+    font-size: 13px;
+    color: grey;
+  }
+  @media screen and (max-width: 900px) {
     display: none;
   }
 `;
@@ -354,8 +354,9 @@ export const Continue = styled.p`
   color: white;
   font-size: 15px;
   margin-top: 13px;
-  @media screen and (max-width: 500px) {
-    font-size: 12.5px;
+  @media screen and (max-width: 300px) {
+    font-size: 13px;
+    margin-top: 7px;
   }
 `;
 
@@ -366,21 +367,5 @@ export const Title = styled.h1`
   @media (min-width: 56px) and (max-width: 300px) {
     font-size: 25px;
     padding-top: 6px;
-  }
-`;
-
-export const Quotes = styled.div`
-  font-family: Oxygen;
-  color: white;
-  font-size: 30px;
-  align-self: center;
-  margin-bottom: 820px;
-  @media (min-width: 900px) and (max-width: 1750px) {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 750px;
-  }
-  @media (height: 1490px) {
-    margin-bottom: 1200px;
   }
 `;

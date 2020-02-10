@@ -6,20 +6,14 @@ module.exports = {
     const db = req.app.get("db");
 
     let date = new Date();
-
-    console.log(date);
-
     const {
       class_title,
       class_description,
       // class_status, //either (open, close) ? maybe by defualt is open
       token //mentor reference
     } = req.body;
-
     jwtDecode(token);
     let parseToken = jwtDecode(token);
-    console.log(parseToken);
-
     db.class
       .save({
         user_id: parseToken.userid,
@@ -51,9 +45,12 @@ module.exports = {
   },
   get_inqueue: (req, res) => {
     const db = req.app.get("db");
-
-    db.concern_list
-      .find({ class_id: req.params.class_id })
+    const { search } = req.query;
+    // db.concern_list
+    //   .find({ class_id: req.params.class_id })
+    db.query(
+      `SELECT * FROM concern_list WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
+    )
       .then(data => {
         res.status(201).json(data);
       })
@@ -61,6 +58,71 @@ module.exports = {
         res.status(401).end(err);
       });
   },
+  get_done: (req, res) => {
+    const db = req.app.get("db");
+    const { search } = req.query;
+
+    db.query(
+      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
+    )
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(401).end(err);
+      });
+  },
+  get_all: (req, res) => {
+    const db = req.app.get("db");
+    const { search } = req.query;
+
+    db.query(
+      `SELECT * FROM concern_list WHERE class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
+    )
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(401).end(err);
+      });
+  },
+
+  // delete: (req, res) => {
+  //   const db = req.app.get("db");
+
+  //   db.assisted_by
+  //     .destroy({
+  //       class_id: req.params.class_id,
+  //       user_student_id: req.params.user_student_id
+  //     })
+  //     .then(data => {
+  //       res.status(201).json(data);
+  //     })
+  //     .catch(err => {
+  //       res.status(401).end(err);
+  //     });
+  // },
+
+  done: (req, res) => {
+    const db = req.app.get("db");
+    const { assisted_id, user_student_id, class_id } = req.params;
+    const { assist_status } = req.body;
+
+    db.assisted_by
+      .save({
+        assisted_id,
+        user_student_id,
+        class_id,
+        assist_status
+      })
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(401).end(err);
+      });
+  },
+
   get_my_classroom: (req, res) => {
     const db = req.app.get("db");
 
@@ -71,6 +133,23 @@ module.exports = {
     db.query(
       `SELECT class.class_id, class.class_title, class.class_description, class.class_date_created, class.class_status, classroom_key.classroom_key
       FROM class INNER JOIN classroom_key ON class.class_id = classroom_key.class_id WHERE class.user_id = ${parseToken.userid}`
+    )
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(400).end(err);
+      });
+  },
+
+  get_my_classroom_by_email: (req, res) => {
+    const db = req.app.get("db");
+
+    const { email } = req.body;
+
+    db.query(
+      `SELECT class.class_id, class.class_title, class.class_description, class.class_date_created, class.class_status, classroom_key.classroom_key
+      FROM users INNER JOIN class ON class.user_id = users.user_id INNER JOIN classroom_key ON class.class_id = classroom_key.class_id  WHERE users.email = '${email}'`
     )
       .then(data => {
         res.status(201).json(data);

@@ -11,6 +11,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,59 +20,60 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
+  },
+  small: {
+    width: theme.spacing(4),
+    height: theme.spacing(4)
   }
 }));
 
-export default function InQueue(rowDatahandler) {
-  const classes = useStyles();
-  const [concernsData, setConcernsData] = useState([{ count: 0 }]);
+export default function InQueue(props) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [concernsData, setConcernsData] = useState([]);
   const [image, setImage] = useState("");
+  const [name, setName] = useState("");
   const open = Boolean(anchorEl);
-
-  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
-    }).then(res => {
-      // console
-      setConcernsData(res.data);
-    });
-  }, [rowDatahandler.search]);
-
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const classes = useStyles();
 
-  const handleConcernData = data => {
-    rowDataHandlerChild2(data);
-  };
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
 
-  // console.log(concernsData);
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/student/queue/order/${props.classReference}?search=${props.search}` //5 here is a class_id example
+    }).then(res => {
+      setConcernsData(res.data);
+    });
+  }, []); //class_id
+
+  //   console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
-        {concernsData.map((data, index) => {
+        {concernsData.map((concern, index) => {
           axios
-            .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
+            .get(
+              `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
+              {}
+            )
             .then(data => {
               setImage(data.data[0].image);
             });
           return (
             <div key={index}>
               <ListItem
-                button
                 style={{
                   borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px"
                 }}
-                onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
                   <Avatar src={image}></Avatar>
@@ -90,7 +92,7 @@ export default function InQueue(rowDatahandler) {
                   <MenuItem onClick={handleClose}>Log Out</MenuItem>
                 </Menu>
                 <ListItemText
-                  primary={data.concern_title}
+                  primary={concern.concern.concern_title}
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -99,19 +101,24 @@ export default function InQueue(rowDatahandler) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        {data.concern_description}
+                        {/* {name} */}
+                        {concern.concern.concern_description}
                       </Typography>
                     </React.Fragment>
                   }
                 />
                 <ListItemSecondaryAction style={{ display: "flex" }}>
-                  <Avatar variant="square" className={classes.small}>
+                  <Avatar variant="square">
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status === 1 ? "Hot" : "Queue"}
+                      {concern.concern.concern_status === 1
+                        ? "being helped"
+                        : concern.queue_order_num === 1
+                        ? "next"
+                        : concern.queue_order_num}
                     </p>
                   </Avatar>
                   <MoreVertIcon
-                    // onClick={handleMenu}
+                    onClick={handleMenu}
                     style={{
                       fontSize: 35,
                       color: "#c4c4c4",
