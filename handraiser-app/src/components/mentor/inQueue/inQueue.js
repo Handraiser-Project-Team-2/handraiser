@@ -33,18 +33,23 @@ export default function InQueue(rowDatahandler) {
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
   useEffect(() => {
+    update(rowDatahandler.search);
+  }, [rowDatahandler.search]);
+
+  // here
+  const update = (data) => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
+      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
     })
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data)
         setConcernsData(res.data);
       })
       .catch(err => {
         console.log(err);
       });
-  }, [rowDatahandler.search]);
+  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -57,7 +62,6 @@ export default function InQueue(rowDatahandler) {
     rowDataHandlerChild2(data);
   };
 
-  // console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>

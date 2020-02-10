@@ -31,6 +31,7 @@ import axios from "axios";
 
 import Tabs from "./Tabs/Tabs";
 import Topbar from "../reusables/Topbar";
+import Handshake from "./reactives/Handshake";
 var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
@@ -60,14 +61,25 @@ export default function Mentor() {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const sendMsg = evt => {
     evt.preventDefault();
     // console.log(name);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  //   axios.patch(
+  //     `http://localhost:5001/api/concern_list/${rowData.concern_id}`,
+  //     {
+  //       concern_id: rowData.concern_id,
+  //       concern_status: 1
+  //     }
+  //   );
+  // };
 
   const handleDone = rowData => {
     if (rowData.length === 0) {
@@ -141,41 +153,57 @@ export default function Mentor() {
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
-      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
-        concern_id: rowData.concern_id,
-        concern_title: rowData.concern_title,
-        concern_description: rowData.concern_description,
-        concern_status: 1
-      })
+      .get(`http://localhost:5000/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
-        axios
-          .get(
-            `http://localhost:5000/api/assisted_by/${rowData.class_id}/${rowData.user_id}`,
-            {}
-          )
-          .then(data => {
-            if (data.data.length == 0) {
-              axios.post(`http://localhost:5000/api/assisted_by`, {
-                assist_status: "ongoing",
-                class_id: rowData.class_id,
-                // user_mentor_id: 3, //mock user_mentor_id data //used for checking
-                user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
-                user_student_id: rowData.user_id
-              });
-            } else {
-              axios.patch(
-                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-                {
-                  assisted_id: data.data[0].assisted_id,
-                  user_student_id: data.data[0].user_id,
-                  class_id: data.data[0].class_id,
-                  user_mentor_id: user_id,
-                  assist_status: "ongoing"
-                }
-              );
-            }
-          });
+        setName(data.data[0].first_name + " " + data.data[0].last_name);
       });
+  };
+
+  const rowDatahandler_false = rowData => {
+    setConcernTitle(rowData.concern_title);
+    setRowData(rowData);
+
+    // axios
+    //   .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
+    //     concern_id: rowData.concern_id,
+    //     concern_title: rowData.concern_title,
+    //     concern_description: rowData.concern_description,
+    //     concern_status: 1
+    //   })
+    //   .then(data => {
+    //     axios
+    //       .get(
+    //         `http://localhost:5000/api/assisted_by/${rowData.class_id}/${rowData.user_id}`,
+    //         {}
+    //       )
+    //       .then(data => {
+    //         //get data of who assisted this concern
+
+    //         // if none then reference this current mentor
+    //         if (data.data.length == 0) {
+    //           axios.post(`http://localhost:5000/api/assisted_by`, {
+    //             assist_status: "ongoing",
+    //             class_id: rowData.class_id,
+    //             // user_mentor_id: 3, //mock user_mentor_id data //used for checking
+    //             user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
+    //             user_student_id: rowData.user_id
+    //           });
+    //         } else {
+    //           //reflect current mentor
+    //           axios.patch(
+    //             `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+    //             {
+    //               assisted_id: data.data[0].assisted_id,
+    //               user_student_id: data.data[0].user_id,
+    //               class_id: data.data[0].class_id,
+    //               user_mentor_id: user_id,
+    //               assist_status: "ongoing"
+    //             }
+    //           );
+    //         }
+    //       });
+    //   });
+
     axios
       .get(`http://localhost:5000/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
@@ -218,8 +246,6 @@ export default function Mentor() {
     }
   });
 
-  console.log(user_id);
-
   return (
     <React.Fragment>
       <Topbar />
@@ -249,11 +275,6 @@ export default function Mentor() {
               <Typography variant="h6">From: {name}</Typography>
             </TitleName>
             <Option>
-              <Avatar
-                alt="I"
-                src={HandShakeImage}
-                className={classes.handshake}
-              />
               <div
                 style={{
                   display: "flex",
@@ -272,40 +293,45 @@ export default function Mentor() {
               </div>
             </Option>
           </Subject>
-          <Conversation></Conversation>
-          <Message>
-            <Field>
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  flexDirection: "column",
-                  width: "100%"
-                }}
-              >
-                <form onSubmit={sendMsg}>
-                  <TextField
-                    id="outlined-textarea"
-                    multiline
-                    variant="outlined"
-                    fullWidth
-                    rows="3"
-                  />
+          {rowData.concern_status === 2 ? <Handshake data={rowData} rowDatahandler={rowDatahandler}/> : ""}
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "15px"
-                    }}
-                  >
-                    <Send onClick={sendMsg}>SEND</Send>
-                  </div>
-                </form>
-              </div>
-            </Field>
-          </Message>
+          <Conversation></Conversation>
+
+          {rowData.concern_status === 2 ? '':(
+            <Message>
+              <Field>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    width: "100%"
+                  }}
+                >
+                  <form onSubmit={sendMsg}>
+                    <TextField
+                      id="outlined-textarea"
+                      multiline
+                      variant="outlined"
+                      fullWidth
+                      rows="3"
+                    />
+
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "15px"
+                      }}
+                    >
+                      <Send onClick={sendMsg}>SEND</Send>
+                    </div>
+                  </form>
+                </div>
+              </Field>
+            </Message>
+          )}
         </Help>
         <Div2>
           <Shared>
