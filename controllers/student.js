@@ -128,7 +128,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} AND concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC`
+      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status = 3 AND class_id = ${req.params.class_id} AND concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         // re:looping here please
@@ -192,9 +192,9 @@ module.exports = {
   //getassisted_by
   GetAssisted_by: (req, res) => {
     const db = req.app.get("db");
-    const { user_student_id } = req.params;
+    const { user_student_id, class_id } = req.params;
     db.assisted_by
-      .find({ user_student_id })
+      .find({ class_id, user_student_id })
       .then(assist => res.status(200).json(assist))
       .catch(err => {
         console.error(err);

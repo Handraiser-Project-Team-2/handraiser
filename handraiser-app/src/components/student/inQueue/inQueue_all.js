@@ -58,14 +58,6 @@ export default function InQueue(props) {
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((concern, index) => {
-          // axios
-          //   .get(
-          //     `http://localhost:5000/api/userprofile/${concern.concern.user_id}`,
-          //     {}
-          //   )
-          //   .then(data => {
-          //     setImage(data.data[0].image);
-          //   });
           return (
             <div key={index}>
               <ListItem

@@ -48,22 +48,10 @@ export default function InQueue(props) {
     setAnchorEl(null);
   };
 
-  //   const handleConcernData = data => {
-  //     rowDataHandlerChild2(data);
-  //   };
-
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
-          // axios
-          //   .get(
-          //     `http://localhost:5000/api/userprofile/${data.concern.user_id}`,
-          //     {}
-          //   )
-          //   .then(data => {
-          //     setImage(data.data[0].image);
-          //   });
           return (
             <div key={index}>
               <ListItem
@@ -75,7 +63,7 @@ export default function InQueue(props) {
                 // onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
+                  <Avatar src={data.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"

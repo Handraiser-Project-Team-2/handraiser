@@ -68,7 +68,10 @@ massive({
 
     app.patch("/api/concern_list/:concern_id", student.updateConcern);
     app.post("/api/assisted_by", student.assisted_by);
-    app.get("/api/assisted_by/:user_student_id", student.GetAssisted_by);
+    app.get(
+      "/api/assisted_by/:class_id/:user_student_id",
+      student.GetAssisted_by
+    );
     app.get("/api/concern_list/:concern_id", student.getConcern);
     app.get("/api/student/concern_list/user/:user_id", student.getUserConcern); // get all user request
 

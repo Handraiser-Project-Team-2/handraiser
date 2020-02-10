@@ -2,15 +2,9 @@ import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Avatar from "@material-ui/core/Avatar";
 import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MenuIcon from "@material-ui/icons/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
 import {
@@ -78,7 +72,10 @@ export default function Mentor() {
       })
       .then(data => {
         axios
-          .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
+          .get(
+            `http://localhost:5000/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
+            {}
+          )
           .then(data => {
             axios.patch(
               `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
@@ -135,14 +132,17 @@ export default function Mentor() {
       })
       .then(data => {
         axios
-          .get(`http://localhost:5000/api/assisted_by/${rowData.user_id}`, {})
+          .get(
+            `http://localhost:5000/api/assisted_by/${rowData.class_id}/${rowData.user_id}`,
+            {}
+          )
           .then(data => {
             if (data.data.length == 0) {
               axios.post(`http://localhost:5000/api/assisted_by`, {
                 assist_status: "ongoing",
                 class_id: rowData.class_id,
-                user_mentor_id: 3, //mock user_mentor_id data //used for checking
-                // user_mentor_id: user_id,    <<----------- correct way: uncomment if data is available
+                // user_mentor_id: 3, //mock user_mentor_id data //used for checking
+                user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
                 user_student_id: rowData.user_id
               });
             } else {
@@ -152,6 +152,7 @@ export default function Mentor() {
                   assisted_id: data.data[0].assisted_id,
                   user_student_id: data.data[0].user_id,
                   class_id: data.data[0].class_id,
+                  user_mentor_id: user_id,
                   assist_status: "ongoing"
                 }
               );
@@ -200,7 +201,7 @@ export default function Mentor() {
     }
   });
 
-  // console.log(rowData);
+  console.log(user_id);
 
   return (
     <React.Fragment>
