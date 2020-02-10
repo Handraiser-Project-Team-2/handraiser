@@ -30,14 +30,21 @@ export default function InQueue({ class_id, search }) {
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://localhost:5000/api/classes/all/${class_id}?search=${search}`
-    }).then(res => {
-      // console
-      setConcernsData(res.data);
-    });
-  }, [search]);
+    if (!concernsData) {
+      axios({
+        method: "get",
+        url: `http://localhost:5000/api/classes/all/${class_id}?search=${search}`
+      })
+        .then(res => {
+          // console
+          setConcernsData(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+    console.log(concernsData);
+  }, [concernsData]);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -53,77 +60,74 @@ export default function InQueue({ class_id, search }) {
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
-        {concernsData.map((data, index) => {
-          // axios
-          //   .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
-          //   .then(data => {
-          //     setImage(data.data[0].image);
-          //   });
-          return (
-            <div key={index}>
-              <ListItem
-                button
-                style={{
-                  borderLeft: "14px solid #8932a8",
-                  borderBottom: "0.5px solid #abababde",
-                  padding: "10px 15px"
-                }}
-                // onClick={() => handleConcernData(data)}
-              >
-                <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
-                </ListItemAvatar>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right"
-                  }}
-                  open={open}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>Log Out</MenuItem>
-                </Menu>
-                <ListItemText
-                  primary={data.concern_title}
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                      >
-                        {data.concern_description}
-                      </Typography>
-                    </React.Fragment>
-                  }
-                />
-                <ListItemSecondaryAction style={{ display: "flex" }}>
-                  <Avatar variant="square" className={classes.small}>
-                    <p style={{ fontSize: 12 }}>
-                      {data.concern_status === 3
-                        ? "Done"
-                        : data.concern_status === 1
-                        ? "Hot"
-                        : "Queue"}
-                    </p>
-                  </Avatar>
-                  <MoreVertIcon
-                    onClick={handleMenu}
+        {concernsData
+          ? concernsData.map((data, index) => {
+              return (
+                <div key={index}>
+                  <ListItem
+                    button
                     style={{
-                      fontSize: 35,
-                      color: "#c4c4c4",
-                      cursor: "pointer"
+                      borderLeft: "14px solid #8932a8",
+                      borderBottom: "0.5px solid #abababde",
+                      padding: "10px 15px"
                     }}
-                  />
-                </ListItemSecondaryAction>
-              </ListItem>
-            </div>
-          );
-        })}
+                    // onClick={() => handleConcernData(data)}
+                  >
+                    <ListItemAvatar>
+                      <Avatar src={data.image}></Avatar>
+                    </ListItemAvatar>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right"
+                      }}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                    </Menu>
+                    <ListItemText
+                      primary={data.concern_title}
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            className={classes.inline}
+                            color="textPrimary"
+                          >
+                            {data.concern_description}
+                          </Typography>
+                        </React.Fragment>
+                      }
+                    />
+                    <ListItemSecondaryAction style={{ display: "flex" }}>
+                      <Avatar variant="square" className={classes.small}>
+                        <p style={{ fontSize: 12 }}>
+                          {data.concern_status === 3
+                            ? "Done"
+                            : data.concern_status === 1
+                            ? "Hot"
+                            : "Queue"}
+                        </p>
+                      </Avatar>
+                      <MoreVertIcon
+                        onClick={handleMenu}
+                        style={{
+                          fontSize: 35,
+                          color: "#c4c4c4",
+                          cursor: "pointer"
+                        }}
+                      />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                </div>
+              );
+            })
+          : ""}
       </List>
     </Paper>
   );

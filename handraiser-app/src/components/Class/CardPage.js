@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -10,10 +10,26 @@ import deepOrange from "@material-ui/core/colors/deepOrange";
 import CardActions from "@material-ui/core/CardActions";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import IconButton from "@material-ui/core/IconButton";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import Collapse from "@material-ui/core/Collapse";
+
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(theme => ({
+  copyIcon: {
+    float: "right",
+    color: blueGrey[500]
+  },
   actions: {
-    backgroundColor: blueGrey[100]
+    backgroundColor: blueGrey[100],
+    display: "flex",
+    justifyContent: "space-between"
   },
   square: {
     color: theme.palette.getContrastText(deepOrange[500]),
@@ -69,8 +85,19 @@ export default function CardPage({ classData, data }) {
     }
   };
 
+  const [copied, setCopied] = useState(false);
+  const onCopy = () => {
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 1500);
+  };
+
   return (
     <>
+      <Collapse in={copied}>
+        <Alert severity="success">Copied to clipboard!</Alert>
+      </Collapse>
       {classData.map(row => (
         <Card className={classes.card} key={row.class_id}>
           <CardActionArea
@@ -109,6 +136,13 @@ export default function CardPage({ classData, data }) {
                 ? `Class code: ${row.classroom_key}`
                 : null}
             </Typography>
+            {cstate && cstate.user_type_id === 4 ? (
+              <CopyToClipboard onCopy={onCopy} text={row.classroom_key}>
+                <IconButton aria-label="delete" className={classes.copyIcon}>
+                  <FileCopyIcon fontSize="small" />
+                </IconButton>
+              </CopyToClipboard>
+            ) : null}
           </CardActions>
         </Card>
       ))}

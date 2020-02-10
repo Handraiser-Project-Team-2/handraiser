@@ -36,10 +36,14 @@ export default function InQueue(rowDatahandler) {
     axios({
       method: "get",
       url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
-    }).then(res => {
-      // console
-      setConcernsData(res.data);
-    });
+    })
+      .then(res => {
+        console.log(res.data);
+        setConcernsData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }, [rowDatahandler.search]);
 
   const handleMenu = event => {
@@ -58,14 +62,6 @@ export default function InQueue(rowDatahandler) {
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
-          // axios
-          //   .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
-          //   .then(
-          //     data => {
-          //       setImage(data.data[0].image);
-          //     },
-          //     [load]
-          //   );
           return (
             <div key={index}>
               <ListItem
@@ -78,7 +74,7 @@ export default function InQueue(rowDatahandler) {
                 onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
+                  <Avatar src={data.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"

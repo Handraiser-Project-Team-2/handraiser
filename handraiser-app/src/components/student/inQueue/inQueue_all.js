@@ -76,7 +76,7 @@ export default function InQueue(props) {
                 }}
               >
                 <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
+                  <Avatar src={concern.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
