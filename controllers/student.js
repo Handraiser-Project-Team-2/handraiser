@@ -100,7 +100,7 @@ module.exports = {
     const db = req.app.get("db");
     const { search } = req.query;
 
-    db.query(0
+    db.query(
       `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
