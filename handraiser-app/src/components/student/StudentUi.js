@@ -137,8 +137,9 @@ export default function Student() {
               <TextField
                 id="standard-basic"
                 value={concernTitle}
+                fullWidth
                 onChange={e => setConcernTitle(e.target.value)}
-                style={{ width: 700 }}
+                // style={{ width: 700 }}
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Subject</Typography>

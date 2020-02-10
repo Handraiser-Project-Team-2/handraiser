@@ -24,8 +24,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function InQueue(rowDatahandler) {
   const classes = useStyles();
-  const [concernsData, setConcernsData] = useState([{ count: 0 }]);
+  const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [image, setImage] = useState("");
+  const [load, setLoad] = useState(false);
   const open = Boolean(anchorEl);
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
