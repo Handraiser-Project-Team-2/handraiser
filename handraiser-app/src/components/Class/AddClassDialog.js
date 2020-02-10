@@ -12,6 +12,10 @@ import teal from "@material-ui/core/colors/teal";
 import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
+  span: {
+    float: "right",
+    marginBottom: theme.spacing(2)
+  },
   title: {
     backgroundColor: teal[500],
     color: "white"
@@ -113,11 +117,13 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
               margin="dense"
               label="Class Title"
               fullWidth
-              style={{ marginBottom: "20px" }}
               name="class_title"
               defaultValue={state.class_title}
               onChange={e => handleChange(e)}
             />
+
+            <span className={classes.span}>0/20</span>
+
             <TextField
               required
               id="outlined-multiline-static"
@@ -130,6 +136,9 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
               defaultValue={state.class_description}
               onChange={e => handleChange(e)}
             />
+
+            <span style={{float: 'right'}}>0/20</span>
+
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">

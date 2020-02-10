@@ -14,6 +14,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
+import EditClassDialog from "./EditClassDialog";
 
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -23,7 +24,6 @@ function Alert(props) {
 
 const useStyles = makeStyles(theme => ({
   copyIcon: {
-    float: "right",
     color: blueGrey[500]
   },
   actions: {
@@ -128,21 +128,26 @@ export default function CardPage({ classData, data }) {
             </CardContent>
           </CardActionArea>
           <CardActions className={classes.actions}>
-            <Typography variant="caption" display="block" gutterBottom>
-              {cstate && cstate.user_type_id === 3
-                ? `Mentor: ${row.first_name} ${row.last_name}`
-                : null}
-              {cstate && cstate.user_type_id === 4
-                ? `Class code: ${row.classroom_key}`
-                : null}
-            </Typography>
-            {cstate && cstate.user_type_id === 4 ? (
-              <CopyToClipboard onCopy={onCopy} text={row.classroom_key}>
-                <IconButton aria-label="delete" className={classes.copyIcon}>
-                  <FileCopyIcon fontSize="small" />
-                </IconButton>
-              </CopyToClipboard>
-            ) : null}
+            <div style={{display: 'flex', alignItems: 'center'}}>
+              <Typography variant="caption" display="block" gutterBottom>
+                {cstate && cstate.user_type_id === 3
+                  ? `Mentor: ${row.first_name} ${row.last_name}`
+                  : null}
+                {cstate && cstate.user_type_id === 4
+                  ? `Class code: ${row.classroom_key}`
+                  : null}
+              </Typography>
+
+              {cstate && cstate.user_type_id === 4 ? (
+                <CopyToClipboard onCopy={onCopy} text={row.classroom_key}>
+                  <IconButton aria-label="delete" className={classes.copyIcon}>
+                    <FileCopyIcon fontSize="small" />
+                  </IconButton>
+                </CopyToClipboard>
+              ) : null}
+            </div>
+
+            <EditClassDialog data={row} />
           </CardActions>
         </Card>
       ))}
