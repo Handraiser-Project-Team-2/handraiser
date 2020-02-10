@@ -30,20 +30,17 @@ export default function InQueue({ class_id, search }) {
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    if (!concernsData) {
-      axios({
-        method: "get",
-        url: `http://localhost:5000/api/classes/all/${class_id}?search=${search}`
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/classes/all/${class_id}?search=${search}`
+    })
+      .then(res => {
+        // console
+        setConcernsData(res.data);
       })
-        .then(res => {
-          // console
-          setConcernsData(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-    console.log(concernsData);
+      .catch(err => {
+        console.log(err);
+      });
   }, [concernsData]);
 
   const handleMenu = event => {
@@ -52,10 +49,6 @@ export default function InQueue({ class_id, search }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  //   const handleConcernData = data => {
-  //     rowDataHandlerChild2(data);
-  //   };
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
@@ -99,7 +92,7 @@ export default function InQueue({ class_id, search }) {
                             className={classes.inline}
                             color="textPrimary"
                           >
-                            {data.concern_description}
+                            {data.first_name + " " + data.last_name}
                           </Typography>
                         </React.Fragment>
                       }

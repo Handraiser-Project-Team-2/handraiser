@@ -38,7 +38,6 @@ export default function InQueue(rowDatahandler) {
       url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${rowDatahandler.search}`
     })
       .then(res => {
-        console.log(res.data);
         setConcernsData(res.data);
       })
       .catch(err => {
@@ -99,7 +98,7 @@ export default function InQueue(rowDatahandler) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        {data.concern_description}
+                        {data.first_name + " " + data.last_name}
                       </Typography>
                     </React.Fragment>
                   }

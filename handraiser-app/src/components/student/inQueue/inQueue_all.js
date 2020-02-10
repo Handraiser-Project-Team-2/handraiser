@@ -94,7 +94,9 @@ export default function InQueue(props) {
                         color="textPrimary"
                       >
                         {/* {name} */}
-                        {concern.concern.concern_description}
+                        {concern.concern.first_name +
+                          " " +
+                          concern.concern.last_name}
                       </Typography>
                     </React.Fragment>
                   }

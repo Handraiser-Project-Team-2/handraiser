@@ -26,7 +26,6 @@ export default function InQueue({ class_id, search }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
   useEffect(() => {
@@ -46,19 +45,10 @@ export default function InQueue({ class_id, search }) {
     setAnchorEl(null);
   };
 
-  //   const handleConcernData = data => {
-  //     rowDataHandlerChild2(data);
-  //   };
-
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
-          // axios
-          //   .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
-          //   .then(data => {
-          //     setImage(data.data[0].image);
-          //   });
           return (
             <div key={index}>
               <ListItem
@@ -71,7 +61,7 @@ export default function InQueue({ class_id, search }) {
                 // onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
+                  <Avatar src={data.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
@@ -96,7 +86,7 @@ export default function InQueue({ class_id, search }) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        {data.concern_description}
+                        {data.first_name + " " + data.last_name}
                       </Typography>
                     </React.Fragment>
                   }

@@ -38,6 +38,7 @@ massive({
     app.post("/api/user/data", users.getUser);
     app.get("/api/userprofile/:user_id", users.getUserProfile);
     app.post("/api/userprofile/", users.getUserProfileByEmail);
+    app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
 
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor); //reference a mentor user type to an email
@@ -50,6 +51,7 @@ massive({
     app.post("/api/admin/check/designation", admin.need_validations); // implicitly check if email need validations
 
     // mentor endpoints
+    app.get("api/classes/all/:class_id", mentor.get_all);
     app.get("/api/classes/done/:class_id", mentor.get_done);
     app.patch(
       "/api/assistance/:assisted_id/:class_id/:user_student_id",

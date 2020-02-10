@@ -35,6 +35,13 @@ export default function Topbar() {
   };
 
   const Logout = () => {
+    axios
+      .patch(`http://localhost:5000/api/users/${user_id}`, {
+        user_status: 0
+      })
+      .then(res => {
+        alert("Logged out successfully");
+      });
     sessionStorage.setItem("token", "");
     history.push("/");
     setData();
