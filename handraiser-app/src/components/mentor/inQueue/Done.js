@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function InQueue({ class_id, search }) {
   const classes = useStyles();
-  const [concernsData, setConcernsData] = useState([{ count: 0 }]);
+  const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
@@ -38,7 +38,7 @@ export default function InQueue({ class_id, search }) {
       // console
       setConcernsData(res.data);
     });
-  }, []);
+  }, [search]);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -55,11 +55,11 @@ export default function InQueue({ class_id, search }) {
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
-          axios
-            .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
-            .then(data => {
-              setImage(data.data[0].image);
-            });
+          // axios
+          //   .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
+          //   .then(data => {
+          //     setImage(data.data[0].image);
+          //   });
           return (
             <div key={index}>
               <ListItem

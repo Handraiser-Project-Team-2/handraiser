@@ -123,96 +123,96 @@ export default function Student() {
       });
   };
 
-  if (state.user_type === 3) {
-    return (
-      <React.Fragment>
-        <Topbar />
-        <Div>
-          <Queue>
-            <Tabs classReference={class_id} />
-          </Queue>
-          <Help>
-            <Subject>
-              <TitleName>
-                <TextField
-                  id="standard-basic"
-                  value={concernTitle}
-                  onChange={e => setConcernTitle(e.target.value)}
-                  fullWidth
-                />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Typography>Subject</Typography>
-                  <Typography>{concernTitle.length}/30</Typography>
-                </div>
-              </TitleName>
-              <Option>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    width: "100%"
-                  }}
-                >
-                  <More onClick={handleMenu}>
-                    <MoreVertIcon
-                      style={{
-                        fontSize: 35,
-                        color: "#c4c4c4"
-                      }}
-                    />
-                  </More>
-                </div>
-              </Option>
-            </Subject>
-            <Chatfield />
-            <Message>
-              <Field>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "space-between",
-                    flexDirection: "column",
-                    width: "100%"
-                  }}
-                >
-                  <form onSubmit={sendMsg}>
-                    <TextField
-                      id="outlined-textarea"
-                      multiline
-                      variant="outlined"
-                      fullWidth
-                      rows="2"
-                      value={concernDescription}
-                      onChange={e => setConcernDescription(e.target.value)}
-                    />
-                    <div
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "15px"
-                      }}
-                    >
-                      <Request onClick={sendRequest}>NEW REQUEST</Request>
-                      <Send onClick={sendMsg}>SEND</Send>
-                    </div>
-                  </form>
-                </div>
-              </Field>
-            </Message>
-          </Help>
-          <Div2>
-            <Shared>
-              <Typography variant="h6">Shared Files</Typography>
-            </Shared>
-          </Div2>
-        </Div>
-      </React.Fragment>
-    );
-  } else {
-    return "";
-  }
+  // if (state.user_type === 3) {
+  return (
+    <React.Fragment>
+      <Topbar />
+      <Div>
+        <Queue>
+          <Tabs classReference={class_id} />
+        </Queue>
+        <Help>
+          <Subject>
+            <TitleName>
+              <TextField
+                id="standard-basic"
+                value={concernTitle}
+                fullWidth
+                onChange={e => setConcernTitle(e.target.value)}
+                // style={{ width: 700 }}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography>Subject</Typography>
+                <Typography>{concernTitle.length}/30</Typography>
+              </div>
+            </TitleName>
+            <Option>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%"
+                }}
+              >
+                <More onClick={handleMenu}>
+                  <MoreVertIcon
+                    style={{
+                      fontSize: 35,
+                      color: "#c4c4c4"
+                    }}
+                  />
+                </More>
+              </div>
+            </Option>
+          </Subject>
+          <Chatfield />
+          <Message>
+            <Field>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  width: "100%"
+                }}
+              >
+                <form onSubmit={sendMsg}>
+                  <TextField
+                    id="outlined-textarea"
+                    multiline
+                    variant="outlined"
+                    fullWidth
+                    rows="2"
+                    value={concernDescription}
+                    onChange={e => setConcernDescription(e.target.value)}
+                  />
+
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "15px"
+                    }}
+                  >
+                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    <Send onClick={sendMsg}>SEND</Send>
+                  </div>
+                </form>
+              </div>
+            </Field>
+          </Message>
+        </Help>
+        <Div2>
+          <Shared>
+            <Typography variant="h6">Shared Files</Typography>
+          </Shared>
+        </Div2>
+      </Div>
+    </React.Fragment>
+  );
+  // } else {
+  //   return "";
+  // }
 }

@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function InQueue({ class_id, search }) {
   const classes = useStyles();
-  const [concernsData, setConcernsData] = useState();
+  const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);

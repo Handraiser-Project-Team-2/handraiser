@@ -43,3 +43,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #372476;
 }
+
+.MuiList-padding {
+  padding: 0px !important;
+}

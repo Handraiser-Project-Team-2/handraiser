@@ -60,6 +60,7 @@ massive({
     app.get("/api/classes/queue/:class_id", mentor.get_inqueue); // get all assistance request
     app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
     app.post("/api/my/classes/email", mentor.get_my_classroom_by_email); // get all classroom referenced to the current user by email
+    app.delete("/api/assisted_by/:user_student_id", mentor.delete); // delete from assisted_by table
 
     // student endpoints
     app.get("/api/student/queue/order/:class_id", student.queue_order_all);
@@ -67,7 +68,10 @@ massive({
 
     app.patch("/api/concern_list/:concern_id", student.updateConcern);
     app.post("/api/assisted_by", student.assisted_by);
-    app.get("/api/assisted_by/:user_student_id", student.GetAssisted_by);
+    app.get(
+      "/api/assisted_by/:class_id/:user_student_id",
+      student.GetAssisted_by
+    );
     app.get("/api/concern_list/:concern_id", student.getConcern);
     app.get("/api/student/concern_list/user/:user_id", student.getUserConcern); // get all user request
 

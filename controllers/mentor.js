@@ -46,9 +46,9 @@ module.exports = {
   get_inqueue: (req, res) => {
     const db = req.app.get("db");
     const { search } = req.query;
-  
+
     db.query(
-      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC;`
+      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC;`
     )
       .then(data => {
         res.status(201).json(data);
@@ -62,7 +62,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
+      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         res.status(201).json(data);
@@ -76,7 +76,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC;`
+      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC;`
     )
       .then(data => {
         res.status(201).json(data);
@@ -86,21 +86,20 @@ module.exports = {
       });
   },
 
-  // delete: (req, res) => {
-  //   const db = req.app.get("db");
+  delete: (req, res) => {
+    const db = req.app.get("db");
 
-  //   db.assisted_by
-  //     .destroy({
-  //       class_id: req.params.class_id,
-  //       user_student_id: req.params.user_student_id
-  //     })
-  //     .then(data => {
-  //       res.status(201).json(data);
-  //     })
-  //     .catch(err => {
-  //       res.status(401).end(err);
-  //     });
-  // },
+    db.assisted_by
+      .destroy({
+        user_student_id: req.params.user_student_id
+      })
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(401).end(err);
+      });
+  },
 
   done: (req, res) => {
     const db = req.app.get("db");
