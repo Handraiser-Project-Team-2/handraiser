@@ -48,10 +48,15 @@ export default function Mentor() {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const sendMsg = evt => {
     evt.preventDefault();
     // console.log(name);
   };
+  
   // const handleClose = () => {
   //   setAnchorEl(null);
   //   axios.patch(
@@ -191,7 +196,7 @@ export default function Mentor() {
           horizontal: "right"
         }}
         open={open}
-        // onClose={handleClose}
+        onClose={handleClose}
       >
         <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
         <MenuItem onClick={e => handleBackQueue(rowData)}>
