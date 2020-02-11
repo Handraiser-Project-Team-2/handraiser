@@ -126,14 +126,16 @@ export default function InQueue(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
+                <status-indicator
+                  positive
+                  style={{
+                    zIndex: 2,
+                    position: "absolute",
+                    marginTop: "15px",
+                    marginLeft: "30px"
+                  }}
+                ></status-indicator>
                 <ListItemAvatar>
-                  <status-indicator
-                    style={{
-                      position: "absolute",
-                      marginTop: "30px",
-                      marginLeft: "35px"
-                    }}
-                  ></status-indicator>
                   <Avatar src={concern.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu

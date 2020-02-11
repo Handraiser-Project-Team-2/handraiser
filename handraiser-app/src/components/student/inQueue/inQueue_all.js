@@ -69,15 +69,6 @@ export default function InQueue(props) {
                 }}
               >
                 <ListItemAvatar>
-                  <status-indicator
-                    positive
-                    pulse
-                    style={{
-                      position: "absolute",
-                      marginTop: "30px",
-                      marginLeft: "35px"
-                    }}
-                  ></status-indicator>
                   <Avatar src={concern.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu

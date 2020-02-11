@@ -76,15 +76,6 @@ export default function InQueue({ class_id, search }) {
                     // onClick={() => handleConcernData(data)}
                   >
                     <ListItemAvatar>
-                      <status-indicator
-                        positive
-                        pulse
-                        style={{
-                          position: "absolute",
-                          marginTop: "30px",
-                          marginLeft: "35px"
-                        }}
-                      ></status-indicator>
                       <Avatar src={data.image}></Avatar>
                     </ListItemAvatar>
                     <Menu
