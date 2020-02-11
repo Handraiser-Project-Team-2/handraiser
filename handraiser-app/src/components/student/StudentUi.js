@@ -32,8 +32,12 @@ import {
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
+import io from "socket.io-client";
+import Input from '../reusables/Input'
+import ScrollToBottom from "react-scroll-to-bottom";
+import "emoji-mart/css/emoji-mart.css";
 var jwtDecode = require("jwt-decode");
-
+let socket;
 export default function Student() {
   let history = useHistory();
   let { class_id } = useParams();
@@ -46,6 +50,16 @@ export default function Student() {
   const user_id = decoded.userid;
   const [name, setName] = useState("");
   const { cstate, getData } = useContext(UserContext);
+  ///for chat
+  const [username, setUsername] = useState("");
+  const [room, setRoom] = useState("");
+  const [message, setMessage] = useState("");
+  const [feed, setfeed] = useState("");
+  const [active, setActive] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [avatar, setAvatar] = useState("");
+  const [emoji, setEmoji] = useState(false);
+  const ENDPOINT = "localhost:5000";
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -53,10 +67,15 @@ export default function Student() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const sendMsg = evt => {
+  const sendMessage = evt => {
     evt.preventDefault();
-    console.log(concernDescription);
+
   };
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    
+    console.log(socket);
+  }, [ENDPOINT]);
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
@@ -66,6 +85,8 @@ export default function Student() {
         })
         .then(data => {
           setState({ user_type: data.data.user_type_id });
+          setAvatar(data.data.image);
+          setUsername(data.data.first_name);
 
           const user_type = data.data.user_type_id;
 
@@ -122,7 +143,10 @@ export default function Student() {
         console.log(err);
       });
   };
-
+  const join = () => {
+    setActive(true);
+    socket.emit("join", { username, room: "team2", image: avatar }, () => {});
+  };
   // if (state.user_type === 3) {
   return (
     <React.Fragment>
@@ -177,8 +201,8 @@ export default function Student() {
                   width: "100%"
                 }}
               >
-                <form onSubmit={sendMsg}>
-                  <TextField
+                <form onSubmit={sendMessage}>
+                  {/* <TextField
                     id="outlined-textarea"
                     multiline
                     variant="outlined"
@@ -186,8 +210,12 @@ export default function Student() {
                     rows="2"
                     value={concernDescription}
                     onChange={e => setConcernDescription(e.target.value)}
+                  /> */}
+                  <Input concernDescription={concernDescription}
+                  setConcernDescription={setConcernDescription}
+                  sendMessage={sendMessage}
+                  username={username}
                   />
-
                   <div
                     style={{
                       width: "100%",
@@ -197,7 +225,8 @@ export default function Student() {
                     }}
                   >
                     <Request onClick={sendRequest}>NEW REQUEST</Request>
-                    <Send onClick={sendMsg}>SEND</Send>
+                    <Send onClick={sendMessage}>SEND</Send>
+                    <button onClick={join}>Join</button>
                   </div>
                 </form>
               </div>
