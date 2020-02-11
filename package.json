@@ -8,7 +8,8 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix handraiser-app",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "docker": "docker-compose up db",
+    "dev": "concurrently \"npm run server\" \"npm run client\" ",
     "migrate": "node-pg-migrate"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "emoji-mart": "^2.11.2",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
@@ -31,6 +33,7 @@
     "react-hook-form": "^4.8.2",
     "react-text-mask": "^5.4.3",
     "socket.io": "^2.3.0",
+    "status-indicator": "^1.0.9",
     "sweetalert2": "^9.7.1"
   },
   "keywords": [],

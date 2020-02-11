@@ -147,7 +147,7 @@ export default function ClassLanding(props) {
               <NoClass />
             ) : (
               <Container maxWidth="lg" className={classes.flexy}>
-                <CardPage classData={classData} data={data} />
+                <CardPage classData={classData} data={data} fetchMentorClass={fetchMentorClass} />
               </Container>
             )}
           </Grid>

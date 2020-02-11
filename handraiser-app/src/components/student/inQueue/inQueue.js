@@ -6,10 +6,11 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
-import { Typography, Paper } from "@material-ui/core";
+import { Typography, Paper, useMediaQuery } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import styled from "styled-components";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -120,8 +121,17 @@ export default function InQueue(props) {
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px"
                 }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
               >
                 <ListItemAvatar>
+                  <status-indicator
+                    style={{
+                      position: "absolute",
+                      marginTop: "30px",
+                      marginLeft: "35px"
+                    }}
+                  ></status-indicator>
                   <Avatar src={concern.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
@@ -141,6 +151,7 @@ export default function InQueue(props) {
                     Edit Request
                   </MenuItem>
                 </Menu>
+
                 <ListItemText
                   primary={concern.concern.concern_title}
                   secondary={
@@ -202,10 +213,11 @@ export default function InQueue(props) {
                     </React.Fragment>
                   }
                 />
+
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square">
                     <p style={{ fontSize: 12 }}>
-                      {concern.concern.concern_status == 1
+                      {concern.concern.concern_status === 1
                         ? "being helped"
                         : concern.queue_order_num == 0
                         ? "next"

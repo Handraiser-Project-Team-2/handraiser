@@ -6,8 +6,12 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
+import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import { useHistory, useParams } from "react-router-dom";
 import Topbar from "../reusables/Topbar";
+import Chatfield from "../reusables/Chatfield";
 import {
   Div,
   Nav,
@@ -26,7 +30,6 @@ import {
   Request
 } from "../Styles/Styles";
 import axios from "axios";
-
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
 var jwtDecode = require("jwt-decode");
@@ -50,9 +53,9 @@ export default function Student() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const sendMsg = evt => {
     evt.preventDefault();
+    console.log(concernDescription);
   };
 
   useEffect(() => {
@@ -62,17 +65,14 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          console.log(data);
           setState({ user_type: data.data.user_type_id });
 
           const user_type = data.data.user_type_id;
 
-          console.log(user_type);
-
           if (user_type !== 3) {
             Swal.fire({
               icon: "error",
-              title: "You cannot acces this page!"
+              title: "You cannot access this page!"
             }).then(function() {
               if (user_type === 4) {
                 history.push("/mentor");
@@ -88,7 +88,7 @@ export default function Student() {
     } else {
       Swal.fire({
         icon: "error",
-        title: "You cannot acces this page!"
+        title: "You cannot access this page!"
       }).then(function() {
         history.push("/");
       });
@@ -165,75 +165,7 @@ export default function Student() {
               </div>
             </Option>
           </Subject>
-          <Conversation>
-            <div
-              style={{
-                display: "flex",
-                marginTop: "10px",
-                marginRight: "15px",
-                padding: "10px",
-                flexDirection: "row-reverse"
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  marginLeft: "10px",
-                  alignItems: "flex-end"
-                }}
-              >
-                <Avatar></Avatar>
-              </div>
-
-              <div
-                style={{
-                  marginLeft: "10px",
-                  backgroundColor: "white",
-                  maxWidth: "450px",
-                  border: "1px solid lightgrey",
-                  padding: "10px 20px 10px 20px",
-                  borderRadius: "10px"
-                }}
-              >
-                <span id="display">Hello</span>
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                marginTop: "10px",
-                marginRight: "15px",
-                padding: "10px",
-                flexDirection: "row"
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  marginLeft: "10px",
-                  alignItems: "flex-end"
-                }}
-              >
-                <Avatar></Avatar>
-              </div>
-
-              <div
-                style={{
-                  marginLeft: "10px",
-                  backgroundColor: "white",
-                  maxWidth: "450px",
-                  border: "1px solid lightgrey",
-                  padding: "10px 20px 10px 20px",
-                  borderRadius: "10px"
-                }}
-              >
-                <span>
-                  Curry to Igoudala! Back to Curry! Igoudala with the layup...
-                  OHHHH!!!! BLOCKED BY JAMES!!!
-                </span>
-              </div>
-            </div>
-          </Conversation>
+          <Chatfield />
           <Message>
             <Field>
               <div
@@ -251,7 +183,7 @@ export default function Student() {
                     multiline
                     variant="outlined"
                     fullWidth
-                    rows="3"
+                    rows="2"
                     value={concernDescription}
                     onChange={e => setConcernDescription(e.target.value)}
                   />

@@ -6,25 +6,67 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import Drawer from "@material-ui/core/Drawer";
 import { Nav } from "../Styles/Styles";
 import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
 import { UserContext } from "../Contexts/UserContext";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
 
 var jwtDecode = require("jwt-decode");
 
 export default function Topbar() {
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false
+  });
   var jwtDecode = require("jwt-decode");
   let history = useHistory();
   const [user, setUser] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [name, setName] = useState("");
   var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const { setData } = useContext(UserContext);
+
+  const toggleDrawer = (side, open) => event => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [side]: open });
+  };
+
+  const sideList = side => (
+    <div
+      role="presentation"
+      onClick={toggleDrawer(side, false)}
+      onKeyDown={toggleDrawer(side, false)}
+    >
+      <List>
+        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -55,7 +97,7 @@ export default function Topbar() {
     axios.get(`http://localhost:5000/api/userprofile/${user_id}`).then(res => {
       setUser(res.data[0].image);
     });
-  }, []);
+  });
 
   return (
     <Nav>
@@ -67,9 +109,16 @@ export default function Topbar() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton edge="start" aria-label="menu">
+            <IconButton
+              edge="start"
+              aria-label="menu"
+              onClick={toggleDrawer("left", true)}
+            >
               <MenuIcon style={{ color: "white" }} />
             </IconButton>
+            <Drawer open={state.left} onClose={toggleDrawer("left", false)}>
+              {sideList("left")}
+            </Drawer>
             <Typography variant="h6">Handraiser</Typography>
           </div>
           <div>

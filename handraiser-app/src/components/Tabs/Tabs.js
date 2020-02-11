@@ -5,7 +5,8 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -56,7 +57,7 @@ export const TabBtn = props => {
         {...other}
       >
         {value === index && (
-          <Box style={{ paddingTop: "20px" }}>{children}</Box>
+          <Box style={{ paddingTop: "50px" }}>{children}</Box>
         )}
       </Typography>
     );
@@ -75,11 +76,15 @@ export const TabBtn = props => {
   }, []);
 
   const handleChange = (event, newValue) => {
+    event.preventDefault();
     setTabValue(newValue);
   };
 
   const handleOnChange = (e, tab) => {
-    setUserData({ [e.target.name]: e.target.value });
+    let email = e.target.name;
+    let value = e.target.value;
+    userData[email] = value;
+    setUserData(userData);
     if (tab === 1) {
       setType("mentor");
     } else {
@@ -109,7 +114,7 @@ export const TabBtn = props => {
       })
       .catch(err => {
         toast.error(err, {
-          position: toast.POSITION.TOP_CENTER
+          position: toast.POSITION.TOP_RIGHT
         });
       });
   };
@@ -151,24 +156,13 @@ export const TabBtn = props => {
         </Paper>
         {hide && (
           <BtnBox>
-            {tabValue === 1 ? (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleOpen(props)}
-              >
-                Generate Key
-              </Button>
-            ) : (
-              <Button
-                value="admin"
-                variant="contained"
-                color="primary"
-                onClick={() => handleOpen(props)}
-              >
-                Generate Key
-              </Button>
-            )}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleOpen(props)}
+            >
+              Generate Key
+            </Button>
           </BtnBox>
         )}
       </TabBox>

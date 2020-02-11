@@ -13,6 +13,7 @@ const admin = require("./controllers/admins");
 const classes = require("./controllers/class");
 const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
+const authorization = require("./controllers/authorization");
 
 const mail = require("./mail");
 
@@ -32,14 +33,13 @@ massive({
     app.set("db", db);
     app.use(cors());
     app.use(express.json());
+
+    // app.use(authorization.authorization_check);
+
     //WEBSOCKET START
     const server = http.Server(app);
     const io = socketIO(server);
     app.use(router);
-
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
-    app.use(cookieParser());
 
     // endpoints declaration
 
@@ -47,6 +47,7 @@ massive({
     app.post("/api/login", users.login);
     app.post("/api/user/data", users.getUser);
     app.get("/api/userprofile/:user_id", users.getUserProfile);
+    app.get("/api/user/student_list", users.accessList_student);
     app.post("/api/userprofile/", users.getUserProfileByEmail);
     app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
 
@@ -73,6 +74,7 @@ massive({
     app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
     app.post("/api/my/classes/email", mentor.get_my_classroom_by_email); // get all classroom referenced to the current user by email
     app.delete("/api/assisted_by/:user_student_id", mentor.delete); // delete from assisted_by table
+    app.put("/api/mentor/my/class", mentor.edit_class); // edit a certain class
 
     // student endpoints
     app.get("/api/student/queue/order/:class_id", student.queue_order_all);
