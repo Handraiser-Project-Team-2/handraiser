@@ -16,7 +16,6 @@ export default function NavBar() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-
           setState({ user_type: data.data.user_type_id });
           const user_type = data.data.user_type_id;
           if (user_type !== 1) {

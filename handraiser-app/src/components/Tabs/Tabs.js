@@ -35,18 +35,23 @@ export const TabBtn = props => {
         {...other}
       >
         {value === index && (
-          <Box style={{ paddingTop: "20px" }}>{children}</Box>
+          <Box style={{ paddingTop: "50px" }}>{children}</Box>
         )}
       </Typography>
     );
   }
 
   const handleChange = (event, newValue) => {
+    event.preventDefault();
     setTabValue(newValue);
   };
 
   const handleOnChange = (e, tab) => {
-    setUserData({ [e.target.name]: e.target.value });
+    let email = e.target.name;
+    let value = e.target.value;
+    userData[email] = value;
+
+    setUserData(userData);
     if (tab === 1) {
       setType("mentor");
     } else {
@@ -105,24 +110,13 @@ export const TabBtn = props => {
         </Paper>
         {hide && (
           <BtnBox>
-            {tabValue === 1 ? (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleOpen(props)}
-              >
-                Generate Key
-              </Button>
-            ) : (
-              <Button
-                value="admin"
-                variant="contained"
-                color="primary"
-                onClick={() => handleOpen(props)}
-              >
-                Generate Key
-              </Button>
-            )}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleOpen(props)}
+            >
+              Generate Key
+            </Button>
           </BtnBox>
         )}
       </TabBox>

@@ -45,12 +45,10 @@ export default function Mentor() {
 
   const rowDatahandler = rowData => {
     setRowData(rowData);
-    axios
-      .get(`/api/userprofile/${rowData.user_id}`, {})
-      .then(data => {
-        console.log(data.data[0]);
-        setName(data.data[0].first_name + " " + data.data[0].last_name);
-      });
+    axios.get(`/api/userprofile/${rowData.user_id}`, {}).then(data => {
+      console.log(data.data[0]);
+      setName(data.data[0].first_name + " " + data.data[0].last_name);
+    });
   };
 
   useEffect(() => {
@@ -163,5 +161,4 @@ export default function Mentor() {
       </Div>
     </React.Fragment>
   );
-   }
-
+}

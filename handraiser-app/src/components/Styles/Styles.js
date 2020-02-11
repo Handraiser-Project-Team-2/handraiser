@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import backgroundImg from "../images/programmer_1.png";
+
 //Table Styles
 export const TabBox = styled.div`
   display: flex;
@@ -17,12 +18,15 @@ export const BtnBox = styled.div`
   }
 `;
 export const RowCont = styled.div`
-  text-align: center;
+  margin-left: -37px;
+  margin-top: -5px;
 `;
 export const TableStyle = styled.div`
-  @media only screen and (max-width: 750px),
-    (height: 1024px) and (width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: landscape),
-    (width: 1024px) and (height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: portrait) {
+  @media only screen and (max-width: 750px) {
+    table,
+    thead,
+    tbody,
+    th,
     td,
     tr {
       display: block;
@@ -39,7 +43,7 @@ export const TableStyle = styled.div`
       flex-direction: row;
       border: none;
       position: relative;
-      padding-left: 60px;
+      padding-left: 70px;
     }
     td:before {
       position: absolute;
@@ -49,23 +53,21 @@ export const TableStyle = styled.div`
       width: 20%;
       padding: 10px;
     }
-    td:nth-of-type(1):before {
-      content: " ";
-    }
     td:nth-of-type(2):before {
-      content: "Email:";
+      content: "Email: ";
     }
     td:nth-of-type(3):before {
-      content: "Status:";
+      content: "Status: ";
     }
     td:nth-of-type(4):before {
-      content: "Key:";
+      content: "Key: ";
     }
     td:nth-of-type(5):before {
-      content: "Action:";
+      content: "Action: ";
     }
   }
 `;
+
 //Student and Mentor Ui Styles
 export const Nav = styled.div`
   width: 100%;
