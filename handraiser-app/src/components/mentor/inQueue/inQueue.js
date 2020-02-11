@@ -33,18 +33,16 @@ export default function InQueue(rowDatahandler) {
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
   useEffect(() => {
-    
     update(rowDatahandler.search);
   }, [rowDatahandler.search]);
 
   // here
-  const update = (data) => {
+  const update = data => {
     axios({
       method: "get",
       url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
     })
       .then(res => {
-        // console.log(res.data)
         setConcernsData(res.data);
       })
       .catch(err => {
@@ -104,7 +102,7 @@ export default function InQueue(rowDatahandler) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        {data.concern_description}
+                        {data.first_name + " " + data.last_name}
                       </Typography>
                     </React.Fragment>
                   }
