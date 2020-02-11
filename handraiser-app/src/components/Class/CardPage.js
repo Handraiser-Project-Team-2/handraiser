@@ -25,9 +25,9 @@ function Alert(props) {
 const useStyles = makeStyles(theme => ({
   typoDescription: {
     marginTop: theme.spacing(2),
-    color: 'white'
+    color: "white"
   },
-  typoTitle:{
+  typoTitle: {
     height: theme.spacing(8)
   },
   copyIcon: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.getContrastText(deepOrange[500]),
     backgroundColor: deepOrange[500],
     width: theme.spacing(8),
-    height: theme.spacing(8),
+    height: theme.spacing(8)
   },
   description: {
     backgroundColor: blueGrey[200],
@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
     float: "left",
     margin: theme.spacing(2),
     boxShadow: "10px 10px 8px #888888",
-    overflowWrap: 'break-word',
+    overflowWrap: "break-word",
     maxHeight: 325
   },
   media: {
@@ -114,7 +114,12 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
             }}
           >
             <CardContent className={classes.title}>
-              <Typography gutterBottom variant="h5" component="h2" className={classes.typoTitle}>
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="h2"
+                className={classes.typoTitle}
+              >
                 {row.class_title}
               </Typography>
               <Avatar
@@ -136,7 +141,7 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
             </CardContent>
           </CardActionArea>
           <CardActions className={classes.actions}>
-            <div style={{display: 'flex', alignItems: 'center'}}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <Typography variant="caption" display="block" gutterBottom>
                 {cstate && cstate.user_type_id === 3
                   ? `Mentor: ${row.first_name} ${row.last_name}`
@@ -154,8 +159,9 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
                 </CopyToClipboard>
               ) : null}
             </div>
-
-            <EditClassDialog data={row} fetchMentorClass={fetchMentorClass} />
+            {cstate && cstate.user_type_id === 4 ? (
+              <EditClassDialog data={row} fetchMentorClass={fetchMentorClass} />
+            ) : null}
           </CardActions>
         </Card>
       ))}
