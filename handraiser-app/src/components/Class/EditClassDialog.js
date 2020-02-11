@@ -10,6 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import { makeStyles } from "@material-ui/core/styles";
 import blueGrey from "@material-ui/core/colors/blueGrey";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -22,34 +23,24 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function EditClassDialog({ data }) {
+export default function EditClassDialog({ data, fetchMentorClass }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setState({
-      class_title: "",
-      class_description: ""
-    });
-    setText({
-      class_title: data.class_title.length,
-      class_description: data.class_description.length
-    })
+    console.log(data.class_id);
   };
 
   const [state, setState] = useState({
+    class_id: data.class_id,
     class_title: data.class_title,
     class_description: data.class_description
   });
   const [text, setText] = useState({
     class_title: data.class_title.length,
     class_description: data.class_description.length
-  })
+  });
 
   const handleChange = e => {
     setState({
@@ -59,11 +50,30 @@ export default function EditClassDialog({ data }) {
     setText({
       ...text,
       [e.target.name]: e.target.value.length
-    })
-    console.log(text)
+    });
   };
 
-  
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    axios({
+      method: "put",
+      url: `http://localhost:5000/api/mentor/my/class`,
+      data: state
+    })
+      .then(data => {
+        fetchMentorClass();
+        handleClose();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       <IconButton aria-label="delete" onClick={handleClickOpen}>
@@ -77,42 +87,50 @@ export default function EditClassDialog({ data }) {
         <DialogTitle id="form-dialog-title" className={classes.title}>
           Edit Class details
         </DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            label="Class Title"
-            fullWidth
-            name="class_title"
-            defaultValue={data.class_title}
-            onChange={e => handleChange(e)}
-            style={{ marginTop: "2em" }}
-          />
-          <span className={classes.span}>{text.class_title}/20</span>
+        <form onSubmit={handleSubmit}>
+          <DialogContent>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              label="Class Title"
+              fullWidth
+              name="class_title"
+              defaultValue={data.class_title}
+              onChange={e => handleChange(e)}
+              style={{ marginTop: "2em" }}
+              inputProps={{
+                maxLength: 25
+              }}
+            />
+            <span className={classes.span}>{text.class_title}/25</span>
 
-          <TextField
-            required
-            id="outlined-multiline-static"
-            label="Class Description"
-            multiline
-            rows="4"
-            variant="outlined"
-            fullWidth
-            name="class_description"
-            defaultValue={data.class_description}
-            onChange={e => handleChange(e)}
-          />
-          <span className={classes.span}>{text.class_description}/20</span>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Confirm
-          </Button>
-        </DialogActions>
+            <TextField
+              required
+              id="outlined-multiline-static"
+              label="Class Description"
+              multiline
+              rows="4"
+              variant="outlined"
+              fullWidth
+              name="class_description"
+              defaultValue={data.class_description}
+              onChange={e => handleChange(e)}
+              inputProps={{
+                maxLength: 60
+              }}
+            />
+            <span className={classes.span}>{text.class_description}/60</span>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary">
+              Confirm
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );

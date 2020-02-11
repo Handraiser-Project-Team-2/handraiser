@@ -23,6 +23,13 @@ function Alert(props) {
 }
 
 const useStyles = makeStyles(theme => ({
+  typoDescription: {
+    marginTop: theme.spacing(2),
+    color: 'white'
+  },
+  typoTitle:{
+    height: theme.spacing(8)
+  },
   copyIcon: {
     color: blueGrey[500]
   },
@@ -36,8 +43,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: deepOrange[500],
     width: theme.spacing(8),
     height: theme.spacing(8),
-    top: theme.spacing(6),
-    left: theme.spacing(2)
   },
   description: {
     backgroundColor: blueGrey[200],
@@ -49,21 +54,24 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: blueGrey[500],
     color: "white",
     textAlign: "center",
-    minHeight: 80
+    minHeight: 80,
+    maxHeight: 120
   },
   card: {
     minWidth: 345,
     maxWidth: 345,
     float: "left",
     margin: theme.spacing(2),
-    boxShadow: "10px 10px 8px #888888"
+    boxShadow: "10px 10px 8px #888888",
+    overflowWrap: 'break-word',
+    maxHeight: 325
   },
   media: {
     height: 140
   }
 }));
 
-export default function CardPage({ classData, data }) {
+export default function CardPage({ classData, data, fetchMentorClass }) {
   const classes = useStyles();
   let history = useHistory();
   const { cstate, getData } = useContext(UserContext);
@@ -72,7 +80,7 @@ export default function CardPage({ classData, data }) {
     if (!cstate) {
       getData();
     }
-  }, [cstate]);
+  }, [cstate, getData]);
 
   const cardClick = e => {
     if (cstate) {
@@ -106,7 +114,7 @@ export default function CardPage({ classData, data }) {
             }}
           >
             <CardContent className={classes.title}>
-              <Typography gutterBottom variant="h5" component="h2">
+              <Typography gutterBottom variant="h5" component="h2" className={classes.typoTitle}>
                 {row.class_title}
               </Typography>
               <Avatar
@@ -121,7 +129,7 @@ export default function CardPage({ classData, data }) {
               <Typography
                 variant="body1"
                 component="p"
-                style={{ color: "white" }}
+                className={classes.typoDescription}
               >
                 {row.class_description}
               </Typography>
@@ -147,7 +155,7 @@ export default function CardPage({ classData, data }) {
               ) : null}
             </div>
 
-            <EditClassDialog data={row} />
+            <EditClassDialog data={row} fetchMentorClass={fetchMentorClass} />
           </CardActions>
         </Card>
       ))}

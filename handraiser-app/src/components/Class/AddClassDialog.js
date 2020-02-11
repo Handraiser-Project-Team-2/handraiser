@@ -53,11 +53,22 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
     class_description: "",
     class_status: "open"
   });
+
+  const [text, setText] = useState({
+    class_title: 0,
+    class_description: 0
+  });
+
   const handleChange = e => {
     setState({
       ...state,
       [e.target.name]: e.target.value
     });
+    setText({
+      ...text,
+      [e.target.name]: e.target.value.length
+    });
+    console.log(text);
   };
 
   const handleSubmit = e => {
@@ -120,9 +131,12 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
               name="class_title"
               defaultValue={state.class_title}
               onChange={e => handleChange(e)}
+              inputProps={{
+                maxLength: 25
+              }}
             />
 
-            <span className={classes.span}>0/20</span>
+            <span className={classes.span}>{text.class_title}/25</span>
 
             <TextField
               required
@@ -135,10 +149,12 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
               name="class_description"
               defaultValue={state.class_description}
               onChange={e => handleChange(e)}
+              inputProps={{
+                maxLength: 60
+              }}
             />
 
-            <span style={{float: 'right'}}>0/20</span>
-
+            <span style={{ float: "right" }}>{text.class_description}/60</span>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
