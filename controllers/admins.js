@@ -153,7 +153,7 @@ module.exports = {
               .then(validate => {
                 // then change user type here(here)
                 db.query(
-                `UPDATE users
+                  `UPDATE users
                 SET user_type_id = ${user.validation_type}
                 WHERE email = '${data.email}'`
                 )

@@ -115,7 +115,19 @@ module.exports = {
         res.status(400).end();
       });
   },
+  accessList_student: (req, res) => {
+    const db = req.app.get("db");
 
+    db.query(
+      "select * from users inner join user_profile on users.profile_id = user_profile.profile_id where user_type_id = 3"
+    )
+      .then(data => {
+        res.status(200).json(data);
+      })
+      .catch(err => {
+        res.status(400).end();
+      });
+  },
   getUserProfileByEmail: (req, res) => {
     const db = req.app.get("db");
 
