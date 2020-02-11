@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -11,6 +12,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,45 +24,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue(rowDatahandler) {
+export default function InQueue(props) {
   const classes = useStyles();
+  var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
-  const [load, setLoad] = useState(false);
   const open = Boolean(anchorEl);
 
-  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
-
   useEffect(() => {
-    
-    update(rowDatahandler.search);
-  }, [rowDatahandler.search]);
-
-  // here
-  const update = (data) => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
-    })
-      .then(res => {
-        // console.log(res.data)
-        setConcernsData(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+      url: `http://localhost:5000/api/student/done/order/${props.classReference}/${user_id}?search=${props.search}` //5 here is a class_id example
+    }).then(res => {
+      setConcernsData(res.data);
+    });
+  }, [props.search]);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleConcernData = data => {
-    rowDataHandlerChild2(data);
   };
 
   return (
@@ -70,16 +56,15 @@ export default function InQueue(rowDatahandler) {
           return (
             <div key={index}>
               <ListItem
-                button
                 style={{
                   borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px"
                 }}
-                onClick={() => handleConcernData(data)}
+                // onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={data.image}></Avatar>
+                  <Avatar src={data.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
@@ -95,7 +80,7 @@ export default function InQueue(rowDatahandler) {
                   <MenuItem onClick={handleClose}>Log Out</MenuItem>
                 </Menu>
                 <ListItemText
-                  primary={data.concern_title}
+                  primary={data.concern.concern_title}
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -104,7 +89,7 @@ export default function InQueue(rowDatahandler) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        {data.concern_description}
+                        {data.concern.concern_description}
                       </Typography>
                     </React.Fragment>
                   }
@@ -112,11 +97,11 @@ export default function InQueue(rowDatahandler) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square" className={classes.small}>
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status == 1 ? "Hot" : "Queue"}
+                      {data.concern.concern_status === 3 ? "Done" : ""}
                     </p>
                   </Avatar>
                   <MoreVertIcon
-                    // onClick={handleMenu}
+                    onClick={handleMenu}
                     style={{
                       fontSize: 35,
                       color: "#c4c4c4",

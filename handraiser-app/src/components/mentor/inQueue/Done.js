@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -22,35 +23,22 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue(rowDatahandler) {
+export default function InQueue({ class_id, search }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
-  const [load, setLoad] = useState(false);
   const open = Boolean(anchorEl);
 
-  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
-
   useEffect(() => {
-    
-    update(rowDatahandler.search);
-  }, [rowDatahandler.search]);
-
-  // here
-  const update = (data) => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
-    })
-      .then(res => {
-        // console.log(res.data)
-        setConcernsData(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+      url: `http://localhost:5000/api/classes/done/${class_id}?search=${search}`
+    }).then(res => {
+      // console
+      setConcernsData(res.data);
+    });
+  }, [search]);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -59,14 +47,19 @@ export default function InQueue(rowDatahandler) {
     setAnchorEl(null);
   };
 
-  const handleConcernData = data => {
-    rowDataHandlerChild2(data);
-  };
+  //   const handleConcernData = data => {
+  //     rowDataHandlerChild2(data);
+  //   };
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
+          // axios
+          //   .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
+          //   .then(data => {
+          //     setImage(data.data[0].image);
+          //   });
           return (
             <div key={index}>
               <ListItem
@@ -76,10 +69,10 @@ export default function InQueue(rowDatahandler) {
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px"
                 }}
-                onClick={() => handleConcernData(data)}
+                // onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={data.image}></Avatar>
+                  <Avatar src={image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
@@ -112,11 +105,11 @@ export default function InQueue(rowDatahandler) {
                 <ListItemSecondaryAction style={{ display: "flex" }}>
                   <Avatar variant="square" className={classes.small}>
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status == 1 ? "Hot" : "Queue"}
+                      {data.concern_status === 3 ? "Done" : ""}
                     </p>
                   </Avatar>
                   <MoreVertIcon
-                    // onClick={handleMenu}
+                    onClick={handleMenu}
                     style={{
                       fontSize: 35,
                       color: "#c4c4c4",

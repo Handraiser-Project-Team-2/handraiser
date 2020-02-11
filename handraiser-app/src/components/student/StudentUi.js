@@ -6,8 +6,12 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
+import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import { useHistory, useParams } from "react-router-dom";
 import Topbar from "../reusables/Topbar";
+import Chatfield from "../reusables/Chatfield";
 import {
   Div,
   Nav,
@@ -26,7 +30,6 @@ import {
   Request
 } from "../Styles/Styles";
 import axios from "axios";
-
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
 var jwtDecode = require("jwt-decode");
@@ -42,8 +45,7 @@ export default function Student() {
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
-  const { userData } = useContext(UserContext);
-
+  const { cstate, getData } = useContext(UserContext);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -51,29 +53,26 @@ export default function Student() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const sendMsg = evt => {
     evt.preventDefault();
+    console.log(concernDescription);
   };
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("/api/user/data", {
+        .post("http://localhost:5000/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          console.log(data);
           setState({ user_type: data.data.user_type_id });
 
           const user_type = data.data.user_type_id;
 
-          console.log(user_type);
-
           if (user_type !== 3) {
             Swal.fire({
               icon: "error",
-              title: "You cannot acces this page!"
+              title: "You cannot access this page!"
             }).then(function() {
               if (user_type === 4) {
                 history.push("/mentor");
@@ -84,18 +83,17 @@ export default function Student() {
           }
         })
         .catch(err => {
-          console.log(err);
+          // console.log(err);
         });
     } else {
       Swal.fire({
         icon: "error",
-        title: "You cannot acces this page!"
+        title: "You cannot access this page!"
       }).then(function() {
         history.push("/");
       });
     }
-    console.log(userData)
-  }, [userData]);
+  }, [cstate]);
 
   const sendRequest = () => {
     axios
@@ -105,7 +103,7 @@ export default function Student() {
         concern_title: concernTitle,
         concern_description: concernDescription
       })
-      .then((data) => {
+      .then(data => {
         setConcernTitle("");
         setConcernDescription("");
         Swal.fire({
@@ -125,165 +123,96 @@ export default function Student() {
       });
   };
 
-  if (state.user_type === 3) {
-    return (
-      <React.Fragment>
-        <Topbar />
-        <Div>
-          <Queue>
-            <Tabs classReference={class_id} />
-          </Queue>
-          <Help>
-            <Subject>
-              <TitleName>
-                <TextField
-                  id="standard-basic"
-                  value={concernTitle}
-                  onChange={e => setConcernTitle(e.target.value)}
-                  style={{ width: 700 }}
-                />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Typography>Subject</Typography>
-                  <Typography>{concernTitle.length}/30</Typography>
-                </div>
-              </TitleName>
-              <Option>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    width: "100%"
-                  }}
-                >
-                  <More onClick={handleMenu}>
-                    <MoreVertIcon
-                      style={{
-                        fontSize: 35,
-                        color: "#c4c4c4"
-                      }}
-                    />
-                  </More>
-                </div>
-              </Option>
-            </Subject>
-            <Conversation>
+  // if (state.user_type === 3) {
+  return (
+    <React.Fragment>
+      <Topbar />
+      <Div>
+        <Queue>
+          <Tabs classReference={class_id} />
+        </Queue>
+        <Help>
+          <Subject>
+            <TitleName>
+              <TextField
+                id="standard-basic"
+                value={concernTitle}
+                fullWidth
+                onChange={e => setConcernTitle(e.target.value)}
+                // style={{ width: 700 }}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography>Subject</Typography>
+                <Typography>{concernTitle.length}/30</Typography>
+              </div>
+            </TitleName>
+            <Option>
               <div
                 style={{
                   display: "flex",
-                  marginTop: "10px",
-                  marginRight: "15px",
-                  padding: "10px",
-                  flexDirection: "row-reverse"
+                  justifyContent: "flex-end",
+                  width: "100%"
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    marginLeft: "10px",
-                    alignItems: "flex-end"
-                  }}
-                >
-                  <Avatar></Avatar>
-                </div>
-
-                <div
-                  style={{
-                    marginLeft: "10px",
-                    backgroundColor: "white",
-                    maxWidth: "450px",
-                    border: "1px solid lightgrey",
-                    padding: "10px 20px 10px 20px",
-                    borderRadius: "10px"
-                  }}
-                >
-                  <span id="display">Hello</span>
-                </div>
+                <More onClick={handleMenu}>
+                  <MoreVertIcon
+                    style={{
+                      fontSize: 35,
+                      color: "#c4c4c4"
+                    }}
+                  />
+                </More>
               </div>
+            </Option>
+          </Subject>
+          <Chatfield />
+          <Message>
+            <Field>
               <div
                 style={{
                   display: "flex",
-                  marginTop: "10px",
-                  marginRight: "15px",
-                  padding: "10px",
-                  flexDirection: "row"
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  width: "100%"
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    marginLeft: "10px",
-                    alignItems: "flex-end"
-                  }}
-                >
-                  <Avatar></Avatar>
-                </div>
+                <form onSubmit={sendMsg}>
+                  <TextField
+                    id="outlined-textarea"
+                    multiline
+                    variant="outlined"
+                    fullWidth
+                    rows="2"
+                    value={concernDescription}
+                    onChange={e => setConcernDescription(e.target.value)}
+                  />
 
-                <div
-                  style={{
-                    marginLeft: "10px",
-                    backgroundColor: "white",
-                    maxWidth: "450px",
-                    border: "1px solid lightgrey",
-                    padding: "10px 20px 10px 20px",
-                    borderRadius: "10px"
-                  }}
-                >
-                  <span>
-                    Curry to Igoudala! Back to Curry! Igoudala with the layup...
-                    OHHHH!!!! BLOCKED BY JAMES!!!
-                  </span>
-                </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "15px"
+                    }}
+                  >
+                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    <Send onClick={sendMsg}>SEND</Send>
+                  </div>
+                </form>
               </div>
-            </Conversation>
-            <Message>
-              <Field>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "space-between",
-                    flexDirection: "column",
-                    width: "100%"
-                  }}
-                >
-                  <form onSubmit={sendMsg}>
-                    <TextField
-                      id="outlined-textarea"
-                      multiline
-                      variant="outlined"
-                      fullWidth
-                      rows="3"
-                      value={concernDescription}
-                      onChange={e => setConcernDescription(e.target.value)}
-                    />
-
-                    <div
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "15px"
-                      }}
-                    >
-                      <Request onClick={sendRequest}>NEW REQUEST</Request>
-                      <Send onClick={sendMsg}>SEND</Send>
-                    </div>
-                  </form>
-                </div>
-              </Field>
-            </Message>
-          </Help>
-          <Div2>
-            <Shared>
-              <Typography variant="h6">Shared Files</Typography>
-            </Shared>
-          </Div2>
-        </Div>
-      </React.Fragment>
-    );
-  } else {
-    return "";
-  }
+            </Field>
+          </Message>
+        </Help>
+        <Div2>
+          <Shared>
+            <Typography variant="h6">Shared Files</Typography>
+          </Shared>
+        </Div2>
+      </Div>
+    </React.Fragment>
+  );
+  // } else {
+  //   return "";
+  // }
 }

@@ -50,7 +50,6 @@ export const TabBtn = props => {
     let email = e.target.name;
     let value = e.target.value;
     userData[email] = value;
-
     setUserData(userData);
     if (tab === 1) {
       setType("mentor");
