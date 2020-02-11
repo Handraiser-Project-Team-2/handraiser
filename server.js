@@ -97,10 +97,21 @@ massive({
 
     io.on("connection", socket => {
       console.log("Online");
+
+      socket.on("update", (message, callback) => {
+
+        console.log(message);
+
+        io.emit('throw', message);
+
+        callback();
+      })
+
       socket.on("disconnect", () => {
         console.log("Offline");
       });
     });
+    
     server.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
     });

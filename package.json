@@ -8,7 +8,7 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix handraiser-app",
-    "docker":"docker-compose up db",
+    "docker": "docker-compose up db",
     "dev": "concurrently \"npm run server\" \"npm run client\" ",
     "migrate": "node-pg-migrate"
   },

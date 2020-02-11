@@ -32,9 +32,13 @@ import {
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
+import io from "socket.io-client";
+
 var jwtDecode = require("jwt-decode");
 
 export default function Student() {
+  let socket = io("ws://localhost:5000", { transports: ["websocket"] });
+  // let socket;
   let history = useHistory();
   let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -55,10 +59,13 @@ export default function Student() {
   };
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(concernDescription);
+    // console.log(concernDescription);
   };
+  const ENDPOINT = "localhost:5000";
 
   useEffect(() => {
+    socket = io(ENDPOINT);
+
     if (sessionStorage.getItem("token")) {
       axios
         .post("http://localhost:5000/api/user/data", {
@@ -93,34 +100,47 @@ export default function Student() {
         history.push("/");
       });
     }
-  }, [cstate]);
+  }, [cstate, ENDPOINT]);
 
   const sendRequest = () => {
-    axios
-      .post(`http://localhost:5000/api/student/request/assistance`, {
-        class_id: class_id,
-        user_id: user_id,
-        concern_title: concernTitle,
-        concern_description: concernDescription
-      })
-      .then(data => {
-        setConcernTitle("");
-        setConcernDescription("");
-        Swal.fire({
-          icon: "success",
-          title: "Request sent to the mentor"
-        })
-          .then(() => {
-            window.location.reload();
-            // history.push(`/student/${class_id}`);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    console.log({
+      concern_title: concernTitle,
+      concern_description: concernDescription
+    });
+
+    socket.emit(
+      "update",
+      { concern_title: concernTitle, concern_description: concernDescription },
+      () => {
+        return console.log("drawback");
+      }
+    );
+
+    // axios
+    //   .post(`http://localhost:5000/api/student/request/assistance`, {
+    //     class_id: class_id,
+    //     user_id: user_id,
+    //     concern_title: concernTitle,
+    //     concern_description: concernDescription
+    //   })
+    //   .then(data => {
+    //     setConcernTitle("");
+    //     setConcernDescription("");
+    //     Swal.fire({
+    //       icon: "success",
+    //       title: "Request sent to the mentor"
+    //     })
+    //       .then(() => {
+    //         window.location.reload();
+    //         // history.push(`/student/${class_id}`);
+    //       })
+    //       .catch(err => {
+    //         console.log(err);
+    //       });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   };
 
   // if (state.user_type === 3) {

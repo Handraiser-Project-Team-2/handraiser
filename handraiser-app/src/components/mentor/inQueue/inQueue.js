@@ -11,6 +11,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import io from "socket.io-client";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,22 +30,57 @@ export default function InQueue(rowDatahandler) {
   const [image, setImage] = useState("");
   const [load, setLoad] = useState(false);
   const open = Boolean(anchorEl);
+  // let socket = io();
+  const ENDPOINT = "localhost:5000";
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
+  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
+
   useEffect(() => {
+    if (rowDatahandler.search || concernsData.length === 0) {
+      update(rowDatahandler.search);
+      console.log(concernsData);
+    }
+    let socket = io(ENDPOINT);
+
+    socket.on("throw", message => {
+      console.log("message recieved", message);
+
+      let trasmission = {
+        concern_title: message.concern_title,
+        concern_description: message.concern_description,
+        concern_status: "",
+        class_id: "",
+        user_id: "",
+        profile_id: "",
+        first_name: "",
+        last_name: "",
+        image: ""
+      };
+
+      let concern_b = Object.assign([], concernsData);
+
+      concern_b.push(trasmission);
+
+      console.log(concern_b);
+      setConcernsData(concern_b);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected to server");
+    });
+
     
-    update(rowDatahandler.search);
-  }, [rowDatahandler.search]);
+  }, [rowDatahandler.search, ENDPOINT, concernsData]);
 
   // here
-  const update = (data) => {
+  const update = data => {
     axios({
       method: "get",
       url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
     })
       .then(res => {
-        // console.log(res.data)
         setConcernsData(res.data);
       })
       .catch(err => {
@@ -62,7 +98,6 @@ export default function InQueue(rowDatahandler) {
   const handleConcernData = data => {
     rowDataHandlerChild2(data);
   };
-
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
