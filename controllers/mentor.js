@@ -155,5 +155,26 @@ module.exports = {
       .catch(err => {
         res.status(400).end(err);
       });
+  },
+
+  edit_class: (req, res) => {
+    const db = req.app.get("db");
+    const { class_id, class_title, class_description } = req.body;
+
+    db.class
+      .update(
+        {
+          class_id: class_id
+        },
+        {
+          class_title: class_title,
+          class_description: class_description
+        }
+      )
+      .then(classroom => res.status(201).send(classroom))
+      .catch(err => {
+        console.err(err);
+        res.status(500).end();
+      });
   }
 };

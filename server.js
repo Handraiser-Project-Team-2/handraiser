@@ -67,6 +67,7 @@ massive({
     app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
     app.post("/api/my/classes/email", mentor.get_my_classroom_by_email); // get all classroom referenced to the current user by email
     app.delete("/api/assisted_by/:user_student_id", mentor.delete); // delete from assisted_by table
+    app.put("/api/mentor/my/class", mentor.edit_class); // edit a certain class
 
     // student endpoints
     app.get("/api/student/queue/order/:class_id", student.queue_order_all);

@@ -14,6 +14,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
+import EditClassDialog from "./EditClassDialog";
 
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -22,8 +23,14 @@ function Alert(props) {
 }
 
 const useStyles = makeStyles(theme => ({
+  typoDescription: {
+    marginTop: theme.spacing(2),
+    color: "white"
+  },
+  typoTitle: {
+    height: theme.spacing(8)
+  },
   copyIcon: {
-    float: "right",
     color: blueGrey[500]
   },
   actions: {
@@ -35,9 +42,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.getContrastText(deepOrange[500]),
     backgroundColor: deepOrange[500],
     width: theme.spacing(8),
-    height: theme.spacing(8),
-    top: theme.spacing(6),
-    left: theme.spacing(2)
+    height: theme.spacing(8)
   },
   description: {
     backgroundColor: blueGrey[200],
@@ -49,21 +54,24 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: blueGrey[500],
     color: "white",
     textAlign: "center",
-    minHeight: 80
+    minHeight: 80,
+    maxHeight: 120
   },
   card: {
     minWidth: 345,
     maxWidth: 345,
     float: "left",
     margin: theme.spacing(2),
-    boxShadow: "10px 10px 8px #888888"
+    boxShadow: "10px 10px 8px #888888",
+    overflowWrap: "break-word",
+    maxHeight: 325
   },
   media: {
     height: 140
   }
 }));
 
-export default function CardPage({ classData, data }) {
+export default function CardPage({ classData, data, fetchMentorClass }) {
   const classes = useStyles();
   let history = useHistory();
   const { cstate, getData } = useContext(UserContext);
@@ -72,7 +80,7 @@ export default function CardPage({ classData, data }) {
     if (!cstate) {
       getData();
     }
-  }, [cstate]);
+  }, [cstate, getData]);
 
   const cardClick = e => {
     if (cstate) {
@@ -106,7 +114,12 @@ export default function CardPage({ classData, data }) {
             }}
           >
             <CardContent className={classes.title}>
-              <Typography gutterBottom variant="h5" component="h2">
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="h2"
+                className={classes.typoTitle}
+              >
                 {row.class_title}
               </Typography>
               <Avatar
@@ -121,27 +134,33 @@ export default function CardPage({ classData, data }) {
               <Typography
                 variant="body1"
                 component="p"
-                style={{ color: "white" }}
+                className={classes.typoDescription}
               >
                 {row.class_description}
               </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions className={classes.actions}>
-            <Typography variant="caption" display="block" gutterBottom>
-              {cstate && cstate.user_type_id === 3
-                ? `Mentor: ${row.first_name} ${row.last_name}`
-                : null}
-              {cstate && cstate.user_type_id === 4
-                ? `Class code: ${row.classroom_key}`
-                : null}
-            </Typography>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Typography variant="caption" display="block" gutterBottom>
+                {cstate && cstate.user_type_id === 3
+                  ? `Mentor: ${row.first_name} ${row.last_name}`
+                  : null}
+                {cstate && cstate.user_type_id === 4
+                  ? `Class code: ${row.classroom_key}`
+                  : null}
+              </Typography>
+
+              {cstate && cstate.user_type_id === 4 ? (
+                <CopyToClipboard onCopy={onCopy} text={row.classroom_key}>
+                  <IconButton aria-label="delete" className={classes.copyIcon}>
+                    <FileCopyIcon fontSize="small" />
+                  </IconButton>
+                </CopyToClipboard>
+              ) : null}
+            </div>
             {cstate && cstate.user_type_id === 4 ? (
-              <CopyToClipboard onCopy={onCopy} text={row.classroom_key}>
-                <IconButton aria-label="delete" className={classes.copyIcon}>
-                  <FileCopyIcon fontSize="small" />
-                </IconButton>
-              </CopyToClipboard>
+              <EditClassDialog data={row} fetchMentorClass={fetchMentorClass} />
             ) : null}
           </CardActions>
         </Card>
