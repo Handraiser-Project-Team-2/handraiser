@@ -30,8 +30,6 @@ const useStyles = makeStyles(theme => ({
 export default function InQueue(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState([]);
-  const [image, setImage] = useState("");
-  const [name, setName] = useState("");
   const open = Boolean(anchorEl);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
