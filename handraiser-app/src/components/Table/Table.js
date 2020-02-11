@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
 import { Tooltip } from "@material-ui/core";
 import axios from "axios";
+import "../../App.css";
 
 import { RowCont, TableStyle } from "../Styles/Styles";
 
@@ -49,6 +51,11 @@ export const TableCont = props => {
                   <DeleteIcon />
                 </Button>
               </Tooltip>
+              <Tooltip title="Verify">
+                <Button>
+                  <EditIcon />
+                </Button>
+              </Tooltip>
             </RowCont>
           </React.Fragment>
         )
@@ -56,44 +63,32 @@ export const TableCont = props => {
     ],
     data: []
   });
-  const [mentorURL, setMentorURL] = useState(
-    "http://localhost:5000/api/admin/mentor_list"
-  );
-  const [adminURL, setAdminURL] = useState(
-    "http://localhost:5000/api/admin/admins_list"
-  );
-  const [isError, setIsError] = useState(false);
-  const CancelToken = axios.CancelToken;
-  const source = CancelToken.source();
+  const [mentorURL] = useState("http://localhost:5000/api/admin/mentor_list");
+  const [adminURL] = useState("http://localhost:5000/api/admin/admins_list");
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsError(false);
       try {
-        const mentor = await axios.get(mentorURL, {
-          cancelToken: source.token
-        });
-        const admin = await axios.get(adminURL, { cancelToken: source.token });
+        const mentor = await axios(mentorURL);
+        const admin = await axios(adminURL);
 
         if (tabValue === 1) {
-          setTableData({ ...tableData, data: mentor.data });
+          setTableData(tableData => ({
+            ...tableData,
+            data: mentor.data
+          }));
         } else if (tabValue === 2) {
-          setTableData({ ...tableData, data: admin.data });
+          setTableData(tableData => ({
+            ...tableData,
+            data: admin.data
+          }));
         }
       } catch (err) {
-        if (axios.isCancel(err)) {
-          console.log("", err.message);
-        } else {
-          setIsError(true);
-        }
+        console.error(err);
       }
     };
     fetchData();
-
-    return () => {
-      source.cancel("");
-    };
-  }, [tableData]);
+  }, [mentorURL, adminURL, tabValue]);
 
   return (
     <TableStyle>
@@ -108,13 +103,11 @@ export const TableCont = props => {
           actionsColumnIndex: -1,
           draggable: false,
           headerStyle: {
-            textAlign: "center",
             fontSize: 18
           },
           cellStyle: {
-            textAlign: "center",
-            width: 5,
-            maxWidth: 50
+            width: 900,
+            maxWidth: 280
           }
         }}
       />

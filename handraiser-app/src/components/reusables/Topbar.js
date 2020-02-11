@@ -34,7 +34,6 @@ export default function Topbar() {
   const [user, setUser] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [name, setName] = useState("");
   var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const { setData } = useContext(UserContext);
@@ -91,7 +90,7 @@ export default function Topbar() {
     axios.get(`http://localhost:5000/api/userprofile/${user_id}`).then(res => {
       setUser(res.data[0].image);
     });
-  }, []);
+  });
 
   return (
     <Nav>
