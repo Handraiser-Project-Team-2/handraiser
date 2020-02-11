@@ -42,6 +42,7 @@ massive({
     app.post("/api/login", users.login);
     app.post("/api/user/data", users.getUser);
     app.get("/api/userprofile/:user_id", users.getUserProfile);
+    app.get("/api/user/student_list", users.accessList_student);
     app.post("/api/userprofile/", users.getUserProfileByEmail);
 
     // admins endpoints
