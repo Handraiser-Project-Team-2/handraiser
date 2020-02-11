@@ -4,12 +4,17 @@ const express = require("express");
 const massive = require("massive");
 const cors = require("cors");
 const router = require("./router");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+
 // setup controllers
 const users = require("./controllers/users");
 const admin = require("./controllers/admins");
 const classes = require("./controllers/class");
 const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
+
+const mail = require("./mail");
 
 require("dotenv").config();
 massive({
@@ -31,6 +36,11 @@ massive({
     const server = http.Server(app);
     const io = socketIO(server);
     app.use(router);
+
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+    app.use(cookieParser());
+
     // endpoints declaration
 
     // users endpoints
@@ -91,6 +101,9 @@ massive({
     app.get("/api/classes", classes.getAllClass); // get all available classes
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
     app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
+
+    //sending email
+    app.post("/api/sendMail", mail.sendEmail);
 
     io.on("connection", socket => {
       console.log("Online");
