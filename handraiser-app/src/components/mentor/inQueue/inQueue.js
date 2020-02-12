@@ -37,19 +37,19 @@ export default function InQueue(rowDatahandler) {
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
   // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
-  const [initial, setInitial] = useState(true);
+  // const [initial, setInitial] = useState(true);
   useEffect(() => {
     socket = io(ENDPOINT);
 
     // update(rowDatahandler.search);
 
-    if (initial) {
+    // if (initial) {
       socket.emit("join", {
         username: "Admin",
         room: rowDatahandler.class_id,
         image: ""
       });
-    }
+    // }
 
     if (rowDatahandler.search || !concernsData) {
       update(rowDatahandler.search);

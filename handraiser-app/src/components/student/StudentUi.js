@@ -156,7 +156,7 @@ export default function Student() {
         console.log(err);
       });
   };
-  //get data of active queue where user interacted with from the queue panel
+  //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
     console.log(rowData)
     setConcernTitle(rowData.concern.concern_title);
