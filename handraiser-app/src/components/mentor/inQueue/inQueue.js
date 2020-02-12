@@ -77,7 +77,29 @@ export default function InQueue(rowDatahandler) {
                 onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={data.image}></Avatar>
+                  <div>
+                    {data.user_status === 1 ? (
+                      <status-indicator
+                        positive
+                        pulse
+                        style={{
+                          position: "absolute",
+                          marginTop: "30px",
+                          marginLeft: "35px"
+                        }}
+                      ></status-indicator>
+                    ) : (
+                      <status-indicator
+                        pulse
+                        style={{
+                          position: "absolute",
+                          marginTop: "30px",
+                          marginLeft: "35px"
+                        }}
+                      ></status-indicator>
+                    )}
+                    <Avatar src={data.image}></Avatar>
+                  </div>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"

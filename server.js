@@ -15,7 +15,7 @@ const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
 const authorization = require("./controllers/authorization");
 
-const mail = require("./mail");
+const mail = require("./controllers/mail");
 
 require("dotenv").config();
 massive({
@@ -97,6 +97,7 @@ massive({
       student.queue_order_done
     ); // get all done request assistance
     app.post("/api/student/get/class", student.get_my_classroom);
+    app.post("/api/student/get/class/:user_id", student.get_my_classroom_all);
     app.post("/api/student/classes", classes.getClassDetails);
 
     // class endpoints

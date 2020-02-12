@@ -160,7 +160,6 @@ export default function Mentor() {
       });
   };
 
-  
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
@@ -226,7 +225,7 @@ export default function Mentor() {
               }}
             >
               <Typography variant="h5">Concern: {concernTitle}</Typography>
-              <Typography variant="span">From: {name}</Typography>
+              <Typography>From: {name}</Typography>
             </TitleName>
             <Option>
               <div
@@ -246,17 +245,21 @@ export default function Mentor() {
                 </More>
               </div>
             </Option>
-
           </Subject>
 
-          {rowData.concern_status === 2 ? <Handshake data={rowData} rowDatahandler={rowDatahandler}/> : ""}
-          
-          <Chatfield />
+          {rowData.concern_status === 2 ? (
+            <Handshake data={rowData} rowDatahandler={rowDatahandler} />
+          ) : (
+            ""
+          )}
 
+          <Chatfield />
 
           {/* <Conversation></Conversation> */}
 
-          {rowData.concern_status === 2 ? '':(
+          {rowData.concern_status === 2 ? (
+            ""
+          ) : (
             <Message>
               <Field>
                 <div
