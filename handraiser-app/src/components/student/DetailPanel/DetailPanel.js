@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
@@ -69,13 +70,44 @@ const ExpansionPanelDetails = withStyles(theme => ({
   }
 }))(MuiExpansionPanelDetails);
 
-export default function SimpleExpansionPanel() {
+export default function SimpleExpansionPanel({
+  class_id,
+  expanded,
+  setExpanded
+}) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState("panel1");
+  const [classInfo, setClassInfo] = React.useState([]);
+  const [classMem, setClassMem] = React.useState([]);
 
   const handleChange = panel => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
+
+  useEffect(() => {
+    axios({
+      method: "post",
+      url: `http://localhost:5000/api/student/classes/${class_id}`
+    })
+      .then(res => {
+        setClassInfo(res.data[0]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/classes/members/${class_id}`
+    })
+      .then(res => {
+        setClassMem(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Div2>
@@ -113,19 +145,19 @@ export default function SimpleExpansionPanel() {
               }}
             >
               <LockIcon />
-              <span>Name of Group</span>
+              <span>{classInfo.class_title}</span>
             </span>
             <span style={{ padding: "25px 10px 5px 10px", color: "grey" }}>
               Description
             </span>
             <span style={{ padding: "10px 10px 8px 9px", color: "darkblue" }}>
-              Set a class description
+              {classInfo.class_description}
             </span>
             <span style={{ padding: "25px 10px 5px 10px", color: "grey" }}>
-              Created
+              Date Created
             </span>
             <span style={{ padding: "10px 10px 8px 9px" }}>
-              Created by Lebron James
+              {classInfo.class_date_created}
             </span>
           </div>
         </ExpansionPanelDetails>
@@ -155,9 +187,43 @@ export default function SimpleExpansionPanel() {
               flexDirection: "column"
             }}
           >
+            {classMem.map((member, index) => {
+              return (
+                <ListItem key={index}>
+                  <Avatar
+                    src={member.image}
+                    style={{
+                      marginLeft: "-17px"
+                    }}
+                  ></Avatar>
+                  <span
+                    style={{
+                      marginLeft: "8px",
+                      fontWeight: "bold"
+                    }}
+                  >
+                    {member.first_name + " " + member.last_name}
+                  </span>
+                  {member.user_status === 1 ? (
+                    <status-indicator
+                      positive
+                      style={{
+                        marginLeft: "10px"
+                      }}
+                    ></status-indicator>
+                  ) : (
+                    <status-indicator
+                      style={{
+                        marginLeft: "10px"
+                      }}
+                    ></status-indicator>
+                  )}
+                </ListItem>
+              );
+            })}
             <ListItem>
               <Avatar
-                src={James}
+                src={classInfo.image}
                 style={{
                   marginLeft: "-17px"
                 }}
@@ -168,14 +234,22 @@ export default function SimpleExpansionPanel() {
                   fontWeight: "bold"
                 }}
               >
-                Lebron James
+                {classInfo.first_name + " " + classInfo.last_name + " (Mentor)"}
               </span>
-              <status-indicator
-                positive
-                style={{
-                  marginLeft: "10px"
-                }}
-              ></status-indicator>
+              {classInfo.user_status === 1 ? (
+                <status-indicator
+                  positive
+                  style={{
+                    marginLeft: "10px"
+                  }}
+                ></status-indicator>
+              ) : (
+                <status-indicator
+                  style={{
+                    marginLeft: "10px"
+                  }}
+                ></status-indicator>
+              )}
             </ListItem>
             <div
               className={classes.root}

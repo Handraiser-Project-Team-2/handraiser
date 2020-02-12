@@ -66,7 +66,6 @@ export default function Student() {
     // console.log(concernDescription);
   };
 
-
   const ENDPOINT = "localhost:5000";
 
   useEffect(() => {
@@ -166,16 +165,30 @@ export default function Student() {
   };
   //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
-    console.log(rowData)
+    console.log(rowData);
     setConcernTitle(rowData.concern.concern_title);
     // setRowData(rowData);
     axios
-      .get(`http://localhost:5000/api/userprofile/${rowData.concern.user_id}`, {})
+      .get(
+        `http://localhost:5000/api/userprofile/${rowData.concern.user_id}`,
+        {}
+      )
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
-      }).catch(err=>{
-        console.log(err)
       })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const [expanded, setExpanded] = React.useState("");
+
+  const handleClickDetail = () => {
+    setExpanded("panel1");
+  };
+
+  const handleClickMember = () => {
+    setExpanded("panel2");
   };
 
   return (
@@ -183,7 +196,7 @@ export default function Student() {
       <Topbar />
       <Div>
         <Queue>
-          <Tabs  rowDatahandler={rowDatahandler} classReference={class_id} />
+          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />
         </Queue>
         <Help>
           <Subject>
@@ -203,6 +216,7 @@ export default function Student() {
             <Option>
               <div>
                 <HelpIcon
+                  onClick={handleClickDetail}
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
@@ -213,6 +227,7 @@ export default function Student() {
               </div>
               <div>
                 <GroupIcon
+                  onClick={handleClickMember}
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
@@ -276,7 +291,11 @@ export default function Student() {
             </Field>
           </Message>
         </Help>
-        <DetailPanel />
+        <DetailPanel
+          class_id={class_id}
+          expanded={expanded}
+          setExpanded={setExpanded}
+        />
       </Div>
     </React.Fragment>
   );

@@ -70,9 +70,13 @@ const ExpansionPanelDetails = withStyles(theme => ({
   }
 }))(MuiExpansionPanelDetails);
 
-export default function SimpleExpansionPanel({ class_id }) {
+export default function SimpleExpansionPanel({
+  class_id,
+  expanded,
+  setExpanded
+}) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState("panel1");
+  // const [expanded, setExpanded] = React.useState("panel1");
   const [classInfo, setClassInfo] = React.useState([]);
   const [classMem, setClassMem] = React.useState([]);
 
