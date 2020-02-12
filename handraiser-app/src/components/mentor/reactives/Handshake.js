@@ -13,54 +13,69 @@ export default function Handshake(props) {
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
   const accept = data => {
+    console.log("hanshake request");
+    axios
+      .patch(`http://localhost:5000/api/concern_list/${data.concern_id}`, {
+        concern_id: data.concern_id,
+        concern_title: data.concern_title,
+        concern_description: data.concern_description,
+        concern_status: 1
+      })
+      .then(data => {
+        // console.log(data/data)
+        props.rowDatahandler(data.data);
 
-    socket.emit('update',{message:'server has been called'},()=>{
-      return console.log('drawback')
-    })
+        axios
+          .get(
+            `http://localhost:5000/api/assisted_by/${data.class_id}/${data.user_id}`,
+            {}
+          )
+          .then(data => {
+            //get data of who assisted this concern
 
-    // axios
-    //   .patch(`http://localhost:5000/api/concern_list/${data.concern_id}`, {
-    //     concern_id: data.concern_id,
-    //     concern_title: data.concern_title,
-    //     concern_description: data.concern_description,
-    //     concern_status: 1
-    //   })
-    //   .then(data => {
-
-    //     props.rowDatahandler(data.data);
-
-    //     axios
-    //       .get(
-    //         `http://localhost:5000/api/assisted_by/${data.class_id}/${data.user_id}`,
-    //         {}
-    //       )
-    //       .then(data => {
-    //         //get data of who assisted this concern
-
-    //         // if none then reference this current mentor
-    //         if (data.data.length == 0) {
-    //           axios.post(`http://localhost:5000/api/assisted_by`, {
-    //             assist_status: "ongoing",
-    //             class_id: data.class_id,
-    //             // user_mentor_id: 3, //mock user_mentor_id data //used for checking
-    //             user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
-    //             user_student_id: data.user_id
-    //           });
-    //         } else {
-    //           //reflect current mentor
-    //           axios.patch(
-    //             `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-    //             {
-    //               assisted_id: data.data[0].assisted_id,
-    //               user_student_id: data.data[0].user_id,
-    //               class_id: data.data[0].class_id,
-    //               user_mentor_id: user_id,
-    //               assist_status: "ongoing"
-    //             }
-    //           );
-    //         }
-    //       });
-    //   });
+            // if none then reference this current mentor
+            if (data.data.length == 0) {
+              axios
+                .post(`http://localhost:5000/api/assisted_by`, {
+                  assist_status: "ongoing",
+                  class_id: data.class_id,
+                  // user_mentor_id: 3, //mock user_mentor_id data //used for checking
+                  user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
+                  user_student_id: data.user_id
+                })
+                .then(data => {
+                  console.log(data);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            } else {
+              //reflect current mentor
+              axios.patch(
+                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                {
+                  assisted_id: data.data[0].assisted_id,
+                  user_student_id: data.data[0].user_id,
+                  class_id: data.data[0].class_id,
+                  user_mentor_id: user_id,
+                  assist_status: "ongoing"
+                }
+                  .then(data => {
+                    console.log(data);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  })
+              );
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (

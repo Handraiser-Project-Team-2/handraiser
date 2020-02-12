@@ -61,10 +61,12 @@ export default function Student() {
     evt.preventDefault();
     // console.log(concernDescription);
   };
+
   const ENDPOINT = "localhost:5000";
 
   useEffect(() => {
     socket = io(ENDPOINT);
+    
 
     if (sessionStorage.getItem("token")) {
       axios
@@ -100,50 +102,49 @@ export default function Student() {
         history.push("/");
       });
     }
+
+    if(!cstate){
+      getData();
+    }
   }, [cstate, ENDPOINT]);
 
   const sendRequest = () => {
-    console.log({
-      concern_title: concernTitle,
-      concern_description: concernDescription
-    });
+    socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
-    socket.emit(
-      "update",
-      { concern_title: concernTitle, concern_description: concernDescription },
-      () => {
-        return console.log("drawback");
-      }
-    );
+    axios
+      .post(`http://localhost:5000/api/student/request/assistance`, {
+        class_id: class_id,
+        user_id: user_id,
+        concern_title: concernTitle,
+        concern_description: concernDescription
+      })
+      .then(data => {
+        console.log(data.data);
 
-    // axios
-    //   .post(`http://localhost:5000/api/student/request/assistance`, {
-    //     class_id: class_id,
-    //     user_id: user_id,
-    //     concern_title: concernTitle,
-    //     concern_description: concernDescription
-    //   })
-    //   .then(data => {
-    //     setConcernTitle("");
-    //     setConcernDescription("");
-    //     Swal.fire({
-    //       icon: "success",
-    //       title: "Request sent to the mentor"
-    //     })
-    //       .then(() => {
-    //         window.location.reload();
-    //         // history.push(`/student/${class_id}`);
-    //       })
-    //       .catch(err => {
-    //         console.log(err);
-    //       });
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
+          socket.emit(
+            "AddRequest",
+            {
+              concern_id: data.data.concern_id,
+              concern_title: data.data.concern_title,
+              concern_description: data.data.concern_description,
+              concern_status: data.data.concern_status,
+              class_id: data.data.class_id,
+              user_id: data.data.user_id,
+              cstate,
+              room: class_id
+            },
+            () => {
+              return console.log("drawback");
+            }
+          );
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+   
   };
 
-  // if (state.user_type === 3) {
   return (
     <React.Fragment>
       <Topbar />
