@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Button from "@material-ui/core/Button";
-import { Tooltip } from "@material-ui/core";
 import axios from "axios";
 
-import { RowCont, TableStyle } from "../Styles/Styles";
+import { Row, TableStyle } from "../Styles/Styles2";
+
+// COMPONENTS
+import ViewStudentDialog from "./Student/ViewStudentDialog";
 
 export const StudentTable = props => {
+  const { tabValue } = props;
   const [tableData, setTableData] = useState({
     columns: [
       {
@@ -15,42 +16,47 @@ export const StudentTable = props => {
         field: ""
       },
       {
+        title: "Name",
+        field: "first_name",
+        render: row => (
+          <React.Fragment>
+            <ViewStudentDialog data={row}>
+              {row.first_name + " " + row.last_name}
+            </ViewStudentDialog>
+          </React.Fragment>
+        )
+      },
+      {
         title: "Email",
-        field: "validation_email"
+        field: "email"
       },
       {
         title: "Status",
-        field: "validation_status"
+        field: "user_status",
+        render: row => (row.user_status === 1 ? "Active" : "Inactive")
       },
       {
         title: "Action",
-        field: "",
-        render: rowData => (
-          <React.Fragment>
-            <RowCont>
-              <Tooltip title="Delete">
-                <Button>
-                  <DeleteIcon />
-                </Button>
-              </Tooltip>
-            </RowCont>
-          </React.Fragment>
-        )
+        field: ""
       }
     ],
     data: []
   });
+  const [studentURL] = useState("http://localhost:5000/api/user/student_list");
 
-  //   useEffect(() => {
-  //     (async function() {
-  //       try {
-  //         const all = await axios("");
-  //         setTableData({ ...tableData, data: all.data });
-  //       } catch (err) {
-  //         console.error(err);
-  //       }
-  //     })();
-  //   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const student = await axios(studentURL);
+        if (tabValue === 0) {
+          setTableData(tableData => ({ ...tableData, data: student.data }));
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, [studentURL, tabValue]);
 
   return (
     <TableStyle>
@@ -65,13 +71,11 @@ export const StudentTable = props => {
           actionsColumnIndex: -1,
           draggable: false,
           headerStyle: {
-            textAlign: "center",
             fontSize: 18
           },
           cellStyle: {
-            textAlign: "center",
-            width: 5,
-            maxWidth: 50
+            width: 900,
+            maxWidth: 287
           }
         }}
       />
