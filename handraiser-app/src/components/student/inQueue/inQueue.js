@@ -48,8 +48,6 @@ export default function InQueue(props) {
 
   let socket;
   const ENDPOINT = "localhost:5000";
-  
-  const [initial, setInitial] = useState(true);
 
   useEffect(() => {
 
