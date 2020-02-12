@@ -62,11 +62,11 @@ export default function Student() {
     // console.log(concernDescription);
   };
 
+
   const ENDPOINT = "localhost:5000";
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    
 
     if (sessionStorage.getItem("token")) {
       axios
@@ -92,7 +92,7 @@ export default function Student() {
           }
         })
         .catch(err => {
-          // console.log(err);
+          console.log(err);
         });
     } else {
       Swal.fire({
@@ -103,7 +103,7 @@ export default function Student() {
       });
     }
 
-    if(!cstate){
+    if (!cstate) {
       getData();
     }
   }, [cstate, ENDPOINT]);
@@ -121,28 +121,53 @@ export default function Student() {
       .then(data => {
         console.log(data.data);
 
-          socket.emit(
-            "AddRequest",
-            {
-              concern_id: data.data.concern_id,
-              concern_title: data.data.concern_title,
-              concern_description: data.data.concern_description,
-              concern_status: data.data.concern_status,
-              class_id: data.data.class_id,
-              user_id: data.data.user_id,
-              cstate,
-              room: class_id
-            },
-            () => {
-              return console.log("drawback");
-            }
-          );
+        // add websocket here to reflect new request;
+
+        setConcernTitle("");
+        setConcernDescription("");
+
+        Swal.fire({
+          icon: "success",
+          title: "Request sent to the mentor"
+        })
+          .then(() => {
+            socket.emit(
+              "AddRequest",
+              {
+                concern_id: data.data.concern_id,
+                concern_title: data.data.concern_title,
+                concern_description: data.data.concern_description,
+                concern_status: data.data.concern_status,
+                class_id: data.data.class_id,
+                user_id: data.data.user_id,
+                cstate,
+                room: class_id
+              },
+              () => {
+                return console.log("drawback");
+              }
+            );
+          })
+          .catch(err => {
+            console.log(err);
+          });
       })
       .catch(err => {
         console.log(err);
       });
-
-   
+  };
+  //get data of active queue where user interacted with from the queue panel
+  const rowDatahandler = rowData => {
+    console.log(rowData)
+    setConcernTitle(rowData.concern.concern_title);
+    // setRowData(rowData);
+    axios
+      .get(`http://localhost:5000/api/userprofile/${rowData.concern.user_id}`, {})
+      .then(data => {
+        setName(data.data[0].first_name + " " + data.data[0].last_name);
+      }).catch(err=>{
+        console.log(err)
+      })
   };
 
   return (
@@ -150,7 +175,7 @@ export default function Student() {
       <Topbar />
       <Div>
         <Queue>
-          <Tabs classReference={class_id} />
+          <Tabs  rowDatahandler={rowDatahandler} classReference={class_id} />
         </Queue>
         <Help>
           <Subject>

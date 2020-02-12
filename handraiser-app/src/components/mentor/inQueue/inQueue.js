@@ -106,8 +106,10 @@ export default function InQueue(rowDatahandler) {
   };
 
   const handleConcernData = data => {
+    console.log('here')
     rowDataHandlerChild2(data);
   };
+
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
