@@ -91,6 +91,11 @@ export default function InQueue(props) {
       });
   };
 
+  const handleConcernData = data => {
+    console.log('here')
+    props.rowDatahandler(data);
+  };
+
   const handleCloseEdit = () => {
     setOpenEdit(false);
   };
@@ -119,10 +124,12 @@ export default function InQueue(props) {
                 style={{
                   borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
-                  padding: "10px 15px"
+                  padding: "10px 15px",
+                  cursor: 'pointer'
                 }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
+                onClick={() => handleConcernData(concern)}
               >
                 <ListItemAvatar>
                   <status-indicator

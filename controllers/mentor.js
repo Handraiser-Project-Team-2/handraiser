@@ -54,7 +54,7 @@ module.exports = {
         res.status(201).json(data);
       })
       .catch(err => {
-        res.status(401).end(err);
+        res.status(401).end();
       });
   },
   get_done: (req, res) => {

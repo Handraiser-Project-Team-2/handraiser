@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
-import io from "socket.io-client";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -36,7 +35,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-let socket;
 export default function ClassLanding(props) {
   let token = sessionStorage.getItem("token").split(" ")[1];
   const classes = useStyles();

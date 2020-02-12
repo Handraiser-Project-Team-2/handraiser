@@ -33,8 +33,12 @@ import Tabs from "./Tabs/Tabs";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
+import Input from '../reusables/Input'
+import io from "socket.io-client";
+import ScrollToBottom from "react-scroll-to-bottom";
+import "emoji-mart/css/emoji-mart.css";
 var jwtDecode = require("jwt-decode");
-
+let socket;
 const useStyles = makeStyles(theme => ({
   handshake: {
     marginLeft: theme.spacing(3),
@@ -58,6 +62,24 @@ export default function Mentor() {
   const [concernTitle, setConcernTitle] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
+  
+  ///for chat
+  const [username, setUsername] = useState("");
+  const [room, setRoom] = useState("");
+  const [message, setMessage] = useState("");
+  const [feed, setfeed] = useState("");
+  const [active, setActive] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [avatar, setAvatar] = useState("");
+  const [emoji, setEmoji] = useState(false);
+  const ENDPOINT = "localhost:5000";
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    console.log(socket);
+  }, [ENDPOINT]);
+
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -69,6 +91,7 @@ export default function Mentor() {
   const sendMsg = evt => {
     evt.preventDefault();
     // console.log(name);
+    
   };
 
   // const handleClose = () => {
@@ -93,6 +116,7 @@ export default function Mentor() {
     setConcernTitle("");
     setName("");
     setAnchorEl(null);
+    
     axios
       .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
@@ -151,13 +175,16 @@ export default function Mentor() {
   };
 
   const rowDatahandler = rowData => {
+    console.log(rowData)
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
       .get(`http://localhost:5000/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
-      });
+      }).catch(err=>{
+        console.log(err)
+      })
   };
 
   
@@ -253,9 +280,6 @@ export default function Mentor() {
           
           <Chatfield />
 
-
-          {/* <Conversation></Conversation> */}
-
           {rowData.concern_status === 2 ? '':(
             <Message>
               <Field>
@@ -269,13 +293,14 @@ export default function Mentor() {
                   }}
                 >
                   <form onSubmit={sendMsg}>
-                    <TextField
+                    {/* <TextField
                       id="outlined-textarea"
                       multiline
                       variant="outlined"
                       fullWidth
                       rows="3"
-                    />
+                    /> */}
+                    <Input />
 
                     <div
                       style={{
