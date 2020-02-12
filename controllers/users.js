@@ -77,6 +77,22 @@ module.exports = {
         res.status(400).end();
       });
   },
+
+  patchUserStatus: (req, res) => {
+    const db = req.app.get("db");
+
+    const { user_id } = req.params;
+    const { user_status } = req.body;
+
+    db.users
+      .save({ user_id, user_status })
+      .then(user => res.status(200).json(user))
+      .catch(err => {
+        console.error(err);
+        // res.status(500).end();
+      });
+  },
+
   getUser: (req, res) => {
     const db = req.app.get("db");
 
@@ -115,7 +131,19 @@ module.exports = {
         res.status(400).end();
       });
   },
+  accessList_student: (req, res) => {
+    const db = req.app.get("db");
 
+    db.query(
+      "select * from users inner join user_profile on users.profile_id = user_profile.profile_id where user_type_id = 3"
+    )
+      .then(data => {
+        res.status(200).json(data);
+      })
+      .catch(err => {
+        res.status(400).end();
+      });
+  },
   getUserProfileByEmail: (req, res) => {
     const db = req.app.get("db");
 
