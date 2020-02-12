@@ -37,19 +37,19 @@ export default function InQueue(rowDatahandler) {
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
   // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
-  const [initial, setInitial] = useState(true);
+  // const [initial, setInitial] = useState(true);
   useEffect(() => {
     socket = io(ENDPOINT);
 
     // update(rowDatahandler.search);
 
-    if (initial) {
-      socket.emit("join", {
-        username: "Admin",
-        room: rowDatahandler.class_id,
-        image: ""
-      });
-    }
+    // if (initial) {
+    socket.emit("join", {
+      username: "Admin",
+      room: rowDatahandler.class_id,
+      image: ""
+    });
+    // }
 
     if (rowDatahandler.search || !concernsData) {
       update(rowDatahandler.search);
@@ -122,7 +122,8 @@ export default function InQueue(rowDatahandler) {
                     style={{
                       borderLeft: "14px solid #8932a8",
                       borderBottom: "0.5px solid #abababde",
-                      padding: "10px 15px"
+                      padding: "10px 15px",
+                      backgroundColor: "whitesmoke"
                     }}
                     onClick={() => handleConcernData(data)}
                   >

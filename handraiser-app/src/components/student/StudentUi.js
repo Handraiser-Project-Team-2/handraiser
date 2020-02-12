@@ -10,8 +10,11 @@ import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import { useHistory, useParams } from "react-router-dom";
+import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
+import GroupIcon from "@material-ui/icons/Group";
+import HelpIcon from "@material-ui/icons/Help";
 import {
   Div,
   Nav,
@@ -46,6 +49,7 @@ export default function Student() {
   const open = Boolean(anchorEl);
   const [concernDescription, setConcernDescription] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
+  const [userImage, setUserImage] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
@@ -74,7 +78,11 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          setState({ user_type: data.data.user_type_id });
+          console.log(userImage);
+          setUserImage(data.data.image);
+          setState({
+            user_type: data.data.user_type_id
+          });
 
           const user_type = data.data.user_type_id;
 
@@ -156,7 +164,7 @@ export default function Student() {
         console.log(err);
       });
   };
-  //get data of active queue where user interacted with from the queue panel
+  //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
     console.log(rowData)
     setConcernTitle(rowData.concern.concern_title);
@@ -193,25 +201,40 @@ export default function Student() {
               </div>
             </TitleName>
             <Option>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%"
-                }}
-              >
-                <More onClick={handleMenu}>
-                  <MoreVertIcon
-                    style={{
-                      fontSize: 35,
-                      color: "#c4c4c4"
-                    }}
-                  />
-                </More>
+              <div>
+                <HelpIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <GroupIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <MoreVertIcon
+                  onClick={handleMenu}
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
               </div>
             </Option>
           </Subject>
-          <Chatfield />
+          <Chatfield userImage={userImage} />
           <Message>
             <Field>
               <div
@@ -231,6 +254,9 @@ export default function Student() {
                     fullWidth
                     rows="2"
                     value={concernDescription}
+                    style={{
+                      backgroundColor: "white"
+                    }}
                     onChange={e => setConcernDescription(e.target.value)}
                   />
 
@@ -250,11 +276,7 @@ export default function Student() {
             </Field>
           </Message>
         </Help>
-        <Div2>
-          <Shared>
-            <Typography variant="h6">Shared Files</Typography>
-          </Shared>
-        </Div2>
+        <DetailPanel />
       </Div>
     </React.Fragment>
   );

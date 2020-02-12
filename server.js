@@ -98,12 +98,13 @@ massive({
     ); // get all done request assistance
     app.post("/api/student/get/class", student.get_my_classroom);
     app.post("/api/student/get/class/:user_id", student.get_my_classroom_all);
-    app.post("/api/student/classes", classes.getClassDetails);
+    app.post("/api/student/classes/:class_id", classes.getClassDetails); //get class details including class mentor
 
     // class endpoints
     app.get("/api/classes", classes.getAllClass); // get all available classes
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
     app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
+    app.get("/api/classes/members/:class_id", classes.getClassMembers); // get class members
 
     //sending email
     app.post("/api/sendMail", mail.sendEmail);
@@ -114,7 +115,7 @@ massive({
       socket.on("AddRequest", (data, callback) => {
         console.log(data);
 
-        io.to(data.room).emit("consolidateRequest", data );
+        io.to(data.room).emit("consolidateRequest", data);
 
         callback();
       });

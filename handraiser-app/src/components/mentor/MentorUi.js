@@ -10,7 +10,8 @@ import Avatar from "@material-ui/core/Avatar";
 import HandShakeImage from "../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
-
+import GroupIcon from "@material-ui/icons/Group";
+import HelpIcon from "@material-ui/icons/Help";
 import {
   Div,
   Nav,
@@ -28,8 +29,8 @@ import {
   Shared
 } from "../Styles/Styles";
 import axios from "axios";
-
 import Tabs from "./Tabs/Tabs";
+import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
@@ -139,6 +140,7 @@ export default function Mentor() {
               }
             );
           });
+        window.location.reload();
       });
   };
 
@@ -251,24 +253,46 @@ export default function Mentor() {
               }}
             >
               <Typography variant="h5">Concern: {concernTitle}</Typography>
-              <Typography>From: {name}</Typography>
-            </TitleName>
-            <Option>
-              <div
+              <Typography
+                variant="subtitle2"
                 style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%"
+                  fontSize: "12.4px"
                 }}
               >
-                <More onClick={handleMenu}>
-                  <MoreVertIcon
-                    style={{
-                      fontSize: 35,
-                      color: "#c4c4c4"
-                    }}
-                  />
-                </More>
+                From: {name}
+              </Typography>
+            </TitleName>
+            <Option>
+              <div>
+                <HelpIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <GroupIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <MoreVertIcon
+                  onClick={handleMenu}
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
               </div>
             </Option>
           </Subject>
@@ -278,6 +302,8 @@ export default function Mentor() {
           ) : (
             ""
           )}
+
+          <Chatfield />
 
           {rowData.concern_status === 2 ? (
             ""
@@ -318,11 +344,7 @@ export default function Mentor() {
             </Message>
           )}
         </Help>
-        <Div2>
-          <Shared>
-            <Typography variant="h6">Shared Files</Typography>
-          </Shared>
-        </Div2>
+        <DetailPanel class_id={class_id} />
       </Div>
     </React.Fragment>
   );

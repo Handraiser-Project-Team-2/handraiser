@@ -59,7 +59,8 @@ export default function InQueue(props) {
                 style={{
                   borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
-                  padding: "10px 15px"
+                  padding: "10px 15px",
+                  backgroundColor: "whitesmoke"
                 }}
                 // onClick={() => handleConcernData(data)}
               >
@@ -98,8 +99,7 @@ export default function InQueue(props) {
                   open={open}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                  <MenuItem onClick={handleClose}>Remove Request</MenuItem>
                 </Menu>
                 <ListItemText
                   primary={data.concern.concern_title}
@@ -117,7 +117,13 @@ export default function InQueue(props) {
                   }
                 />
                 <ListItemSecondaryAction style={{ display: "flex" }}>
-                  <Avatar variant="square" className={classes.small}>
+                  <Avatar
+                    variant="square"
+                    className={classes.small}
+                    style={{
+                      backgroundColor: "forestgreen"
+                    }}
+                  >
                     <p style={{ fontSize: 12 }}>
                       {data.concern.concern_status === 3 ? "Done" : ""}
                     </p>

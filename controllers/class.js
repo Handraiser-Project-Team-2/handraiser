@@ -7,7 +7,6 @@ function getStudentsByClass(req, res) {
         user_profile.profile_id,
         user_profile.first_name,
         user_profile.last_name,
-        user_profile.middle_name,
         user_profile.image
       FROM
         user_profile
@@ -48,23 +47,47 @@ function getClassByMentor(req, res) {
     });
 }
 
-function getClassDetails(req, res){
-  const db =req.app.get("db");
-  const {token, class_id} = req.body;
-  
-    db.class
-    .findOne({class_id})
-    .then(data=>{
-      res.status(201).json({...data})
-    })
-    .catch(err=>{
-      res.status(422).end()
-    })
+function getClassDetails(req, res) {
+  const db = req.app.get("db");
+  const { class_id } = req.params;
+
+  db.query(
+    `SELECT
+        *
+      FROM
+        user_profile
+      INNER JOIN users ON users.profile_id = user_profile.profile_id
+      INNER JOIN class ON users.user_id = class.user_id where class_id = ${class_id};`
+  )
+    .then(detail => res.status(201).send(detail))
+    .catch(err => {
+      res.status(422).end();
+    });
+}
+
+function getClassMembers(req, res) {
+  const db = req.app.get("db");
+  const { class_id } = req.params;
+
+  db.query(
+    `SELECT
+        *
+      FROM
+        user_profile
+      INNER JOIN users ON users.profile_id = user_profile.profile_id
+      INNER JOIN classroom ON users.user_id = classroom.user_id where class_id = ${class_id};`
+  )
+    .then(members => res.status(201).send(members))
+    .catch(err => {
+      console.error(err);
+      res.status(500).end();
+    });
 }
 
 module.exports = {
   getAllClass,
   getStudentsByClass,
   getClassByMentor,
-  getClassDetails
+  getClassDetails,
+  getClassMembers
 };
