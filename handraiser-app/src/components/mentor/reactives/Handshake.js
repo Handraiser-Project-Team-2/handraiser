@@ -65,6 +65,7 @@ export default function Handshake(props) {
           className={classes.handshake_button_container}
           onClick={() => {
             accept(props.data);
+            window.location.reload();
           }}
         >
           <img className={classes.handshake_img} src={HandShakeImage} />
@@ -92,7 +93,7 @@ const useStyles = makeStyles(theme => ({
   },
   handshake_container: {
     width: "500px",
-    height: "140px",
+    height: "121px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",

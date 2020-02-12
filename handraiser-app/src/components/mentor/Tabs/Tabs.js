@@ -61,12 +61,14 @@ const TabBtn = ({ class_id, rowDatahandler }) => {
           value={tabValue}
           onChange={handleChange}
           indicatorColor="primary"
-          textColor="primary"
+          style={{
+            background: "#372476",
+            color: "white"
+          }}
         >
           <Tab
             label="IN QUEUE"
             onClick={() => setHide(hide === false ? hide : !hide)}
-            style={{ width: "2px" }}
           />
           <Tab
             label="CLOSED"

@@ -11,6 +11,7 @@ import CardActions from "@material-ui/core/CardActions";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import Background from "../images/undraw_code_thinking_1jeh.svg";
 import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
@@ -27,7 +28,8 @@ const useStyles = makeStyles(theme => ({
     color: blueGrey[500]
   },
   actions: {
-    backgroundColor: blueGrey[100],
+    background: `linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%)`,
+    color: "white",
     display: "flex",
     justifyContent: "space-between"
   },
@@ -37,18 +39,20 @@ const useStyles = makeStyles(theme => ({
     width: theme.spacing(8),
     height: theme.spacing(8),
     top: theme.spacing(6),
-    left: theme.spacing(2)
+    left: theme.spacing(2),
+    borderRadius: "50%"
   },
   description: {
-    backgroundColor: blueGrey[200],
+    background: `linear-gradient(to right, #8e9eab, #eef2f3)`,
     textAlign: "center",
     minHeight: 130,
     paddingTop: theme.spacing(4)
   },
   title: {
-    backgroundColor: blueGrey[500],
     color: "white",
     textAlign: "center",
+    background: `url(${Background}),linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%)`,
+    backgroundSize: "100% 100%",
     minHeight: 80
   },
   card: {
@@ -106,9 +110,6 @@ export default function CardPage({ classData, data }) {
             }}
           >
             <CardContent className={classes.title}>
-              <Typography gutterBottom variant="h5" component="h2">
-                {row.class_title}
-              </Typography>
               <Avatar
                 variant="square"
                 className={classes.square}
@@ -118,6 +119,9 @@ export default function CardPage({ classData, data }) {
             </CardContent>
 
             <CardContent className={classes.description}>
+              <Typography gutterBottom variant="h5" component="h2">
+                {row.class_title}
+              </Typography>
               <Typography
                 variant="body1"
                 component="p"
@@ -128,7 +132,14 @@ export default function CardPage({ classData, data }) {
             </CardContent>
           </CardActionArea>
           <CardActions className={classes.actions}>
-            <Typography variant="caption" display="block" gutterBottom>
+            <Typography
+              variant="caption"
+              display="block"
+              gutterBottom
+              style={{
+                marginLeft: "25px"
+              }}
+            >
               {cstate && cstate.user_type_id === 3
                 ? `Mentor: ${row.first_name} ${row.last_name}`
                 : null}

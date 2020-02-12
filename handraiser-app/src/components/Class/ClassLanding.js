@@ -5,7 +5,6 @@ import Container from "@material-ui/core/Container";
 import axios from "axios";
 import io from "socket.io-client";
 import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // COMPONENTS
 import CardPage from "./CardPage";

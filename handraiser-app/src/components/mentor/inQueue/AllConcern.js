@@ -71,7 +71,8 @@ export default function InQueue({ class_id, search }) {
                     style={{
                       borderLeft: "14px solid #8932a8",
                       borderBottom: "0.5px solid #abababde",
-                      padding: "10px 15px"
+                      padding: "10px 15px",
+                      backgroundColor: "whitesmoke"
                     }}
                     // onClick={() => handleConcernData(data)}
                   >
@@ -107,7 +108,13 @@ export default function InQueue({ class_id, search }) {
                       }
                     />
                     <ListItemSecondaryAction style={{ display: "flex" }}>
-                      <Avatar variant="square" className={classes.small}>
+                      <Avatar
+                        variant="square"
+                        className={classes.small}
+                        style={{
+                          backgroundColor: "#372476"
+                        }}
+                      >
                         <p style={{ fontSize: 12 }}>
                           {data.concern_status === 3
                             ? "Done"

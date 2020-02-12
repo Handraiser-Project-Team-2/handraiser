@@ -50,8 +50,6 @@ export default function InQueue(props) {
       method: "get",
       url: `http://localhost:5000/api/student/queue/order/${props.classReference}/${user_id}?search=${props.search}`
     }).then(res => {
-      console.log(res.data);
-
       setConcernsData(res.data);
     });
   }, [props.search]); //class_id
@@ -121,7 +119,8 @@ export default function InQueue(props) {
                 style={{
                   borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
-                  padding: "10px 15px"
+                  padding: "10px 15px",
+                  backgroundColor: "whitesmoke"
                 }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
@@ -219,10 +218,15 @@ export default function InQueue(props) {
                 />
 
                 <ListItemSecondaryAction style={{ display: "flex" }}>
-                  <Avatar variant="square">
-                    <p style={{ fontSize: 12 }}>
+                  <Avatar
+                    variant="square"
+                    style={{
+                      backgroundColor: "#372476"
+                    }}
+                  >
+                    <p style={{ fontSize: 12, paddingLeft: "2px" }}>
                       {concern.concern.concern_status === 1
-                        ? "being helped"
+                        ? "Being helped"
                         : concern.queue_order_num == 0
                         ? "next"
                         : concern.queue_order_num}
