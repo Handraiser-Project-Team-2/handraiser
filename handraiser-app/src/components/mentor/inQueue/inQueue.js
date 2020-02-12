@@ -44,6 +44,7 @@ export default function InQueue(rowDatahandler) {
     // update(rowDatahandler.search);
 
     // if (initial) {
+      console.log(rowDatahandler.class_id)
     socket.emit("join", {
       username: "Admin",
       room: rowDatahandler.class_id,
@@ -54,6 +55,11 @@ export default function InQueue(rowDatahandler) {
     if (rowDatahandler.search || !concernsData) {
       update(rowDatahandler.search);
     }
+
+    socket.on("hanshakeAccept", message => {
+      console.log("hanshakeAccept", message);
+      update("");
+    });
 
     socket.on("consolidateRequest", message => {
       console.log("message recieved", message);

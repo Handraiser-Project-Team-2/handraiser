@@ -48,51 +48,33 @@ export default function InQueue(props) {
 
   let socket;
   const ENDPOINT = "localhost:5000";
+  const [initial, setInitial] = useState();
 
   useEffect(() => {
     socket = io(ENDPOINT);
-
+    console.log(props.classReference)
     // if (initial) {
-    socket.emit("join", {
-      username: "Admin",
-      room: props.classReference,
-      image: ""
-    });
+      socket.emit("join", {
+        username: "Admin",
+        room: props.classReference,
+        image: ""
+      });
 
-    // setInitial(false);
+      // setInitial(false);
     // }
 
     if (props.search || !concernsData) {
       update(props.search);
     }
 
+    socket.on("hanshakeAccept", (message)=>{
+      console.log("hanshakeAccept", message)
+      update("");
+    })
+
     socket.on("consolidateRequest", message => {
       console.log("message recieved", message);
-
-      console.log(concernsData);
-
-      let trasmission = {
-        concern: {
-          concern_id: message.concern_id,
-          concern_title: message.concern_title,
-          concern_description: message.concern_description,
-          concern_status: message.concern_status,
-          class_id: message.class_id,
-          user_id: message.user_id,
-          profile_id: message.cstate.profile_id,
-          first_name: message.cstate.first_name,
-          last_name: message.cstate.last_name,
-          image: message.cstate.image
-        },
-        queue_order_num: ""
-      };
-
-      let concern_b = Object.assign([], concernsData);
-
-      concern_b.push(trasmission);
-
-      console.log(concern_b);
-      setConcernsData(concern_b);
+      update("");
     });
 
     socket.on("disconnect", () => {
@@ -143,7 +125,9 @@ export default function InQueue(props) {
       })
       .then(() => {
         window.location = `/student/${props.classReference}`;
-      });
+      }).catch(err=>{
+        console.log(err)
+      })
   };
 
   const handleConcernData = data => {
@@ -157,15 +141,19 @@ export default function InQueue(props) {
 
   const handleRemoveReq = () => {
     setAnchorEl(null);
-    axios
-      .delete(
-        `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
-        {}
-      )
-      .then(() => {
-        window.location = `/student/${props.classReference}`;
-        alert("Your concern has been removed from the queue");
-      });
+
+    console.log(concern)
+    // if (concern.concern) {
+      axios
+        .delete(
+          `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
+          {}
+        )
+        .then(() => {
+          window.location = `/student/${props.classReference}`;
+          alert("Your concern has been removed from the queue");
+        });
+    // }
   };
 
   // console.log(concernsData);

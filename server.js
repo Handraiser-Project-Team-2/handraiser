@@ -113,9 +113,15 @@ massive({
       socket.on("AddRequest", (data, callback) => {
         console.log(data);
 
-        io.to(data.room).emit("consolidateRequest", data );
+        io.to(data.room).emit("consolidateRequest", data);
 
         callback();
+      });
+
+      socket.on("handshake", data => {
+        console.log("handshake flag", data)
+
+        io.to(data.room).emit("hanshakeAccept", {message:'handshake succesful'});
       });
 
       console.log("Online");
@@ -139,7 +145,6 @@ massive({
 
         socket.join(user.room);
 
-        // callback();
       });
 
       socket.on("typing", data => {

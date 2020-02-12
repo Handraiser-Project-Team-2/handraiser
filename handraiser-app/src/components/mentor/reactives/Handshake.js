@@ -1,33 +1,58 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import io from "socket.io-client";
+import { useHistory, useParams } from "react-router-dom";
+
 
 var jwtDecode = require("jwt-decode");
 
 export default function Handshake(props) {
-  let socket = io(); //initial connection
+  let { class_id } = useParams();
+
   const classes = useStyles();
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
-  const accept = data => {
+  const ENDPOINT = "localhost:5000";
+
+
+  let socket = io(ENDPOINT);
+
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+
+    socket.emit("join", {
+      username: "hanshakes",
+      room: class_id,
+      image: ""
+    });
+
+  });
+
+  const accept = highdata => {
     console.log("hanshake request");
+
     axios
-      .patch(`http://localhost:5000/api/concern_list/${data.concern_id}`, {
-        concern_id: data.concern_id,
-        concern_title: data.concern_title,
-        concern_description: data.concern_description,
+      .patch(`http://localhost:5000/api/concern_list/${highdata.concern_id}`, {
+        concern_id: highdata.concern_id,
+        concern_title: highdata.concern_title,
+        concern_description: highdata.concern_description,
         concern_status: 1
       })
       .then(data => {
         // console.log(data/data)
         props.rowDatahandler(data.data);
 
+        console.log(highdata);
+        
+        socket.emit("handshake", { room: highdata.class_id });
+
         axios
           .get(
-            `http://localhost:5000/api/assisted_by/${data.class_id}/${data.user_id}`,
+            `http://localhost:5000/api/assisted_by/${highdata.class_id}/${highdata.user_id}`,
             {}
           )
           .then(data => {
@@ -38,10 +63,10 @@ export default function Handshake(props) {
               axios
                 .post(`http://localhost:5000/api/assisted_by`, {
                   assist_status: "ongoing",
-                  class_id: data.class_id,
+                  class_id: highdata.class_id,
                   // user_mentor_id: 3, //mock user_mentor_id data //used for checking
                   user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
-                  user_student_id: data.user_id
+                  user_student_id: highdata.user_id
                 })
                 .then(data => {
                   console.log(data);
@@ -51,22 +76,23 @@ export default function Handshake(props) {
                 });
             } else {
               //reflect current mentor
-              axios.patch(
-                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-                {
-                  assisted_id: data.data[0].assisted_id,
-                  user_student_id: data.data[0].user_id,
-                  class_id: data.data[0].class_id,
-                  user_mentor_id: user_id,
-                  assist_status: "ongoing"
-                }
-                  .then(data => {
-                    console.log(data);
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  })
-              );
+              axios
+                .patch(
+                  `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                  {
+                    assisted_id: data.data[0].assisted_id,
+                    user_student_id: data.data[0].user_id,
+                    class_id: data.data[0].class_id,
+                    user_mentor_id: user_id,
+                    assist_status: "ongoing"
+                  }
+                )
+                .then(data => {
+                  console.log(data);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
             }
           })
           .catch(err => {
@@ -89,7 +115,7 @@ export default function Handshake(props) {
           className={classes.handshake_button_container}
           onClick={() => {
             accept(props.data);
-            window.location.reload();
+            // window.location.reload();
           }}
         >
           <img className={classes.handshake_img} src={HandShakeImage} />

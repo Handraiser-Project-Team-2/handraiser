@@ -129,6 +129,7 @@ export default function Student() {
       .then(data => {
         console.log(data.data);
 
+
         // add websocket here to reflect new request;
 
         setConcernTitle("");
@@ -138,7 +139,8 @@ export default function Student() {
           icon: "success",
           title: "Request sent to the mentor"
         })
-          .then(() => {
+          .then((flag) => {
+
             socket.emit(
               "AddRequest",
               {

@@ -124,27 +124,29 @@ export default function Mentor() {
         concern_status: 3
       })
       .then(data => {
-
-        
         axios
           .get(
             `http://localhost:5000/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
             {}
           )
           .then(data => {
-            console.log(data);
-
-            axios.patch(
-              `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-              {
-                assisted_id: data.data[0].assisted_id,
-                user_student_id: data.data[0].user_id,
-                class_id: data.data[0].class_id,
-                assist_status: "done"
-              }
-            );
+            axios
+              .patch(
+                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                {
+                  assisted_id: data.data[0].assisted_id,
+                  user_student_id: data.data[0].user_id,
+                  class_id: data.data[0].class_id,
+                  assist_status: "done"
+                }
+              )
+              .then(data => {
+                socket.emit("handshake", { room: class_id });
+              })
+              .catch(err => {
+                console.log(err);
+              });
           });
-        window.location.reload();
       });
   };
 
@@ -167,6 +169,10 @@ export default function Mentor() {
         concern_status: 2
       })
       .then(data => {
+
+        socket.emit("handshake", { room: class_id });
+
+        
         axios
           .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
           .then(data => {
