@@ -50,17 +50,16 @@ export default function InQueue(props) {
   const ENDPOINT = "localhost:5000";
 
   useEffect(() => {
-
     socket = io(ENDPOINT);
 
     // if (initial) {
-      socket.emit("join", {
-        username: "Admin",
-        room: props.classReference,
-        image: ""
-      });
+    socket.emit("join", {
+      username: "Admin",
+      room: props.classReference,
+      image: ""
+    });
 
-      // setInitial(false);
+    // setInitial(false);
     // }
 
     if (props.search || !concernsData) {

@@ -28,7 +28,7 @@ export const TableStyle = styled.div`
   @media only screen and (max-width: 500px),
     (height: 1024px) and (width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: landscape),
     (width: 1024px) and (height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: portrait) {
- table,
+    table,
     thead,
     tbody,
     th,
@@ -122,8 +122,7 @@ export const Subject = styled.div`
 export const Conversation = styled.div`
   height: 655px;
   overflow: auto;
-  background-color: #eaeaea;
-  border-radius: 10px 10px 0 0;
+  border-top: 1px solid lightgrey;
   @media (max-height: 894px) {
     height: 567.5px;
   }
@@ -137,16 +136,16 @@ export const Conversation = styled.div`
     height: 725px;
   }
 `;
+
 export const Message = styled.div`
   display: flex;
   padding: 20px;
   justify-content: center;
-  background-color: #dddddd;
+  background-color: #f2f2f2;
 `;
 export const TitleName = styled.div`
   padding: 20px;
   width: 815px;
-  border-right: 1px solid lightgrey;
   background-color: #ffffff;
   @media (min-width: 768px) and (max-width: 1024px) {
     width: 95%;
@@ -157,28 +156,36 @@ export const Field = styled.div`
 `;
 export const Option = styled.div`
   display: flex;
+  justify-content: space-around;
   align-content: center;
   align-items: center;
-  border-right: 1px solid lightgrey;
   width: 145px;
 `;
 export const Shared = styled.div`
+  background-color: whitesmoke;
   display: flex;
-  margin-top: 33px;
-  padding-bottom: 31px;
-  justify-content: center;
+  height: 97px;
+  justify-content: flex-start;
   border-bottom: 1px solid lightgrey;
+  h6 {
+    margin-top: 35px;
+    margin-left: 30px;
+    font-weight: bold;
+  }
   @media (min-width: 100px) and (max-width: 1440px) {
     display: none;
   }
 `;
 export const More = styled.button`
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
   border: transparent;
   background: transparent;
   cursor: pointer;
 `;
 export const Send = styled.button`
-  background-color: #2fdc5f;
+  background-color: forestgreen;
   color: white;
   border: transparent;
   width: 150px;

@@ -11,6 +11,7 @@ import CardActions from "@material-ui/core/CardActions";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import Background from "../images/undraw_code_thinking_1jeh.svg";
 import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
@@ -34,7 +35,8 @@ const useStyles = makeStyles(theme => ({
     color: blueGrey[500]
   },
   actions: {
-    backgroundColor: blueGrey[100],
+    background: `linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%)`,
+    color: "white",
     display: "flex",
     justifyContent: "space-between"
   },
@@ -42,17 +44,19 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.getContrastText(deepOrange[500]),
     backgroundColor: deepOrange[500],
     width: theme.spacing(8),
-    height: theme.spacing(8)
+    height: theme.spacing(8),
+    borderRadius: "50%"
   },
   description: {
-    backgroundColor: blueGrey[200],
+    background: `linear-gradient(to right, #8e9eab, #eef2f3)`,
     textAlign: "center",
     minHeight: 130,
     paddingTop: theme.spacing(4)
   },
   title: {
-    backgroundColor: blueGrey[500],
     color: "white",
+    background: `url(${Background}), linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%)`,
+    backgroundSize: "100% 100%",
     textAlign: "center",
     minHeight: 80,
     maxHeight: 120
@@ -131,6 +135,9 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
             </CardContent>
 
             <CardContent className={classes.description}>
+              <Typography gutterBottom variant="h5" component="h2">
+                {row.class_title}
+              </Typography>
               <Typography
                 variant="body1"
                 component="p"

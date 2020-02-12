@@ -44,11 +44,11 @@ export default function InQueue(rowDatahandler) {
     // update(rowDatahandler.search);
 
     // if (initial) {
-      socket.emit("join", {
-        username: "Admin",
-        room: rowDatahandler.class_id,
-        image: ""
-      });
+    socket.emit("join", {
+      username: "Admin",
+      room: rowDatahandler.class_id,
+      image: ""
+    });
     // }
 
     if (rowDatahandler.search || !concernsData) {
@@ -106,78 +106,78 @@ export default function InQueue(rowDatahandler) {
   };
 
   const handleConcernData = data => {
-    console.log('here')
+    console.log("here");
     rowDataHandlerChild2(data);
   };
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
-        {
-          concernsData ? concernsData.map((data, index) => {
-            return (
-              <div key={index}>
-                <ListItem
-                  button
-                  style={{
-                    borderLeft: "14px solid #8932a8",
-                    borderBottom: "0.5px solid #abababde",
-                    padding: "10px 15px"
-                  }}
-                  onClick={() => handleConcernData(data)}
-                >
-                  <ListItemAvatar>
-                    <Avatar src={data.image}></Avatar>
-                  </ListItemAvatar>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right"
+        {concernsData
+          ? concernsData.map((data, index) => {
+              return (
+                <div key={index}>
+                  <ListItem
+                    button
+                    style={{
+                      borderLeft: "14px solid #8932a8",
+                      borderBottom: "0.5px solid #abababde",
+                      padding: "10px 15px",
+                      backgroundColor: "whitesmoke"
                     }}
-                    open={open}
-                    onClose={handleClose}
+                    onClick={() => handleConcernData(data)}
                   >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>Log Out</MenuItem>
-                  </Menu>
-                  <ListItemText
-                    primary={data.concern_title}
-                    secondary={
-                      <React.Fragment>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          className={classes.inline}
-                          color="textPrimary"
-                        >
-                          {data.concern_description}
-                        </Typography>
-                      </React.Fragment>
-                    }
-                  />
-                  <ListItemSecondaryAction style={{ display: "flex" }}>
-                    <Avatar variant="square" className={classes.small}>
-                      <p style={{ fontSize: 12 }}>
-                        {data.concern_status == 1 ? "Hot" : "Queue"}
-                      </p>
-                    </Avatar>
-                    <MoreVertIcon
-                      // onClick={handleMenu}
-                      style={{
-                        fontSize: 35,
-                        color: "#c4c4c4",
-                        cursor: "pointer"
+                    <ListItemAvatar>
+                      <Avatar src={data.image}></Avatar>
+                    </ListItemAvatar>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right"
                       }}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                    </Menu>
+                    <ListItemText
+                      primary={data.concern_title}
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            className={classes.inline}
+                            color="textPrimary"
+                          >
+                            {data.concern_description}
+                          </Typography>
+                        </React.Fragment>
+                      }
                     />
-                  </ListItemSecondaryAction>
-                </ListItem>
-              </div>
-            );
-          }):""
-        }
-        
+                    <ListItemSecondaryAction style={{ display: "flex" }}>
+                      <Avatar variant="square" className={classes.small}>
+                        <p style={{ fontSize: 12 }}>
+                          {data.concern_status == 1 ? "Hot" : "Queue"}
+                        </p>
+                      </Avatar>
+                      <MoreVertIcon
+                        // onClick={handleMenu}
+                        style={{
+                          fontSize: 35,
+                          color: "#c4c4c4",
+                          cursor: "pointer"
+                        }}
+                      />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                </div>
+              );
+            })
+          : ""}
       </List>
     </Paper>
   );

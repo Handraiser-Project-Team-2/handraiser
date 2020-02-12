@@ -10,7 +10,8 @@ import Avatar from "@material-ui/core/Avatar";
 import HandShakeImage from "../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
-
+import GroupIcon from "@material-ui/icons/Group";
+import HelpIcon from "@material-ui/icons/Help";
 import {
   Div,
   Nav,
@@ -28,12 +29,12 @@ import {
   Shared
 } from "../Styles/Styles";
 import axios from "axios";
-
 import Tabs from "./Tabs/Tabs";
+import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
-import Input from '../reusables/Input'
+import Input from "../reusables/Input";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
 import "emoji-mart/css/emoji-mart.css";
@@ -62,7 +63,7 @@ export default function Mentor() {
   const [concernTitle, setConcernTitle] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
-  
+
   ///for chat
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
@@ -79,7 +80,6 @@ export default function Mentor() {
     console.log(socket);
   }, [ENDPOINT]);
 
-
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -91,7 +91,6 @@ export default function Mentor() {
   const sendMsg = evt => {
     evt.preventDefault();
     // console.log(name);
-    
   };
 
   // const handleClose = () => {
@@ -116,7 +115,7 @@ export default function Mentor() {
     setConcernTitle("");
     setName("");
     setAnchorEl(null);
-    
+
     axios
       .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
@@ -145,6 +144,7 @@ export default function Mentor() {
               }
             );
           });
+        window.location.reload();
       });
   };
 
@@ -179,19 +179,19 @@ export default function Mentor() {
   };
 
   const rowDatahandler = rowData => {
-    console.log(rowData)
+    console.log(rowData);
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
       .get(`http://localhost:5000/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
-      }).catch(err=>{
-        console.log(err)
       })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
-  
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
@@ -257,34 +257,61 @@ export default function Mentor() {
               }}
             >
               <Typography variant="h5">Concern: {concernTitle}</Typography>
-              <Typography variant="span">From: {name}</Typography>
-            </TitleName>
-            <Option>
-              <div
+              <Typography
+                variant="subtitle2"
                 style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%"
+                  fontSize: "12.4px"
                 }}
               >
-                <More onClick={handleMenu}>
-                  <MoreVertIcon
-                    style={{
-                      fontSize: 35,
-                      color: "#c4c4c4"
-                    }}
-                  />
-                </More>
+                From: {name}
+              </Typography>
+            </TitleName>
+            <Option>
+              <div>
+                <HelpIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <GroupIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <MoreVertIcon
+                  onClick={handleMenu}
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
               </div>
             </Option>
-
           </Subject>
 
-          {rowData.concern_status === 2 ? <Handshake data={rowData} rowDatahandler={rowDatahandler}/> : ""}
-          
+          {rowData.concern_status === 2 ? (
+            <Handshake data={rowData} rowDatahandler={rowDatahandler} />
+          ) : (
+            ""
+          )}
+
           <Chatfield />
 
-          {rowData.concern_status === 2 ? '':(
+          {rowData.concern_status === 2 ? (
+            ""
+          ) : (
             <Message>
               <Field>
                 <div
@@ -321,11 +348,7 @@ export default function Mentor() {
             </Message>
           )}
         </Help>
-        <Div2>
-          <Shared>
-            <Typography variant="h6">Shared Files</Typography>
-          </Shared>
-        </Div2>
+        <DetailPanel />
       </Div>
     </React.Fragment>
   );
