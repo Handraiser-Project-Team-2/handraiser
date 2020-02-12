@@ -136,6 +136,7 @@ export const Conversation = styled.div`
     height: 725px;
   }
 `;
+
 export const Message = styled.div`
   display: flex;
   padding: 20px;

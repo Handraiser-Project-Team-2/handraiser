@@ -4,6 +4,9 @@ const express = require("express");
 const massive = require("massive");
 const cors = require("cors");
 const router = require("./router");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+
 // setup controllers
 const users = require("./controllers/users");
 const admin = require("./controllers/admins");
@@ -11,6 +14,8 @@ const classes = require("./controllers/class");
 const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
 const authorization = require("./controllers/authorization");
+
+const mail = require("./mail");
 
 require("dotenv").config();
 massive({
@@ -44,6 +49,7 @@ massive({
     app.get("/api/userprofile/:user_id", users.getUserProfile);
     app.get("/api/user/student_list", users.accessList_student);
     app.post("/api/userprofile/", users.getUserProfileByEmail);
+    app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
 
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor); //reference a mentor user type to an email
@@ -56,6 +62,7 @@ massive({
     app.post("/api/admin/check/designation", admin.need_validations); // implicitly check if email need validations
 
     // mentor endpoints
+    app.get("api/classes/all/:class_id", mentor.get_all);
     app.get("/api/classes/done/:class_id", mentor.get_done);
     app.patch(
       "/api/assistance/:assisted_id/:class_id/:user_student_id",
@@ -67,6 +74,7 @@ massive({
     app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
     app.post("/api/my/classes/email", mentor.get_my_classroom_by_email); // get all classroom referenced to the current user by email
     app.delete("/api/assisted_by/:user_student_id", mentor.delete); // delete from assisted_by table
+    app.put("/api/mentor/my/class", mentor.edit_class); // edit a certain class
 
     // student endpoints
     app.get("/api/student/queue/order/:class_id", student.queue_order_all);
@@ -96,10 +104,65 @@ massive({
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
     app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
 
+    //sending email
+    app.post("/api/sendMail", mail.sendEmail);
+
     io.on("connection", socket => {
+      const users = [];
+
+      socket.on("AddRequest", (data, callback) => {
+        console.log(data);
+
+        io.to(data.room).emit("consolidateRequest", data );
+
+        callback();
+      });
+
       console.log("Online");
+
+      socket.on("join", ({ username, room, image }, callback) => {
+        const user = {
+          id: socket.id,
+          name: username,
+          room: room,
+          image: image
+        };
+
+        users.push(user);
+
+        console.log("user", user);
+
+        socket.emit("message", {
+          user: "admin",
+          text: `${user.name},welcome to the room ${user.room} `
+        });
+
+        socket.join(user.room);
+
+        // callback();
+      });
+
+      socket.on("typing", data => {
+        socket.broadcast.emit("typing", data);
+      });
+      socket.on("not typing", data => {
+        socket.broadcast.emit("not typing", data);
+      });
+
+      socket.on("sendMessage", (message, callback) => {
+        const user = users.find(user => user.id === socket.id);
+        console.log(user);
+        io.to(user.room).emit("message", {
+          user: user.name,
+          text: message,
+          image: user.image
+        });
+
+        callback();
+      });
+
       socket.on("disconnect", () => {
-        console.log("Offline");
+        console.log("user disconnected");
       });
     });
     server.listen(PORT, () => {

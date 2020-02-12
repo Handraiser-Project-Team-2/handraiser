@@ -48,13 +48,13 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC;`
+      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC;`
     )
       .then(data => {
         res.status(201).json(data);
       })
       .catch(err => {
-        res.status(401).end(err);
+        res.status(401).end();
       });
   },
   get_done: (req, res) => {
@@ -62,7 +62,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list WHERE concern_status = 3 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC`
+      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status = 3 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         res.status(201).json(data);
@@ -76,7 +76,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' AND concern_description ILIKE '%${search}%' order by concern_id ASC;`
+      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC;`
     )
       .then(data => {
         res.status(201).json(data);
@@ -154,6 +154,27 @@ module.exports = {
       })
       .catch(err => {
         res.status(400).end(err);
+      });
+  },
+
+  edit_class: (req, res) => {
+    const db = req.app.get("db");
+    const { class_id, class_title, class_description } = req.body;
+
+    db.class
+      .update(
+        {
+          class_id: class_id
+        },
+        {
+          class_title: class_title,
+          class_description: class_description
+        }
+      )
+      .then(classroom => res.status(201).send(classroom))
+      .catch(err => {
+        console.err(err);
+        res.status(500).end();
       });
   }
 };

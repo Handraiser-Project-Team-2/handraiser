@@ -2,14 +2,18 @@ import React from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import io from "socket.io-client";
+
 var jwtDecode = require("jwt-decode");
 
 export default function Handshake(props) {
+  let socket = io(); //initial connection
   const classes = useStyles();
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
   const accept = data => {
+    console.log("hanshake request");
     axios
       .patch(`http://localhost:5000/api/concern_list/${data.concern_id}`, {
         concern_id: data.concern_id,
@@ -18,6 +22,7 @@ export default function Handshake(props) {
         concern_status: 1
       })
       .then(data => {
+        // console.log(data/data)
         props.rowDatahandler(data.data);
 
         axios
@@ -30,13 +35,20 @@ export default function Handshake(props) {
 
             // if none then reference this current mentor
             if (data.data.length == 0) {
-              axios.post(`http://localhost:5000/api/assisted_by`, {
-                assist_status: "ongoing",
-                class_id: data.class_id,
-                // user_mentor_id: 3, //mock user_mentor_id data //used for checking
-                user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
-                user_student_id: data.user_id
-              });
+              axios
+                .post(`http://localhost:5000/api/assisted_by`, {
+                  assist_status: "ongoing",
+                  class_id: data.class_id,
+                  // user_mentor_id: 3, //mock user_mentor_id data //used for checking
+                  user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
+                  user_student_id: data.user_id
+                })
+                .then(data => {
+                  console.log(data);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
             } else {
               //reflect current mentor
               axios.patch(
@@ -48,9 +60,21 @@ export default function Handshake(props) {
                   user_mentor_id: user_id,
                   assist_status: "ongoing"
                 }
+                  .then(data => {
+                    console.log(data);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  })
               );
             }
+          })
+          .catch(err => {
+            console.log(err);
           });
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 
