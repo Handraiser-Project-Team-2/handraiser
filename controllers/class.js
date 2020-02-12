@@ -50,6 +50,7 @@ function getClassByMentor(req, res) {
 function getClassDetails(req, res) {
   const db = req.app.get("db");
   const { class_id } = req.params;
+  const { search } = req.query;
 
   db.query(
     `SELECT
@@ -68,6 +69,7 @@ function getClassDetails(req, res) {
 function getClassMembers(req, res) {
   const db = req.app.get("db");
   const { class_id } = req.params;
+  const { search } = req.query;
 
   db.query(
     `SELECT
@@ -75,7 +77,7 @@ function getClassMembers(req, res) {
       FROM
         user_profile
       INNER JOIN users ON users.profile_id = user_profile.profile_id
-      INNER JOIN classroom ON users.user_id = classroom.user_id where class_id = ${class_id};`
+      INNER JOIN classroom ON users.user_id = classroom.user_id where user_profile.first_name ILIKE '%${search}%' AND class_id = ${class_id};`
   )
     .then(members => res.status(201).send(members))
     .catch(err => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
@@ -15,6 +15,7 @@ import GroupIcon from "@material-ui/icons/Group";
 import James from "../../images/1966.png";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { Avatar, ListItemText, ListItem } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
 import LockIcon from "@material-ui/icons/Lock";
 
 const useStyles = makeStyles(theme => ({
@@ -77,8 +78,9 @@ export default function SimpleExpansionPanel({
 }) {
   const classes = useStyles();
   // const [expanded, setExpanded] = React.useState("panel1");
-  const [classInfo, setClassInfo] = React.useState([]);
-  const [classMem, setClassMem] = React.useState([]);
+  const [classInfo, setClassInfo] = useState([]);
+  const [classMem, setClassMem] = useState([]);
+  const [search, setSearch] = useState("");
 
   const handleChange = panel => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -100,7 +102,7 @@ export default function SimpleExpansionPanel({
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/members/${class_id}`
+      url: `http://localhost:5000/api/classes/members/${class_id}?search=${search}`
     })
       .then(res => {
         setClassMem(res.data);
@@ -108,7 +110,7 @@ export default function SimpleExpansionPanel({
       .catch(err => {
         console.log(err);
       });
-  }, []);
+  }, [search]);
 
   return (
     <Div2>
@@ -179,7 +181,7 @@ export default function SimpleExpansionPanel({
               color: "forestgreen"
             }}
           />
-          <Typography>Members</Typography>
+          <Typography>Members </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <div
@@ -258,8 +260,14 @@ export default function SimpleExpansionPanel({
                 display: "flex"
               }}
             >
-              <Button variant="outlined">See All Members</Button>
-              <Button variant="outlined">Add Student</Button>
+              {/* <Button variant="outlined">See All Members</Button>
+              <Button variant="outlined">Add Student</Button> */}
+              <TextField
+                id="outlined-basic"
+                placeholder="Search member..."
+                fullWidth
+                onChange={e => setSearch(e.target.value)}
+              />
             </div>
           </div>
         </ExpansionPanelDetails>
