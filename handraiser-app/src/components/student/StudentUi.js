@@ -32,9 +32,13 @@ import {
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
+import io from "socket.io-client";
+
 var jwtDecode = require("jwt-decode");
 
 export default function Student() {
+  let socket = io("ws://localhost:5000", { transports: ["websocket"] });
+  // let socket;
   let history = useHistory();
   let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -55,10 +59,15 @@ export default function Student() {
   };
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(concernDescription);
+    // console.log(concernDescription);
   };
 
+
+  const ENDPOINT = "localhost:5000";
+
   useEffect(() => {
+    socket = io(ENDPOINT);
+
     if (sessionStorage.getItem("token")) {
       axios
         .post("http://localhost:5000/api/user/data", {
@@ -83,7 +92,7 @@ export default function Student() {
           }
         })
         .catch(err => {
-          // console.log(err);
+          console.log(err);
         });
     } else {
       Swal.fire({
@@ -93,9 +102,15 @@ export default function Student() {
         history.push("/");
       });
     }
-  }, [cstate]);
+
+    if (!cstate) {
+      getData();
+    }
+  }, [cstate, ENDPOINT]);
 
   const sendRequest = () => {
+    socket.emit("join", { username: "Yow", room: class_id, image: "" });
+
     axios
       .post(`http://localhost:5000/api/student/request/assistance`, {
         class_id: class_id,
@@ -104,15 +119,34 @@ export default function Student() {
         concern_description: concernDescription
       })
       .then(data => {
+        console.log(data.data);
+
+        // add websocket here to reflect new request;
+
         setConcernTitle("");
         setConcernDescription("");
+
         Swal.fire({
           icon: "success",
           title: "Request sent to the mentor"
         })
           .then(() => {
-            window.location.reload();
-            // history.push(`/student/${class_id}`);
+            socket.emit(
+              "AddRequest",
+              {
+                concern_id: data.data.concern_id,
+                concern_title: data.data.concern_title,
+                concern_description: data.data.concern_description,
+                concern_status: data.data.concern_status,
+                class_id: data.data.class_id,
+                user_id: data.data.user_id,
+                cstate,
+                room: class_id
+              },
+              () => {
+                return console.log("drawback");
+              }
+            );
           })
           .catch(err => {
             console.log(err);
@@ -122,14 +156,26 @@ export default function Student() {
         console.log(err);
       });
   };
+  //get data of active queue where user interacted with from the queue panel
+  const rowDatahandler = rowData => {
+    console.log(rowData)
+    setConcernTitle(rowData.concern.concern_title);
+    // setRowData(rowData);
+    axios
+      .get(`http://localhost:5000/api/userprofile/${rowData.concern.user_id}`, {})
+      .then(data => {
+        setName(data.data[0].first_name + " " + data.data[0].last_name);
+      }).catch(err=>{
+        console.log(err)
+      })
+  };
 
-  // if (state.user_type === 3) {
   return (
     <React.Fragment>
       <Topbar />
       <Div>
         <Queue>
-          <Tabs classReference={class_id} />
+          <Tabs  rowDatahandler={rowDatahandler} classReference={class_id} />
         </Queue>
         <Help>
           <Subject>

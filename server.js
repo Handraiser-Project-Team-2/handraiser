@@ -109,9 +109,61 @@ massive({
     app.post("/api/sendMail", mail.sendEmail);
 
     io.on("connection", socket => {
+      const users = [];
+
+      socket.on("AddRequest", (data, callback) => {
+        console.log(data);
+
+        io.to(data.room).emit("consolidateRequest", data );
+
+        callback();
+      });
+
       console.log("Online");
+
+      socket.on("join", ({ username, room, image }, callback) => {
+        const user = {
+          id: socket.id,
+          name: username,
+          room: room,
+          image: image
+        };
+
+        users.push(user);
+
+        console.log("user", user);
+
+        socket.emit("message", {
+          user: "admin",
+          text: `${user.name},welcome to the room ${user.room} `
+        });
+
+        socket.join(user.room);
+
+        // callback();
+      });
+
+      socket.on("typing", data => {
+        socket.broadcast.emit("typing", data);
+      });
+      socket.on("not typing", data => {
+        socket.broadcast.emit("not typing", data);
+      });
+
+      socket.on("sendMessage", (message, callback) => {
+        const user = users.find(user => user.id === socket.id);
+        console.log(user);
+        io.to(user.room).emit("message", {
+          user: user.name,
+          text: message,
+          image: user.image
+        });
+
+        callback();
+      });
+
       socket.on("disconnect", () => {
-        console.log("Offline");
+        console.log("user disconnected");
       });
     });
     server.listen(PORT, () => {
