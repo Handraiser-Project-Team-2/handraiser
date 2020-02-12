@@ -60,7 +60,10 @@ const TabBtn = props => {
           value={tabValue}
           onChange={handleChange}
           indicatorColor="primary"
-          textColor="primary"
+          style={{
+            background: "#372476",
+            color: "white"
+          }}
         >
           <Tab
             label="MY REQUESTS"

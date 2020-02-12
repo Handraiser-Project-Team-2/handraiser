@@ -48,21 +48,20 @@ export default function InQueue(props) {
 
   let socket;
   const ENDPOINT = "localhost:5000";
-  
+
   const [initial, setInitial] = useState(true);
 
   useEffect(() => {
-
     socket = io(ENDPOINT);
 
     // if (initial) {
-      socket.emit("join", {
-        username: "Admin",
-        room: props.classReference,
-        image: ""
-      });
+    socket.emit("join", {
+      username: "Admin",
+      room: props.classReference,
+      image: ""
+    });
 
-      // setInitial(false);
+    // setInitial(false);
     // }
 
     if (props.search || !concernsData) {
