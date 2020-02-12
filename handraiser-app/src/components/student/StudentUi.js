@@ -117,6 +117,7 @@ export default function Student() {
   }, [cstate, ENDPOINT]);
 
   const sendRequest = () => {
+    
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     axios

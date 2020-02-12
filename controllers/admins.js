@@ -110,26 +110,7 @@ module.exports = {
                 validation_type: setType
               })
               .then(data => {
-                db.users
-                  .find({ email: data.email })
-                  .then(user => {
-                    if (user) {
-                      db.users.update(
-                        { user_id: user.user_id },
-                        {
-                          ...user,
-                          user_type_id: setType
-                        }
-                      );
-                    }
-
-                    res.status(201).json({data,user})
-
-                    console.log("email", data);
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  });
+                res.status(201).json({data,user})
               })
               .catch(err => {
                 res.status(400).end();
@@ -181,6 +162,7 @@ module.exports = {
     db.users
       .findOne({ user_id: parseToken.userid })
       .then(data => {
+        
         db.validations.findOne({ validation_email: data.email }).then(user => {
           if (user.validation_key === supplied_key) {
             // then verify status

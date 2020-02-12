@@ -44,7 +44,7 @@ export default function InQueue(rowDatahandler) {
     // update(rowDatahandler.search);
 
     // if (initial) {
-      console.log(rowDatahandler.class_id)
+    console.log(rowDatahandler.class_id);
     socket.emit("join", {
       username: "Admin",
       room: rowDatahandler.class_id,
@@ -112,7 +112,6 @@ export default function InQueue(rowDatahandler) {
   };
 
   const handleConcernData = data => {
-    console.log("here");
     rowDataHandlerChild2(data);
   };
 
@@ -125,12 +124,21 @@ export default function InQueue(rowDatahandler) {
                 <div key={index}>
                   <ListItem
                     button
-                    style={{
-                      borderLeft: "14px solid #8932a8",
-                      borderBottom: "0.5px solid #abababde",
-                      padding: "10px 15px",
-                      backgroundColor: "whitesmoke"
-                    }}
+                    style={
+                      data.concern_status === 1
+                        ? {
+                            borderLeft: "10px solid #8932a8",
+                            borderBottom: "0.5px solid #abababde",
+                            padding: "10px 15px",
+                            backgroundColor: "whitesmoke"
+                          }
+                        : {
+                            borderLeft: "10px solid blue",
+                            borderBottom: "0.5px solid #abababde",
+                            padding: "10px 15px",
+                            backgroundColor: "whitesmoke"
+                          }
+                    }
                     onClick={() => handleConcernData(data)}
                   >
                     <ListItemAvatar>
