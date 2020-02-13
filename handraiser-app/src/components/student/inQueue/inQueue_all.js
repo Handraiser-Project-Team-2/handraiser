@@ -102,7 +102,29 @@ export default function InQueue(props) {
                 }}
               >
                 <ListItemAvatar>
-                  <Avatar src={concern.concern.image}></Avatar>
+                  <div>
+                    {concern.concern.user_status === 1 ? (
+                      <status-indicator
+                        positive
+                        pulse
+                        style={{
+                          position: "absolute",
+                          marginTop: "30px",
+                          marginLeft: "35px"
+                        }}
+                      ></status-indicator>
+                    ) : (
+                      <status-indicator
+                        pulse
+                        style={{
+                          position: "absolute",
+                          marginTop: "30px",
+                          marginLeft: "35px"
+                        }}
+                      ></status-indicator>
+                    )}
+                    <Avatar src={concern.concern.image}></Avatar>
+                  </div>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
@@ -127,7 +149,6 @@ export default function InQueue(props) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        {/* {name} */}
                         {concern.concern.first_name +
                           " " +
                           concern.concern.last_name}
