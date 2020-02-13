@@ -1,3 +1,7 @@
+body {
+  background-color: whitesmoke;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -42,4 +46,8 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #372476;
+}
+
+.MuiList-padding {
+  padding: 0px !important;
 }

@@ -12,7 +12,6 @@ import axios from "axios";
 import { TabBox, BtnBox } from "../Styles/Styles";
 
 import { TableCont } from "../Table/Table";
-import { StudentTable } from "../Table-Student/Table-student";
 import { GenerateKey } from "../Generate-Key/Generate";
 
 export const TabBtn = props => {
@@ -21,7 +20,6 @@ export const TabBtn = props => {
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState({});
   const [type, setType] = useState("");
-
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -50,7 +48,6 @@ export const TabBtn = props => {
     let email = e.target.name;
     let value = e.target.value;
     userData[email] = value;
-
     setUserData(userData);
     if (tab === 1) {
       setType("mentor");
@@ -70,16 +67,18 @@ export const TabBtn = props => {
   const handleAdd = () => {
     axios
       .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
-      .then(() => {
+      .then(res => {
         toast.success("Registration Sucessful!", {
           position: toast.POSITION.TOP_RIGHT
         });
         setOpen(false);
       })
-      .catch(err => {
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT
-        });
+      .catch(errors => {
+        try {
+          toast.error(errors.res.data.error);
+        } catch {
+          console.log(errors);
+        }
       });
   };
 
@@ -121,7 +120,7 @@ export const TabBtn = props => {
         )}
       </TabBox>
       <TabPanel value={tabValue} index={0}>
-        <StudentTable tabValue={tabValue} />
+        <TableCont tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
         <TableCont tabValue={tabValue} />
@@ -138,7 +137,7 @@ export const TabBtn = props => {
         handleOnChange={handleOnChange}
         tabValue={tabValue}
       />
-      <ToastContainer />
+      <ToastContainer autoClose={1500} />
     </React.Fragment>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
+import styled from "styled-components";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -11,6 +12,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,67 +21,64 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
+  },
+  small: {
+    width: theme.spacing(4),
+    height: theme.spacing(4)
   }
 }));
 
-export default function InQueue(rowDatahandler) {
-  const classes = useStyles();
-  const [concernsData, setConcernsData] = useState([]);
+export default function InQueue(props) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [concernsData, setConcernsData] = useState([]);
   const [image, setImage] = useState("");
-  const [load, setLoad] = useState(false);
+  const [name, setName] = useState("");
   const open = Boolean(anchorEl);
-
-  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
-
-  useEffect(() => {
-    
-    update(rowDatahandler.search);
-  }, [rowDatahandler.search]);
-
-  // here
-  const update = (data) => {
-    axios({
-      method: "get",
-      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
-    })
-      .then(res => {
-        // console.log(res.data)
-        setConcernsData(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const classes = useStyles();
 
-  const handleConcernData = data => {
-    rowDataHandlerChild2(data);
-  };
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
 
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/student/queue/order/${props.classReference}?search=${props.search}` //5 here is a class_id example
+    }).then(res => {
+      setConcernsData(res.data);
+    });
+  }, [props.search]); //class_id
+
+  //   console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
-        {concernsData.map((data, index) => {
+        {concernsData.map((concern, index) => {
           return (
             <div key={index}>
               <ListItem
-                button
                 style={{
                   borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px"
                 }}
-                onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={data.image}></Avatar>
+                  <status-indicator
+                    positive
+                    pulse
+                    style={{
+                      position: "absolute",
+                      marginTop: "30px",
+                      marginLeft: "35px"
+                    }}
+                  ></status-indicator>
+                  <Avatar src={concern.concern.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
@@ -95,7 +94,7 @@ export default function InQueue(rowDatahandler) {
                   <MenuItem onClick={handleClose}>Log Out</MenuItem>
                 </Menu>
                 <ListItemText
-                  primary={data.concern_title}
+                  primary={concern.concern.concern_title}
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -104,19 +103,24 @@ export default function InQueue(rowDatahandler) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        {data.concern_description}
+                        {/* {name} */}
+                        {concern.concern.concern_description}
                       </Typography>
                     </React.Fragment>
                   }
                 />
                 <ListItemSecondaryAction style={{ display: "flex" }}>
-                  <Avatar variant="square" className={classes.small}>
+                  <Avatar variant="square">
                     <p style={{ fontSize: 12 }}>
-                      {data.concern_status == 1 ? "Hot" : "Queue"}
+                      {concern.concern.concern_status === 1
+                        ? "being helped"
+                        : concern.queue_order_num == 0
+                        ? "next"
+                        : concern.queue_order_num}
                     </p>
                   </Avatar>
                   <MoreVertIcon
-                    // onClick={handleMenu}
+                    onClick={handleMenu}
                     style={{
                       fontSize: 35,
                       color: "#c4c4c4",

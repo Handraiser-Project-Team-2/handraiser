@@ -34,7 +34,7 @@ export default function MentorProfile({ profileData, classData }) {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} className={classes.gridCont}>
+      <Grid container spacing={1} className={classes.gridCont}>
         <Grid item xs={12} sm={4}>
           <div className={classes.profileCont}>
             <Avatar

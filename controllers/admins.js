@@ -60,9 +60,9 @@ module.exports = {
   },
   accessList_mentors: (req, res) => {
     const db = req.app.get("db");
-
-    db.validations
-      .find({ validation_type: 4 })
+    db.query(
+      `select * from validations INNER JOIN users ON validations.validation_email = users.email AND validations.validation_type = 4`
+    )
       .then(data => {
         res.status(200).json(data);
       })
@@ -73,8 +73,9 @@ module.exports = {
   accessList_admins: (req, res) => {
     const db = req.app.get("db");
 
-    db.validations
-      .find({ validation_type: 1 })
+    db.query(
+      `select * from validations INNER JOIN users ON validations.validation_email = users.email AND validations.validation_type = 1`
+    )
       .then(data => {
         res.status(200).json(data);
       })
@@ -96,7 +97,7 @@ module.exports = {
     // check email if already defined
     try {
       db.validations
-        .find({ validation_email: email })
+        .findOne({ validation_email: email })
         .then(data => {
           console.log(!data);
 

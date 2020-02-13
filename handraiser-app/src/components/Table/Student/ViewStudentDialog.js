@@ -18,16 +18,14 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-
 export default function ViewMentorDialog({ data }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
   const [profileData, setProfileData] = useState([]);
-  const handleClickOpen = () => {
+  const handleClickOpen = data => {
     setOpen(true);
     fetchProfileData();
-    fetchClass();
+    fetchStudentClass(data);
   };
 
   const fetchProfileData = () => {
@@ -37,7 +35,7 @@ export default function ViewMentorDialog({ data }) {
       data: { email: data.email }
     })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
         setProfileData(data.data);
       })
       .catch(err => {
@@ -46,14 +44,14 @@ export default function ViewMentorDialog({ data }) {
   };
 
   const [classData, setClassData] = useState([]);
-  const fetchClass = () => {
+  const fetchStudentClass = data => {
     axios({
       method: "post",
-      url: `/api/student/get/class`,
+      url: `/api/student/get/class/${data.user_id}`,
       data: { email: data.email }
     })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
         setClassData(data.data);
       })
       .catch(err => {
@@ -70,10 +68,10 @@ export default function ViewMentorDialog({ data }) {
       <Typography
         variant="body2"
         gutterBottom
-        onClick={handleClickOpen}
+        onClick={() => handleClickOpen(data)}
         className={classes.email}
       >
-        {data.email}
+        {data.first_name + " " + data.last_name}
       </Typography>
       <Dialog
         open={open}
