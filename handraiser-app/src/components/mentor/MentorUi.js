@@ -169,10 +169,8 @@ export default function Mentor() {
         concern_status: 2
       })
       .then(data => {
-
         socket.emit("handshake", { room: class_id });
 
-        
         axios
           .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
           .then(data => {
@@ -185,7 +183,7 @@ export default function Mentor() {
   };
 
   const rowDatahandler = rowData => {
-    console.log(rowData);
+    // console.log(rowData);
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
@@ -342,13 +340,6 @@ export default function Mentor() {
                   }}
                 >
                   <form onSubmit={sendMsg}>
-                    {/* <TextField
-                      id="outlined-textarea"
-                      multiline
-                      variant="outlined"
-                      fullWidth
-                      rows="3"
-                    /> */}
                     <Input />
 
                     <div

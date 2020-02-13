@@ -194,7 +194,6 @@ module.exports = {
     const db = req.app.get("db");
     const { user_student_id, class_id } = req.params;
 
-    
     db.assisted_by
       .find({ class_id, user_student_id })
       .then(assist => res.status(200).json(assist))

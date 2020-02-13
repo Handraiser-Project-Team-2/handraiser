@@ -62,7 +62,6 @@ export default function InQueue(props) {
   }, [ENDPOINT]);
 
   useEffect(() => {
-    
     if (props.search || !concernsData) {
       update(props.search);
     }
