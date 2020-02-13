@@ -86,6 +86,7 @@ export default function InQueue(props) {
       url: `http://localhost:5000/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
+      console.log(res.data.length);
     });
   };
 
@@ -112,22 +113,22 @@ export default function InQueue(props) {
         `http://localhost:5000/api/concern_list/${concern.concern.concern_id}`
       )
       .then(data => {
-
-        axios.patch(
-          `http://localhost:5000/api/concern_list/${data.data[0].concern_id}`,
-          {
-            concern_id: data.data[0].concern_id,
-            concern_title: concernTitle,
-            concern_description: concernDescription,
-            concern_status: data.data[0].concern_status
-          }
-        ).then((data)=>{
-          socket.emit("handshake", { room: props.classReference });
-
-        }).catch(err => {
-          console.log(err);
-        });
-
+        axios
+          .patch(
+            `http://localhost:5000/api/concern_list/${data.data[0].concern_id}`,
+            {
+              concern_id: data.data[0].concern_id,
+              concern_title: concernTitle,
+              concern_description: concernDescription,
+              concern_status: data.data[0].concern_status
+            }
+          )
+          .then(data => {
+            socket.emit("handshake", { room: props.classReference });
+          })
+          .catch(err => {
+            console.log(err);
+          });
 
         console.log(data);
       })
@@ -154,7 +155,6 @@ export default function InQueue(props) {
         {}
       )
       .then(data => {
-
         socket.emit("handshake", { room: props.classReference });
 
         // alert("Your concern has been removed from the queue");
