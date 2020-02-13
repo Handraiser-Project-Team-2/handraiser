@@ -19,6 +19,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import { toast, ToastContainer } from "react-toastify";
+import Swal from "sweetalert2";
 
 var jwtDecode = require("jwt-decode");
 
@@ -77,16 +79,15 @@ export default function Topbar() {
   };
 
   const Logout = () => {
-    axios
-      .patch(`http://localhost:5000/api/users/${user_id}`, {
-        user_status: 0
-      })
-      .then(res => {
-        alert("Logged out successfully");
-      });
     sessionStorage.setItem("token", "");
     history.push("/");
     setData();
+    axios.patch(`http://localhost:5000/api/users/${user_id}`).then(res => {
+      Swal.fire({
+        icon: "success",
+        title: "Logged out successful!"
+      });
+    });
   };
 
   const sendMsg = evt => {
@@ -154,6 +155,7 @@ export default function Topbar() {
           </Menu>
         </Toolbar>
       </AppBar>
+      <ToastContainer autoClose={1500} />
     </Nav>
   );
 }

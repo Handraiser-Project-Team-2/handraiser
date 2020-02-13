@@ -28,7 +28,7 @@ export default function ViewMentorDialog({ data }) {
     fetchStudentClass(data);
   };
 
-  const fetchProfileData = () => {
+  const fetchProfileData = data => {
     axios({
       method: "post",
       url: `/api/userprofile/`,
