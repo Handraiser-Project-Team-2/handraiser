@@ -58,25 +58,6 @@ export default function InQueue(rowDatahandler) {
     });
 
     socket.on("consolidateRequest", message => {
-      // console.log("message recieved", message);
-
-      // let trasmission = {
-      //   concern_id: message.concern_id,
-      //   concern_title: message.concern_title,
-      //   concern_description: message.concern_description,
-      //   concern_status: message.concern_status,
-      //   class_id: message.class_id,
-      //   user_id: message.user_id,
-      //   profile_id: message.cstate.profile_id,
-      //   first_name: message.cstate.first_name,
-      //   last_name: message.cstate.last_name,
-      //   image: message.cstate.image
-      // };
-
-      // let concern_b = Object.assign([], concernsData);
-      // concern_b.push(trasmission);
-      // setConcernsData(concern_b);
-
       update("");
     });
 
