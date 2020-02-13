@@ -5,7 +5,6 @@ import axios from "axios";
 import io from "socket.io-client";
 import { useHistory, useParams } from "react-router-dom";
 
-
 var jwtDecode = require("jwt-decode");
 
 export default function Handshake(props) {
@@ -17,9 +16,7 @@ export default function Handshake(props) {
 
   const ENDPOINT = "localhost:5000";
 
-
   let socket = io(ENDPOINT);
-
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -29,7 +26,6 @@ export default function Handshake(props) {
       room: class_id,
       image: ""
     });
-
   });
 
   const accept = highdata => {
@@ -47,7 +43,7 @@ export default function Handshake(props) {
         props.rowDatahandler(data.data);
 
         console.log(highdata);
-        
+
         socket.emit("handshake", { room: highdata.class_id });
 
         axios
@@ -110,16 +106,37 @@ export default function Handshake(props) {
         <div className={classes.handshake_text_container}>
           <p className={classes.handshake_text_main}>Respond to request?</p>
         </div>
-        <div className={classes.triangle_aest} />
-        <div
-          className={classes.handshake_button_container}
-          onClick={() => {
-            accept(props.data);
-            // window.location.reload();
-          }}
-        >
-          <img className={classes.handshake_img} src={HandShakeImage} />
-          <p className={classes.handshake_text_btn}>ACCEPT</p>
+
+        <div className={classes.button_flex_container}>
+          <div className={classes.button_main_container_2}>
+            <div className={classes.triangle_aest} />
+            <div
+              className={classes.handshake_button_container}
+              onClick={() => {
+                accept(props.data);
+                // window.location.reload();
+              }}
+            >
+              <img className={classes.handshake_img} src={HandShakeImage} />
+              <p className={classes.handshake_text_btn}>ACCEPT</p>
+            </div>
+          </div>
+
+          <div className={classes.button_main_container}>
+            <div className={classes.triangle_aest_2} />
+            <div
+              className={classes.handshake_button_container_2}
+              onClick={() => {
+                accept(props.data);
+                // window.location.reload();
+              }}
+            >
+              {/* <img className={classes.handshake_img} src={HandShakeImage} /> */}
+              <p className={classes.handshake_text_btn_2}>X</p>
+
+              <p className={classes.handshake_text_btn}>CLOSE</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -127,6 +144,26 @@ export default function Handshake(props) {
 }
 
 const useStyles = makeStyles(theme => ({
+  button_flex_container: {
+    display: "flex",
+    height: "100%"
+  },
+  button_main_container: {
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: "2"
+  },
+  button_main_container_2: {
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    left: "25px",
+    zIndex: "1"
+  },
   handshake_main_btn: {
     display: "flex",
     justifyContent: "center",
@@ -142,7 +179,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: "10px"
   },
   handshake_container: {
-    width: "500px",
+    width: "600px",
     height: "121px",
     display: "flex",
     justifyContent: "space-between",
@@ -169,6 +206,23 @@ const useStyles = makeStyles(theme => ({
     },
     zIndex: "1"
   },
+  handshake_button_container_2: {
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    width: "100px",
+    cursor: "pointer",
+    background: "#F00A38",
+    "&:hover": {
+      background: "#c4032a"
+    },
+    "&:hover div": {
+      borderColor: "transparent #00eb41 transparent transparent"
+    },
+    zIndex: "1"
+  },
   handshake_text_container: {
     marginLeft: "95px"
   },
@@ -179,6 +233,13 @@ const useStyles = makeStyles(theme => ({
     fontSize: "0.8em",
     color: "white",
     fontWeight: "800"
+  },
+  handshake_text_btn_2: {
+    fontSize: "3em",
+    color: "white",
+    fontWeight: "800",
+    fontWeight: "200",
+
   },
   handshake_img: {
     backgroundSize: "cover",
@@ -194,7 +255,18 @@ const useStyles = makeStyles(theme => ({
     borderColor: "transparent #2FDC5F transparent transparent",
     position: "relative",
     top: "2px",
-    right: "-39px",
+    right: "-6px",
+    zIndex: "0"
+  },
+  triangle_aest_2: {
+    width: "0",
+    height: "0",
+    borderStyle: "solid",
+    borderWidth: "12.5px 25px 12.5px 0",
+    borderColor: "transparent #F00A38 transparent transparent",
+    position: "relative",
+    top: "2px",
+    right: "-6px",
     zIndex: "0"
   }
 }));
