@@ -89,15 +89,16 @@ export default function SimpleExpansionPanel({
   useEffect(() => {
     axios({
       method: "post",
-      url: `http://localhost:5000/api/student/classes/${class_id}`
+      url: `http://localhost:5000/api/classinfo/${class_id}?search=${search}`
     })
       .then(res => {
+        // console.log(res.data);
         setClassInfo(res.data[0]);
       })
       .catch(err => {
         console.log(err);
       });
-  }, []);
+  }, [search]);
 
   useEffect(() => {
     axios({
@@ -112,6 +113,7 @@ export default function SimpleExpansionPanel({
       });
   }, [search]);
 
+  const date = classInfo.class_date_created;
   return (
     <Div2>
       <Shared>
@@ -153,7 +155,12 @@ export default function SimpleExpansionPanel({
             <span style={{ padding: "25px 10px 5px 10px", color: "grey" }}>
               Description
             </span>
-            <span style={{ padding: "10px 10px 8px 9px", color: "darkblue" }}>
+            <span
+              style={{
+                padding: "10px 10px 8px 9px",
+                color: "darkblue"
+              }}
+            >
               {classInfo.class_description}
             </span>
             <span style={{ padding: "25px 10px 5px 10px", color: "grey" }}>

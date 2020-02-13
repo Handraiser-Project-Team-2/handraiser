@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
@@ -15,6 +15,7 @@ import GroupIcon from "@material-ui/icons/Group";
 import James from "../../images/1966.png";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { Avatar, ListItemText, ListItem } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
 import LockIcon from "@material-ui/icons/Lock";
 
 const useStyles = makeStyles(theme => ({
@@ -76,8 +77,10 @@ export default function SimpleExpansionPanel({
   setExpanded
 }) {
   const classes = useStyles();
-  const [classInfo, setClassInfo] = React.useState([]);
-  const [classMem, setClassMem] = React.useState([]);
+  // const [expanded, setExpanded] = React.useState("panel1");
+  const [classInfo, setClassInfo] = useState([]);
+  const [classMem, setClassMem] = useState([]);
+  const [search, setSearch] = useState("");
 
   const handleChange = panel => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -86,20 +89,21 @@ export default function SimpleExpansionPanel({
   useEffect(() => {
     axios({
       method: "post",
-      url: `http://localhost:5000/api/student/classes/${class_id}`
+      url: `http://localhost:5000/api/classinfo/${class_id}?search=${search}`
     })
       .then(res => {
+        // console.log(res.data);
         setClassInfo(res.data[0]);
       })
       .catch(err => {
         console.log(err);
       });
-  }, []);
+  }, [search]);
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/members/${class_id}`
+      url: `http://localhost:5000/api/classes/members/${class_id}?search=${search}`
     })
       .then(res => {
         setClassMem(res.data);
@@ -107,7 +111,7 @@ export default function SimpleExpansionPanel({
       .catch(err => {
         console.log(err);
       });
-  }, []);
+  }, [search]);
 
   return (
     <Div2>
@@ -150,7 +154,12 @@ export default function SimpleExpansionPanel({
             <span style={{ padding: "25px 10px 5px 10px", color: "grey" }}>
               Description
             </span>
-            <span style={{ padding: "10px 10px 8px 9px", color: "darkblue" }}>
+            <span
+              style={{
+                padding: "10px 10px 8px 9px",
+                color: "darkblue"
+              }}
+            >
               {classInfo.class_description}
             </span>
             <span style={{ padding: "25px 10px 5px 10px", color: "grey" }}>
@@ -178,7 +187,7 @@ export default function SimpleExpansionPanel({
               color: "forestgreen"
             }}
           />
-          <Typography>Members</Typography>
+          <Typography>Members </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <div
@@ -257,8 +266,14 @@ export default function SimpleExpansionPanel({
                 display: "flex"
               }}
             >
-              <Button variant="outlined">See All Members</Button>
-              <Button variant="outlined">Add Student</Button>
+              {/* <Button variant="outlined">See All Members</Button>
+              <Button variant="outlined">Add Student</Button> */}
+              <TextField
+                id="outlined-basic"
+                placeholder="Search member..."
+                fullWidth
+                onChange={e => setSearch(e.target.value)}
+              />
             </div>
           </div>
         </ExpansionPanelDetails>

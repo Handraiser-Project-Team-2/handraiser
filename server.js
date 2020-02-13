@@ -98,7 +98,7 @@ massive({
     ); // get all done request assistance
     app.post("/api/student/get/class", student.get_my_classroom);
     app.post("/api/student/get/class/:user_id", student.get_my_classroom_all);
-    app.post("/api/student/classes/:class_id", classes.getClassDetails); //get class details including class mentor
+    app.post("/api/classinfo/:class_id", classes.getClassDetails); //get class details including class mentor
 
     // class endpoints
     app.get("/api/classes", classes.getAllClass); // get all available classes

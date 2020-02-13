@@ -58,11 +58,15 @@ function getClassDetails(req, res) {
       FROM
         user_profile
       INNER JOIN users ON users.profile_id = user_profile.profile_id
-      INNER JOIN class ON users.user_id = class.user_id where class_id = ${class_id};`
+      INNER JOIN class ON users.user_id = class.user_id where user_profile.first_name ILIKE '%${search}%' AND class_id = ${class_id};`
   )
-    .then(detail => res.status(201).send(detail))
+    .then(detail => {
+      // console.log(detail);
+      // `SELECT * from ${detail} where ${detail.first_name} ILIKE '%${search}%' OR ${detail.last_name} ILIKE '%${search}%'`;
+      res.status(201).json(detail);
+    })
     .catch(err => {
-      res.status(422).end();
+      res.status(500).end();
     });
 }
 
