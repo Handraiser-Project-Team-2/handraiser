@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import List from "@material-ui/core/List";
@@ -13,6 +13,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
 import "status-indicator/styles.css";
+import io from "socket.io-client";
+import { UserContext } from "../../Contexts/UserContext";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,19 +33,51 @@ export default function InQueue({ class_id, search }) {
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
+  const { cstate, getData } = useContext(UserContext);
+
+  const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
+
   useEffect(() => {
+    socket = io(ENDPOINT);
+
+    if (!cstate) {
+      getData();
+    }
+
+    if (cstate) {
+      socket.emit("join", {
+        username: cstate.user_id,
+        room: class_id,
+        image: ""
+      });
+    }
+
+    update("");
+  }, [ENDPOINT]);
+
+  useEffect(() => {
+
+    update(search);
+
+    socket.on("updateComponents", message => {
+      update("");
+    });
+
+  }, [search]);
+
+  const update = data => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/all/${class_id}?search=${search}`
+      url: `http://localhost:5000/api/classes/all/${class_id}?search=${data}`
     })
       .then(res => {
-        // console
         setConcernsData(res.data);
       })
       .catch(err => {
         console.log(err);
       });
-  }, [concernsData]);
+  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);

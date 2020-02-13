@@ -92,7 +92,7 @@ export default function SimpleExpansionPanel({
       url: `http://localhost:5000/api/classinfo/${class_id}?search=${search}`
     })
       .then(res => {
-        // console.log(res.data);
+        console.log(res.data);
         setClassInfo(res.data);
       })
       .catch(err => {

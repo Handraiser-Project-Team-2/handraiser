@@ -112,18 +112,24 @@ export default function InQueue(props) {
         `http://localhost:5000/api/concern_list/${concern.concern.concern_id}`
       )
       .then(data => {
-        axios.patch(
-          `http://localhost:5000/api/concern_list/${data.data[0].concern_id}`,
-          {
-            concern_id: data.data[0].concern_id,
-            concern_title: concernTitle,
-            concern_description: concernDescription,
-            concern_status: data.data[0].concern_status
-          }
-        );
-      })
-      .then(() => {
-        window.location = `/student/${props.classReference}`;
+        axios
+          .patch(
+            `http://localhost:5000/api/concern_list/${data.data[0].concern_id}`,
+            {
+              concern_id: data.data[0].concern_id,
+              concern_title: concernTitle,
+              concern_description: concernDescription,
+              concern_status: data.data[0].concern_status
+            }
+          )
+          .then(data => {
+            socket.emit("handshake", { room: props.classReference });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
+        console.log(data);
       })
       .catch(err => {
         console.log(err);
@@ -148,19 +154,15 @@ export default function InQueue(props) {
         {}
       )
       .then(data => {
-        // window.location = `/student/${props.classReference}`;
-
         socket.emit("handshake", { room: props.classReference });
 
-        alert("Your concern has been removed from the queue");
+        // alert("Your concern has been removed from the queue");
       })
       .catch(err => {
         console.log(err);
       });
-    // }
   };
 
-  // console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
