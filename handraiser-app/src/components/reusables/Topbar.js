@@ -21,8 +21,6 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Swal from "sweetalert2";
 
-var jwtDecode = require("jwt-decode");
-
 export default function Topbar() {
   const [state, setState] = React.useState({
     top: false,
@@ -78,19 +76,37 @@ export default function Topbar() {
   };
 
   const Logout = () => {
-    axios
-      .patch(`http://localhost:5000/api/users/${user_id}`, {
-        user_status: 0
-      })
-      .then(res => {
+    // .then(res => {
+    // Swal.fire({
+    //   icon: "success",
+    //   title: "Logged out succesfully!"
+    // });
+    Swal.fire({
+      title: "Confirm",
+      text: "Are you sure you want to log out?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes!"
+    }).then(result => {
+      if (result.value) {
+        axios
+          .patch(`http://localhost:5000/api/users/${user_id}`, {
+            user_status: 0
+          })
+          .then(() => {
+            sessionStorage.setItem("token", "");
+            history.push("/");
+            setData();
+          });
         Swal.fire({
           icon: "success",
           title: "Logged out succesfully!"
         });
-      });
-    sessionStorage.setItem("token", "");
-    history.push("/");
-    setData();
+      }
+    });
+    // });
   };
 
   const sendMsg = evt => {

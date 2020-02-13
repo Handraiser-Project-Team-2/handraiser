@@ -126,9 +126,11 @@ massive({
       });
 
       socket.on("handshake", data => {
-        console.log("handshake flag", data)
+        console.log("handshake flag", data);
 
-        io.to(data.room).emit("updateComponents", {message:'handshake succesful'});
+        io.to(data.room).emit("updateComponents", {
+          message: "handshake succesful"
+        });
       });
 
       console.log("Online");
@@ -151,7 +153,6 @@ massive({
         });
 
         socket.join(user.room);
-
       });
 
       socket.on("typing", data => {

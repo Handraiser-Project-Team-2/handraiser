@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React from "react";
 import Logo from "../images/google.png";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { GoogleLogin } from "react-google-login";
 import axios from "axios";
 import {
   LoginDiv,
