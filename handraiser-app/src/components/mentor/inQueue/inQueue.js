@@ -31,29 +31,31 @@ export default function InQueue(rowDatahandler) {
   const [image, setImage] = useState("");
   const [load, setLoad] = useState(false);
   const open = Boolean(anchorEl);
-  let socket;
   const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
-  // const [initial, setInitial] = useState(true);
   useEffect(() => {
     socket = io(ENDPOINT);
 
-    // update(rowDatahandler.search);
-
-    // if (initial) {
     socket.emit("join", {
       username: "Admin",
       room: rowDatahandler.class_id,
       image: ""
     });
-    // }
+  }, [ENDPOINT]);
+
+  useEffect(() => {
+    console.log(rowDatahandler.class_id);
 
     if (rowDatahandler.search || !concernsData) {
       update(rowDatahandler.search);
     }
+
+    socket.on("updateComponents", message => {
+      update("");
+    });
 
     socket.on("consolidateRequest", message => {
       console.log("message recieved", message);
@@ -72,10 +74,7 @@ export default function InQueue(rowDatahandler) {
       };
 
       let concern_b = Object.assign([], concernsData);
-
       concern_b.push(trasmission);
-
-      console.log(concern_b);
       setConcernsData(concern_b);
     });
 
@@ -84,7 +83,6 @@ export default function InQueue(rowDatahandler) {
     });
   }, [rowDatahandler.search, ENDPOINT, concernsData]);
 
-  // here
   const update = data => {
     axios({
       method: "get",
@@ -106,7 +104,6 @@ export default function InQueue(rowDatahandler) {
   };
 
   const handleConcernData = data => {
-    console.log("here");
     rowDataHandlerChild2(data);
   };
 
@@ -119,12 +116,21 @@ export default function InQueue(rowDatahandler) {
                 <div key={index}>
                   <ListItem
                     button
-                    style={{
-                      borderLeft: "14px solid #8932a8",
-                      borderBottom: "0.5px solid #abababde",
-                      padding: "10px 15px",
-                      backgroundColor: "whitesmoke"
-                    }}
+                    style={
+                      data.concern_status === 1
+                        ? {
+                            borderLeft: "10px solid #8932a8",
+                            borderBottom: "0.5px solid #abababde",
+                            padding: "10px 15px",
+                            backgroundColor: "whitesmoke"
+                          }
+                        : {
+                            borderLeft: "10px solid blue",
+                            borderBottom: "0.5px solid #abababde",
+                            padding: "10px 15px",
+                            backgroundColor: "whitesmoke"
+                          }
+                    }
                     onClick={() => handleConcernData(data)}
                   >
                     <ListItemAvatar>

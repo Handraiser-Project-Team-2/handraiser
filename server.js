@@ -116,11 +116,17 @@ massive({
       const users = [];
 
       socket.on("AddRequest", (data, callback) => {
-        console.log(data);
+        // console.log(data);
 
         io.to(data.room).emit("consolidateRequest", data);
 
         callback();
+      });
+
+      socket.on("handshake", data => {
+        console.log("handshake flag", data)
+
+        io.to(data.room).emit("updateComponents", {message:'handshake succesful'});
       });
 
       console.log("Online");
@@ -144,7 +150,6 @@ massive({
 
         socket.join(user.room);
 
-        // callback();
       });
 
       socket.on("typing", data => {
@@ -156,7 +161,7 @@ massive({
 
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
-        console.log(user);
+        // console.log(user);
         io.to(user.room).emit("message", {
           user: user.name,
           text: message,

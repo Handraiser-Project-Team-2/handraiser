@@ -19,6 +19,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
+import { useHistory, useParams } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,61 +41,39 @@ export default function InQueue(props) {
   const [concernDescription, setConcernDescription] = useState("");
   const open = Boolean(anchorEl);
   const [concern, setConcern] = useState("");
+  let { class_id } = useParams();
 
   const classes = useStyles();
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-
-  let socket;
   const ENDPOINT = "localhost:5000";
 
-  const [initial, setInitial] = useState(true);
+  let socket = io(ENDPOINT);
+  const [initial, setInitial] = useState();
 
   useEffect(() => {
     socket = io(ENDPOINT);
-
-    // if (initial) {
     socket.emit("join", {
       username: "Admin",
       room: props.classReference,
       image: ""
     });
+  }, [ENDPOINT]);
 
-    // setInitial(false);
-    // }
-
+  useEffect(() => {
+    
     if (props.search || !concernsData) {
       update(props.search);
     }
 
+    socket.on("updateComponents", message => {
+      update("");
+    });
+
     socket.on("consolidateRequest", message => {
       console.log("message recieved", message);
-
-      console.log(concernsData);
-
-      let trasmission = {
-        concern: {
-          concern_id: message.concern_id,
-          concern_title: message.concern_title,
-          concern_description: message.concern_description,
-          concern_status: message.concern_status,
-          class_id: message.class_id,
-          user_id: message.user_id,
-          profile_id: message.cstate.profile_id,
-          first_name: message.cstate.first_name,
-          last_name: message.cstate.last_name,
-          image: message.cstate.image
-        },
-        queue_order_num: ""
-      };
-
-      let concern_b = Object.assign([], concernsData);
-
-      concern_b.push(trasmission);
-
-      console.log(concern_b);
-      setConcernsData(concern_b);
+      update("");
     });
 
     socket.on("disconnect", () => {
@@ -128,6 +107,7 @@ export default function InQueue(props) {
 
   const handleSaveEdit = () => {
     setOpenEdit(false);
+
     axios
       .get(
         `http://localhost:5000/api/concern_list/${concern.concern.concern_id}`
@@ -145,11 +125,13 @@ export default function InQueue(props) {
       })
       .then(() => {
         window.location = `/student/${props.classReference}`;
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 
   const handleConcernData = data => {
-    console.log("here");
     props.rowDatahandler(data);
   };
 
@@ -159,15 +141,24 @@ export default function InQueue(props) {
 
   const handleRemoveReq = () => {
     setAnchorEl(null);
+
+    // if (concern.concern) {
     axios
       .delete(
         `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
         {}
       )
-      .then(() => {
-        window.location = `/student/${props.classReference}`;
+      .then(data => {
+        // window.location = `/student/${props.classReference}`;
+
+        socket.emit("handshake", { room: props.classReference });
+
         alert("Your concern has been removed from the queue");
+      })
+      .catch(err => {
+        console.log(err);
       });
+    // }
   };
 
   // console.log(concernsData);
@@ -280,7 +271,16 @@ export default function InQueue(props) {
                     />
 
                     <ListItemSecondaryAction style={{ display: "flex" }}>
-                      <Avatar variant="square">
+                      <Avatar
+                        variant="square"
+                        style={
+                          concern.concern.concern_status === 1
+                            ? { background: "red" }
+                            : concern.queue_order_num == 0
+                            ? { background: "green" }
+                            : { background: "blue" }
+                        }
+                      >
                         <p style={{ fontSize: 12 }}>
                           {concern.concern.concern_status === 1
                             ? "being helped"

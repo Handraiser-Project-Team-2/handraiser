@@ -66,8 +66,11 @@ export default function Student() {
     // console.log(concernDescription);
   };
 
-
   const ENDPOINT = "localhost:5000";
+
+  useEffect(() => {
+    socket.emit("join", { username: "Yow", room: class_id, image: "" });
+  },[]);
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -117,8 +120,6 @@ export default function Student() {
   }, [cstate, ENDPOINT]);
 
   const sendRequest = () => {
-    socket.emit("join", { username: "Yow", room: class_id, image: "" });
-
     axios
       .post(`http://localhost:5000/api/student/request/assistance`, {
         class_id: class_id,
@@ -138,7 +139,7 @@ export default function Student() {
           icon: "success",
           title: "Request sent to the mentor"
         })
-          .then(() => {
+          .then(flag => {
             socket.emit(
               "AddRequest",
               {
@@ -166,16 +167,20 @@ export default function Student() {
   };
   //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
-    console.log(rowData)
+    // console.log(rowData);
     setConcernTitle(rowData.concern.concern_title);
     // setRowData(rowData);
     axios
-      .get(`http://localhost:5000/api/userprofile/${rowData.concern.user_id}`, {})
+      .get(
+        `http://localhost:5000/api/userprofile/${rowData.concern.user_id}`,
+        {}
+      )
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
-      }).catch(err=>{
-        console.log(err)
       })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
@@ -183,7 +188,7 @@ export default function Student() {
       <Topbar />
       <Div>
         <Queue>
-          <Tabs  rowDatahandler={rowDatahandler} classReference={class_id} />
+          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />
         </Queue>
         <Help>
           <Subject>
