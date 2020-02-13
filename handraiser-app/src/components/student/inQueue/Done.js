@@ -35,6 +35,8 @@ export default function InQueue(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
+  const [concern, setConcern] = useState();
+
   const ENDPOINT = "localhost:5000";
   let socket = io(ENDPOINT);
   const { cstate, getData } = useContext(UserContext);
@@ -63,7 +65,6 @@ export default function InQueue(props) {
     }
 
     socket.on("updateComponents", message => {
-
       update("");
     });
   }, [props.search]);
@@ -77,7 +78,8 @@ export default function InQueue(props) {
     });
   };
 
-  const handleMenu = event => {
+  const handleMenu = (event, data) => {
+    setConcern(data);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -85,7 +87,26 @@ export default function InQueue(props) {
   };
 
   const handleConcernData = data => {
+    setAnchorEl(null);
+
     props.rowDatahandler(data);
+  };
+
+  const handleRemoveReq = () => {
+    setAnchorEl(null);
+
+    if (concern) {
+      axios
+        .delete(`http://localhost:5000/api/student/request/${concern.concern.concern_id}`, {})
+        .then(data => {
+          socket.emit("handshake", { room: props.classReference });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+
+    handleClose();
   };
 
   return (
@@ -117,7 +138,9 @@ export default function InQueue(props) {
                   open={open}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>Remove Request</MenuItem>
+                  <MenuItem onClick={() => handleRemoveReq()}>
+                    Remove Request
+                  </MenuItem>
                 </Menu>
                 <ListItemText
                   primary={data.concern.concern_title}
@@ -147,7 +170,7 @@ export default function InQueue(props) {
                     </p>
                   </Avatar>
                   <MoreVertIcon
-                    onClick={handleMenu}
+                    onClick={event => handleMenu(event, data)}
                     style={{
                       fontSize: 35,
                       color: "#c4c4c4",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import styled from "styled-components";
@@ -12,6 +12,9 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import { UserContext } from "../../Contexts/UserContext";
+import io from "socket.io-client";
+
 var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
@@ -42,17 +45,48 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
+  const { cstate, getData } = useContext(UserContext);
+
+  const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
 
   useEffect(() => {
+    socket = io(ENDPOINT);
+
+    if (!cstate) {
+      getData();
+    }
+
+    if (cstate) {
+      socket.emit("join", {
+        username: cstate.user_id,
+        room: props.classReference,
+        image: ""
+      });
+    }
+
+    update("");
+  }, [ENDPOINT]);
+
+  useEffect(() => {
+
+    update(props.search);
+
+    socket.on("updateComponents", message => {
+      update("");
+    });
+    
+  }, [props.search]); //class_id
+
+  const update = data => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/student/queue/order/${props.classReference}?search=${props.search}` //5 here is a class_id example
+      url: `http://localhost:5000/api/student/queue/order/${props.classReference}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
     });
-  }, [props.search]); //class_id
+  };
 
-  //   console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
