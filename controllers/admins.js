@@ -98,8 +98,6 @@ module.exports = {
       db.validations
         .find({ validation_email: email })
         .then(data => {
-          console.log(!data);
-
           const keys = keygen.genKey(email, type);
 
           if (!data || data.length === 0) {
@@ -112,7 +110,7 @@ module.exports = {
                 validation_type: setType
               })
               .then(data => {
-                res.status(201).json(data);
+                res.status(201).json({data,user})
               })
               .catch(err => {
                 res.status(400).end();
@@ -121,6 +119,28 @@ module.exports = {
             // already registered
             res.status(201).json({ remarks: "data is already registed", data });
           }
+          // res.status(201).json(data);
+          // find if email is registered as a student
+          // if yes then change user type
+
+          // db.users
+          //   .find({ email: data.email })
+          //   .then(data => {
+          //     if (data) {
+          //       db.users.update(
+          //         { user_id: data.user_id },
+          //         {
+          //           ...data,
+          //           user_type_id: setType
+          //         }
+          //       );
+          //     }
+
+          //     console.log("email", data);
+          //   })
+          //   .catch(err => {
+          //     console.log(err);
+          //   });
         })
         .catch(err => {
           res.status(400).end();
@@ -142,6 +162,7 @@ module.exports = {
     db.users
       .findOne({ user_id: parseToken.userid })
       .then(data => {
+        
         db.validations.findOne({ validation_email: data.email }).then(user => {
           if (user.validation_key === supplied_key) {
             // then verify status

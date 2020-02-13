@@ -69,6 +69,10 @@ export default function Student() {
   const ENDPOINT = "localhost:5000";
 
   useEffect(() => {
+    socket.emit("join", { username: "Yow", room: class_id, image: "" });
+  }, []);
+
+  useEffect(() => {
     socket = io(ENDPOINT);
 
     if (sessionStorage.getItem("token")) {
@@ -116,8 +120,6 @@ export default function Student() {
   }, [cstate, ENDPOINT]);
 
   const sendRequest = () => {
-    socket.emit("join", { username: "Yow", room: class_id, image: "" });
-
     axios
       .post(`http://localhost:5000/api/student/request/assistance`, {
         class_id: class_id,
@@ -137,7 +139,7 @@ export default function Student() {
           icon: "success",
           title: "Request sent to the mentor"
         })
-          .then(() => {
+          .then(flag => {
             socket.emit(
               "AddRequest",
               {
@@ -165,7 +167,7 @@ export default function Student() {
   };
   //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
-    console.log(rowData);
+    // console.log(rowData);
     setConcernTitle(rowData.concern.concern_title);
     // setRowData(rowData);
     axios
