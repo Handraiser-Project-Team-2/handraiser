@@ -93,7 +93,7 @@ export default function SimpleExpansionPanel({
     })
       .then(res => {
         // console.log(res.data);
-        setClassInfo(res.data[0]);
+        setClassInfo(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -137,38 +137,53 @@ export default function SimpleExpansionPanel({
           <Typography>Details</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ padding: "5px 10px 5px 10px", color: "grey" }}>
-              Name
-            </span>
-            <span
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "10px 10px 5px 5px"
-              }}
-            >
-              <LockIcon />
-              <span>{classInfo.class_title}</span>
-            </span>
-            <span style={{ padding: "25px 10px 5px 10px", color: "grey" }}>
-              Description
-            </span>
-            <span
-              style={{
-                padding: "10px 10px 8px 9px",
-                color: "darkblue"
-              }}
-            >
-              {classInfo.class_description}
-            </span>
-            <span style={{ padding: "25px 10px 5px 10px", color: "grey" }}>
-              Date Created
-            </span>
-            <span style={{ padding: "10px 10px 8px 9px" }}>
-              {classInfo.class_date_created}
-            </span>
-          </div>
+          {classInfo
+            ? classInfo.map((info, key) => {
+                return (
+                  <div
+                    key={key}
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <span
+                      style={{ padding: "5px 10px 5px 10px", color: "grey" }}
+                    >
+                      Name
+                    </span>
+                    <span
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        padding: "10px 10px 5px 5px"
+                      }}
+                    >
+                      <LockIcon />
+                      <span>{info.class_title}</span>
+                    </span>
+                    <span
+                      style={{ padding: "25px 10px 5px 10px", color: "grey" }}
+                    >
+                      Description
+                    </span>
+                    <span
+                      style={{
+                        padding: "10px 10px 8px 9px",
+                        color: "darkblue"
+                      }}
+                    >
+                      {info.class_description}
+                    </span>
+                    <span
+                      style={{ padding: "25px 10px 5px 10px", color: "grey" }}
+                    >
+                      Date Created
+                    </span>
+                    <span style={{ padding: "10px 10px 8px 9px" }}>
+                      {info.class_date_created}
+                    </span>
+                  </div>
+                );
+              })
+            : ""}
         </ExpansionPanelDetails>
       </ExpansionPanel>
       <ExpansionPanel
@@ -230,36 +245,47 @@ export default function SimpleExpansionPanel({
                 </ListItem>
               );
             })}
-            <ListItem>
-              <Avatar
-                src={classInfo.image}
-                style={{
-                  marginLeft: "-17px"
-                }}
-              ></Avatar>
-              <span
-                style={{
-                  marginLeft: "8px",
-                  fontWeight: "bold"
-                }}
-              >
-                {classInfo.first_name + " " + classInfo.last_name + " (Mentor)"}
-              </span>
-              {classInfo.user_status === 1 ? (
-                <status-indicator
-                  positive
-                  style={{
-                    marginLeft: "10px"
-                  }}
-                ></status-indicator>
-              ) : (
-                <status-indicator
-                  style={{
-                    marginLeft: "10px"
-                  }}
-                ></status-indicator>
-              )}
-            </ListItem>
+
+            {classInfo
+              ? classInfo.map((mentor, key) => {
+                  return (
+                    <ListItem key={key}>
+                      <Avatar
+                        src={mentor.image}
+                        style={{
+                          marginLeft: "-17px"
+                        }}
+                      ></Avatar>
+                      <span
+                        style={{
+                          marginLeft: "8px",
+                          fontWeight: "bold"
+                        }}
+                      >
+                        {mentor.first_name +
+                          " " +
+                          mentor.last_name +
+                          " (Mentor)"}
+                      </span>
+                      {mentor.user_status === 1 ? (
+                        <status-indicator
+                          positive
+                          style={{
+                            marginLeft: "10px"
+                          }}
+                        ></status-indicator>
+                      ) : (
+                        <status-indicator
+                          style={{
+                            marginLeft: "10px"
+                          }}
+                        ></status-indicator>
+                      )}
+                    </ListItem>
+                  );
+                })
+              : ""}
+
             <div
               className={classes.root}
               style={{
