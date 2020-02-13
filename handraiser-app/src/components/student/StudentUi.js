@@ -70,7 +70,7 @@ export default function Student() {
 
   useEffect(() => {
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
-  },[]);
+  }, []);
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -183,6 +183,16 @@ export default function Student() {
       });
   };
 
+  const [expanded, setExpanded] = React.useState("");
+
+  const handleClickDetail = () => {
+    setExpanded("panel1");
+  };
+
+  const handleClickMember = () => {
+    setExpanded("panel2");
+  };
+
   return (
     <React.Fragment>
       <Topbar />
@@ -208,6 +218,7 @@ export default function Student() {
             <Option>
               <div>
                 <HelpIcon
+                  onClick={handleClickDetail}
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
@@ -218,6 +229,7 @@ export default function Student() {
               </div>
               <div>
                 <GroupIcon
+                  onClick={handleClickMember}
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
@@ -281,7 +293,11 @@ export default function Student() {
             </Field>
           </Message>
         </Help>
-        <DetailPanel />
+        <DetailPanel
+          class_id={class_id}
+          expanded={expanded}
+          setExpanded={setExpanded}
+        />
       </Div>
     </React.Fragment>
   );

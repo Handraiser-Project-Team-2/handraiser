@@ -101,15 +101,12 @@ export const TabBtn = props => {
   };
 
   const handleAdd = () => {
+    setOpenConfirm(true);
     axios
       .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
       .then(res => {
-        setOpenConfirm(true);
-        setEmailTo(res.data.validation_email);
-        setKey(res.data.validation_key);
-        toast.info("registration sucessful!", {
-          position: toast.POSITION.TOP_CENTER
-        });
+        setEmailTo(res.data.data.validation_email);
+        setKey(res.data.data.validation_key);
         setOpen(false);
       })
       .catch(err => {
@@ -126,6 +123,12 @@ export const TabBtn = props => {
       adminEmail: adminEmail,
       adminPass: adminPass
     });
+    toast.success(
+      "Registration successful! Verification Key sent to the mentor!",
+      {
+        position: toast.POSITION.TOP_RIGHT
+      }
+    );
     setOpenConfirm(false);
   };
 
@@ -216,6 +219,8 @@ export const TabBtn = props => {
         </DialogActions>
       </Dialog>
       {/* ---------------Confirmation dialog---------------------- */}
+
+      <ToastContainer />
     </React.Fragment>
   );
 };

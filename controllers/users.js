@@ -119,8 +119,6 @@ module.exports = {
 
     const { user_id } = req.params;
 
-    console.log(user_id);
-
     db.query(
       `SELECT * FROM user_profile inner join users on user_profile.profile_id = users.profile_id where user_id = ${user_id}`
     )

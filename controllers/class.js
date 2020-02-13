@@ -7,7 +7,6 @@ function getStudentsByClass(req, res) {
         user_profile.profile_id,
         user_profile.first_name,
         user_profile.last_name,
-        user_profile.middle_name,
         user_profile.image
       FROM
         user_profile
@@ -48,23 +47,53 @@ function getClassByMentor(req, res) {
     });
 }
 
-function getClassDetails(req, res){
-  const db =req.app.get("db");
-  const {token, class_id} = req.body;
-  
-    db.class
-    .findOne({class_id})
-    .then(data=>{
-      res.status(201).json({...data})
+function getClassDetails(req, res) {
+  const db = req.app.get("db");
+  const { class_id } = req.params;
+  const { search } = req.query;
+
+  db.query(
+    `SELECT
+        *
+      FROM
+        user_profile
+      INNER JOIN users ON users.profile_id = user_profile.profile_id
+      INNER JOIN class ON users.user_id = class.user_id where user_profile.first_name ILIKE '%${search}%' AND class_id = ${class_id};`
+  )
+    .then(detail => {
+      // console.log(detail);
+      // `SELECT * from ${detail} where ${detail.first_name} ILIKE '%${search}%' OR ${detail.last_name} ILIKE '%${search}%'`;
+      res.status(201).json(detail);
     })
-    .catch(err=>{
-      res.status(422).end()
-    })
+    .catch(err => {
+      res.status(500).end();
+    });
+}
+
+function getClassMembers(req, res) {
+  const db = req.app.get("db");
+  const { class_id } = req.params;
+  const { search } = req.query;
+
+  db.query(
+    `SELECT
+        *
+      FROM
+        user_profile
+      INNER JOIN users ON users.profile_id = user_profile.profile_id
+      INNER JOIN classroom ON users.user_id = classroom.user_id where user_profile.first_name ILIKE '%${search}%' AND class_id = ${class_id};`
+  )
+    .then(members => res.status(201).send(members))
+    .catch(err => {
+      console.error(err);
+      res.status(500).end();
+    });
 }
 
 module.exports = {
   getAllClass,
   getStudentsByClass,
   getClassByMentor,
-  getClassDetails
+  getClassDetails,
+  getClassMembers
 };
