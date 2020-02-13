@@ -76,12 +76,12 @@ export default function MentorProfile({ profileData, classData }) {
                 {profileData.stud_helped}
               </Typography>
               <Typography variant="h5" gutterBottom>
-                Students Helped
+                Resolved Concerns
               </Typography>
             </Grid>
             <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
               <Typography variant="h3" gutterBottom>
-                0
+                {profileData.stud_handled}
               </Typography>
               <Typography variant="h5" gutterBottom>
                 Students Handled
