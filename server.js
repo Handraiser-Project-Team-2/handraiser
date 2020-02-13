@@ -14,6 +14,7 @@ const classes = require("./controllers/class");
 const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
 const authorization = require("./controllers/authorization");
+const chat = require("./controllers/chat");
 
 const mail = require("./controllers/mail");
 
@@ -105,6 +106,10 @@ massive({
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
     app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
     app.get("/api/classes/members/:class_id", classes.getClassMembers); // get class members
+
+    //  chat endpoints
+    app.post("/api/chat/send", chat.sendMessage);
+    app.get("/api/chat/convo", chat.getConversation);
 
     //sending email
     app.post("/api/sendMail", mail.sendEmail);
