@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import List from "@material-ui/core/List";
@@ -13,6 +13,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
 import "status-indicator/styles.css";
+import io from "socket.io-client";
+import { UserContext } from "../../Contexts/UserContext";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,22 +33,51 @@ export default function InQueue({ class_id, search }) {
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
+  const { cstate, getData } = useContext(UserContext);
+
+  const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
+
   useEffect(() => {
-    if (!concernsData) {
-      axios({
-        method: "get",
-        url: `http://localhost:5000/api/classes/all/${class_id}?search=${search}`
-      })
-        .then(res => {
-          // console
-          setConcernsData(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    socket = io(ENDPOINT);
+
+    if (!cstate) {
+      getData();
     }
-    console.log(concernsData);
-  }, [concernsData]);
+
+    if (cstate) {
+      socket.emit("join", {
+        username: cstate.user_id,
+        room: class_id,
+        image: ""
+      });
+    }
+
+    update("");
+  }, [ENDPOINT]);
+
+  useEffect(() => {
+
+    update(search);
+
+    socket.on("updateComponents", message => {
+      update("");
+    });
+
+  }, [search]);
+
+  const update = data => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/classes/all/${class_id}?search=${data}`
+    })
+      .then(res => {
+        setConcernsData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -54,10 +85,6 @@ export default function InQueue({ class_id, search }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  //   const handleConcernData = data => {
-  //     rowDataHandlerChild2(data);
-  //   };
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
@@ -71,20 +98,12 @@ export default function InQueue({ class_id, search }) {
                     style={{
                       borderLeft: "14px solid #8932a8",
                       borderBottom: "0.5px solid #abababde",
-                      padding: "10px 15px"
+                      padding: "10px 15px",
+                      backgroundColor: "whitesmoke"
                     }}
                     // onClick={() => handleConcernData(data)}
                   >
                     <ListItemAvatar>
-                      <status-indicator
-                        positive
-                        pulse
-                        style={{
-                          position: "absolute",
-                          marginTop: "30px",
-                          marginLeft: "35px"
-                        }}
-                      ></status-indicator>
                       <Avatar src={data.image}></Avatar>
                     </ListItemAvatar>
                     <Menu
@@ -110,13 +129,19 @@ export default function InQueue({ class_id, search }) {
                             className={classes.inline}
                             color="textPrimary"
                           >
-                            {data.concern_description}
+                            {data.first_name + " " + data.last_name}
                           </Typography>
                         </React.Fragment>
                       }
                     />
                     <ListItemSecondaryAction style={{ display: "flex" }}>
-                      <Avatar variant="square" className={classes.small}>
+                      <Avatar
+                        variant="square"
+                        className={classes.small}
+                        style={{
+                          backgroundColor: "#372476"
+                        }}
+                      >
                         <p style={{ fontSize: 12 }}>
                           {data.concern_status === 3
                             ? "Done"

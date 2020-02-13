@@ -27,7 +27,6 @@ export default function InQueue({ class_id, search }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
   useEffect(() => {
@@ -47,19 +46,10 @@ export default function InQueue({ class_id, search }) {
     setAnchorEl(null);
   };
 
-  //   const handleConcernData = data => {
-  //     rowDataHandlerChild2(data);
-  //   };
-
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData.map((data, index) => {
-          // axios
-          //   .get(`http://localhost:5000/api/userprofile/${data.user_id}`, {})
-          //   .then(data => {
-          //     setImage(data.data[0].image);
-          //   });
           return (
             <div key={index}>
               <ListItem
@@ -67,12 +57,13 @@ export default function InQueue({ class_id, search }) {
                 style={{
                   borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
-                  padding: "10px 15px"
+                  padding: "10px 15px",
+                  backgroundColor: "whitesmoke"
                 }}
                 // onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={image}></Avatar>
+                  <Avatar src={data.image}></Avatar>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
@@ -97,13 +88,19 @@ export default function InQueue({ class_id, search }) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        {data.concern_description}
+                        {data.first_name + " " + data.last_name}
                       </Typography>
                     </React.Fragment>
                   }
                 />
                 <ListItemSecondaryAction style={{ display: "flex" }}>
-                  <Avatar variant="square" className={classes.small}>
+                  <Avatar
+                    variant="square"
+                    className={classes.small}
+                    style={{
+                      backgroundColor: "forestgreen"
+                    }}
+                  >
                     <p style={{ fontSize: 12 }}>
                       {data.concern_status === 3 ? "Done" : ""}
                     </p>

@@ -10,8 +10,11 @@ import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import { useHistory, useParams } from "react-router-dom";
+import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
+import GroupIcon from "@material-ui/icons/Group";
+import HelpIcon from "@material-ui/icons/Help";
 import {
   Div,
   Nav,
@@ -32,9 +35,13 @@ import {
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
+import io from "socket.io-client";
+
 var jwtDecode = require("jwt-decode");
 
 export default function Student() {
+  let socket = io("ws://localhost:5000", { transports: ["websocket"] });
+  // let socket;
   let history = useHistory();
   let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,6 +49,7 @@ export default function Student() {
   const open = Boolean(anchorEl);
   const [concernDescription, setConcernDescription] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
+  const [userImage, setUserImage] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
@@ -55,17 +63,29 @@ export default function Student() {
   };
   const sendMsg = evt => {
     evt.preventDefault();
-    console.log(concernDescription);
+    // console.log(concernDescription);
   };
 
+  const ENDPOINT = "localhost:5000";
+
   useEffect(() => {
+    socket.emit("join", { username: "Yow", room: class_id, image: "" });
+  },[]);
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+
     if (sessionStorage.getItem("token")) {
       axios
         .post("http://localhost:5000/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          setState({ user_type: data.data.user_type_id });
+          console.log(userImage);
+          setUserImage(data.data.image);
+          setState({
+            user_type: data.data.user_type_id
+          });
 
           const user_type = data.data.user_type_id;
 
@@ -83,7 +103,7 @@ export default function Student() {
           }
         })
         .catch(err => {
-          // console.log(err);
+          console.log(err);
         });
     } else {
       Swal.fire({
@@ -93,7 +113,11 @@ export default function Student() {
         history.push("/");
       });
     }
-  }, [cstate]);
+
+    if (!cstate) {
+      getData();
+    }
+  }, [cstate, ENDPOINT]);
 
   const sendRequest = () => {
     axios
@@ -104,15 +128,34 @@ export default function Student() {
         concern_description: concernDescription
       })
       .then(data => {
+        console.log(data.data);
+
+        // add websocket here to reflect new request;
+
         setConcernTitle("");
         setConcernDescription("");
+
         Swal.fire({
           icon: "success",
           title: "Request sent to the mentor"
         })
-          .then(() => {
-            window.location.reload();
-            // history.push(`/student/${class_id}`);
+          .then(flag => {
+            socket.emit(
+              "AddRequest",
+              {
+                concern_id: data.data.concern_id,
+                concern_title: data.data.concern_title,
+                concern_description: data.data.concern_description,
+                concern_status: data.data.concern_status,
+                class_id: data.data.class_id,
+                user_id: data.data.user_id,
+                cstate,
+                room: class_id
+              },
+              () => {
+                return console.log("drawback");
+              }
+            );
           })
           .catch(err => {
             console.log(err);
@@ -122,14 +165,30 @@ export default function Student() {
         console.log(err);
       });
   };
+  //send data of active queue where user interacted with from the queue panel
+  const rowDatahandler = rowData => {
+    // console.log(rowData);
+    setConcernTitle(rowData.concern.concern_title);
+    // setRowData(rowData);
+    axios
+      .get(
+        `http://localhost:5000/api/userprofile/${rowData.concern.user_id}`,
+        {}
+      )
+      .then(data => {
+        setName(data.data[0].first_name + " " + data.data[0].last_name);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
-  // if (state.user_type === 3) {
   return (
     <React.Fragment>
       <Topbar />
       <Div>
         <Queue>
-          <Tabs classReference={class_id} />
+          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />
         </Queue>
         <Help>
           <Subject>
@@ -147,25 +206,40 @@ export default function Student() {
               </div>
             </TitleName>
             <Option>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%"
-                }}
-              >
-                <More onClick={handleMenu}>
-                  <MoreVertIcon
-                    style={{
-                      fontSize: 35,
-                      color: "#c4c4c4"
-                    }}
-                  />
-                </More>
+              <div>
+                <HelpIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <GroupIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <MoreVertIcon
+                  onClick={handleMenu}
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
               </div>
             </Option>
           </Subject>
-          <Chatfield />
+          <Chatfield userImage={userImage} />
           <Message>
             <Field>
               <div
@@ -185,6 +259,9 @@ export default function Student() {
                     fullWidth
                     rows="2"
                     value={concernDescription}
+                    style={{
+                      backgroundColor: "white"
+                    }}
                     onChange={e => setConcernDescription(e.target.value)}
                   />
 
@@ -204,11 +281,7 @@ export default function Student() {
             </Field>
           </Message>
         </Help>
-        <Div2>
-          <Shared>
-            <Typography variant="h6">Shared Files</Typography>
-          </Shared>
-        </Div2>
+        <DetailPanel />
       </Div>
     </React.Fragment>
   );

@@ -193,6 +193,8 @@ module.exports = {
   GetAssisted_by: (req, res) => {
     const db = req.app.get("db");
     const { user_student_id, class_id } = req.params;
+
+    
     db.assisted_by
       .find({ class_id, user_student_id })
       .then(assist => res.status(200).json(assist))
@@ -214,8 +216,7 @@ module.exports = {
       .catch(err => {
         res.status(401).end(err);
       });
-  },
-
+  },  
   get_my_classroom: (req, res) => {
     const db = req.app.get("db");
 
@@ -228,7 +229,7 @@ module.exports = {
       FROM class INNER JOIN classroom ON classroom.class_id = class.class_id INNER JOIN user_profile ON user_profile.profile_id = class.user_id
       WHERE classroom.user_id = ${parseToken.userid}`
     )
-      .then(data => {
+      .then(data => { 
         res.status(201).json(data);
       })
       .catch(err => {
@@ -299,5 +300,6 @@ module.exports = {
         // res.status(500).end();
         res.status(400).end();
       });
-  }
+  },
+
 };

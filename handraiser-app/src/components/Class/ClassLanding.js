@@ -3,9 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
-import io from "socket.io-client";
 import { useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 // COMPONENTS
 import CardPage from "./CardPage";
@@ -15,6 +13,7 @@ import AddClassDialog from "./AddClassDialog";
 import Topbar from "../reusables/Topbar";
 import NoClass from "./NoClass";
 import { UserContext } from "../Contexts/UserContext";
+import SearchComponent from "./SearchComponent";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -36,7 +35,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-let socket;
 export default function ClassLanding(props) {
   let token = sessionStorage.getItem("token").split(" ")[1];
   const classes = useStyles();
@@ -85,6 +83,7 @@ export default function ClassLanding(props) {
   };
 
   const [classData, setClassData] = useState([]);
+  const [tempClassData, setTempClassData] = useState([]);
 
   // get all class relative to this mentor(if user is verified)
   const fetchMentorClass = () => {
@@ -95,6 +94,7 @@ export default function ClassLanding(props) {
     })
       .then(data => {
         setClassData(data.data);
+        setTempClassData(data.data);
       })
       .catch(err => {
         console.log(err);
@@ -111,6 +111,7 @@ export default function ClassLanding(props) {
       .then(data => {
         console.log(data.data);
         setClassData(data.data);
+        setTempClassData(data.data);
       })
       .catch(err => {
         console.log(err);
@@ -134,6 +135,10 @@ export default function ClassLanding(props) {
               ""
             )}
             <Grid item xs={12}>
+              <SearchComponent
+                setTempClassData={setTempClassData}
+                classData={classData}
+              />
               {userType === 3 ? (
                 <FindClassDialog />
               ) : (
@@ -147,7 +152,11 @@ export default function ClassLanding(props) {
               <NoClass />
             ) : (
               <Container maxWidth="lg" className={classes.flexy}>
-                <CardPage classData={classData} data={data} />
+                <CardPage
+                  classData={tempClassData}
+                  data={data}
+                  fetchMentorClass={fetchMentorClass}
+                />
               </Container>
             )}
           </Grid>

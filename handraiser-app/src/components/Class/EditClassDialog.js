@@ -4,59 +4,42 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
 import { makeStyles } from "@material-ui/core/styles";
-import Fab from "@material-ui/core/Fab";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import teal from "@material-ui/core/colors/teal";
+import blueGrey from "@material-ui/core/colors/blueGrey";
 import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
+  title: {
+    backgroundColor: blueGrey[500],
+    color: "white"
+  },
   span: {
     float: "right",
     marginBottom: theme.spacing(2)
-  },
-  title: {
-    backgroundColor: teal[500],
-    color: "white"
-  },
-  fab: {
-    float: "right",
-    backgroundColor: teal[500]
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1)
   }
 }));
 
-export default function AddClassDialog({ token, fetchMentorClass }) {
+export default function EditClassDialog({ data, fetchMentorClass }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
+    console.log(data.class_id);
   };
-
-  const handleClose = () => {
-    setOpen(false);
-
-    setState(prevState => {
-      return { ...prevState, class_title: "", class_description: "" };
-    });
-  };
-
-  const [dateToday] = useState({ data: new Date().toLocaleDateString() });
 
   const [state, setState] = useState({
-    token: token,
-    class_title: "",
-    class_description: "",
-    class_status: "open"
+    class_id: data.class_id,
+    class_title: data.class_title,
+    class_description: data.class_description
   });
-
   const [text, setText] = useState({
-    class_title: 0,
-    class_description: 0
+    class_title: data.class_title.length,
+    class_description: data.class_description.length
   });
 
   const handleChange = e => {
@@ -68,19 +51,21 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
       ...text,
       [e.target.name]: e.target.value.length
     });
-    console.log(text);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log("token", token);
+
     axios({
-      method: "post",
-      url: `http://localhost:5000/api/mentor/classroom/add`,
+      method: "put",
+      url: `http://localhost:5000/api/mentor/my/class`,
       data: state
     })
       .then(data => {
-        console.log(data);
         fetchMentorClass();
         handleClose();
       })
@@ -91,37 +76,19 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
 
   return (
     <div>
-      <Fab
-        variant="extended"
-        color="primary"
-        className={classes.fab}
-        onClick={handleClickOpen}
-      >
-        <AddCircleOutlineIcon className={classes.extendedIcon} />
-        Create new class
-      </Fab>
+      <IconButton aria-label="delete" onClick={handleClickOpen}>
+        <EditIcon />
+      </IconButton>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title" className={classes.title}>
-          Create new Class
+          Edit Class details
         </DialogTitle>
         <form onSubmit={handleSubmit}>
           <DialogContent>
-            {/* VISUAL ONLY */}
-            <TextField
-              margin="dense"
-              label="Date"
-              defaultValue={dateToday.data}
-              style={{ float: "right" }}
-              InputProps={{
-                readOnly: true
-              }}
-            />
-            {/* END */}
-
             <TextField
               autoFocus
               required
@@ -129,13 +96,13 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
               label="Class Title"
               fullWidth
               name="class_title"
-              defaultValue={state.class_title}
+              defaultValue={data.class_title}
               onChange={e => handleChange(e)}
+              style={{ marginTop: "2em" }}
               inputProps={{
                 maxLength: 25
               }}
             />
-
             <span className={classes.span}>{text.class_title}/25</span>
 
             <TextField
@@ -147,21 +114,20 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
               variant="outlined"
               fullWidth
               name="class_description"
-              defaultValue={state.class_description}
+              defaultValue={data.class_description}
               onChange={e => handleChange(e)}
               inputProps={{
                 maxLength: 60
               }}
             />
-
-            <span style={{ float: "right" }}>{text.class_description}/60</span>
+            <span className={classes.span}>{text.class_description}/60</span>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button color="primary" type="submit">
-              Submit
+            <Button type="submit" color="primary">
+              Confirm
             </Button>
           </DialogActions>
         </form>

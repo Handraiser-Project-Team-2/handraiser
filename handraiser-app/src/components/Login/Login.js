@@ -32,6 +32,9 @@ export default function Login(props) {
         }
       })
         .then(data => {
+          axios.patch(`http://localhost:5000/api/users/${data.data.user_id}`, {
+            user_status: 1
+          });
           const userType = data.data.user_type_id;
           localStorage.setItem("name", response.profileObj.givenName);
           sessionStorage.setItem("token", "Bearer " + data.data.token);

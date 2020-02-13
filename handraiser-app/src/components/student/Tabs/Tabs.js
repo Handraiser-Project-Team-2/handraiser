@@ -60,7 +60,10 @@ const TabBtn = props => {
           value={tabValue}
           onChange={handleChange}
           indicatorColor="primary"
-          textColor="primary"
+          style={{
+            background: "#372476",
+            color: "white"
+          }}
         >
           <Tab
             label="MY REQUESTS"
@@ -78,10 +81,18 @@ const TabBtn = props => {
       </Paper>
 
       <TabPanel value={tabValue} index={0}>
-        <InQueue classReference={props.classReference} search={search} />
+        <InQueue
+          rowDatahandler={props.rowDatahandler}
+          classReference={props.classReference}
+          search={search}
+        />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <Done classReference={props.classReference} search={search} />
+        <Done
+          rowDatahandler={props.rowDatahandler}
+          classReference={props.classReference}
+          search={search}
+        />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
         <InQueueAll classReference={props.classReference} search={search} />

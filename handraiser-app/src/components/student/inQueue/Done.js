@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import List from "@material-ui/core/List";
@@ -12,6 +12,9 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import io from "socket.io-client";
+import { UserContext } from "../../Contexts/UserContext";
+
 var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
@@ -32,21 +35,78 @@ export default function InQueue(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
+  const [concern, setConcern] = useState();
+
+  const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
+  const { cstate, getData } = useContext(UserContext);
 
   useEffect(() => {
+    socket = io(ENDPOINT);
+
+    if (!cstate) {
+      getData();
+    }
+
+    if (cstate) {
+      socket.emit("join", {
+        username: cstate.user_id,
+        room: props.classReference,
+        image: ""
+      });
+    }
+
+    update("");
+  }, [ENDPOINT]);
+
+  useEffect(() => {
+    if (props.search || !concernsData) {
+      update(props.search);
+    }
+
+    socket.on("updateComponents", message => {
+      update("");
+    });
+  }, [props.search]);
+
+  const update = data => {
     axios({
       method: "get",
       url: `http://localhost:5000/api/student/done/order/${props.classReference}/${user_id}?search=${props.search}` //5 here is a class_id example
     }).then(res => {
       setConcernsData(res.data);
     });
-  }, [props.search]);
+  };
 
-  const handleMenu = event => {
+  const handleMenu = (event, data) => {
+    setConcern(data);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleConcernData = data => {
+    setAnchorEl(null);
+
+    props.rowDatahandler(data);
+  };
+
+  const handleRemoveReq = () => {
+    setAnchorEl(null);
+
+    if (concern) {
+      axios
+        .delete(`http://localhost:5000/api/student/request/${concern.concern.concern_id}`, {})
+        .then(data => {
+          socket.emit("handshake", { room: props.classReference });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+
+    handleClose();
   };
 
   return (
@@ -59,9 +119,11 @@ export default function InQueue(props) {
                 style={{
                   borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
-                  padding: "10px 15px"
+                  padding: "10px 15px",
+                  backgroundColor: "whitesmoke",
+                  cursor: "pointer"
                 }}
-                // onClick={() => handleConcernData(data)}
+                onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
                   <Avatar src={data.concern.image}></Avatar>
@@ -76,8 +138,9 @@ export default function InQueue(props) {
                   open={open}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>Log Out</MenuItem>
+                  <MenuItem onClick={() => handleRemoveReq()}>
+                    Remove Request
+                  </MenuItem>
                 </Menu>
                 <ListItemText
                   primary={data.concern.concern_title}
@@ -95,13 +158,19 @@ export default function InQueue(props) {
                   }
                 />
                 <ListItemSecondaryAction style={{ display: "flex" }}>
-                  <Avatar variant="square" className={classes.small}>
+                  <Avatar
+                    variant="square"
+                    className={classes.small}
+                    style={{
+                      backgroundColor: "forestgreen"
+                    }}
+                  >
                     <p style={{ fontSize: 12 }}>
                       {data.concern.concern_status === 3 ? "Done" : ""}
                     </p>
                   </Avatar>
                   <MoreVertIcon
-                    onClick={handleMenu}
+                    onClick={event => handleMenu(event, data)}
                     style={{
                       fontSize: 35,
                       color: "#c4c4c4",

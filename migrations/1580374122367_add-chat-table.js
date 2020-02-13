@@ -18,9 +18,9 @@ exports.up = pgm => {
       type: "integer",
       references: "users"
     },
-    chatroom_id: {
+    concern_id: {
       type: "integer",
-      references: "chatroom"
+      references: "concern_list"
     }
   });
 };

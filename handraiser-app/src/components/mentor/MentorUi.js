@@ -10,7 +10,8 @@ import Avatar from "@material-ui/core/Avatar";
 import HandShakeImage from "../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
-
+import GroupIcon from "@material-ui/icons/Group";
+import HelpIcon from "@material-ui/icons/Help";
 import {
   Div,
   Nav,
@@ -28,13 +29,17 @@ import {
   Shared
 } from "../Styles/Styles";
 import axios from "axios";
-
 import Tabs from "./Tabs/Tabs";
+import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
+import Input from "../reusables/Input";
+import io from "socket.io-client";
+import ScrollToBottom from "react-scroll-to-bottom";
+import "emoji-mart/css/emoji-mart.css";
 var jwtDecode = require("jwt-decode");
-
+let socket;
 const useStyles = makeStyles(theme => ({
   handshake: {
     marginLeft: theme.spacing(3),
@@ -58,6 +63,23 @@ export default function Mentor() {
   const [concernTitle, setConcernTitle] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
+
+  ///for chat
+  const [username, setUsername] = useState("");
+  const [room, setRoom] = useState("");
+  const [message, setMessage] = useState("");
+  const [feed, setfeed] = useState("");
+  const [active, setActive] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [avatar, setAvatar] = useState("");
+  const [emoji, setEmoji] = useState(false);
+  const ENDPOINT = "localhost:5000";
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    console.log(socket);
+  }, [ENDPOINT]);
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -93,6 +115,7 @@ export default function Mentor() {
     setConcernTitle("");
     setName("");
     setAnchorEl(null);
+
     axios
       .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
@@ -107,15 +130,22 @@ export default function Mentor() {
             {}
           )
           .then(data => {
-            axios.patch(
-              `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-              {
-                assisted_id: data.data[0].assisted_id,
-                user_student_id: data.data[0].user_id,
-                class_id: data.data[0].class_id,
-                assist_status: "done"
-              }
-            );
+            axios
+              .patch(
+                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                {
+                  assisted_id: data.data[0].assisted_id,
+                  user_student_id: data.data[0].user_id,
+                  class_id: data.data[0].class_id,
+                  assist_status: "done"
+                }
+              )
+              .then(data => {
+                socket.emit("handshake", { room: class_id });
+              })
+              .catch(err => {
+                console.log(err);
+              });
           });
       });
   };
@@ -139,6 +169,8 @@ export default function Mentor() {
         concern_status: 2
       })
       .then(data => {
+        socket.emit("handshake", { room: class_id });
+
         axios
           .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
           .then(data => {
@@ -151,12 +183,16 @@ export default function Mentor() {
   };
 
   const rowDatahandler = rowData => {
+    console.log(rowData);
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
       .get(`http://localhost:5000/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 
@@ -225,24 +261,46 @@ export default function Mentor() {
               }}
             >
               <Typography variant="h5">Concern: {concernTitle}</Typography>
-              <Typography variant="span">From: {name}</Typography>
-            </TitleName>
-            <Option>
-              <div
+              <Typography
+                variant="subtitle2"
                 style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%"
+                  fontSize: "12.4px"
                 }}
               >
-                <More onClick={handleMenu}>
-                  <MoreVertIcon
-                    style={{
-                      fontSize: 35,
-                      color: "#c4c4c4"
-                    }}
-                  />
-                </More>
+                From: {name}
+              </Typography>
+            </TitleName>
+            <Option>
+              <div>
+                <HelpIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <GroupIcon
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
+              </div>
+              <div>
+                <MoreVertIcon
+                  onClick={handleMenu}
+                  style={{
+                    fontSize: 30,
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
+                  }}
+                />
               </div>
             </Option>
           </Subject>
@@ -254,8 +312,6 @@ export default function Mentor() {
           )}
 
           <Chatfield />
-
-          {/* <Conversation></Conversation> */}
 
           {rowData.concern_status === 2 ? (
             ""
@@ -272,13 +328,14 @@ export default function Mentor() {
                   }}
                 >
                   <form onSubmit={sendMsg}>
-                    <TextField
+                    {/* <TextField
                       id="outlined-textarea"
                       multiline
                       variant="outlined"
                       fullWidth
                       rows="3"
-                    />
+                    /> */}
+                    <Input />
 
                     <div
                       style={{
@@ -295,11 +352,7 @@ export default function Mentor() {
             </Message>
           )}
         </Help>
-        <Div2>
-          <Shared>
-            <Typography variant="h6">Shared Files</Typography>
-          </Shared>
-        </Div2>
+        <DetailPanel />
       </Div>
     </React.Fragment>
   );

@@ -24,7 +24,7 @@ const Profile = styled.div`
 `;
 const Sender = styled.div`
   margin-left: 10px;
-  background-color: #372476;
+  background-color: forestgreen;
   color: white;
   max-width: 450px;
   padding: 10px 20px 10px 20px;
@@ -32,7 +32,7 @@ const Sender = styled.div`
 `;
 const Receiver = styled.div`
   margin-left: 10px;
-  background-color: white;
+  background-color: #f2f2f2;
   max-width: 450px;
   padding: 10px 20px 10px 20px;
   border-radius: 10px 10px 10px 0px;
@@ -61,24 +61,29 @@ const Div = styled.div`
   @keyframes bob {
     10% {
       transform: translateY(-10px);
-      background-color: #9e9da2;
+      background-color: white;
     }
     50% {
       transform: translateY(0);
-      background-color: #b6b5ba;
+      background-color: white;
     }
   }
 `;
 
-export default function Chatfield() {
+export default function Chatfield(props) {
+  const { userImage } = props;
   return (
     <Conversation>
       <Cont>
         <Profile>
-          <Avatar></Avatar>
+          <Avatar src={userImage}></Avatar>
         </Profile>
         <Sender>
-          <span>Hello</span>
+          <Div>
+            <span></span>
+            <span></span>
+            <span></span>
+          </Div>
         </Sender>
       </Cont>
       <Cont2>
@@ -92,18 +97,6 @@ export default function Chatfield() {
           </span>
         </Receiver>
       </Cont2>
-      <Cont>
-        <Profile>
-          <Avatar></Avatar>
-        </Profile>
-        <Sender>
-          <Div>
-            <span></span>
-            <span></span>
-            <span></span>
-          </Div>
-        </Sender>
-      </Cont>
     </Conversation>
   );
 }
