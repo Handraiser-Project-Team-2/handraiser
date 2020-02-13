@@ -31,33 +31,29 @@ export default function InQueue(rowDatahandler) {
   const [image, setImage] = useState("");
   const [load, setLoad] = useState(false);
   const open = Boolean(anchorEl);
-  let socket;
   const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
-  // const [initial, setInitial] = useState(true);
   useEffect(() => {
     socket = io(ENDPOINT);
 
-    // update(rowDatahandler.search);
-
-    // if (initial) {
-    console.log(rowDatahandler.class_id);
     socket.emit("join", {
       username: "Admin",
       room: rowDatahandler.class_id,
       image: ""
     });
-    // }
+  }, [ENDPOINT]);
+
+  useEffect(() => {
+    console.log(rowDatahandler.class_id);
 
     if (rowDatahandler.search || !concernsData) {
       update(rowDatahandler.search);
     }
 
-    socket.on("hanshakeAccept", message => {
-      console.log("hanshakeAccept", message);
+    socket.on("updateComponents", message => {
       update("");
     });
 
@@ -78,10 +74,7 @@ export default function InQueue(rowDatahandler) {
       };
 
       let concern_b = Object.assign([], concernsData);
-
       concern_b.push(trasmission);
-
-      console.log(concern_b);
       setConcernsData(concern_b);
     });
 
@@ -90,7 +83,6 @@ export default function InQueue(rowDatahandler) {
     });
   }, [rowDatahandler.search, ENDPOINT, concernsData]);
 
-  // here
   const update = data => {
     axios({
       method: "get",

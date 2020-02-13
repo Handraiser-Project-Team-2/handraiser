@@ -21,7 +21,6 @@ import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
 import { useHistory, useParams } from "react-router-dom";
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
@@ -44,7 +43,6 @@ export default function InQueue(props) {
   const [concern, setConcern] = useState("");
   let { class_id } = useParams();
 
-
   const classes = useStyles();
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
@@ -56,24 +54,20 @@ export default function InQueue(props) {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    console.log(props.classReference);
-    // if (initial) {
     socket.emit("join", {
       username: "Admin",
       room: props.classReference,
       image: ""
     });
+  }, [ENDPOINT]);
 
-    // setInitial(false);
-    // }
-
+  useEffect(() => {
+    
     if (props.search || !concernsData) {
       update(props.search);
     }
 
-
-    socket.on("hanshakeAccept", message => {
-      console.log("hanshakeAccept", message);
+    socket.on("updateComponents", message => {
       update("");
     });
 
@@ -112,7 +106,6 @@ export default function InQueue(props) {
   };
 
   const handleSaveEdit = () => {
-
     setOpenEdit(false);
 
     axios
@@ -155,15 +148,16 @@ export default function InQueue(props) {
         `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
         {}
       )
-      .then((data) => {
+      .then(data => {
         // window.location = `/student/${props.classReference}`;
 
         socket.emit("handshake", { room: props.classReference });
 
         alert("Your concern has been removed from the queue");
-      }).catch(err=>{
-        console.log(err)
       })
+      .catch(err => {
+        console.log(err);
+      });
     // }
   };
 

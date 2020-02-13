@@ -88,7 +88,11 @@ const TabBtn = props => {
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <Done classReference={props.classReference} search={search} />
+        <Done
+          rowDatahandler={props.rowDatahandler}
+          classReference={props.classReference}
+          search={search}
+        />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
         <InQueueAll classReference={props.classReference} search={search} />
