@@ -503,7 +503,11 @@ export default function Student() {
                   width: "100%"
                 }}
               >
-                {/* <form onSubmit={sendMsg}>
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                  }}
+                >
                   <TextField
                     id="outlined-textarea"
                     multiline
@@ -515,25 +519,25 @@ export default function Student() {
                       backgroundColor: "white"
                     }}
                     onChange={e => setConcernDescription(e.target.value)}
-                  /> */}
-                <Input
+                  />
+                  {/* <Input
                   message={message}
                   setMessage={setMessage}
                   sendMessage={sendMessage}
                   username={username}
-                />
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "15px"
-                  }}
-                >
-                  <Request onClick={sendRequest}>NEW REQUEST</Request>
-                  <Send onClick={sendMessage}>SEND</Send>
-                </div>
-                {/* </form> */}
+                /> */}
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "15px"
+                    }}
+                  >
+                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    <Send onClick={sendMessage}>SEND</Send>
+                  </div>
+                </form>
               </div>
             </Field>
           </Message>
