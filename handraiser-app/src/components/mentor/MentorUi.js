@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
-import 
-hakeImage from "../images/HandshakeEmoji.png";
+import hakeImage from "../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
 import HelpIcon from "@material-ui/icons/Help";
 import {
   Div,
-  Nav,
+  // Nav,
   Queue,
   Help,
   Subject,
   TitleName,
   Option,
-  More,
-  Conversation,
+  // More,
+  // Conversation,
   Message,
   Field,
-  Send,
-  Div2,
-  Shared
+  Send
+  // Div2,
+  // Shared
 } from "../Styles/Styles";
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
@@ -37,7 +36,7 @@ import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
 import Input from "../reusables/Input";
 import io from "socket.io-client";
-import ScrollToBottom from "react-scroll-to-bottom";
+// import ScrollToBottom from "react-scroll-to-bottom";
 import "emoji-mart/css/emoji-mart.css";
 var jwtDecode = require("jwt-decode");
 let socket;
@@ -54,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Mentor() {
-  const classes = useStyles();
+  // const classes = useStyles();
   let history = useHistory();
   let { class_id } = useParams();
   const [rowData, setRowData] = useState([]);
@@ -63,7 +62,7 @@ export default function Mentor() {
   const [name, setName] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  const user_id = decoded.userid; //mentor_user_id if mentor is logged in
+  // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
   ///for chat
   const [username, setUsername] = useState("");
@@ -106,8 +105,7 @@ export default function Mentor() {
   // };
 
   const handleDone = rowData => {
-
-    setSelection(false)
+    setSelection(false);
 
     if (rowData.length === 0) {
       Swal.fire({
@@ -297,7 +295,7 @@ export default function Mentor() {
               <Option>
                 <div>
                   <HelpIcon
-                  onClick={handleClickDetail}
+                    onClick={handleClickDetail}
                     style={{
                       fontSize: 30,
                       color: "#c4c4c4",
@@ -308,7 +306,7 @@ export default function Mentor() {
                 </div>
                 <div>
                   <GroupIcon
-                  onClick={handleClickMember}
+                    onClick={handleClickMember}
                     style={{
                       fontSize: 30,
                       color: "#c4c4c4",
@@ -339,14 +337,18 @@ export default function Mentor() {
                 alignItems: "center"
               }}
             >
-              <Typography variant="h5" style={{color:'#bcbcbc'}}>
+              <Typography variant="h5" style={{ color: "#bcbcbc" }}>
                 Select any concern to interact
               </Typography>
             </div>
           )}
 
-          {selection &&  rowData.concern_status === 2  ? (
-            <Handshake data={rowData} rowDatahandler={rowDatahandler} handleDone={handleDone} />
+          {selection && rowData.concern_status === 2 ? (
+            <Handshake
+              data={rowData}
+              rowDatahandler={rowDatahandler}
+              handleDone={handleDone}
+            />
           ) : (
             ""
           )}

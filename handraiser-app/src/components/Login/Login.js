@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -38,13 +37,16 @@ export default function Login(props) {
         }
       })
         .then(data => {
-          axios.patch(`http://localhost:5000/api/users/${data.data.user_id}`, {
-            user_status: 1
-          }).then((data)=>{
-            socket.emit("user_activity", {});
-          }).catch((err)=>{
-            console.log(err)
-          })
+          axios
+            .patch(`http://localhost:5000/api/users/${data.data.user_id}`, {
+              user_status: 1
+            })
+            .then(data => {
+              socket.emit("user_activity", {});
+            })
+            .catch(err => {
+              console.log(err);
+            });
           const userType = data.data.user_type_id;
           localStorage.setItem("name", response.profileObj.givenName);
           sessionStorage.setItem("token", "Bearer " + data.data.token);

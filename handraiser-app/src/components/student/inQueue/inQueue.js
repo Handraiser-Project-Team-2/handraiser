@@ -8,11 +8,10 @@ import Bear from "../../images/bear.gif";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
-import { Typography, Paper, useMediaQuery } from "@material-ui/core";
+import { Typography, Paper } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import styled from "styled-components";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -22,7 +21,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
-import { useHistory, useParams } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,13 +60,11 @@ export default function InQueue(props) {
   var jwtDecode = require("jwt-decode");
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState();
-  const [image, setImage] = useState("");
   const [openEdit, setOpenEdit] = React.useState(false);
   const [concernTitle, setConcernTitle] = useState("");
   const [concernDescription, setConcernDescription] = useState("");
   const open = Boolean(anchorEl);
   const [concern, setConcern] = useState("");
-  let { class_id } = useParams();
 
   const classes = useStyles();
 

@@ -13,7 +13,6 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
 import io from "socket.io-client";
-import { conformToMask } from "react-text-mask";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,9 +41,6 @@ export default function InQueue(rowDatahandler) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [image, setImage] = useState("");
-  const [load, setLoad] = useState(false);
-  const [color, setColor] = useState("red");
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
   const ENDPOINT = "localhost:5000";
@@ -93,9 +89,9 @@ export default function InQueue(rowDatahandler) {
       });
   };
 
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleMenu = event => {
+  //   setAnchorEl(event.currentTarget);
+  // };
   const handleClose = () => {
     setAnchorEl(null);
   };

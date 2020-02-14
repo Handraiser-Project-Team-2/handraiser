@@ -89,25 +89,28 @@ export default function Topbar() {
   };
 
   const Logout = () => {
-
     sessionStorage.setItem("token", "");
     history.push("/");
     setData();
-    axios.patch(`http://localhost:5000/api/users/${user_id}`).then(res => {
-      Swal.fire({
-        icon: "success",
-        title: "Logged out successful!"
+    axios
+      .patch(`http://localhost:5000/api/users/${user_id}`)
+      .then(res => {
+        Swal.fire({
+          icon: "success",
+          title: "Logged out successfully!"
+        });
+      })
+      .then(data => {
+        socket.emit("user_activity", {});
+      })
+      .catch(err => {
+        console.log(err);
       });
-    }).then((data)=>{
-      socket.emit("user_activity", { });
-    }).catch((err)=>{
-      console.log(err)
-    })
   };
 
-  const sendMsg = evt => {
-    evt.preventDefault();
-  };
+  // const sendMsg = evt => {
+  //   evt.preventDefault();
+  // };
 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/userprofile/${user_id}`).then(res => {
@@ -160,11 +163,10 @@ export default function Topbar() {
             <MenuItem onClick={handleClose}>Profile</MenuItem>
 
             <MenuItem>
-              {" "}
               <GoogleLogout
                 clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"
                 buttonText="Logout"
-                onLogoutSuccess={Logout}
+                onLogoutSuccess={() => Logout()}
               ></GoogleLogout>
             </MenuItem>
           </Menu>

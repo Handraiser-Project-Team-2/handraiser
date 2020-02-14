@@ -55,7 +55,7 @@ export default function Handshake(props) {
             //get data of who assisted this concern
 
             // if none then reference this current mentor
-            if (data.data.length == 0) {
+            if (data.data.length === 0) {
               axios
                 .post(`http://localhost:5000/api/assisted_by`, {
                   assist_status: "ongoing",
@@ -238,8 +238,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: "3em",
     color: "white",
     fontWeight: "800",
-    fontWeight: "200",
-
+    fontWeight: "200"
   },
   handshake_img: {
     backgroundSize: "cover",

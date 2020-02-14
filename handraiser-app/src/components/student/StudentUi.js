@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+// import IconButton from "@material-ui/core/IconButton";
+// import AccountCircle from "@material-ui/icons/AccountCircle";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
@@ -17,19 +17,19 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Input from "../reusables/Input";
 import {
   Div,
-  Nav,
+  // Nav,
   Queue,
   Help,
   Subject,
   TitleName,
   Option,
-  More,
-  Conversation,
+  // More,
+  // Conversation,
   Message,
   Field,
   Send,
-  Div2,
-  Shared,
+  // Div2,
+  // Shared,
   Request
 } from "../Styles/Styles";
 import axios from "axios";
@@ -124,7 +124,7 @@ export default function Student() {
   let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
   const [concernDescription, setConcernDescription] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
   const [userImage, setUserImage] = useState("");
@@ -418,9 +418,8 @@ export default function Student() {
               <TextField
                 id="standard-basic"
                 value={concernTitle}
-                fullWidthmes0sage
+                fullWidth
                 onChange={e => setConcernTitle(e.target.value)}
-                // style={{ width: 700 }}
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Subject</Typography>
@@ -430,9 +429,9 @@ export default function Student() {
             <Option>
               <div>
                 <HelpOutlineIcon
+                  onClick={handleClickDetail}
                   style={{
                     fontSize: 30,
-                    color: "#c4c4c4",
                     cursor: "pointer",
                     color: "grey"
                   }}
@@ -440,9 +439,9 @@ export default function Student() {
               </div>
               <div>
                 <PeopleOutlineIcon
+                  onClick={handleClickMember}
                   style={{
                     fontSize: 30,
-                    color: "#c4c4c4",
                     cursor: "pointer",
                     color: "grey"
                   }}

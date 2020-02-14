@@ -19,11 +19,11 @@ import { TabBox, BtnBox } from "../Styles/Styles";
 
 import { TableCont } from "../Table/Table";
 import { GenerateKey } from "../Generate-Key/Generate";
-var jwtDecode = require("jwt-decode");
+// var jwtDecode = require("jwt-decode");
 
 export const TabBtn = props => {
-  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  const user_id = decoded.userid;
+  // const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  // const user_id = decoded.userid;
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
   const [open, setOpen] = useState(false);
@@ -34,10 +34,6 @@ export const TabBtn = props => {
   const [emailTo, setEmailTo] = useState("");
   const [key, setKey] = useState("");
   const [openConfirm, setOpenConfirm] = React.useState(false);
-
-  const handleClickOpenConfirm = () => {
-    setOpenConfirm(true);
-  };
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
@@ -104,6 +100,7 @@ export const TabBtn = props => {
   };
 
   const handleAdd = () => {
+    let isSubscribed = true;
     setOpenConfirm(true);
     axios
       .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
@@ -119,6 +116,7 @@ export const TabBtn = props => {
           console.log(errors);
         }
       });
+    return () => (isSubscribed = false);
   };
 
   const handleConfirm = () => {
@@ -216,7 +214,7 @@ export const TabBtn = props => {
           <Button onClick={handleCloseConfirm} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleConfirm} color="primary">
+          <Button onClick={() => handleConfirm()} color="primary">
             Confirm
           </Button>
         </DialogActions>
