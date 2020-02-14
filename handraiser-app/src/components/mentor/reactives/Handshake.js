@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import io from "socket.io-client";
 import { useHistory, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 var jwtDecode = require("jwt-decode");
 
@@ -27,6 +28,52 @@ export default function Handshake(props) {
       image: ""
     });
   });
+
+  const handleDone = rowData => {
+    if (rowData.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "No concern selected!",
+        text: "Please select a concern."
+      });
+    }
+    // setConcernTitle("");
+    // setName("");
+    // setAnchorEl(null);
+
+    axios
+      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
+        concern_id: rowData.concern_id,
+        concern_title: rowData.concern_title,
+        concern_description: rowData.concern_description,
+        concern_status: 3
+      })
+      .then(data => {
+        axios
+          .get(
+            `http://localhost:5000/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
+            {}
+          )
+          .then(data => {
+            axios
+              .patch(
+                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                {
+                  assisted_id: data.data[0].assisted_id,
+                  user_student_id: data.data[0].user_id,
+                  class_id: data.data[0].class_id,
+                  assist_status: "done"
+                }
+              )
+              .then(data => {
+                socket.emit("handshake", { room: class_id });
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          });
+      });
+  };
 
   const accept = highdata => {
     console.log("hanshake request");
@@ -127,7 +174,7 @@ export default function Handshake(props) {
             <div
               className={classes.handshake_button_container_2}
               onClick={() => {
-                accept(props.data);
+                props.handleDone(props.data);
                 // window.location.reload();
               }}
             >

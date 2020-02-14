@@ -7,7 +7,8 @@ import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
-import HandShakeImage from "../images/HandshakeEmoji.png";
+import 
+hakeImage from "../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
@@ -105,6 +106,9 @@ export default function Mentor() {
   // };
 
   const handleDone = rowData => {
+
+    setSelection(false)
+
     if (rowData.length === 0) {
       Swal.fire({
         icon: "error",
@@ -329,8 +333,8 @@ export default function Mentor() {
             </div>
           )}
 
-          {rowData.concern_status === 2 ? (
-            <Handshake data={rowData} rowDatahandler={rowDatahandler} />
+          {selection &&  rowData.concern_status === 2  ? (
+            <Handshake data={rowData} rowDatahandler={rowDatahandler} handleDone={handleDone} />
           ) : (
             ""
           )}
