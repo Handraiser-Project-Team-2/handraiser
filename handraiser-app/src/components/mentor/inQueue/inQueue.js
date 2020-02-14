@@ -50,7 +50,6 @@ export default function InQueue(rowDatahandler) {
   }, [ENDPOINT]);
 
   useEffect(() => {
-    console.log(rowDatahandler.class_id);
 
     if (rowDatahandler.search || !concernsData) {
       update(rowDatahandler.search);
