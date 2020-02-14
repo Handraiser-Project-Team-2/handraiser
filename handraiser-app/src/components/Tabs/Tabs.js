@@ -18,7 +18,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { TabBox, BtnBox } from "../Styles/Styles";
 
 import { TableCont } from "../Table/Table";
-import { StudentTable } from "../Table-Student/Table-student";
 import { GenerateKey } from "../Generate-Key/Generate";
 var jwtDecode = require("jwt-decode");
 
@@ -64,6 +63,10 @@ export const TabBtn = props => {
   }
 
   useEffect(() => {
+    fetchAdminEmail();
+  }, []);
+
+  const fetchAdminEmail = () => {
     axios({
       method: "post",
       url: `http://localhost:5000/api/user/data`,
@@ -73,7 +76,7 @@ export const TabBtn = props => {
     }).then(res => {
       setAdminEmail(res.data.email);
     });
-  }, []);
+  };
 
   const handleChange = (event, newValue) => {
     event.preventDefault();
@@ -101,21 +104,20 @@ export const TabBtn = props => {
   };
 
   const handleAdd = () => {
+    setOpenConfirm(true);
     axios
       .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
       .then(res => {
-        setOpenConfirm(true);
-        setEmailTo(res.data.validation_email);
-        setKey(res.data.validation_key);
-        toast.info("registration sucessful!", {
-          position: toast.POSITION.TOP_CENTER
-        });
+        setEmailTo(res.data.data.validation_email);
+        setKey(res.data.data.validation_key);
         setOpen(false);
       })
-      .catch(err => {
-        toast.error(err, {
-          position: toast.POSITION.TOP_RIGHT
-        });
+      .catch(errors => {
+        try {
+          toast.error(errors.res.data.error);
+        } catch {
+          console.log(errors);
+        }
       });
   };
 
@@ -126,6 +128,12 @@ export const TabBtn = props => {
       adminEmail: adminEmail,
       adminPass: adminPass
     });
+    toast.success(
+      "Registration successful! Verification Key sent to the mentor!",
+      {
+        position: toast.POSITION.TOP_RIGHT
+      }
+    );
     setOpenConfirm(false);
   };
 
@@ -167,7 +175,7 @@ export const TabBtn = props => {
         )}
       </TabBox>
       <TabPanel value={tabValue} index={0}>
-        <StudentTable tabValue={tabValue} />
+        <TableCont tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
         <TableCont tabValue={tabValue} />
@@ -184,8 +192,6 @@ export const TabBtn = props => {
         handleOnChange={handleOnChange}
         tabValue={tabValue}
       />
-
-      {/* ---------------Confirmation dialog---------------------- */}
       <Dialog
         open={openConfirm}
         onClose={handleCloseConfirm}
@@ -215,7 +221,8 @@ export const TabBtn = props => {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* ---------------Confirmation dialog---------------------- */}
+
+      <ToastContainer autoClose={1500} />
     </React.Fragment>
   );
 };

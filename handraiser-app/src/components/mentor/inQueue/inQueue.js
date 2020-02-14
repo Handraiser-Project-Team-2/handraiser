@@ -22,7 +22,20 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
-  }
+  },
+  queue: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
+  },
+  active: { backgroundColor: "pink" }
 }));
 
 export default function InQueue(rowDatahandler) {
@@ -31,53 +44,35 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const [load, setLoad] = useState(false);
+  const [color, setColor] = useState("red");
+  const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  let socket;
   const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
 
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
-  // const [initial, setInitial] = useState(true);
   useEffect(() => {
     socket = io(ENDPOINT);
 
-    // update(rowDatahandler.search);
-
-    // if (initial) {
     socket.emit("join", {
       username: "Admin",
       room: rowDatahandler.class_id,
       image: ""
     });
-    // }
+  }, [ENDPOINT]);
 
+  useEffect(() => {
     if (rowDatahandler.search || !concernsData) {
       update(rowDatahandler.search);
     }
 
+    socket.on("updateComponents", message => {
+      update("");
+    });
+
     socket.on("consolidateRequest", message => {
-      console.log("message recieved", message);
-
-      let trasmission = {
-        concern_id: message.concern_id,
-        concern_title: message.concern_title,
-        concern_description: message.concern_description,
-        concern_status: message.concern_status,
-        class_id: message.class_id,
-        user_id: message.user_id,
-        profile_id: message.cstate.profile_id,
-        first_name: message.cstate.first_name,
-        last_name: message.cstate.last_name,
-        image: message.cstate.image
-      };
-
-      let concern_b = Object.assign([], concernsData);
-
-      concern_b.push(trasmission);
-
-      console.log(concern_b);
-      setConcernsData(concern_b);
+      update("");
     });
 
     socket.on("disconnect", () => {
@@ -85,7 +80,6 @@ export default function InQueue(rowDatahandler) {
     });
   }, [rowDatahandler.search, ENDPOINT, concernsData]);
 
-  // here
   const update = data => {
     axios({
       method: "get",
@@ -106,9 +100,9 @@ export default function InQueue(rowDatahandler) {
     setAnchorEl(null);
   };
 
-  const handleConcernData = data => {
-    console.log("here");
+  const handleConcernData = (data, index) => {
     rowDataHandlerChild2(data);
+    setSelectedIndex(index);
   };
 
   return (
@@ -128,7 +122,29 @@ export default function InQueue(rowDatahandler) {
                     onClick={() => handleConcernData(data)}
                   >
                     <ListItemAvatar>
-                      <Avatar src={data.image}></Avatar>
+                      <div>
+                        {data.user_status === 1 ? (
+                          <status-indicator
+                            positive
+                            pulse
+                            style={{
+                              position: "absolute",
+                              marginTop: "30px",
+                              marginLeft: "35px"
+                            }}
+                          ></status-indicator>
+                        ) : (
+                          <status-indicator
+                            pulse
+                            style={{
+                              position: "absolute",
+                              marginTop: "30px",
+                              marginLeft: "35px"
+                            }}
+                          ></status-indicator>
+                        )}
+                        <Avatar src={data.image}></Avatar>
+                      </div>
                     </ListItemAvatar>
                     <Menu
                       id="menu-appbar"
@@ -182,20 +198,7 @@ export default function InQueue(rowDatahandler) {
                         {data.concern_status == 1 ? (
                           <Avatar variant="square" src={Handshake} />
                         ) : (
-                          <div
-                            style={{
-                              display: "flex",
-                              backgroundColor: "white",
-                              borderRadius: "10px",
-                              justifyContent: "center",
-                              alignContent: "center",
-                              alignItems: "center",
-                              width: "40px",
-                              height: "40px",
-                              border: "1px solid lightgrey",
-                              borderTop: "10px solid #372476"
-                            }}
-                          >
+                          <div className={classes.queue}>
                             <span
                               style={{ color: "darkblue", fontSize: "10px" }}
                             >

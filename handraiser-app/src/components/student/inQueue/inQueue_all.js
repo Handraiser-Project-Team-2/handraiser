@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import styled from "styled-components";
@@ -13,6 +13,9 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import { UserContext } from "../../Contexts/UserContext";
+import io from "socket.io-client";
+
 var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
@@ -26,6 +29,30 @@ const useStyles = makeStyles(theme => ({
   small: {
     width: theme.spacing(4),
     height: theme.spacing(4)
+  },
+  next: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
+  },
+  number: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
   }
 }));
 
@@ -36,17 +63,46 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
+  const { cstate, getData } = useContext(UserContext);
+
+  const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
 
   useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://localhost:5000/api/student/queue/order/${props.classReference}?search=${props.search}` //5 here is a class_id example
-    }).then(res => {
-      setConcernsData(res.data);
+    socket = io(ENDPOINT);
+
+    if (!cstate) {
+      getData();
+    }
+
+    if (cstate) {
+      socket.emit("join", {
+        username: cstate.user_id,
+        room: props.classReference,
+        image: ""
+      });
+    }
+
+    update("");
+  }, [ENDPOINT]);
+
+  useEffect(() => {
+    update(props.search);
+
+    socket.on("updateComponents", message => {
+      update("");
     });
   }, [props.search]); //class_id
 
-  //   console.log(concernsData);
+  const update = data => {
+    axios({
+      method: "get",
+      url: `http://localhost:5000/api/student/queue/order/${props.classReference}?search=${data}`
+    }).then(res => {
+      setConcernsData(res.data);
+    });
+  };
+
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <List className={classes.root}>
@@ -61,7 +117,29 @@ export default function InQueue(props) {
                 }}
               >
                 <ListItemAvatar>
-                  <Avatar src={concern.concern.image}></Avatar>
+                  <div>
+                    {concern.concern.user_status === 1 ? (
+                      <status-indicator
+                        positive
+                        pulse
+                        style={{
+                          position: "absolute",
+                          marginTop: "30px",
+                          marginLeft: "35px"
+                        }}
+                      ></status-indicator>
+                    ) : (
+                      <status-indicator
+                        pulse
+                        style={{
+                          position: "absolute",
+                          marginTop: "30px",
+                          marginLeft: "35px"
+                        }}
+                      ></status-indicator>
+                    )}
+                    <Avatar src={concern.concern.image}></Avatar>
+                  </div>
                 </ListItemAvatar>
 
                 <ListItemText
@@ -99,20 +177,7 @@ export default function InQueue(props) {
                       {concern.concern.concern_status === 1 ? (
                         <Avatar variant="square" src={Handshake} />
                       ) : concern.queue_order_num == 0 ? (
-                        <div
-                          style={{
-                            display: "flex",
-                            backgroundColor: "white",
-                            borderRadius: "10px",
-                            justifyContent: "center",
-                            alignContent: "center",
-                            alignItems: "center",
-                            width: "40px",
-                            height: "40px",
-                            border: "1px solid lightgrey",
-                            borderTop: "10px solid #372476"
-                          }}
-                        >
+                        <div className={classes.next}>
                           <span
                             style={{
                               color: "black",
@@ -123,32 +188,18 @@ export default function InQueue(props) {
                           </span>
                         </div>
                       ) : (
-                        <div
-                          style={{
-                            display: "flex",
-                            backgroundColor: "white",
-                            borderRadius: "10px",
-                            justifyContent: "center",
-                            alignContent: "center",
-                            alignItems: "center",
-                            width: "40px",
-                            height: "40px",
-                            border: "1px solid lightgrey",
-                            borderTop: "10px solid #372476"
-                          }}
-                        >
-                          <span style={{ color: "black" }}>
-                            <span
-                              style={{
-                                display: "flex",
-                                color: "black",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                alignContent: "center"
-                              }}
-                            >
-                              {concern.queue_order_num}
-                            </span>
+                        <div className={classes.number}>
+                          <span
+                            style={{
+                              display: "flex",
+                              color: "black",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              alignContent: "center",
+                              fontSize: "15px"
+                            }}
+                          >
+                            {concern.queue_order_num}
                           </span>
                         </div>
                       )}

@@ -7,7 +7,8 @@ import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
-import HandShakeImage from "../images/HandshakeEmoji.png";
+import 
+hakeImage from "../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
@@ -105,6 +106,9 @@ export default function Mentor() {
   // };
 
   const handleDone = rowData => {
+
+    setSelection(false)
+
     if (rowData.length === 0) {
       Swal.fire({
         icon: "error",
@@ -130,21 +134,31 @@ export default function Mentor() {
             {}
           )
           .then(data => {
-            axios.patch(
-              `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-              {
-                assisted_id: data.data[0].assisted_id,
-                user_student_id: data.data[0].user_id,
-                class_id: data.data[0].class_id,
-                assist_status: "done"
-              }
-            );
+            axios
+              .patch(
+                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                {
+                  assisted_id: data.data[0].assisted_id,
+                  user_student_id: data.data[0].user_id,
+                  class_id: data.data[0].class_id,
+                  assist_status: "done"
+                }
+              )
+              .then(data => {
+                socket.emit("handshake", { room: class_id });
+              })
+              .catch(err => {
+                console.log(err);
+              });
           });
-        window.location.reload();
       });
   };
 
+  const [selection, setSelection] = useState(false);
+
   const handleBackQueue = rowData => {
+    setSelection(false);
+
     if (rowData.length === 0) {
       Swal.fire({
         icon: "error",
@@ -163,6 +177,8 @@ export default function Mentor() {
         concern_status: 2
       })
       .then(data => {
+        socket.emit("handshake", { room: class_id });
+
         axios
           .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
           .then(data => {
@@ -175,6 +191,7 @@ export default function Mentor() {
   };
 
   const rowDatahandler = rowData => {
+    setSelection(true);
     console.log(rowData);
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
@@ -223,6 +240,16 @@ export default function Mentor() {
     }
   });
 
+  const [expanded, setExpanded] = React.useState("");
+
+  const handleClickDetail = () => {
+    setExpanded("panel1");
+  };
+
+  const handleClickMember = () => {
+    setExpanded("panel2");
+  };
+
   return (
     <React.Fragment>
       <Topbar />
@@ -246,105 +273,144 @@ export default function Mentor() {
           <Tabs rowDatahandler={rowDatahandler} class_id={class_id} />
         </Queue>
         <Help>
-          <Subject>
-            <TitleName
-              style={{
-                paddingTop: "25px"
-              }}
-            >
-              <Typography variant="h5">Concern: {concernTitle}</Typography>
-              <Typography
-                variant="subtitle2"
+          {selection ? (
+            <Subject>
+              <TitleName
                 style={{
-                  fontSize: "12.4px"
+                  paddingTop: "25px"
                 }}
               >
-                From: {name}
-              </Typography>
-            </TitleName>
-            <Option>
-              <div>
-                <HelpIcon
+                <Typography variant="h5">
+                  {selection
+                    ? `Concern: ${concernTitle}`
+                    : `Select any concern to interact`}
+                </Typography>
+                <Typography
+                  variant="subtitle2"
                   style={{
-                    fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
-                  }}
-                />
-              </div>
-              <div>
-                <GroupIcon
-                  style={{
-                    fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
-                  }}
-                />
-              </div>
-              <div>
-                <MoreVertIcon
-                  onClick={handleMenu}
-                  style={{
-                    fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
-                  }}
-                />
-              </div>
-            </Option>
-          </Subject>
-
-          {rowData.concern_status === 2 ? (
-            <Handshake data={rowData} rowDatahandler={rowDatahandler} />
-          ) : (
-            ""
-          )}
-
-          <Chatfield />
-
-          {rowData.concern_status === 2 ? (
-            ""
-          ) : (
-            <Message>
-              <Field>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "space-between",
-                    flexDirection: "column",
-                    width: "100%"
+                    fontSize: "12.4px"
                   }}
                 >
-                  <form onSubmit={sendMsg}>
-                    {/* <TextField
-                      id="outlined-textarea"
-                      multiline
-                      variant="outlined"
-                      fullWidth
-                      rows="3"
-                    /> */}
-                    <Input />
-
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "15px"
-                      }}
-                    >
-                      <Send onClick={sendMsg}>SEND</Send>
-                    </div>
-                  </form>
+                  From: ${name}
+                </Typography>
+              </TitleName>
+              <Option>
+                <div>
+                  <HelpIcon
+                  onClick={handleClickDetail}
+                    style={{
+                      fontSize: 30,
+                      color: "#c4c4c4",
+                      cursor: "pointer",
+                      color: "#372476"
+                    }}
+                  />
                 </div>
-              </Field>
-            </Message>
+                <div>
+                  <GroupIcon
+                  onClick={handleClickMember}
+                    style={{
+                      fontSize: 30,
+                      color: "#c4c4c4",
+                      cursor: "pointer",
+                      color: "#372476"
+                    }}
+                  />
+                </div>
+                <div>
+                  <MoreVertIcon
+                    onClick={handleMenu}
+                    style={{
+                      fontSize: 30,
+                      color: "#c4c4c4",
+                      cursor: "pointer",
+                      color: "#372476"
+                    }}
+                  />
+                </div>
+              </Option>
+            </Subject>
+          ) : (
+            <div
+              style={{
+                height: "96px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Typography variant="h5" style={{color:'#bcbcbc'}}>
+                Select any concern to interact
+              </Typography>
+            </div>
+          )}
+
+          {selection &&  rowData.concern_status === 2  ? (
+            <Handshake data={rowData} rowDatahandler={rowDatahandler} handleDone={handleDone} />
+          ) : (
+            ""
+          )}
+
+          {selection ? (
+            <Chatfield />
+          ) : (
+            <div
+              style={{
+                height: "83vh",
+                width: "100%",
+                background: "#f5f5f5"
+              }}
+            ></div>
+          )}
+
+          {selection ? (
+            rowData.concern_status === 2 ? (
+              ""
+            ) : (
+              <Message>
+                <Field>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-between",
+                      flexDirection: "column",
+                      width: "100%"
+                    }}
+                  >
+                    <form onSubmit={sendMsg}>
+                      {/* <TextField
+                        id="outlined-textarea"
+                        multiline
+                        variant="outlined"
+                        fullWidth
+                        rows="3"
+                      /> */}
+                      <Input />
+
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          marginTop: "15px"
+                        }}
+                      >
+                        <Send onClick={sendMsg}>SEND</Send>
+                      </div>
+                    </form>
+                  </div>
+                </Field>
+              </Message>
+            )
+          ) : (
+            ""
           )}
         </Help>
-        <DetailPanel />
+        <DetailPanel
+          class_id={class_id}
+          expanded={expanded}
+          setExpanded={setExpanded}
+        />
       </Div>
     </React.Fragment>
   );

@@ -119,8 +119,6 @@ module.exports = {
 
     const { user_id } = req.params;
 
-    console.log(user_id);
-
     db.query(
       `SELECT * FROM user_profile inner join users on user_profile.profile_id = users.profile_id where user_id = ${user_id}`
     )
@@ -151,14 +149,58 @@ module.exports = {
 
     db.users.findOne({ email: email }).then(data => {
       if (data) {
-        db.user_profile
-          .findOne({ profile_id: data.profile_id })
-          .then(user => {
-            res.status(201).json({ ...data, ...user });
-          })
-          .catch(err => {
-            res.status(400).end();
-          });
+        db.user_profile.findOne({ profile_id: data.profile_id }).then(user => {
+          if (user) {
+            db.query(
+              `select  COUNT(concern_id) as stud_helped from concern_list INNER JOIN class ON concern_list.class_id = class.class_id WHERE concern_list.concern_status = 3 AND class.user_id = ${data.profile_id}`
+            ).then(row => {
+              if (row) {
+                db.query(
+                  `select COUNT(classroom.classroom_id) as stud_handled from classroom INNER JOIN class ON classroom.class_id = class.class_id WHERE class.user_id = ${data.profile_id}`
+                )
+                  .then(stud => {
+                    res
+                      .status(201)
+                      .json({ ...data, ...user, ...row[0], ...stud[0] });
+                  })
+                  .catch(err => {
+                    res.status(400).end();
+                  });
+              }
+            });
+          }
+        });
+      }
+    });
+  },
+  getUserProfileByStudentEmail: (req, res) => {
+    const db = req.app.get("db");
+
+    const { email } = req.body;
+
+    db.users.findOne({ email: email }).then(data => {
+      if (data) {
+        db.user_profile.findOne({ profile_id: data.profile_id }).then(user => {
+          if (user) {
+            db.query(
+              `select  COUNT(concern_id) as req_resolved from concern_list INNER JOIN class ON concern_list.class_id = class.class_id WHERE concern_list.concern_status = 3 AND concern_list.user_id = ${data.profile_id}`
+            ).then(row => {
+              if (row) {
+                db.query(
+                  `select  COUNT(concern_id) as all_request from concern_list INNER JOIN class ON concern_list.class_id = class.class_id WHERE concern_list.user_id = ${data.profile_id} AND concern_list.user_id = ${data.profile_id};`
+                )
+                  .then(stud => {
+                    res
+                      .status(201)
+                      .json({ ...data, ...user, ...row[0], ...stud[0] });
+                  })
+                  .catch(err => {
+                    res.status(400).end();
+                  });
+              }
+            });
+          }
+        });
       }
     });
   }

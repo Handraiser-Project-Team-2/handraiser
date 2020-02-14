@@ -21,6 +21,18 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
+  },
+  done: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
   }
 }));
 
@@ -63,7 +75,29 @@ export default function InQueue({ class_id, search }) {
                 // onClick={() => handleConcernData(data)}
               >
                 <ListItemAvatar>
-                  <Avatar src={data.image}></Avatar>
+                  <div>
+                    {data.user_status === 1 ? (
+                      <status-indicator
+                        positive
+                        pulse
+                        style={{
+                          position: "absolute",
+                          marginTop: "30px",
+                          marginLeft: "35px"
+                        }}
+                      ></status-indicator>
+                    ) : (
+                      <status-indicator
+                        pulse
+                        style={{
+                          position: "absolute",
+                          marginTop: "30px",
+                          marginLeft: "35px"
+                        }}
+                      ></status-indicator>
+                    )}
+                    <Avatar src={data.image}></Avatar>
+                  </div>
                 </ListItemAvatar>
                 <Menu
                   id="menu-appbar"
@@ -108,20 +142,7 @@ export default function InQueue({ class_id, search }) {
                     }}
                   >
                     {data.concern_status === 3 ? (
-                      <div
-                        style={{
-                          display: "flex",
-                          backgroundColor: "white",
-                          borderRadius: "10px",
-                          justifyContent: "center",
-                          alignContent: "center",
-                          alignItems: "center",
-                          width: "40px",
-                          height: "40px",
-                          border: "1px solid lightgrey",
-                          borderTop: "10px solid #372476"
-                        }}
-                      >
+                      <div className={classes.done}>
                         <DoneIcon style={{ color: "teal" }} />
                       </div>
                     ) : (

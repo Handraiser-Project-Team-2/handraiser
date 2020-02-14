@@ -14,6 +14,7 @@ import AddClassDialog from "./AddClassDialog";
 import Topbar from "../reusables/Topbar";
 import NoClass from "./NoClass";
 import { UserContext } from "../Contexts/UserContext";
+import SearchComponent from "./SearchComponent";
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -84,6 +85,7 @@ export default function ClassLanding(props) {
   };
 
   const [classData, setClassData] = useState([]);
+  const [tempClassData, setTempClassData] = useState([]);
 
   // get all class relative to this mentor(if user is verified)
   const fetchMentorClass = () => {
@@ -94,6 +96,7 @@ export default function ClassLanding(props) {
     })
       .then(data => {
         setClassData(data.data);
+        setTempClassData(data.data);
       })
       .catch(err => {
         console.log(err);
@@ -108,8 +111,9 @@ export default function ClassLanding(props) {
       data: tokState
     })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
         setClassData(data.data);
+        setTempClassData(data.data);
       })
       .catch(err => {
         console.log(err);
@@ -134,6 +138,10 @@ export default function ClassLanding(props) {
               ""
             )}
             <Grid item xs={12}>
+              <SearchComponent
+                setTempClassData={setTempClassData}
+                classData={classData}
+              />
               {userType === 3 ? (
                 <FindClassDialog />
               ) : (
@@ -148,7 +156,7 @@ export default function ClassLanding(props) {
             ) : (
               <Container maxWidth="lg" className={classes.flexy}>
                 <CardPage
-                  classData={classData}
+                  classData={tempClassData}
                   data={data}
                   fetchMentorClass={fetchMentorClass}
                 />

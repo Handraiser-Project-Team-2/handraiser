@@ -14,8 +14,9 @@ const classes = require("./controllers/class");
 const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
 const authorization = require("./controllers/authorization");
+const chat = require("./controllers/chat");
 
-const mail = require("./mail");
+const mail = require("./controllers/mail");
 
 require("dotenv").config();
 massive({
@@ -49,6 +50,7 @@ massive({
     app.get("/api/userprofile/:user_id", users.getUserProfile);
     app.get("/api/user/student_list", users.accessList_student);
     app.post("/api/userprofile/", users.getUserProfileByEmail);
+    app.post("/api/userprofile/student/", users.getUserProfileByStudentEmail);
     app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
 
     // admins endpoints
@@ -97,12 +99,18 @@ massive({
       student.queue_order_done
     ); // get all done request assistance
     app.post("/api/student/get/class", student.get_my_classroom);
-    app.post("/api/student/classes", classes.getClassDetails);
+    app.post("/api/student/get/class/:user_id", student.get_my_classroom_all);
+    app.post("/api/classinfo/:class_id", classes.getClassDetails); //get class details including class mentor
 
     // class endpoints
     app.get("/api/classes", classes.getAllClass); // get all available classes
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
     app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
+    app.get("/api/classes/members/:class_id", classes.getClassMembers); // get class members
+
+    //  chat endpoints
+    app.post("/api/chat/send", chat.sendMessage);
+    app.get("/api/chat/convo", chat.getConversation);
 
     //sending email
     app.post("/api/sendMail", mail.sendEmail);
@@ -111,11 +119,19 @@ massive({
       const users = [];
 
       socket.on("AddRequest", (data, callback) => {
-        console.log(data);
+        // console.log(data);
 
-        io.to(data.room).emit("consolidateRequest", data );
+        io.to(data.room).emit("consolidateRequest", data);
 
         callback();
+      });
+
+      socket.on("handshake", data => {
+        console.log("handshake flag", data);
+
+        io.to(data.room).emit("updateComponents", {
+          message: "handshake succesful"
+        });
       });
 
       console.log("Online");
@@ -138,8 +154,6 @@ massive({
         });
 
         socket.join(user.room);
-
-        // callback();
       });
 
       socket.on("typing", data => {
@@ -151,7 +165,7 @@ massive({
 
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
-        console.log(user);
+        // console.log(user);
         io.to(user.room).emit("message", {
           user: user.name,
           text: message,

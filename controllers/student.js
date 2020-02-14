@@ -74,7 +74,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} AND concern_title ILIKE '%${search}%' order by concern_id ASC`
+      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id inner join users on user_profile.profile_id = users.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} AND concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         // re:looping here please
@@ -101,7 +101,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
+      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id inner join users on user_profile.profile_id = users.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         console.log(data);
@@ -128,7 +128,7 @@ module.exports = {
     const { search } = req.query;
 
     db.query(
-      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id WHERE concern_status = 3 AND class_id = ${req.params.class_id} AND concern_title ILIKE '%${search}%' order by concern_id ASC`
+      `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id inner join users on user_profile.profile_id = users.profile_id WHERE concern_status = 3 AND class_id = ${req.params.class_id} AND concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
         // re:looping here please
@@ -193,6 +193,7 @@ module.exports = {
   GetAssisted_by: (req, res) => {
     const db = req.app.get("db");
     const { user_student_id, class_id } = req.params;
+
     db.assisted_by
       .find({ class_id, user_student_id })
       .then(assist => res.status(200).json(assist))
@@ -214,7 +215,7 @@ module.exports = {
       .catch(err => {
         res.status(401).end(err);
       });
-  },  
+  },
   get_my_classroom: (req, res) => {
     const db = req.app.get("db");
 
@@ -227,7 +228,40 @@ module.exports = {
       FROM class INNER JOIN classroom ON classroom.class_id = class.class_id INNER JOIN user_profile ON user_profile.profile_id = class.user_id
       WHERE classroom.user_id = ${parseToken.userid}`
     )
-      .then(data => { 
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(401).end(err);
+      });
+  },
+
+  get_my_classroom_all: (req, res) => {
+    const db = req.app.get("db");
+
+    const { user_id } = req.params;
+
+    db.query(
+      `SELECT class.class_id,  class.class_title, class.class_description, class.class_date_created, class.class_status, user_profile.first_name, user_profile.last_name, user_profile.image
+      FROM class INNER JOIN classroom ON classroom.class_id = class.class_id INNER JOIN user_profile ON user_profile.profile_id = class.user_id
+      WHERE classroom.user_id = ${user_id}`
+    )
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(401).end(err);
+      });
+  },
+  get_my_classroom_all: (req, res) => {
+    const db = req.app.get("db");
+    const { user_id } = req.params;
+    db.query(
+      `SELECT class.class_id,  class.class_title, class.class_description, class.class_date_created, class.class_status, user_profile.first_name, user_profile.last_name, user_profile.image
+      FROM class INNER JOIN classroom ON classroom.class_id = class.class_id INNER JOIN user_profile ON user_profile.profile_id = class.user_id
+      WHERE classroom.user_id = ${user_id}`
+    )
+      .then(data => {
         res.status(201).json(data);
       })
       .catch(err => {
@@ -250,7 +284,7 @@ module.exports = {
       .then(concern => res.status(200).json(concern))
       .catch(err => {
         console.error(err);
-        // res.status(500).end();
+        res.status(500).end();
       });
   },
   // getConcern
@@ -283,6 +317,5 @@ module.exports = {
         // res.status(500).end();
         res.status(400).end();
       });
-  },
-
+  }
 };

@@ -22,6 +22,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
+import { useHistory, useParams } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,6 +31,30 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
+  },
+  next: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
+  },
+  number: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
   }
 }));
 
@@ -43,61 +68,38 @@ export default function InQueue(props) {
   const [concernDescription, setConcernDescription] = useState("");
   const open = Boolean(anchorEl);
   const [concern, setConcern] = useState("");
+  let { class_id } = useParams();
 
   const classes = useStyles();
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-
-  let socket;
   const ENDPOINT = "localhost:5000";
 
-  const [initial, setInitial] = useState(true);
+  let socket = io(ENDPOINT);
+  const [initial, setInitial] = useState();
 
   useEffect(() => {
     socket = io(ENDPOINT);
-
-    // if (initial) {
     socket.emit("join", {
       username: "Admin",
       room: props.classReference,
       image: ""
     });
+  }, [ENDPOINT]);
 
-    // setInitial(false);
-    // }
-
+  useEffect(() => {
     if (props.search || !concernsData) {
       update(props.search);
     }
 
+    socket.on("updateComponents", message => {
+      update("");
+    });
+
     socket.on("consolidateRequest", message => {
       console.log("message recieved", message);
-
-      console.log(concernsData);
-
-      let trasmission = {
-        concern: {
-          concern_id: message.concern_id,
-          concern_title: message.concern_title,
-          concern_description: message.concern_description,
-          concern_status: message.concern_status,
-          class_id: message.class_id,
-          user_id: message.user_id,
-          profile_id: message.cstate.profile_id,
-          first_name: message.cstate.first_name,
-          last_name: message.cstate.last_name,
-          image: message.cstate.image
-        },
-        queue_order_num: ""
-      };
-
-      let concern_b = Object.assign([], concernsData);
-
-      concern_b.push(trasmission);
-
-      console.log(concern_b);
-      setConcernsData(concern_b);
+      update("");
     });
 
     socket.on("disconnect", () => {
@@ -111,6 +113,7 @@ export default function InQueue(props) {
       url: `http://localhost:5000/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
+      console.log(res.data.length);
     });
   };
 
@@ -131,28 +134,37 @@ export default function InQueue(props) {
 
   const handleSaveEdit = () => {
     setOpenEdit(false);
+
     axios
       .get(
         `http://localhost:5000/api/concern_list/${concern.concern.concern_id}`
       )
       .then(data => {
-        axios.patch(
-          `http://localhost:5000/api/concern_list/${data.data[0].concern_id}`,
-          {
-            concern_id: data.data[0].concern_id,
-            concern_title: concernTitle,
-            concern_description: concernDescription,
-            concern_status: data.data[0].concern_status
-          }
-        );
+        axios
+          .patch(
+            `http://localhost:5000/api/concern_list/${data.data[0].concern_id}`,
+            {
+              concern_id: data.data[0].concern_id,
+              concern_title: concernTitle,
+              concern_description: concernDescription,
+              concern_status: data.data[0].concern_status
+            }
+          )
+          .then(data => {
+            socket.emit("handshake", { room: props.classReference });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+
+        console.log(data);
       })
-      .then(() => {
-        window.location = `/student/${props.classReference}`;
+      .catch(err => {
+        console.log(err);
       });
   };
 
   const handleConcernData = data => {
-    console.log("here");
     props.rowDatahandler(data);
   };
 
@@ -162,18 +174,23 @@ export default function InQueue(props) {
 
   const handleRemoveReq = () => {
     setAnchorEl(null);
+
+    // if (concern.concern) {
     axios
       .delete(
         `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
         {}
       )
-      .then(() => {
-        window.location = `/student/${props.classReference}`;
-        toast.info("Your concern has been removed from the queue");
+      .then(data => {
+        socket.emit("handshake", { room: props.classReference });
+
+        // alert("Your concern has been removed from the queue");
+      })
+      .catch(err => {
+        console.log(err);
       });
   };
 
-  // console.log(concernsData);
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
       <ToastContainer />
@@ -296,20 +313,7 @@ export default function InQueue(props) {
                           {concern.concern.concern_status === 1 ? (
                             <Avatar variant="square" src={Handshake} />
                           ) : concern.queue_order_num === 0 ? (
-                            <div
-                              style={{
-                                display: "flex",
-                                backgroundColor: "white",
-                                borderRadius: "10px",
-                                justifyContent: "center",
-                                alignContent: "center",
-                                alignItems: "center",
-                                width: "40px",
-                                height: "40px",
-                                border: "1px solid lightgrey",
-                                borderTop: "10px solid #372476"
-                              }}
-                            >
+                            <div className={classes.next}>
                               <span
                                 style={{
                                   color: "black",
@@ -320,32 +324,18 @@ export default function InQueue(props) {
                               </span>
                             </div>
                           ) : (
-                            <div
-                              style={{
-                                display: "flex",
-                                backgroundColor: "white",
-                                borderRadius: "10px",
-                                justifyContent: "center",
-                                alignContent: "center",
-                                alignItems: "center",
-                                width: "40px",
-                                height: "40px",
-                                border: "1px solid lightgrey",
-                                borderTop: "10px solid #372476"
-                              }}
-                            >
-                              <span style={{ color: "black" }}>
-                                <span
-                                  style={{
-                                    display: "flex",
-                                    color: "black",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    alignContent: "center"
-                                  }}
-                                >
-                                  {concern.queue_order_num}
-                                </span>
+                            <div className={classes.number}>
+                              <span
+                                style={{
+                                  display: "flex",
+                                  color: "black",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  alignContent: "center",
+                                  fontSize: "15px"
+                                }}
+                              >
+                                {concern.queue_order_num}
                               </span>
                             </div>
                           )}

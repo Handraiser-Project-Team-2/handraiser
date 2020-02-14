@@ -22,14 +22,12 @@ const useStyles = makeStyles(theme => ({
 export default function ViewMentorDialog({ data }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
   const [profileData, setProfileData] = useState([]);
   const handleClickOpen = () => {
     setOpen(true);
     fetchProfileData();
     fetchMentorClass();
   };
-
   const fetchProfileData = () => {
     axios({
       method: "post",
@@ -37,14 +35,13 @@ export default function ViewMentorDialog({ data }) {
       data: { email: data.validation_email }
     })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
         setProfileData(data.data);
       })
       .catch(err => {
         console.log(err);
       });
   };
-
   const [classData, setClassData] = useState([]);
   const fetchMentorClass = () => {
     axios({
@@ -53,7 +50,7 @@ export default function ViewMentorDialog({ data }) {
       data: { email: data.validation_email }
     })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
         setClassData(data.data);
       })
       .catch(err => {

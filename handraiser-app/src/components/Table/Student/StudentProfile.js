@@ -94,7 +94,7 @@ export default function StudentProfile({ profileData, classData }) {
               }}
             >
               <Typography variant="h3" gutterBottom>
-                0
+                {profileData.all_request}
               </Typography>
               <Typography
                 variant="h5"
@@ -106,7 +106,7 @@ export default function StudentProfile({ profileData, classData }) {
             </Grid>
             <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
               <Typography variant="h3" gutterBottom>
-                0
+                {profileData.req_resolved}
               </Typography>
               <Typography
                 variant="h5"

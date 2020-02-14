@@ -32,8 +32,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MentorProfile({ profileData, classData }) {
+  // console.log(profileData);
   const classes = useStyles();
-
   return (
     <div className={classes.root}>
       <Grid container spacing={2} className={classes.gridCont}>
@@ -99,7 +99,7 @@ export default function MentorProfile({ profileData, classData }) {
               }}
             >
               <Typography variant="h3" gutterBottom>
-                0
+                {profileData.stud_helped}
               </Typography>
               <Typography
                 variant="h5"
@@ -111,7 +111,7 @@ export default function MentorProfile({ profileData, classData }) {
             </Grid>
             <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
               <Typography variant="h3" gutterBottom>
-                0
+                {profileData.stud_handled}
               </Typography>
               <Typography
                 variant="h5"
