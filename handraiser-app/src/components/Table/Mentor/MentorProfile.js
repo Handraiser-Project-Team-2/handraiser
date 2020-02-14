@@ -31,7 +31,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function MentorProfile({ profileData, classData }) {
   const classes = useStyles();
-
   return (
     <div className={classes.root}>
       <Grid container spacing={1} className={classes.gridCont}>

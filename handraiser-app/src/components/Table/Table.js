@@ -6,7 +6,7 @@ import MaterialTable from "material-table";
 import axios from "axios";
 import "../../App.css";
 
-import { TableStyle, TableStyle2, RowCont } from "../Styles/Styles";
+import { TableStyle, TableStyle2 } from "../Styles/Styles";
 
 // COMPONENTS
 import ViewMentorDialog from "./Mentor/ViewMentorDIalog";
