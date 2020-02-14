@@ -60,9 +60,9 @@ module.exports = {
   },
   accessList_mentors: (req, res) => {
     const db = req.app.get("db");
-
-    db.validations
-      .find({ validation_type: 4 })
+    db.query(
+      `select * from validations INNER JOIN users ON validations.validation_email = users.email AND validations.validation_type = 4`
+    )
       .then(data => {
         res.status(200).json(data);
       })
@@ -110,7 +110,7 @@ module.exports = {
                 validation_type: setType
               })
               .then(data => {
-                res.status(201).json({data,user})
+                res.status(201).json({ data });
               })
               .catch(err => {
                 res.status(400).end();
@@ -119,9 +119,9 @@ module.exports = {
             // already registered
             res.status(201).json({ remarks: "data is already registed", data });
           }
-          
         })
         .catch(err => {
+          console.log(err);
           res.status(400).end();
         });
     } catch (err) {
@@ -141,7 +141,6 @@ module.exports = {
     db.users
       .findOne({ user_id: parseToken.userid })
       .then(data => {
-        
         db.validations.findOne({ validation_email: data.email }).then(user => {
           if (user.validation_key === supplied_key) {
             // then verify status

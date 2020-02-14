@@ -33,7 +33,22 @@ export const StudentTable = props => {
       {
         title: "Status",
         field: "user_status",
-        render: row => (row.user_status === 1 ? "Active" : "Inactive")
+        render: row =>
+          row.user_status === 1 ? (
+            <span>
+              <status-indicator
+                pulse
+                positive
+                style={{ marginRight: "10px", marginLeft: "10px" }}
+              />
+              <span>Active</span>
+            </span>
+          ) : (
+            <span>
+              <status-indicator pulse style={{ marginRight: "10px" }} />
+              <span>Inactive</span>
+            </span>
+          )
       },
       {
         title: "Action",

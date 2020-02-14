@@ -21,7 +21,8 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
-  }
+  },
+  active: { backgroundColor: "pink" }
 }));
 
 export default function InQueue(rowDatahandler) {
@@ -30,6 +31,8 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [image, setImage] = useState("");
   const [load, setLoad] = useState(false);
+  const [color, setColor] = useState("red");
+  const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
   const ENDPOINT = "localhost:5000";
   let socket = io(ENDPOINT);
@@ -85,8 +88,9 @@ export default function InQueue(rowDatahandler) {
     setAnchorEl(null);
   };
 
-  const handleConcernData = data => {
+  const handleConcernData = (data, index) => {
     rowDataHandlerChild2(data);
+    setSelectedIndex(index);
   };
 
   return (
@@ -98,25 +102,46 @@ export default function InQueue(rowDatahandler) {
                 <div key={index}>
                   <ListItem
                     button
+                    selected={selectedIndex === index}
                     style={
                       data.concern_status === 1
                         ? {
                             borderLeft: "10px solid #8932a8",
                             borderBottom: "0.5px solid #abababde",
-                            padding: "10px 15px",
-                            backgroundColor: "whitesmoke"
+                            padding: "10px 15px"
                           }
                         : {
                             borderLeft: "10px solid blue",
                             borderBottom: "0.5px solid #abababde",
-                            padding: "10px 15px",
-                            backgroundColor: "whitesmoke"
+                            padding: "10px 15px"
                           }
                     }
-                    onClick={() => handleConcernData(data)}
+                    onClick={() => handleConcernData(data, index)}
                   >
                     <ListItemAvatar>
-                      <Avatar src={data.image}></Avatar>
+                      <div>
+                        {data.user_status === 1 ? (
+                          <status-indicator
+                            positive
+                            pulse
+                            style={{
+                              position: "absolute",
+                              marginTop: "30px",
+                              marginLeft: "35px"
+                            }}
+                          ></status-indicator>
+                        ) : (
+                          <status-indicator
+                            pulse
+                            style={{
+                              position: "absolute",
+                              marginTop: "30px",
+                              marginLeft: "35px"
+                            }}
+                          ></status-indicator>
+                        )}
+                        <Avatar src={data.image}></Avatar>
+                      </div>
                     </ListItemAvatar>
                     <Menu
                       id="menu-appbar"

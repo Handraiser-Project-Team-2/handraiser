@@ -14,8 +14,9 @@ const classes = require("./controllers/class");
 const mentor = require("./controllers/mentor");
 const student = require("./controllers/student");
 const authorization = require("./controllers/authorization");
+const chat = require("./controllers/chat");
 
-const mail = require("./mail");
+const mail = require("./controllers/mail");
 
 require("dotenv").config();
 massive({
@@ -97,12 +98,18 @@ massive({
       student.queue_order_done
     ); // get all done request assistance
     app.post("/api/student/get/class", student.get_my_classroom);
-    app.post("/api/student/classes", classes.getClassDetails);
+    app.post("/api/student/get/class/:user_id", student.get_my_classroom_all);
+    app.post("/api/classinfo/:class_id", classes.getClassDetails); //get class details including class mentor
 
     // class endpoints
     app.get("/api/classes", classes.getAllClass); // get all available classes
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
     app.get("/api/classes/:user_id", classes.getClassByMentor); // get class of a userid(for mentor)
+    app.get("/api/classes/members/:class_id", classes.getClassMembers); // get class members
+
+    //  chat endpoints
+    app.post("/api/chat/send", chat.sendMessage);
+    app.get("/api/chat/convo", chat.getConversation);
 
     //sending email
     app.post("/api/sendMail", mail.sendEmail);

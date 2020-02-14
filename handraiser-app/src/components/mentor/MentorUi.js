@@ -240,6 +240,16 @@ export default function Mentor() {
     }
   });
 
+  const [expanded, setExpanded] = React.useState("");
+
+  const handleClickDetail = () => {
+    setExpanded("panel1");
+  };
+
+  const handleClickMember = () => {
+    setExpanded("panel2");
+  };
+
   return (
     <React.Fragment>
       <Topbar />
@@ -287,6 +297,7 @@ export default function Mentor() {
               <Option>
                 <div>
                   <HelpIcon
+                  onClick={handleClickDetail}
                     style={{
                       fontSize: 30,
                       color: "#c4c4c4",
@@ -297,6 +308,7 @@ export default function Mentor() {
                 </div>
                 <div>
                   <GroupIcon
+                  onClick={handleClickMember}
                     style={{
                       fontSize: 30,
                       color: "#c4c4c4",
@@ -394,7 +406,11 @@ export default function Mentor() {
             ""
           )}
         </Help>
-        <DetailPanel />
+        <DetailPanel
+          class_id={class_id}
+          expanded={expanded}
+          setExpanded={setExpanded}
+        />
       </Div>
     </React.Fragment>
   );
