@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import MaterialTable from "material-table";
 
-import { TableStyle } from "../../Styles/Styles";
-
 export default function StudentClass({ classData, profileData }) {
   const [tableData] = useState({
     columns: [
@@ -20,18 +18,23 @@ export default function StudentClass({ classData, profileData }) {
         // render: row => Date.parse(row.class_date_created)
       },
       {
-        title: "Status",
-        field: "class_status"
+        title: "Mentor",
+        field: "first_name",
+        render: row => (
+          <React.Fragment>
+            <span>{row.last_name + "," + " " + row.first_name}</span>
+          </React.Fragment>
+        )
       },
       {
-        title: "Key",
-        field: "classroom_key"
+        title: "Status",
+        field: "class_status"
       }
     ],
     data: classData
   });
   return (
-    <TableStyle>
+    <React.Fragment>
       <MaterialTable
         title={`${profileData.first_name}'s classes`}
         columns={tableData.columns}
@@ -42,18 +45,15 @@ export default function StudentClass({ classData, profileData }) {
           pageSizeOptions: [5, 10, 15, 20],
           actionsColumnIndex: -1,
           draggable: false,
-          paginationType: "stepped",
           headerStyle: {
-            textAlign: "center",
             fontSize: 18
           },
           cellStyle: {
-            textAlign: "center",
-            width: 5,
-            maxWidth: 50
+            width: 900,
+            maxWidth: 280
           }
         }}
       />
-    </TableStyle>
+    </React.Fragment>
   );
 }

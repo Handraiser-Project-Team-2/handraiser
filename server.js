@@ -50,6 +50,7 @@ massive({
     app.get("/api/userprofile/:user_id", users.getUserProfile);
     app.get("/api/user/student_list", users.accessList_student);
     app.post("/api/userprofile/", users.getUserProfileByEmail);
+    app.post("/api/userprofile/student/", users.getUserProfileByStudentEmail);
     app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
 
     // admins endpoints
@@ -126,9 +127,11 @@ massive({
       });
 
       socket.on("handshake", data => {
-        console.log("handshake flag", data)
+        console.log("handshake flag", data);
 
-        io.to(data.room).emit("updateComponents", {message:'handshake succesful'});
+        io.to(data.room).emit("updateComponents", {
+          message: "handshake succesful"
+        });
       });
 
       console.log("Online");
@@ -151,7 +154,6 @@ massive({
         });
 
         socket.join(user.room);
-
       });
 
       socket.on("typing", data => {

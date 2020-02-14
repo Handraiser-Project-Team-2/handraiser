@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import backgroundImg from "../images/programmer_1.png";
-
 //Table Styles
 export const TabBox = styled.div`
   display: flex;
@@ -10,7 +9,6 @@ export const TabBox = styled.div`
     flex-direction: column;
   }
 `;
-
 export const BtnBox = styled.div`
   display: flex;
   @media screen and (max-width: 425px) {
@@ -18,16 +16,11 @@ export const BtnBox = styled.div`
     padding-top: 10px;
   }
 `;
-
 export const RowCont = styled.div`
-  margin-left: -37px;
   margin-top: -5px;
 `;
-
 export const TableStyle = styled.div`
-  @media only screen and (max-width: 500px),
-    (height: 1024px) and (width: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: landscape),
-    (width: 1024px) and (height: 1366px) and (-webkit-min-device-pixel-ratio: 1.5) and (orientation: portrait) {
+  @media only screen and (max-width: 750px) {
     table,
     thead,
     tbody,
@@ -36,22 +29,20 @@ export const TableStyle = styled.div`
     tr {
       display: block;
     }
-
     thead tr {
       display: none;
     }
-
     tr {
-      border-bottom: 3px solid lightgray;
+      border: 1px solid lightgray;
       border-radius: 10px;
     }
-
     td {
+      display: flex;
+      flex-direction: row;
       border: none;
       position: relative;
-      padding-left: 70px;
+      padding-left: 65px;
     }
-
     td:before {
       position: absolute;
       align-items: center;
@@ -64,17 +55,62 @@ export const TableStyle = styled.div`
       content: "Email: ";
     }
     td:nth-of-type(3):before {
-      content: "Status: ";
+      content: "Key: ";
     }
     td:nth-of-type(4):before {
-      content: "Key: ";
+      content: "Email Status: ";
+    }
+    td:nth-of-type(5):before {
+      content: "Status: ";
+    }
+  }
+`;
+export const TableStyle2 = styled.div`
+  @media only screen and (max-width: 750px) {
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+    thead tr {
+      display: none;
+    }
+    tr {
+      border: 1px solid lightgray;
+      border-radius: 10px;
+    }
+    td {
+      display: flex;
+      flex-direction: row;
+      border: none;
+      position: relative;
+      padding-left: 65px;
+    }
+    td:before {
+      position: absolute;
+      align-items: center;
+      top: 1px;
+      left: 6px;
+      width: 20%;
+      padding: 10px;
+    }
+    td:nth-of-type(2):before {
+      content: "Name: ";
+    }
+    td:nth-of-type(3):before {
+      content: "Email: ";
+    }
+    td:nth-of-type(4):before {
+      content: "Status: ";
     }
     td:nth-of-type(5):before {
       content: "Action: ";
     }
   }
 `;
-
 //Student and Mentor Ui Styles
 export const Nav = styled.div`
   width: 100%;
@@ -210,7 +246,6 @@ export const Request = styled.button`
     box-sizing: border-box;
   }
 `;
-
 //Login Styles
 export const LoginDiv = styled.div`
   display: flex;
@@ -340,7 +375,6 @@ export const LoginCont = styled.div`
   flex-direction: row;
   justify-content: center;
 `;
-
 export const LoginFooter = styled.div`
   position: fixed;
   bottom: 0;
@@ -354,7 +388,6 @@ export const LoginFooter = styled.div`
     display: none;
   }
 `;
-
 export const Continue = styled.p`
   font-family: Roboto;
   color: white;
@@ -365,7 +398,6 @@ export const Continue = styled.p`
     margin-top: 7px;
   }
 `;
-
 export const Title = styled.h1`
   font-family: Roboto;
   color: #330066;

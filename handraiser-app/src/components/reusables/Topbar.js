@@ -19,6 +19,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 
 var jwtDecode = require("jwt-decode");
@@ -31,11 +32,11 @@ export default function Topbar() {
     right: false
   });
   var jwtDecode = require("jwt-decode");
+  var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   let history = useHistory();
   const [user, setUser] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const { setData } = useContext(UserContext);
 
@@ -78,19 +79,15 @@ export default function Topbar() {
   };
 
   const Logout = () => {
-    axios
-      .patch(`http://localhost:5000/api/users/${user_id}`, {
-        user_status: 0
-      })
-      .then(res => {
-        Swal.fire({
-          icon: "success",
-          title: "Logged out succesfully!"
-        });
-      });
     sessionStorage.setItem("token", "");
     history.push("/");
     setData();
+    axios.patch(`http://localhost:5000/api/users/${user_id}`).then(res => {
+      Swal.fire({
+        icon: "success",
+        title: "Logged out successful!"
+      });
+    });
   };
 
   const sendMsg = evt => {
@@ -158,6 +155,7 @@ export default function Topbar() {
           </Menu>
         </Toolbar>
       </AppBar>
+      <ToastContainer autoClose={1500} />
     </Nav>
   );
 }

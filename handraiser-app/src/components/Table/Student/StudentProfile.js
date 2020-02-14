@@ -34,7 +34,7 @@ export default function StudentProfile({ profileData, classData }) {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} className={classes.gridCont}>
+      <Grid container spacing={1} className={classes.gridCont}>
         <Grid item xs={12} sm={4}>
           <div className={classes.profileCont}>
             <Avatar
@@ -46,12 +46,7 @@ export default function StudentProfile({ profileData, classData }) {
               {`${profileData.first_name} ${profileData.last_name}`}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              {
-                (profileData.user_type_id === 1 ? "Super Admin" : null,
-                profileData.user_type_id === 2 ? "Admin" : null,
-                profileData.user_type_id === 3 ? "Student" : null,
-                profileData.user_type_id === 4 ? "Mentor" : null)
-              }
+              Student
             </Typography>
           </div>
         </Grid>
@@ -73,18 +68,18 @@ export default function StudentProfile({ profileData, classData }) {
             </Grid>
             <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
               <Typography variant="h3" gutterBottom>
-                0
+                {profileData.all_request}
               </Typography>
               <Typography variant="h5" gutterBottom>
-                Students Helped
+                Number of Request
               </Typography>
             </Grid>
             <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
               <Typography variant="h3" gutterBottom>
-                0
+                {profileData.req_resolved}
               </Typography>
               <Typography variant="h5" gutterBottom>
-                Students Handled
+                Request Resolved
               </Typography>
             </Grid>
           </Grid>

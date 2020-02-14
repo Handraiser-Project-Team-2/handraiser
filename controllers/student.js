@@ -253,6 +253,21 @@ module.exports = {
         res.status(401).end(err);
       });
   },
+  get_my_classroom_all: (req, res) => {
+    const db = req.app.get("db");
+    const { user_id } = req.params;
+    db.query(
+      `SELECT class.class_id,  class.class_title, class.class_description, class.class_date_created, class.class_status, user_profile.first_name, user_profile.last_name, user_profile.image
+      FROM class INNER JOIN classroom ON classroom.class_id = class.class_id INNER JOIN user_profile ON user_profile.profile_id = class.user_id
+      WHERE classroom.user_id = ${user_id}`
+    )
+      .then(data => {
+        res.status(201).json(data);
+      })
+      .catch(err => {
+        res.status(401).end(err);
+      });
+  },
 
   // updateConcern/Request
   updateConcern: (req, res) => {
@@ -269,7 +284,7 @@ module.exports = {
       .then(concern => res.status(200).json(concern))
       .catch(err => {
         console.error(err);
-        // res.status(500).end();
+        res.status(500).end();
       });
   },
   // getConcern
