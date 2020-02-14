@@ -19,6 +19,9 @@ const useStyles = makeStyles(theme => ({
   span: {
     float: "right",
     marginBottom: theme.spacing(2)
+  },
+  edit: {
+    color: "grey"
   }
 }));
 
@@ -76,7 +79,7 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
   return (
     <div>
       <IconButton aria-label="delete" onClick={handleClickOpen}>
-        <EditIcon />
+        <EditIcon className={classes.edit} />
       </IconButton>
       <Dialog
         open={open}

@@ -1,6 +1,5 @@
 import React from "react";
 import { Conversation } from "../Styles/Styles";
-import Avatar from "@material-ui/core/Avatar";
 import styled from "styled-components";
 
 const Cont = styled.div`
@@ -17,28 +16,94 @@ const Cont2 = styled.div`
   padding: 10px;
   flex-direction: row;
 `;
-const Profile = styled.div`
-  display: flex;
-  margin-left: 10px;
-  align-items: flex-end;
-`;
+
 const Sender = styled.div`
   margin-left: 10px;
-  background-color: forestgreen;
   color: white;
-  max-width: 450px;
   padding: 10px 20px 10px 20px;
-  border-radius: 10px 10px 0px 10px;
 `;
 const Receiver = styled.div`
   margin-left: 10px;
-  background-color: #f2f2f2;
-  max-width: 450px;
   padding: 10px 20px 10px 20px;
-  border-radius: 10px 10px 10px 0px;
+  p {
+    max-width: 255px;
+    word-wrap: break-word;
+    margin-bottom: 12px;
+    line-height: 24px;
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 25px;
+  }
+
+  p:before,
+  p:after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    height: 20px;
+  }
+  .from-them {
+    background: #e5e5ea;
+    color: black;
+  }
+  .from-them:before {
+    left: -7px;
+    border-left: 20px solid #e5e5ea;
+    border-bottom-right-radius: 16px 14px;
+    -webkit-transform: translate(0, -2px);
+    transform: translate(0, -2px);
+  }
+  .from-them:after {
+    left: 4px;
+    width: 26px;
+    background: white;
+    border-bottom-right-radius: 10px;
+    -webkit-transform: translate(-30px, -2px);
+    transform: translate(-30px, -2px);
+  }
 `;
 
 const Div = styled.div`
+  p {
+    max-width: 255px;
+    word-wrap: break-word;
+    margin-bottom: 12px;
+    line-height: 24px;
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 25px;
+  }
+
+  p:before,
+  p:after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    height: 20px;
+  }
+
+  .from-me {
+    color: white;
+    background: forestgreen;
+    align-self: flex-end;
+  }
+
+  .from-me:before {
+    right: -7px;
+    border-right: 20px solid forestgreen;
+    border-bottom-left-radius: 16px 14px;
+    -webkit-transform: translate(0, -2px);
+    transform: translate(0, -2px);
+  }
+
+  .from-me:after {
+    right: -56px;
+    width: 26px;
+    background: white;
+    border-bottom-left-radius: 10px;
+    -webkit-transform: translate(-30px, -2px);
+    transform: translate(-30px, -2px);
+  }
   span {
     display: inline-block;
     background-color: white;
@@ -70,33 +135,56 @@ const Div = styled.div`
   }
 `;
 
-export default function Chatfield(props) {
-  const { userImage } = props;
+export default function Chatfield() {
   return (
     <Conversation>
+      <h6
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+          alignItems: "center",
+          marginTop: "10px",
+          color: "grey",
+          fontSize: "10px"
+        }}
+      >
+        Today: 3:57 PM
+      </h6>
       <Cont>
-        <Profile>
-          <Avatar src={userImage}></Avatar>
-        </Profile>
         <Sender>
           <Div>
-            <span></span>
-            <span></span>
-            <span></span>
+            <p className="from-me">Hello</p>
           </Div>
+          <h6
+            style={{
+              marginLeft: "35px",
+              color: "lightgrey",
+              fontSize: "10px"
+            }}
+          >
+            Delivered
+          </h6>
         </Sender>
       </Cont>
       <Cont2>
-        <Profile>
-          <Avatar></Avatar>
-        </Profile>
         <Receiver>
-          <span>
-            Curry to Igoudala! Back to Curry! Igoudala with the layup...
-            OHHHH!!!! BLOCKED BY JAMES!!!
-          </span>
+          <p className="from-them">
+            NANANANNANANNANANANANNANANANANANANANNANANANANANANAN
+          </p>
         </Receiver>
       </Cont2>
+      <Cont>
+        <Sender>
+          <Div>
+            <p className="from-me">
+              <span></span>
+              <span></span>
+              <span></span>
+            </p>
+          </Div>
+        </Sender>
+      </Cont>
     </Conversation>
   );
 }

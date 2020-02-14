@@ -7,9 +7,11 @@ import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import { Shared, Div2 } from "../../Styles/Styles";
-import InfoIcon from "@material-ui/icons/Info";
-import GroupIcon from "@material-ui/icons/Group";
-import { Avatar, ListItem } from "@material-ui/core";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import James from "../../images/1966.png";
+import DescriptionIcon from "@material-ui/icons/Description";
+import { Avatar, ListItemText, ListItem } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import LockIcon from "@material-ui/icons/Lock";
 
@@ -142,7 +144,7 @@ export default function SimpleExpansionPanel({
           id="panel3d-header"
           style={{ backgroundColor: "white" }}
         >
-          <InfoIcon
+          <HelpOutlineIcon
             style={{
               marginRight: "15px",
               color: "#372476"
@@ -210,7 +212,7 @@ export default function SimpleExpansionPanel({
           id="panel3d-header"
           style={{ backgroundColor: "white" }}
         >
-          <GroupIcon
+          <PeopleOutlineIcon
             style={{
               marginRight: "15px",
               color: "forestgreen"

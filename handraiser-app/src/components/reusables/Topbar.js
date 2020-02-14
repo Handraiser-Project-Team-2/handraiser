@@ -21,8 +21,9 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
-import Alert from "@material-ui/lab/Alert";
-import Button from "@material-ui/core/Button";
+import io from "socket.io-client";
+
+var jwtDecode = require("jwt-decode");
 
 export default function Topbar() {
   const [state, setState] = React.useState({
@@ -39,6 +40,15 @@ export default function Topbar() {
   const open = Boolean(anchorEl);
   const user_id = decoded.userid;
   const { setData } = useContext(UserContext);
+
+  const ENDPOINT = "localhost:5000";
+
+  let socket = io(ENDPOINT);
+
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+
+  // })
 
   const toggleDrawer = (side, open) => event => {
     if (
@@ -82,12 +92,20 @@ export default function Topbar() {
     sessionStorage.setItem("token", "");
     history.push("/");
     setData();
-    axios.patch(`http://localhost:5000/api/users/${user_id}`).then(res => {
-      Swal.fire({
-        icon: "success",
-        title: "Logged out successfully!"
+    axios
+      .patch(`http://localhost:5000/api/users/${user_id}`)
+      .then(res => {
+        Swal.fire({
+          icon: "success",
+          title: "Logged out successfully!"
+        });
+      })
+      .then(data => {
+        socket.emit("user_activity", {});
+      })
+      .catch(err => {
+        console.log(err);
       });
-    });
   };
 
   // const sendMsg = evt => {

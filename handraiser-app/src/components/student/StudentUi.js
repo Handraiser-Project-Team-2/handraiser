@@ -12,8 +12,8 @@ import { useHistory, useParams } from "react-router-dom";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
-import GroupIcon from "@material-ui/icons/Group";
-import HelpIcon from "@material-ui/icons/Help";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Input from "../reusables/Input";
 import {
   Div,
@@ -428,22 +428,22 @@ export default function Student() {
             </TitleName>
             <Option>
               <div>
-                <HelpIcon
+                <HelpOutlineIcon
                   onClick={handleClickDetail}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "#372476"
+                    color: "grey"
                   }}
                 />
               </div>
               <div>
-                <GroupIcon
+                <PeopleOutlineIcon
                   onClick={handleClickMember}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "#372476"
+                    color: "grey"
                   }}
                 />
               </div>
@@ -452,9 +452,8 @@ export default function Student() {
                   onClick={handleMenu}
                   style={{
                     fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
+                    color: "grey",
+                    cursor: "pointer"
                   }}
                 />
               </div>
@@ -503,7 +502,11 @@ export default function Student() {
                   width: "100%"
                 }}
               >
-                {/* <form onSubmit={sendMsg}>
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                  }}
+                >
                   <TextField
                     id="outlined-textarea"
                     multiline
@@ -515,25 +518,25 @@ export default function Student() {
                       backgroundColor: "white"
                     }}
                     onChange={e => setConcernDescription(e.target.value)}
-                  /> */}
-                <Input
+                  />
+                  {/* <Input
                   message={message}
                   setMessage={setMessage}
                   sendMessage={sendMessage}
                   username={username}
-                />
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "15px"
-                  }}
-                >
-                  <Request onClick={sendRequest}>NEW REQUEST</Request>
-                  <Send onClick={sendMessage}>SEND</Send>
-                </div>
-                {/* </form> */}
+                /> */}
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "15px"
+                    }}
+                  >
+                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    <Send onClick={sendMessage}>SEND</Send>
+                  </div>
+                </form>
               </div>
             </Field>
           </Message>

@@ -12,6 +12,9 @@ const Input = ({ concernDescription, sendMessage, setconcernDescription }) => (
       value={concernDescription}
       onChange={event => setconcernDescription(event.target.value)}
       onKeyPress={event => (event.key === "Enter" ? sendMessage(event) : null)}
+      style={{
+        backgroundColor: "white"
+      }}
     />
   </React.Fragment>
 );
