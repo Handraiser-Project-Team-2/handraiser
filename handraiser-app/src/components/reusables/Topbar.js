@@ -20,6 +20,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Swal from "sweetalert2";
+import Alert from "@material-ui/lab/Alert";
+import Button from "@material-ui/core/Button";
 
 export default function Topbar() {
   const [state, setState] = React.useState({
@@ -76,34 +78,21 @@ export default function Topbar() {
   };
 
   const Logout = () => {
-    Swal.fire({
-      title: "Confirm",
-      text: "Are you sure you want to log out?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes!"
-    }).then(result => {
-      if (result.value) {
-        axios
-          .patch(`http://localhost:5000/api/users/${user_id}`, {
-            user_status: 0
-          })
-          .then(() => {
-            sessionStorage.setItem("token", "");
-            history.push("/");
-            setData();
-          })
-          .then(() => {
-            Swal.fire({
-              icon: "success",
-              title: "Logged out succesfully!"
-            });
-          });
-      }
-    });
-    // });
+    axios
+      .patch(`http://localhost:5000/api/users/${user_id}`, {
+        user_status: 0
+      })
+      .then(() => {
+        sessionStorage.setItem("token", "");
+        history.push("/");
+        setData();
+      })
+      .then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Logged out succesfully!"
+        });
+      });
   };
 
   // const sendMsg = evt => {

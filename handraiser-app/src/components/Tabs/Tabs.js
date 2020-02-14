@@ -101,6 +101,7 @@ export const TabBtn = props => {
   };
 
   const handleAdd = () => {
+    let isSubscribed = true;
     setOpenConfirm(true);
     axios
       .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
@@ -114,6 +115,7 @@ export const TabBtn = props => {
           position: toast.POSITION.TOP_RIGHT
         });
       });
+    return () => (isSubscribed = false);
   };
 
   const handleConfirm = () => {
