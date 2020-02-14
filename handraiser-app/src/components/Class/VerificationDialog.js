@@ -98,10 +98,10 @@ export default function VerificationDialog(props) {
         // if successful close dialog and return success response
         if (data.data.result === "Validation succesful") {
           handleClose();
-          props.changeUserType(data)
+          props.changeUserType(data);
           props.fetchMentorClass();
           props.fetchUserData();
-        };
+        }
       })
       .catch(err => {
         if (err.response.data.result === "Invalid key supplied") setValid(true); //if true error

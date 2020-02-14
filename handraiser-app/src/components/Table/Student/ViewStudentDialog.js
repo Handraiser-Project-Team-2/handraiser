@@ -18,25 +18,23 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-
-export default function ViewMentorDialog({ data }) {
+export default function ViewStudentDialog({ data }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
   const [profileData, setProfileData] = useState([]);
   const handleClickOpen = data => {
     setOpen(true);
-    fetchProfileData(data);
-    fetchClass(data);
+    fetchProfileData();
+    fetchStudentClass(data);
   };
-
-  const fetchProfileData = data => {
+  const fetchProfileData = () => {
     axios({
       method: "post",
-      url: `/api/userprofile/`,
+      url: `/api/userprofile/student/`,
       data: { email: data.email }
     })
       .then(data => {
+        console.log(data.data);
         setProfileData(data.data);
       })
       .catch(err => {
@@ -45,13 +43,14 @@ export default function ViewMentorDialog({ data }) {
   };
 
   const [classData, setClassData] = useState([]);
-  const fetchClass = data => {
+  const fetchStudentClass = data => {
     axios({
       method: "post",
       url: `/api/student/get/class/${data.user_id}`,
       data: { email: data.email }
     })
       .then(data => {
+        // console.log(data.data);
         setClassData(data.data);
       })
       .catch(err => {

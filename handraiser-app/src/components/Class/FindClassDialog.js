@@ -64,7 +64,7 @@ export default function ResponsiveDialog(props) {
   };
 
   const registerToClass = () => {
-    console.log(input)
+    console.log(input);
     axios({
       method: "post",
       url: "http://localhost:5000/api/student/class/register",

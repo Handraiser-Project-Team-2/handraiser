@@ -50,6 +50,7 @@ massive({
     app.get("/api/userprofile/:user_id", users.getUserProfile);
     app.get("/api/user/student_list", users.accessList_student);
     app.post("/api/userprofile/", users.getUserProfileByEmail);
+    app.post("/api/userprofile/student/", users.getUserProfileByStudentEmail);
     app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
 
     // admins endpoints
