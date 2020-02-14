@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import styled from "styled-components";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -33,7 +32,6 @@ export default function InQueue(props) {
   const user_id = decoded.userid;
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
   const [concern, setConcern] = useState();
 
@@ -97,7 +95,10 @@ export default function InQueue(props) {
 
     if (concern) {
       axios
-        .delete(`http://localhost:5000/api/student/request/${concern.concern.concern_id}`, {})
+        .delete(
+          `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
+          {}
+        )
         .then(data => {
           socket.emit("handshake", { room: props.classReference });
         })

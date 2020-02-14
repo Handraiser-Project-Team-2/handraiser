@@ -78,9 +78,9 @@ export default function InQueue(rowDatahandler) {
       });
   };
 
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleMenu = event => {
+  //   setAnchorEl(event.currentTarget);
+  // };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -171,7 +171,7 @@ export default function InQueue(rowDatahandler) {
                     <ListItemSecondaryAction style={{ display: "flex" }}>
                       <Avatar variant="square" className={classes.small}>
                         <p style={{ fontSize: 12 }}>
-                          {data.concern_status == 1 ? "Hot" : "Queue"}
+                          {data.concern_status === 1 ? "Hot" : "Queue"}
                         </p>
                       </Avatar>
                       <MoreVertIcon

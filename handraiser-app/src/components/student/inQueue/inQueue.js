@@ -6,11 +6,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
-import { Typography, Paper, useMediaQuery } from "@material-ui/core";
+import { Typography, Paper } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import styled from "styled-components";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -19,7 +18,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
-import { useHistory, useParams } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,13 +33,11 @@ export default function InQueue(props) {
   var jwtDecode = require("jwt-decode");
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState();
-  const [image, setImage] = useState("");
   const [openEdit, setOpenEdit] = React.useState(false);
   const [concernTitle, setConcernTitle] = useState("");
   const [concernDescription, setConcernDescription] = useState("");
   const open = Boolean(anchorEl);
   const [concern, setConcern] = useState("");
-  let { class_id } = useParams();
 
   const classes = useStyles();
 
@@ -292,7 +288,7 @@ export default function InQueue(props) {
                         style={
                           concern.concern.concern_status === 1
                             ? { background: "red" }
-                            : concern.queue_order_num == 0
+                            : concern.queue_order_num === 0
                             ? { background: "green" }
                             : { background: "blue" }
                         }
@@ -300,7 +296,7 @@ export default function InQueue(props) {
                         <p style={{ fontSize: 12 }}>
                           {concern.concern.concern_status === 1
                             ? "being helped"
-                            : concern.queue_order_num == 0
+                            : concern.queue_order_num === 0
                             ? "next"
                             : concern.queue_order_num}
                         </p>

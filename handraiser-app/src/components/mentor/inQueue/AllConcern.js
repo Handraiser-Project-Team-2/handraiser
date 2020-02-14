@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import styled from "styled-components";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -30,7 +29,6 @@ export default function InQueue({ class_id, search }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [image, setImage] = useState("");
   const open = Boolean(anchorEl);
 
   const { cstate, getData } = useContext(UserContext);
@@ -57,13 +55,11 @@ export default function InQueue({ class_id, search }) {
   }, [ENDPOINT]);
 
   useEffect(() => {
-
     update(search);
 
     socket.on("updateComponents", message => {
       update("");
     });
-
   }, [search]);
 
   const update = data => {

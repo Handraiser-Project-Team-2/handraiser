@@ -3,8 +3,7 @@ import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import io from "socket.io-client";
-import { useHistory, useParams } from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 
 var jwtDecode = require("jwt-decode");
 
@@ -17,9 +16,7 @@ export default function Handshake(props) {
 
   const ENDPOINT = "localhost:5000";
 
-
   let socket = io(ENDPOINT);
-
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -29,7 +26,6 @@ export default function Handshake(props) {
       room: class_id,
       image: ""
     });
-
   });
 
   const accept = highdata => {
@@ -47,7 +43,7 @@ export default function Handshake(props) {
         props.rowDatahandler(data.data);
 
         console.log(highdata);
-        
+
         socket.emit("handshake", { room: highdata.class_id });
 
         axios
@@ -59,7 +55,7 @@ export default function Handshake(props) {
             //get data of who assisted this concern
 
             // if none then reference this current mentor
-            if (data.data.length == 0) {
+            if (data.data.length === 0) {
               axios
                 .post(`http://localhost:5000/api/assisted_by`, {
                   assist_status: "ongoing",
@@ -118,7 +114,11 @@ export default function Handshake(props) {
             // window.location.reload();
           }}
         >
-          <img className={classes.handshake_img} src={HandShakeImage} />
+          <img
+            className={classes.handshake_img}
+            src={HandShakeImage}
+            alt="handshake"
+          />
           <p className={classes.handshake_text_btn}>ACCEPT</p>
         </div>
       </div>

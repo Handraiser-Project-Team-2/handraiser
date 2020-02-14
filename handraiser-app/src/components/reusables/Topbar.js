@@ -76,11 +76,6 @@ export default function Topbar() {
   };
 
   const Logout = () => {
-    // .then(res => {
-    // Swal.fire({
-    //   icon: "success",
-    //   title: "Logged out succesfully!"
-    // });
     Swal.fire({
       title: "Confirm",
       text: "Are you sure you want to log out?",
@@ -99,19 +94,21 @@ export default function Topbar() {
             sessionStorage.setItem("token", "");
             history.push("/");
             setData();
+          })
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Logged out succesfully!"
+            });
           });
-        Swal.fire({
-          icon: "success",
-          title: "Logged out succesfully!"
-        });
       }
     });
     // });
   };
 
-  const sendMsg = evt => {
-    evt.preventDefault();
-  };
+  // const sendMsg = evt => {
+  //   evt.preventDefault();
+  // };
 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/userprofile/${user_id}`).then(res => {
@@ -164,11 +161,10 @@ export default function Topbar() {
             <MenuItem onClick={handleClose}>Profile</MenuItem>
 
             <MenuItem>
-              {" "}
               <GoogleLogout
                 clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"
                 buttonText="Logout"
-                onLogoutSuccess={Logout}
+                onLogoutSuccess={() => Logout()}
               ></GoogleLogout>
             </MenuItem>
           </Menu>

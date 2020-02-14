@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import styled from "styled-components";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -14,8 +13,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
 import { UserContext } from "../../Contexts/UserContext";
 import io from "socket.io-client";
-
-var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,8 +40,6 @@ export default function InQueue(props) {
   };
   const classes = useStyles();
 
-  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  const user_id = decoded.userid;
   const { cstate, getData } = useContext(UserContext);
 
   const ENDPOINT = "localhost:5000";
@@ -69,13 +64,11 @@ export default function InQueue(props) {
   }, [ENDPOINT]);
 
   useEffect(() => {
-
     update(props.search);
 
     socket.on("updateComponents", message => {
       update("");
     });
-    
   }, [props.search]); //class_id
 
   const update = data => {
@@ -166,7 +159,7 @@ export default function InQueue(props) {
                     <p style={{ fontSize: 12, paddingLeft: "2px" }}>
                       {concern.concern.concern_status === 1
                         ? "Being helped"
-                        : concern.queue_order_num == 0
+                        : concern.queue_order_num === 0
                         ? "next"
                         : concern.queue_order_num}
                     </p>
