@@ -21,6 +21,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
+import io from "socket.io-client";
 
 var jwtDecode = require("jwt-decode");
 
@@ -39,6 +40,15 @@ export default function Topbar() {
   const open = Boolean(anchorEl);
   const user_id = decoded.userid;
   const { setData } = useContext(UserContext);
+
+  const ENDPOINT = "localhost:5000";
+
+  let socket = io(ENDPOINT);
+
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+
+  // })
 
   const toggleDrawer = (side, open) => event => {
     if (
@@ -79,6 +89,7 @@ export default function Topbar() {
   };
 
   const Logout = () => {
+
     sessionStorage.setItem("token", "");
     history.push("/");
     setData();
@@ -87,7 +98,11 @@ export default function Topbar() {
         icon: "success",
         title: "Logged out successful!"
       });
-    });
+    }).then((data)=>{
+      socket.emit("user_activity", { });
+    }).catch((err)=>{
+      console.log(err)
+    })
   };
 
   const sendMsg = evt => {

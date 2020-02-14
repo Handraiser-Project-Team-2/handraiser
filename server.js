@@ -134,6 +134,12 @@ massive({
         });
       });
 
+      socket.on("user_activity", data=>{
+        io.emit("updateComponents", {
+          message: 'logout data consolidating'
+        })
+      })
+
       console.log("Online");
 
       socket.on("join", ({ username, room, image }, callback) => {
