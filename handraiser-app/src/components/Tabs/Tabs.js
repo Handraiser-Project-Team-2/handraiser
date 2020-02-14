@@ -63,9 +63,7 @@ export const TabBtn = props => {
   }
 
   useEffect(() => {
-    if (adminEmail) {
-      fetchAdminEmail();
-    }
+    fetchAdminEmail();
   }, []);
 
   const fetchAdminEmail = () => {

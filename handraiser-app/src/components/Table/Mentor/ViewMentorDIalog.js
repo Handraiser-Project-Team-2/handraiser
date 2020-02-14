@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
 export default function ViewMentorDialog({ data }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
   const [profileData, setProfileData] = useState([]);
   const handleClickOpen = () => {
     setOpen(true);
@@ -36,7 +35,7 @@ export default function ViewMentorDialog({ data }) {
       data: { email: data.validation_email }
     })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
         setProfileData(data.data);
       })
       .catch(err => {
@@ -51,7 +50,7 @@ export default function ViewMentorDialog({ data }) {
       data: { email: data.validation_email }
     })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
         setClassData(data.data);
       })
       .catch(err => {
