@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import axios from "axios";
 import {
   LoginDiv,
@@ -15,10 +16,11 @@ import {
 } from "../Styles/Styles";
 
 export default function Login(props) {
+  const [logged, setLogged] = useState(false);
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);
-
+      setLogged(true);
       axios({
         method: "post",
         url: "http://localhost:5000/api/login",
@@ -35,6 +37,7 @@ export default function Login(props) {
           axios.patch(`http://localhost:5000/api/users/${data.data.user_id}`, {
             user_status: 1
           });
+
           const userType = data.data.user_type_id;
           localStorage.setItem("name", response.profileObj.givenName);
           sessionStorage.setItem("token", "Bearer " + data.data.token);
@@ -67,9 +70,21 @@ export default function Login(props) {
       alert("Error email");
     }
   };
+
   return (
     <LoginDiv>
-      <LoginPic></LoginPic>
+      <LoginPic>
+        <LinearProgress
+          variant="determinate"
+          color="secondary"
+          style={{
+            display: logged ? "block" : "none",
+            position: "absolute",
+            top: 0,
+            width: "100%"
+          }}
+        />
+      </LoginPic>
       <LoginMain>
         <Title>HANDRAISER</Title>
         <p

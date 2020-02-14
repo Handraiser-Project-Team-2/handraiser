@@ -11,11 +11,12 @@ import CardActions from "@material-ui/core/CardActions";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import Background from "../images/undraw_code_thinking_1jeh.svg";
+import Background from "../images/classroom-background-clipart-11.jpg";
 import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
 import EditClassDialog from "./EditClassDialog";
+import teal from "@material-ui/core/colors/teal";
 
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -25,41 +26,46 @@ function Alert(props) {
 
 const useStyles = makeStyles(theme => ({
   typoDescription: {
-    marginTop: theme.spacing(2),
-    color: "white"
+    color: "grey"
   },
   typoTitle: {
     height: theme.spacing(8)
   },
   copyIcon: {
-    color: blueGrey[500]
+    color: "grey"
   },
   actions: {
-    background: `linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%)`,
-    color: "white",
+    backgroundColor: "#372476",
+    borderTop: "1px solid lightgrey",
+    color: "black",
     display: "flex",
     justifyContent: "space-between"
   },
-  square: {
-    color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: deepOrange[500],
-    width: theme.spacing(8),
-    height: theme.spacing(8),
-    borderRadius: "50%"
-  },
   description: {
-    background: `linear-gradient(to right, #8e9eab, #eef2f3)`,
-    textAlign: "center",
-    minHeight: 130,
-    paddingTop: theme.spacing(4)
+    borderTop: "1px solid #372476",
+    marginTop: "-20px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    backgroundColor: "whitesmoke",
+    minHeight: 150,
+    maxHeight: 350
   },
   title: {
-    color: "white",
-    background: `url(${Background}), linear-gradient(250.94deg, #330066 3.3%, #7f25d9 100.52%)`,
+    background: `url(${Background})`,
     backgroundSize: "100% 100%",
-    textAlign: "center",
-    minHeight: 80,
-    maxHeight: 120
+    height: 150
+  },
+  title2: {
+    fontWeight: "bold",
+    color: "black",
+    borderBottom: "1px solid #372476"
+  },
+  mentorName: {
+    marginLeft: "10px",
+    color: "white"
   },
   card: {
     minWidth: 345,
@@ -68,7 +74,8 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(2),
     boxShadow: "10px 10px 8px #888888",
     overflowWrap: "break-word",
-    maxHeight: 325
+    borderRadius: 10,
+    border: "1px solid #372476"
   },
   media: {
     height: 140
@@ -123,33 +130,30 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
                 variant="h5"
                 component="h2"
                 className={classes.typoTitle}
-              >
-                {row.class_title}
-              </Typography>
-              <Avatar
-                variant="square"
-                className={classes.square}
-                alt="Remy Sharp"
-                src={data.user_type_id === 3 ? row.image : data.image}
-              />
+              ></Typography>
             </CardContent>
-
             <CardContent className={classes.description}>
-              <Typography gutterBottom variant="h5" component="h2">
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="h2"
+                className={classes.title2}
+              >
                 {row.class_title}
               </Typography>
-              <Typography
-                variant="body1"
-                component="p"
-                className={classes.typoDescription}
-              >
+              <Typography className={classes.typoDescription}>
                 {row.class_description}
               </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions className={classes.actions}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <Typography variant="caption" display="block" gutterBottom>
+              <Typography
+                variant="caption"
+                display="block"
+                gutterBottom
+                className={classes.mentorName}
+              >
                 {cstate && cstate.user_type_id === 3
                   ? `Mentor: ${row.first_name} ${row.last_name}`
                   : null}

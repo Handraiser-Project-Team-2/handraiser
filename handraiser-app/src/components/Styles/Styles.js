@@ -94,8 +94,9 @@ export const Div2 = styled.div`
   }
 `;
 export const Queue = styled.div`
+  margin-top: 13px;
   width: 25%;
-  border-right: 1px solid lightgrey;
+  border-right: 0.5px solid lightgrey;
   @media (min-width: 100px) and (max-width: 768px) {
     display: none;
   }
@@ -146,7 +147,6 @@ export const Message = styled.div`
 export const TitleName = styled.div`
   padding: 20px;
   width: 815px;
-  background-color: #ffffff;
   @media (min-width: 768px) and (max-width: 1024px) {
     width: 95%;
   }

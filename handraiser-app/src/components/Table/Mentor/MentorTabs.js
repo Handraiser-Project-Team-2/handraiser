@@ -32,8 +32,11 @@ export default function MentorTabs({ profileData, classData }) {
           value={value}
           onChange={handleChange}
           indicatorColor="primary"
-          textColor="primary"
           centered
+          style={{
+            backgroundColor: "#372476",
+            color: "white"
+          }}
         >
           <Tab label="Profile" />
           <Tab label="Classes" />

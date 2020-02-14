@@ -8,6 +8,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
 import { Typography, Paper } from "@material-ui/core";
+import DoneIcon from "@material-ui/icons/Done";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -55,7 +56,6 @@ export default function InQueue({ class_id, search }) {
               <ListItem
                 button
                 style={{
-                  borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px",
                   backgroundColor: "whitesmoke"
@@ -79,16 +79,22 @@ export default function InQueue({ class_id, search }) {
                   <MenuItem onClick={handleClose}>Log Out</MenuItem>
                 </Menu>
                 <ListItemText
-                  primary={data.concern_title}
+                  primary={
+                    <Typography style={{ fontWeight: "bold" }}>
+                      {data.first_name + " " + data.last_name}
+                    </Typography>
+                  }
                   secondary={
                     <React.Fragment>
                       <Typography
                         component="span"
                         variant="body2"
                         className={classes.inline}
-                        color="textPrimary"
+                        style={{
+                          color: "#707070"
+                        }}
                       >
-                        {data.first_name + " " + data.last_name}
+                        {data.concern_title}
                       </Typography>
                     </React.Fragment>
                   }
@@ -98,18 +104,35 @@ export default function InQueue({ class_id, search }) {
                     variant="square"
                     className={classes.small}
                     style={{
-                      backgroundColor: "forestgreen"
+                      background: "transparent"
                     }}
                   >
-                    <p style={{ fontSize: 12 }}>
-                      {data.concern_status === 3 ? "Done" : ""}
-                    </p>
+                    {data.concern_status === 3 ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          backgroundColor: "white",
+                          borderRadius: "10px",
+                          justifyContent: "center",
+                          alignContent: "center",
+                          alignItems: "center",
+                          width: "40px",
+                          height: "40px",
+                          border: "1px solid lightgrey",
+                          borderTop: "10px solid #372476"
+                        }}
+                      >
+                        <DoneIcon style={{ color: "teal" }} />
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </Avatar>
                   <MoreVertIcon
                     onClick={handleMenu}
                     style={{
                       fontSize: 35,
-                      color: "#c4c4c4",
+                      color: "#372476",
                       cursor: "pointer"
                     }}
                   />

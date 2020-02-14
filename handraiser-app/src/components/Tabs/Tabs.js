@@ -137,8 +137,8 @@ export const TabBtn = props => {
             value={tabValue}
             onChange={handleChange}
             indicatorColor="primary"
-            textColor="inherit"
             variant="fullWidth"
+            style={{ backgroundColor: "#372476", color: "white" }}
           >
             <Tab
               label="Students"

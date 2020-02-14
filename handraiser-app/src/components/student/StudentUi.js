@@ -13,8 +13,8 @@ import { useHistory, useParams } from "react-router-dom";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
-import GroupIcon from "@material-ui/icons/Group";
-import HelpIcon from "@material-ui/icons/Help";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import {
   Div,
   Nav,
@@ -65,7 +65,6 @@ export default function Student() {
     evt.preventDefault();
     // console.log(concernDescription);
   };
-
 
   const ENDPOINT = "localhost:5000";
 
@@ -166,16 +165,20 @@ export default function Student() {
   };
   //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
-    console.log(rowData)
+    console.log(rowData);
     setConcernTitle(rowData.concern.concern_title);
     // setRowData(rowData);
     axios
-      .get(`http://localhost:5000/api/userprofile/${rowData.concern.user_id}`, {})
+      .get(
+        `http://localhost:5000/api/userprofile/${rowData.concern.user_id}`,
+        {}
+      )
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
-      }).catch(err=>{
-        console.log(err)
       })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
@@ -183,7 +186,7 @@ export default function Student() {
       <Topbar />
       <Div>
         <Queue>
-          <Tabs  rowDatahandler={rowDatahandler} classReference={class_id} />
+          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />
         </Queue>
         <Help>
           <Subject>
@@ -202,22 +205,22 @@ export default function Student() {
             </TitleName>
             <Option>
               <div>
-                <HelpIcon
+                <HelpOutlineIcon
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
                     cursor: "pointer",
-                    color: "#372476"
+                    color: "grey"
                   }}
                 />
               </div>
               <div>
-                <GroupIcon
+                <PeopleOutlineIcon
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
                     cursor: "pointer",
-                    color: "#372476"
+                    color: "grey"
                   }}
                 />
               </div>
@@ -226,9 +229,8 @@ export default function Student() {
                   onClick={handleMenu}
                   style={{
                     fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
+                    color: "grey",
+                    cursor: "pointer"
                   }}
                 />
               </div>

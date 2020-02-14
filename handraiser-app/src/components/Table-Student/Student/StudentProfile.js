@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles(theme => ({
   gridCont: {
     marginTop: theme.spacing(1),
-    backgroundColor: "#eaeaea"
+    borderRadius: "10px"
   },
   statsCont: {
     marginTop: theme.spacing(12)
@@ -17,12 +17,14 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f4f4f4"
+    backgroundColor: "#f4f4f4",
+    borderRadius: "20px"
   },
   avatar: {
-    width: theme.spacing(20),
-    height: theme.spacing(20),
-    margin: theme.spacing(3)
+    width: theme.spacing(14),
+    height: theme.spacing(14),
+    margin: theme.spacing(3),
+    border: "8px solid #372476"
   },
   root: {
     flexGrow: 1
@@ -34,7 +36,7 @@ export default function StudentProfile({ profileData, classData }) {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} className={classes.gridCont}>
+      <Grid container spacing={2} className={classes.gridCont}>
         <Grid item xs={12} sm={4}>
           <div className={classes.profileCont}>
             <Avatar
@@ -42,16 +44,15 @@ export default function StudentProfile({ profileData, classData }) {
               src={profileData.image}
               className={classes.avatar}
             />
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" gutterBottom style={{ color: "black" }}>
               {`${profileData.first_name} ${profileData.last_name}`}
             </Typography>
-            <Typography variant="h6" gutterBottom>
-              {
-                (profileData.user_type_id === 1 ? "Super Admin" : null,
-                profileData.user_type_id === 2 ? "Admin" : null,
-                profileData.user_type_id === 3 ? "Student" : null,
-                profileData.user_type_id === 4 ? "Mentor" : null)
-              }
+            <Typography
+              variant="h6"
+              gutterBottom
+              style={{ color: "forestgreen" }}
+            >
+              Student
             </Typography>
           </div>
         </Grid>
@@ -63,19 +64,43 @@ export default function StudentProfile({ profileData, classData }) {
             alignItems="center"
             className={classes.statsCont}
           >
-            <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
+            <Grid
+              item
+              xs={12}
+              sm={4}
+              style={{
+                textAlign: "center",
+                borderRight: "1px solid lightgrey"
+              }}
+            >
               <Typography variant="h3" gutterBottom>
                 {Object.keys(classData).length}
               </Typography>
-              <Typography variant="h5" gutterBottom>
+              <Typography
+                variant="h5"
+                gutterBottom
+                style={{ borderRadius: "10px", color: "#372476" }}
+              >
                 Class Attended
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
+            <Grid
+              item
+              xs={12}
+              sm={4}
+              style={{
+                textAlign: "center",
+                borderRight: "1px solid lightgrey"
+              }}
+            >
               <Typography variant="h3" gutterBottom>
                 0
               </Typography>
-              <Typography variant="h5" gutterBottom>
+              <Typography
+                variant="h5"
+                gutterBottom
+                style={{ borderRadius: "10px", color: "#372476" }}
+              >
                 Students Helped
               </Typography>
             </Grid>
@@ -83,7 +108,11 @@ export default function StudentProfile({ profileData, classData }) {
               <Typography variant="h3" gutterBottom>
                 0
               </Typography>
-              <Typography variant="h5" gutterBottom>
+              <Typography
+                variant="h5"
+                gutterBottom
+                style={{ borderRadius: "10px", color: "#372476" }}
+              >
                 Students Handled
               </Typography>
             </Grid>
