@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Handshake from "../../images/handshake.gif";
+import Bear from "../../images/bear.gif";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
@@ -17,6 +19,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { toast, ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
 import { useHistory, useParams } from "react-router-dom";
@@ -28,6 +31,30 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline"
+  },
+  next: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
+  },
+  number: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
   }
 }));
 
@@ -166,6 +193,7 @@ export default function InQueue(props) {
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
+      <ToastContainer />
       <List className={classes.root}>
         {concernsData
           ? concernsData.map((concern, index) => {
@@ -173,39 +201,24 @@ export default function InQueue(props) {
                 <div key={index}>
                   <ListItem
                     style={{
-                      borderLeft: "14px solid #8932a8",
                       borderBottom: "0.5px solid #abababde",
                       padding: "10px 15px",
-                      cursor: "pointer"
+                      cursor: "pointer",
+                      backgroundColor: "whitesmoke"
                     }}
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                     onClick={() => handleConcernData(concern)}
                   >
+                    <status-indicator
+                      style={{
+                        position: "absolute",
+                        marginTop: "15px",
+                        marginLeft: "35px"
+                      }}
+                    ></status-indicator>
                     <ListItemAvatar>
-                      <div>
-                        {concern.concern.user_status === 1 ? (
-                          <status-indicator
-                            positive
-                            pulse
-                            style={{
-                              position: "absolute",
-                              marginTop: "30px",
-                              marginLeft: "35px"
-                            }}
-                          ></status-indicator>
-                        ) : (
-                          <status-indicator
-                            pulse
-                            style={{
-                              position: "absolute",
-                              marginTop: "30px",
-                              marginLeft: "35px"
-                            }}
-                          ></status-indicator>
-                        )}
-                        <Avatar src={concern.concern.image}></Avatar>
-                      </div>
+                      <Avatar src={concern.concern.image}></Avatar>
                     </ListItemAvatar>
                     <Menu
                       id="menu-appbar"
@@ -226,7 +239,11 @@ export default function InQueue(props) {
                     </Menu>
 
                     <ListItemText
-                      primary={concern.concern.concern_title}
+                      primary={
+                        <Typography style={{ fontWeight: "bold" }}>
+                          {concern.concern.concern_title}
+                        </Typography>
+                      }
                       secondary={
                         <React.Fragment>
                           <Typography
@@ -290,30 +307,57 @@ export default function InQueue(props) {
                     <ListItemSecondaryAction style={{ display: "flex" }}>
                       <Avatar
                         variant="square"
-                        style={
-                          concern.concern.concern_status === 1
-                            ? { background: "red" }
-                            : concern.queue_order_num == 0
-                            ? { background: "green" }
-                            : { background: "blue" }
-                        }
+                        style={{ background: "transparent" }}
                       >
-                        <p style={{ fontSize: 12 }}>
-                          {concern.concern.concern_status === 1
-                            ? "being helped"
-                            : concern.queue_order_num == 0
-                            ? "next"
-                            : concern.queue_order_num}
-                        </p>
+                        <div>
+                          {concern.concern.concern_status === 1 ? (
+                            <Avatar variant="square" src={Handshake} />
+                          ) : concern.queue_order_num === 0 ? (
+                            <div className={classes.next}>
+                              <span
+                                style={{
+                                  color: "black",
+                                  fontSize: "10px"
+                                }}
+                              >
+                                NEXT
+                              </span>
+                            </div>
+                          ) : (
+                            <div className={classes.number}>
+                              <span
+                                style={{
+                                  display: "flex",
+                                  color: "black",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  alignContent: "center",
+                                  fontSize: "15px"
+                                }}
+                              >
+                                {concern.queue_order_num}
+                              </span>
+                            </div>
+                          )}
+                        </div>
                       </Avatar>
                       <MoreVertIcon
                         onClick={event => handleMenu(event, concern)}
                         style={{
                           fontSize: 35,
-                          color: "#c4c4c4",
+                          color: "#372476",
                           cursor: "pointer"
                         }}
                       />
+                      <span
+                        style={{
+                          marginLeft: "10px",
+                          color: "grey",
+                          fontSize: "10px"
+                        }}
+                      >
+                        5:00 PM
+                      </span>
                     </ListItemSecondaryAction>
                   </ListItem>
                 </div>

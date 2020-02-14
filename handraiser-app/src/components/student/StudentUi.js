@@ -12,8 +12,8 @@ import { useHistory, useParams } from "react-router-dom";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
-import GroupIcon from "@material-ui/icons/Group";
-import HelpIcon from "@material-ui/icons/Help";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Input from "../reusables/Input";
 import {
   Div,
@@ -429,24 +429,22 @@ export default function Student() {
             </TitleName>
             <Option>
               <div>
-                <HelpIcon
-                  onClick={handleClickDetail}
+                <HelpOutlineIcon
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
                     cursor: "pointer",
-                    color: "#372476"
+                    color: "grey"
                   }}
                 />
               </div>
               <div>
-                <GroupIcon
-                  onClick={handleClickMember}
+                <PeopleOutlineIcon
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
                     cursor: "pointer",
-                    color: "#372476"
+                    color: "grey"
                   }}
                 />
               </div>
@@ -455,9 +453,8 @@ export default function Student() {
                   onClick={handleMenu}
                   style={{
                     fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
+                    color: "grey",
+                    cursor: "pointer"
                   }}
                 />
               </div>

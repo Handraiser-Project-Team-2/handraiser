@@ -6,12 +6,16 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import DoneIcon from "@material-ui/icons/Done";
 import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { Typography, Paper } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 import io from "socket.io-client";
 import { UserContext } from "../../Contexts/UserContext";
 
@@ -33,9 +37,8 @@ export default function InQueue(props) {
   const user_id = decoded.userid;
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [image, setImage] = useState("");
+  const [concern, setConcern] = useState("");
   const open = Boolean(anchorEl);
-  const [concern, setConcern] = useState();
 
   const ENDPOINT = "localhost:5000";
   let socket = io(ENDPOINT);
@@ -78,8 +81,8 @@ export default function InQueue(props) {
     });
   };
 
-  const handleMenu = (event, data) => {
-    setConcern(data);
+  const handleMenu = (event, concern) => {
+    setConcern(concern);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -97,7 +100,10 @@ export default function InQueue(props) {
 
     if (concern) {
       axios
-        .delete(`http://localhost:5000/api/student/request/${concern.concern.concern_id}`, {})
+        .delete(
+          `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
+          {}
+        )
         .then(data => {
           socket.emit("handshake", { room: props.classReference });
         })
@@ -111,13 +117,13 @@ export default function InQueue(props) {
 
   return (
     <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
+      <ToastContainer />
       <List className={classes.root}>
         {concernsData.map((data, index) => {
           return (
             <div key={index}>
               <ListItem
                 style={{
-                  borderLeft: "14px solid #8932a8",
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px",
                   backgroundColor: "whitesmoke",
@@ -165,14 +171,20 @@ export default function InQueue(props) {
                   </MenuItem>
                 </Menu>
                 <ListItemText
-                  primary={data.concern.concern_title}
+                  primary={
+                    <Typography style={{ fontWeight: "bold" }}>
+                      {data.concern.concern_title}
+                    </Typography>
+                  }
                   secondary={
                     <React.Fragment>
                       <Typography
                         component="span"
                         variant="body2"
                         className={classes.inline}
-                        color="textPrimary"
+                        style={{
+                          color: "grey"
+                        }}
                       >
                         {data.concern.concern_description}
                       </Typography>
@@ -184,21 +196,25 @@ export default function InQueue(props) {
                     variant="square"
                     className={classes.small}
                     style={{
-                      backgroundColor: "forestgreen"
+                      background: "transparent"
                     }}
                   >
-                    <p style={{ fontSize: 12 }}>
-                      {data.concern.concern_status === 3 ? "Done" : ""}
-                    </p>
+                    <div style={{ fontSize: 12 }}>
+                      {data.concern.concern_status === 3 ? (
+                        <DoneIcon style={{ color: "teal" }} />
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </Avatar>
-                  <MoreVertIcon
-                    onClick={event => handleMenu(event, data)}
-                    style={{
-                      fontSize: 35,
-                      color: "#c4c4c4",
-                      cursor: "pointer"
-                    }}
-                  />
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    style={{ marginTop: "-5px" }}
+                    onClick={() => handleRemoveReq(data.concern)}
+                  >
+                    <DeleteIcon style={{ color: "grey" }} />
+                  </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>
             </div>
