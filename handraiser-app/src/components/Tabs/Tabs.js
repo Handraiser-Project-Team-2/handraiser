@@ -20,11 +20,11 @@ import { TabBox, BtnBox } from "../Styles/Styles";
 import { UserList } from "../List/List";
 import { TableCont } from "../Table/Table";
 import { GenerateKey } from "../Generate-Key/Generate";
-var jwtDecode = require("jwt-decode");
+// var jwtDecode = require("jwt-decode");
 
 export const TabBtn = props => {
-  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  const user_id = decoded.userid;
+  // const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  // const user_id = decoded.userid;
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
   const [open, setOpen] = useState(false);
@@ -35,10 +35,6 @@ export const TabBtn = props => {
   const [emailTo, setEmailTo] = useState("");
   const [key, setKey] = useState("");
   const [openConfirm, setOpenConfirm] = React.useState(false);
-
-  const handleClickOpenConfirm = () => {
-    setOpenConfirm(true);
-  };
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
@@ -72,7 +68,7 @@ export const TabBtn = props => {
   const fetchAdminEmail = () => {
     axios({
       method: "post",
-      url: `http://localhost:5000/api/user/data`,
+      url: `/api/user/data`,
       data: {
         token: sessionStorage.getItem("token")
       }
@@ -107,9 +103,10 @@ export const TabBtn = props => {
   };
 
   const handleAdd = () => {
+    let isSubscribed = true;
     setOpenConfirm(true);
     axios
-      .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
+      .post(`/api/admin/keygen`, { ...userData, type })
       .then(res => {
         setEmailTo(res.data.data.validation_email);
         setKey(res.data.data.validation_key);
@@ -122,10 +119,11 @@ export const TabBtn = props => {
           console.log(errors);
         }
       });
+    return () => (isSubscribed = false);
   };
 
   const handleConfirm = () => {
-    axios.post(`http://localhost:5000/api/sendMail`, {
+    axios.post(`/api/sendMail`, {
       emailTo: emailTo,
       key: key,
       adminEmail: adminEmail,
@@ -148,8 +146,8 @@ export const TabBtn = props => {
             value={tabValue}
             onChange={handleChange}
             indicatorColor="primary"
-            textColor="inherit"
             variant="fullWidth"
+            style={{ backgroundColor: "#372476", color: "white" }}
           >
             <Tab
               label="Students"
@@ -222,7 +220,7 @@ export const TabBtn = props => {
           <Button onClick={handleCloseConfirm} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleConfirm} color="primary">
+          <Button onClick={() => handleConfirm()} color="primary">
             Confirm
           </Button>
         </DialogActions>

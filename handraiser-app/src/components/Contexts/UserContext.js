@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 import axios from "axios";
 
 export const UserContext = createContext({
@@ -11,7 +11,7 @@ const UserContextProvider = props => {
   const fetchUserData = () => {
     axios({
       method: "post",
-      url: `http://localhost:5000/api/user/data`,
+      url: `/api/user/data`,
       data: { token: sessionStorage.getItem("token") }
     })
       .then(data => {

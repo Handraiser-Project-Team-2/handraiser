@@ -4,7 +4,6 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
@@ -20,6 +19,9 @@ const useStyles = makeStyles(theme => ({
   span: {
     float: "right",
     marginBottom: theme.spacing(2)
+  },
+  edit: {
+    color: "grey"
   }
 }));
 
@@ -62,7 +64,7 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
 
     axios({
       method: "put",
-      url: `http://localhost:5000/api/mentor/my/class`,
+      url: `/api/mentor/my/class`,
       data: state
     })
       .then(data => {
@@ -77,7 +79,7 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
   return (
     <div>
       <IconButton aria-label="delete" onClick={handleClickOpen}>
-        <EditIcon />
+        <EditIcon className={classes.edit} />
       </IconButton>
       <Dialog
         open={open}

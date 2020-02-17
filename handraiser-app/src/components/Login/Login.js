@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import axios from "axios";
 import {
   LoginDiv,
@@ -13,15 +13,20 @@ import {
   Continue,
   Title
 } from "../Styles/Styles";
+import io from "socket.io-client";
 
 export default function Login(props) {
+  const [logged, setLogged] = useState(false);
+
+  const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);
-
+      setLogged(true);
       axios({
         method: "post",
-        url: "http://localhost:5000/api/login",
+        url: "/api/login",
         data: {
           email: response.profileObj.email,
           last_name: response.profileObj.familyName,
@@ -32,9 +37,16 @@ export default function Login(props) {
         }
       })
         .then(data => {
-          axios.patch(`http://localhost:5000/api/users/${data.data.user_id}`, {
-            user_status: 1
-          });
+          axios
+            .patch(`/api/users/${data.data.user_id}`, {
+              user_status: 1
+            })
+            .then(data => {
+              socket.emit("user_activity", {});
+            })
+            .catch(err => {
+              console.log(err);
+            });
           const userType = data.data.user_type_id;
           localStorage.setItem("name", response.profileObj.givenName);
           sessionStorage.setItem("token", "Bearer " + data.data.token);
@@ -67,9 +79,21 @@ export default function Login(props) {
       alert("Error email");
     }
   };
+
   return (
     <LoginDiv>
-      <LoginPic></LoginPic>
+      <LoginPic>
+        <LinearProgress
+          variant="determinate"
+          color="secondary"
+          style={{
+            display: logged ? "block" : "none",
+            position: "absolute",
+            top: 0,
+            width: "100%"
+          }}
+        />
+      </LoginPic>
       <LoginMain>
         <Title>HANDRAISER</Title>
         <p

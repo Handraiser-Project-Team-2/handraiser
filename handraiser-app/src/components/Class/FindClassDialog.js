@@ -14,6 +14,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import indigo from "@material-ui/core/colors/indigo";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import teal from "@material-ui/core/colors/teal";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -25,7 +26,8 @@ const useStyles = makeStyles(theme => ({
     color: "white"
   },
   fab: {
-    float: "right"
+    float: "right",
+    backgroundColor: teal[500]
   },
   extendedIcon: {
     marginRight: theme.spacing(1)
@@ -67,7 +69,7 @@ export default function ResponsiveDialog(props) {
     console.log(input);
     axios({
       method: "post",
-      url: "http://localhost:5000/api/student/class/register",
+      url: "/api/student/class/register",
       data: { token: sessionStorage.getItem("token"), supplied_key: input }
     })
       .then(data => {

@@ -139,9 +139,9 @@ export const TableCont = props => {
       }
     ]
   });
-  const [mentorURL] = useState("http://localhost:5000/api/admin/mentor_list");
-  const [adminURL] = useState("http://localhost:5000/api/admin/admins_list");
-  const [studentURL] = useState("http://localhost:5000/api/user/student_list");
+  const [mentorURL] = useState("api/admin/mentor_list");
+  const [adminURL] = useState("/api/admin/admins_list");
+  const [studentURL] = useState("/api/user/student_list");
 
   useEffect(() => {
     if (!tableData.data) {

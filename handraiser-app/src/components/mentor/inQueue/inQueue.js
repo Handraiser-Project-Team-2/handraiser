@@ -6,13 +6,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
+import Handshake from "../../images/handshake.gif";
 import { Typography, Paper } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
 import io from "socket.io-client";
-import { conformToMask } from "react-text-mask";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,6 +22,18 @@ const useStyles = makeStyles(theme => ({
   inline: {
     display: "inline"
   },
+  queue: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
+  },
   active: { backgroundColor: "pink" }
 }));
 
@@ -29,9 +41,6 @@ export default function InQueue(rowDatahandler) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [image, setImage] = useState("");
-  const [load, setLoad] = useState(false);
-  const [color, setColor] = useState("red");
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
   const ENDPOINT = "localhost:5000";
@@ -50,8 +59,6 @@ export default function InQueue(rowDatahandler) {
   }, [ENDPOINT]);
 
   useEffect(() => {
-    console.log(rowDatahandler.class_id);
-
     if (rowDatahandler.search || !concernsData) {
       update(rowDatahandler.search);
     }
@@ -72,7 +79,7 @@ export default function InQueue(rowDatahandler) {
   const update = data => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
+      url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
     })
       .then(res => {
         setConcernsData(res.data);
@@ -82,9 +89,9 @@ export default function InQueue(rowDatahandler) {
       });
   };
 
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleMenu = event => {
+  //   setAnchorEl(event.currentTarget);
+  // };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -103,21 +110,12 @@ export default function InQueue(rowDatahandler) {
                 <div key={index}>
                   <ListItem
                     button
-                    selected={selectedIndex === index}
-                    style={
-                      data.concern_status === 1
-                        ? {
-                            borderLeft: "10px solid #8932a8",
-                            borderBottom: "0.5px solid #abababde",
-                            padding: "10px 15px"
-                          }
-                        : {
-                            borderLeft: "10px solid blue",
-                            borderBottom: "0.5px solid #abababde",
-                            padding: "10px 15px"
-                          }
-                    }
-                    onClick={() => handleConcernData(data, index)}
+                    style={{
+                      borderBottom: "0.5px solid #abababde",
+                      padding: "10px 15px",
+                      backgroundColor: "whitesmoke"
+                    }}
+                    onClick={() => handleConcernData(data)}
                   >
                     <ListItemAvatar>
                       <div>
@@ -158,31 +156,58 @@ export default function InQueue(rowDatahandler) {
                       <MenuItem onClick={handleClose}>Log Out</MenuItem>
                     </Menu>
                     <ListItemText
-                      primary={data.concern_title}
+                      primary={
+                        <Typography style={{ fontWeight: "bold" }}>
+                          {data.first_name + " " + data.last_name}
+                        </Typography>
+                      }
                       secondary={
                         <React.Fragment>
                           <Typography
                             component="span"
                             variant="body2"
                             className={classes.inline}
-                            color="textPrimary"
+                            style={{
+                              color: "#707070"
+                            }}
                           >
-                            {data.concern_description}
+                            {data.concern_title}
                           </Typography>
                         </React.Fragment>
                       }
                     />
                     <ListItemSecondaryAction style={{ display: "flex" }}>
-                      <Avatar variant="square" className={classes.small}>
-                        <p style={{ fontSize: 12 }}>
-                          {data.concern_status == 1 ? "Hot" : "Queue"}
-                        </p>
+                      <span
+                        style={{
+                          marginRight: "10px",
+                          color: "grey",
+                          fontSize: "10px"
+                        }}
+                      >
+                        5:00 PM
+                      </span>
+                      <Avatar
+                        variant="square"
+                        className={classes.small}
+                        style={{ background: "transparent" }}
+                      >
+                        {data.concern_status == 1 ? (
+                          <Avatar variant="square" src={Handshake} />
+                        ) : (
+                          <div className={classes.queue}>
+                            <span
+                              style={{ color: "darkblue", fontSize: "10px" }}
+                            >
+                              QUEUE
+                            </span>
+                          </div>
+                        )}
                       </Avatar>
                       <MoreVertIcon
                         // onClick={handleMenu}
                         style={{
                           fontSize: 35,
-                          color: "#c4c4c4",
+                          color: "#372476",
                           cursor: "pointer"
                         }}
                       />

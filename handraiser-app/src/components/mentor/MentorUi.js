@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
-import HandShakeImage from "../images/HandshakeEmoji.png";
+import hakeImage from "../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
 import HelpIcon from "@material-ui/icons/Help";
 import {
   Div,
-  Nav,
+  // Nav,
   Queue,
   Help,
   Subject,
   TitleName,
   Option,
-  More,
-  Conversation,
+  // More,
+  // Conversation,
   Message,
   Field,
-  Send,
-  Div2,
-  Shared
+  Send
+  // Div2,
+  // Shared
 } from "../Styles/Styles";
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
@@ -36,7 +36,7 @@ import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
 import Input from "../reusables/Input";
 import io from "socket.io-client";
-import ScrollToBottom from "react-scroll-to-bottom";
+// import ScrollToBottom from "react-scroll-to-bottom";
 import "emoji-mart/css/emoji-mart.css";
 var jwtDecode = require("jwt-decode");
 let socket;
@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Mentor() {
-  const classes = useStyles();
+  // const classes = useStyles();
   let history = useHistory();
   let { class_id } = useParams();
   const [rowData, setRowData] = useState([]);
@@ -62,7 +62,7 @@ export default function Mentor() {
   const [name, setName] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  const user_id = decoded.userid; //mentor_user_id if mentor is logged in
+  // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
   ///for chat
   const [username, setUsername] = useState("");
@@ -105,6 +105,8 @@ export default function Mentor() {
   // };
 
   const handleDone = rowData => {
+    setSelection(false);
+
     if (rowData.length === 0) {
       Swal.fire({
         icon: "error",
@@ -117,7 +119,7 @@ export default function Mentor() {
     setAnchorEl(null);
 
     axios
-      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
+      .patch(`/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
         concern_title: rowData.concern_title,
         concern_description: rowData.concern_description,
@@ -126,13 +128,13 @@ export default function Mentor() {
       .then(data => {
         axios
           .get(
-            `http://localhost:5000/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
+            `/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
             {}
           )
           .then(data => {
             axios
               .patch(
-                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                `/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
                 {
                   assisted_id: data.data[0].assisted_id,
                   user_student_id: data.data[0].user_id,
@@ -150,7 +152,11 @@ export default function Mentor() {
       });
   };
 
+  const [selection, setSelection] = useState(false);
+
   const handleBackQueue = rowData => {
+    setSelection(false);
+
     if (rowData.length === 0) {
       Swal.fire({
         icon: "error",
@@ -162,7 +168,7 @@ export default function Mentor() {
     setName("");
     setAnchorEl(null);
     axios
-      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
+      .patch(`/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
         concern_title: rowData.concern_title,
         concern_description: rowData.concern_description,
@@ -172,10 +178,10 @@ export default function Mentor() {
         socket.emit("handshake", { room: class_id });
 
         axios
-          .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
+          .get(`/api/assisted_by/${data.data.user_id}`, {})
           .then(data => {
             axios.delete(
-              `http://localhost:5000/api/assisted_by/${data.data[0].user_student_id}`,
+              `/api/assisted_by/${data.data[0].user_student_id}`,
               {}
             );
           });
@@ -183,11 +189,12 @@ export default function Mentor() {
   };
 
   const rowDatahandler = rowData => {
-    // console.log(rowData);
+    setSelection(true);
+    console.log(rowData);
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
-      .get(`http://localhost:5000/api/userprofile/${rowData.user_id}`, {})
+      .get(`/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
       })
@@ -199,7 +206,7 @@ export default function Mentor() {
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("http://localhost:5000/api/user/data", {
+        .post("/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
@@ -264,97 +271,141 @@ export default function Mentor() {
           <Tabs rowDatahandler={rowDatahandler} class_id={class_id} />
         </Queue>
         <Help>
-          <Subject>
-            <TitleName
-              style={{
-                paddingTop: "25px"
-              }}
-            >
-              <Typography variant="h5">Concern: {concernTitle}</Typography>
-              <Typography
-                variant="subtitle2"
+          {selection ? (
+            <Subject>
+              <TitleName
                 style={{
-                  fontSize: "12.4px"
+                  paddingTop: "25px"
                 }}
               >
-                From: {name}
+                <Typography variant="h5">
+                  {selection
+                    ? `Concern: ${concernTitle}`
+                    : `Select any concern to interact`}
+                </Typography>
+                <Typography
+                  variant="subtitle2"
+                  style={{
+                    fontSize: "12.4px"
+                  }}
+                >
+                  From: {name}
+                </Typography>
+              </TitleName>
+              <Option>
+                <div>
+                  <HelpIcon
+                    onClick={handleClickDetail}
+                    style={{
+                      fontSize: 30,
+                      color: "#c4c4c4",
+                      cursor: "pointer",
+                      color: "#372476"
+                    }}
+                  />
+                </div>
+                <div>
+                  <GroupIcon
+                    onClick={handleClickMember}
+                    style={{
+                      fontSize: 30,
+                      color: "#c4c4c4",
+                      cursor: "pointer",
+                      color: "#372476"
+                    }}
+                  />
+                </div>
+                <div>
+                  <MoreVertIcon
+                    onClick={handleMenu}
+                    style={{
+                      fontSize: 30,
+                      color: "#c4c4c4",
+                      cursor: "pointer",
+                      color: "#372476"
+                    }}
+                  />
+                </div>
+              </Option>
+            </Subject>
+          ) : (
+            <div
+              style={{
+                height: "96px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Typography variant="h5" style={{ color: "#bcbcbc" }}>
+                Select any concern to interact
               </Typography>
-            </TitleName>
-            <Option>
-              <div>
-                <HelpIcon
-                  onClick={handleClickDetail}
-                  style={{
-                    fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
-                  }}
-                />
-              </div>
-              <div>
-                <GroupIcon
-                  onClick={handleClickMember}
-                  style={{
-                    fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
-                  }}
-                />
-              </div>
-              <div>
-                <MoreVertIcon
-                  onClick={handleMenu}
-                  style={{
-                    fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
-                  }}
-                />
-              </div>
-            </Option>
-          </Subject>
+            </div>
+          )}
 
-          {rowData.concern_status === 2 ? (
-            <Handshake data={rowData} rowDatahandler={rowDatahandler} />
+          {selection && rowData.concern_status === 2 ? (
+            <Handshake
+              data={rowData}
+              rowDatahandler={rowDatahandler}
+              handleDone={handleDone}
+            />
           ) : (
             ""
           )}
 
-          <Chatfield />
-
-          {rowData.concern_status === 2 ? (
-            ""
+          {selection ? (
+            <Chatfield />
           ) : (
-            <Message>
-              <Field>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "space-between",
-                    flexDirection: "column",
-                    width: "100%"
-                  }}
-                >
-                  <form onSubmit={sendMsg}>
-                    <Input />
+            <div
+              style={{
+                height: "83vh",
+                width: "100%",
+                background: "#f5f5f5"
+              }}
+            ></div>
+          )}
 
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "15px"
-                      }}
-                    >
-                      <Send onClick={sendMsg}>SEND</Send>
-                    </div>
-                  </form>
-                </div>
-              </Field>
-            </Message>
+          {selection ? (
+            rowData.concern_status === 2 ? (
+              ""
+            ) : (
+              <Message>
+                <Field>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-between",
+                      flexDirection: "column",
+                      width: "100%"
+                    }}
+                  >
+                    <form onSubmit={sendMsg}>
+                      {/* <TextField
+                        id="outlined-textarea"
+                        multiline
+                        variant="outlined"
+                        fullWidth
+                        rows="3"
+                      /> */}
+                      <Input />
+
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          marginTop: "15px"
+                        }}
+                      >
+                        <Send onClick={sendMsg}>SEND</Send>
+                      </div>
+                    </form>
+                  </div>
+                </Field>
+              </Message>
+            )
+          ) : (
+            ""
           )}
         </Help>
         <DetailPanel

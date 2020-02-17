@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 import { useTheme } from "@material-ui/core/styles";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 // COMPONENTS
 import CardPage from "./CardPage";
@@ -12,7 +13,7 @@ import VerificationDialog from "./VerificationDialog";
 import AddClassDialog from "./AddClassDialog";
 import Topbar from "../reusables/Topbar";
 import NoClass from "./NoClass";
-import { UserContext } from "../Contexts/UserContext";
+// import { UserContext } from "../Contexts/UserContext";
 import SearchComponent from "./SearchComponent";
 
 const useStyles = makeStyles(theme => ({
@@ -40,6 +41,7 @@ export default function ClassLanding(props) {
   const classes = useStyles();
   const [verfication, setVerification] = useState(false);
   const [userType, setUserType] = useState();
+  const [completed, setCompleted] = React.useState(0);
 
   const changeUserType = e => {
     setUserType(e.data.user_type_id);
@@ -105,7 +107,7 @@ export default function ClassLanding(props) {
   const fetchMyClass = () => {
     axios({
       method: "post",
-      url: `http://localhost:5000/api/student/get/class`,
+      url: `/api/student/get/class`,
       data: tokState
     })
       .then(data => {
@@ -121,6 +123,7 @@ export default function ClassLanding(props) {
   return (
     <React.Fragment>
       <Topbar />
+
       {/* BODY */}
       <Container maxWidth="xl">
         <div className={classes.root}>

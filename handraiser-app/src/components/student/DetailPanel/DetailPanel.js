@@ -5,13 +5,10 @@ import { withStyles } from "@material-ui/core/styles";
 import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import styled from "styled-components";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Shared, Div2 } from "../../Styles/Styles";
-import InfoIcon from "@material-ui/icons/Info";
-import GroupIcon from "@material-ui/icons/Group";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import James from "../../images/1966.png";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { Avatar, ListItemText, ListItem } from "@material-ui/core";
@@ -77,7 +74,6 @@ export default function SimpleExpansionPanel({
   setExpanded
 }) {
   const classes = useStyles();
-  // const [expanded, setExpanded] = React.useState("panel1");
   const [classInfo, setClassInfo] = useState([]);
   const [classMem, setClassMem] = useState([]);
   const [search, setSearch] = useState("");
@@ -86,32 +82,52 @@ export default function SimpleExpansionPanel({
     setExpanded(newExpanded ? panel : false);
   };
 
-  useEffect(() => {
-    axios({
-      method: "post",
-      url: `http://localhost:5000/api/classinfo/${class_id}?search=${search}`
-    })
-      .then(res => {
-        console.log(res.data);
-        setClassInfo(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, [search]);
+  const [tempClassInfo, setTempClassInfo] = useState([]);
 
   useEffect(() => {
+    getClassMember();
+    getclassInfo();
+  }, []);
+
+  const getClassMember = () => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/members/${class_id}?search=${search}`
+      url: `/api/classes/members/${class_id}`
     })
       .then(res => {
         setClassMem(res.data);
       })
       .catch(err => {
         console.log(err);
+      }); 
+  };
+
+  const getclassInfo = () => {  
+    axios({
+      method: "post",
+      url: `/api/classinfo/${class_id}`
+    })
+      .then(res => {
+        setClassInfo(res.data); 
+        setTempClassInfo(res.data);
+      })
+      .catch(err => {
+        console.log(err);
       });
-  }, [search]);
+  };
+
+  const [tempClassMem, setTempClassMem] = useState([]);
+  const classMembers = classMem.concat(classInfo);
+  const handleSearch = e => {
+    setSearch(e.target.value);
+    const filteredMembers = classMembers.filter(
+      el =>
+        el.first_name.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+          -1 ||
+        el.last_name.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1
+    );
+    setTempClassMem(filteredMembers);
+  };
 
   return (
     <Div2>
@@ -128,7 +144,7 @@ export default function SimpleExpansionPanel({
           id="panel3d-header"
           style={{ backgroundColor: "white" }}
         >
-          <InfoIcon
+          <HelpOutlineIcon
             style={{
               marginRight: "15px",
               color: "#372476"
@@ -196,7 +212,7 @@ export default function SimpleExpansionPanel({
           id="panel3d-header"
           style={{ backgroundColor: "white" }}
         >
-          <GroupIcon
+          <PeopleOutlineIcon
             style={{
               marginRight: "15px",
               color: "forestgreen"
@@ -211,63 +227,41 @@ export default function SimpleExpansionPanel({
               flexDirection: "column"
             }}
           >
-            {classMem.map((member, index) => {
-              return (
-                <ListItem key={index}>
-                  <Avatar
-                    src={member.image}
-                    style={{
-                      marginLeft: "-17px"
-                    }}
-                  ></Avatar>
-                  <span
-                    style={{
-                      marginLeft: "8px",
-                      fontWeight: "bold"
-                    }}
-                  >
-                    {member.first_name + " " + member.last_name}
-                  </span>
-                  {member.user_status === 1 ? (
-                    <status-indicator
-                      positive
-                      style={{
-                        marginLeft: "10px"
-                      }}
-                    ></status-indicator>
-                  ) : (
-                    <status-indicator
-                      style={{
-                        marginLeft: "10px"
-                      }}
-                    ></status-indicator>
-                  )}
-                </ListItem>
-              );
-            })}
-
-            {classInfo
-              ? classInfo.map((mentor, key) => {
+            {tempClassMem.length === 0
+              ? classMembers.map((member, index) => {
                   return (
-                    <ListItem key={key}>
+                    <ListItem key={index}>
                       <Avatar
-                        src={mentor.image}
+                        src={member.image}
                         style={{
                           marginLeft: "-17px"
                         }}
                       ></Avatar>
-                      <span
-                        style={{
-                          marginLeft: "8px",
-                          fontWeight: "bold"
-                        }}
-                      >
-                        {mentor.first_name +
-                          " " +
-                          mentor.last_name +
-                          " (Mentor)"}
-                      </span>
-                      {mentor.user_status === 1 ? (
+
+                      {member.user_type_id === 4 ? (
+                        <span
+                          style={{
+                            marginLeft: "8px",
+                            fontWeight: "bold"
+                          }}
+                        >
+                          {member.first_name +
+                            " " +
+                            member.last_name +
+                            " (Mentor)"}
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            marginLeft: "8px",
+                            fontWeight: "bold"
+                          }}
+                        >
+                          {member.first_name + " " + member.last_name}
+                        </span>
+                      )}
+
+                      {member.user_status === 1 ? (
                         <status-indicator
                           positive
                           style={{
@@ -284,7 +278,56 @@ export default function SimpleExpansionPanel({
                     </ListItem>
                   );
                 })
-              : ""}
+              : tempClassMem.map((member, index) => {
+                  return (
+                    <ListItem key={index}>
+                      <Avatar
+                        src={member.image}
+                        style={{
+                          marginLeft: "-17px"
+                        }}
+                      ></Avatar>
+
+                      {member.user_type_id === 4 ? (
+                        <span
+                          style={{
+                            marginLeft: "8px",
+                            fontWeight: "bold"
+                          }}
+                        >
+                          {member.first_name +
+                            " " +
+                            member.last_name +
+                            " (Mentor)"}
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            marginLeft: "8px",
+                            fontWeight: "bold"
+                          }}
+                        >
+                          {member.first_name + " " + member.last_name}
+                        </span>
+                      )}
+
+                      {member.user_status === 1 ? (
+                        <status-indicator
+                          positive
+                          style={{
+                            marginLeft: "10px"
+                          }}
+                        ></status-indicator>
+                      ) : (
+                        <status-indicator
+                          style={{
+                            marginLeft: "10px"
+                          }}
+                        ></status-indicator>
+                      )}
+                    </ListItem>
+                  );
+                })}
 
             <div
               className={classes.root}
@@ -292,13 +335,11 @@ export default function SimpleExpansionPanel({
                 display: "flex"
               }}
             >
-              {/* <Button variant="outlined">See All Members</Button>
-              <Button variant="outlined">Add Student</Button> */}
               <TextField
                 id="outlined-basic"
                 placeholder="Search member..."
                 fullWidth
-                onChange={e => setSearch(e.target.value)}
+                onChange={e => handleSearch(e)}
               />
             </div>
           </div>
