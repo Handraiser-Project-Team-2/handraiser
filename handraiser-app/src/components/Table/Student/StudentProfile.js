@@ -34,9 +34,9 @@ export default function StudentProfile({ profileData, classData }) {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={1} className={classes.gridCont}>
+      <Grid container spacing={2} className={classes.gridCont}>
         <Grid item xs={12} sm={4}>
-          <div className={classes.profileCont}>
+          <div className={classes.profileCont} style={{ borderRadius: "20px" }}>
             <Avatar
               alt="Remy Sharp"
               src={profileData.image}
