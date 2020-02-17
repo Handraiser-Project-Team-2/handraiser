@@ -289,7 +289,7 @@ export default function Mentor() {
                     fontSize: "12.4px"
                   }}
                 >
-                  From: ${name}
+                  From: {name}
                 </Typography>
               </TitleName>
               <Option>
