@@ -44,7 +44,7 @@ export default function InQueue({ class_id, search }) {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/done/${class_id}?search=${search}`
+      url: `/api/classes/done/${class_id}?search=${search}`
     }).then(res => {
       // console
       setConcernsData(res.data);

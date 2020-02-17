@@ -45,11 +45,6 @@ export default function Topbar() {
 
   let socket = io(ENDPOINT);
 
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-
-  // })
-
   const toggleDrawer = (side, open) => event => {
     if (
       event.type === "keydown" &&
@@ -92,8 +87,9 @@ export default function Topbar() {
     sessionStorage.setItem("token", "");
     history.push("/");
     setData();
+
     axios
-      .patch(`http://localhost:5000/api/users/${user_id}`)
+      .patch(`/api/users/${user_id}`)
       .then(res => {
         Swal.fire({
           icon: "success",
@@ -108,12 +104,8 @@ export default function Topbar() {
       });
   };
 
-  // const sendMsg = evt => {
-  //   evt.preventDefault();
-  // };
-
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/userprofile/${user_id}`).then(res => {
+    axios.get(`/api/userprofile/${user_id}`).then(res => {
       setUser(res.data[0].image);
     });
   });

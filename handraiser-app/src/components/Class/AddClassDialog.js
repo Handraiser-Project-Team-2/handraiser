@@ -76,7 +76,7 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
     console.log("token", token);
     axios({
       method: "post",
-      url: `http://localhost:5000/api/mentor/classroom/add`,
+      url: `/api/mentor/classroom/add`,
       data: state
     })
       .then(data => {

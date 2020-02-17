@@ -65,7 +65,7 @@ export const TabBtn = props => {
   const fetchAdminEmail = () => {
     axios({
       method: "post",
-      url: `http://localhost:5000/api/user/data`,
+      url: `/api/user/data`,
       data: {
         token: sessionStorage.getItem("token")
       }
@@ -103,7 +103,7 @@ export const TabBtn = props => {
     let isSubscribed = true;
     setOpenConfirm(true);
     axios
-      .post(`http://localhost:5000/api/admin/keygen`, { ...userData, type })
+      .post(`/api/admin/keygen`, { ...userData, type })
       .then(res => {
         setEmailTo(res.data.data.validation_email);
         setKey(res.data.data.validation_key);
@@ -120,7 +120,7 @@ export const TabBtn = props => {
   };
 
   const handleConfirm = () => {
-    axios.post(`http://localhost:5000/api/sendMail`, {
+    axios.post(`/api/sendMail`, {
       emailTo: emailTo,
       key: key,
       adminEmail: adminEmail,

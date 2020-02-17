@@ -119,7 +119,7 @@ export default function Mentor() {
     setAnchorEl(null);
 
     axios
-      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
+      .patch(`/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
         concern_title: rowData.concern_title,
         concern_description: rowData.concern_description,
@@ -128,13 +128,13 @@ export default function Mentor() {
       .then(data => {
         axios
           .get(
-            `http://localhost:5000/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
+            `/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
             {}
           )
           .then(data => {
             axios
               .patch(
-                `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                `/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
                 {
                   assisted_id: data.data[0].assisted_id,
                   user_student_id: data.data[0].user_id,
@@ -168,7 +168,7 @@ export default function Mentor() {
     setName("");
     setAnchorEl(null);
     axios
-      .patch(`http://localhost:5000/api/concern_list/${rowData.concern_id}`, {
+      .patch(`/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
         concern_title: rowData.concern_title,
         concern_description: rowData.concern_description,
@@ -178,10 +178,10 @@ export default function Mentor() {
         socket.emit("handshake", { room: class_id });
 
         axios
-          .get(`http://localhost:5000/api/assisted_by/${data.data.user_id}`, {})
+          .get(`/api/assisted_by/${data.data.user_id}`, {})
           .then(data => {
             axios.delete(
-              `http://localhost:5000/api/assisted_by/${data.data[0].user_student_id}`,
+              `/api/assisted_by/${data.data[0].user_student_id}`,
               {}
             );
           });
@@ -194,7 +194,7 @@ export default function Mentor() {
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
-      .get(`http://localhost:5000/api/userprofile/${rowData.user_id}`, {})
+      .get(`/api/userprofile/${rowData.user_id}`, {})
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
       })
@@ -206,7 +206,7 @@ export default function Mentor() {
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
-        .post("http://localhost:5000/api/user/data", {
+        .post("/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {

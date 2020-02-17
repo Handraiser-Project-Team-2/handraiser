@@ -90,7 +90,7 @@ export default function SimpleExpansionPanel({
   const getClassMember = () => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/members/${class_id}`
+      url: `/api/classes/members/${class_id}`
     })
       .then(res => {
         setClassMem(res.data);
@@ -103,7 +103,7 @@ export default function SimpleExpansionPanel({
   const getclassInfo = () => {
     axios({
       method: "post",
-      url: `http://localhost:5000/api/classinfo/${class_id}`
+      url: `/api/classinfo/${class_id}`
     })
       .then(res => {
         setClassInfo(res.data);

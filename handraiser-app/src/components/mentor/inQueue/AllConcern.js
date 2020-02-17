@@ -91,7 +91,7 @@ export default function InQueue({ class_id, search }) {
   const update = data => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/all/${class_id}?search=${data}`
+      url: `/api/classes/all/${class_id}?search=${data}`
     })
       .then(res => {
         setConcernsData(res.data);

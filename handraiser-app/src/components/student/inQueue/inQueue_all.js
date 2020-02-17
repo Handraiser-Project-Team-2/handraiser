@@ -92,7 +92,7 @@ export default function InQueue(props) {
   const update = data => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/student/queue/order/${props.classReference}?search=${data}`
+      url: `/api/student/queue/order/${props.classReference}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
     });
