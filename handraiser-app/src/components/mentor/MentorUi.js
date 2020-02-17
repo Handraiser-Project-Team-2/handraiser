@@ -7,8 +7,7 @@ import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
-import 
-hakeImage from "../images/HandshakeEmoji.png";
+import hakeImage from "../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
@@ -106,8 +105,7 @@ export default function Mentor() {
   // };
 
   const handleDone = rowData => {
-
-    setSelection(false)
+    setSelection(false);
 
     if (rowData.length === 0) {
       Swal.fire({
@@ -291,13 +289,13 @@ export default function Mentor() {
                     fontSize: "12.4px"
                   }}
                 >
-                  From: ${name}
+                  From: {name}
                 </Typography>
               </TitleName>
               <Option>
                 <div>
                   <HelpIcon
-                  onClick={handleClickDetail}
+                    onClick={handleClickDetail}
                     style={{
                       fontSize: 30,
                       color: "#c4c4c4",
@@ -308,7 +306,7 @@ export default function Mentor() {
                 </div>
                 <div>
                   <GroupIcon
-                  onClick={handleClickMember}
+                    onClick={handleClickMember}
                     style={{
                       fontSize: 30,
                       color: "#c4c4c4",
@@ -339,14 +337,18 @@ export default function Mentor() {
                 alignItems: "center"
               }}
             >
-              <Typography variant="h5" style={{color:'#bcbcbc'}}>
+              <Typography variant="h5" style={{ color: "#bcbcbc" }}>
                 Select any concern to interact
               </Typography>
             </div>
           )}
 
-          {selection &&  rowData.concern_status === 2  ? (
-            <Handshake data={rowData} rowDatahandler={rowDatahandler} handleDone={handleDone} />
+          {selection && rowData.concern_status === 2 ? (
+            <Handshake
+              data={rowData}
+              rowDatahandler={rowDatahandler}
+              handleDone={handleDone}
+            />
           ) : (
             ""
           )}
