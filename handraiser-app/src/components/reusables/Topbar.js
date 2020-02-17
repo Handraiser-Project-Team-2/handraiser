@@ -31,6 +31,7 @@ import CloseIcon from "@material-ui/icons/Close";
 
 import InQueue from "../student/inQueue/inQueue";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import io from "socket.io-client";
 
 var jwtDecode = require("jwt-decode");
 
@@ -64,6 +65,15 @@ export default function Topbar() {
   const panelDrawer = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  const ENDPOINT = "localhost:5000";
+
+  let socket = io(ENDPOINT);
+
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+
+  // })
 
   const toggleDrawer = (side, open) => event => {
     setState({ left: true, [side]: open });
@@ -228,17 +238,25 @@ export default function Topbar() {
     sessionStorage.setItem("token", "");
     history.push("/");
     setData();
-    axios.patch(`http://localhost:5000/api/users/${user_id}`).then(res => {
-      Swal.fire({
-        icon: "success",
-        title: "Logged out successful!"
+    axios
+      .patch(`http://localhost:5000/api/users/${user_id}`)
+      .then(res => {
+        Swal.fire({
+          icon: "success",
+          title: "Logged out successfully!"
+        });
+      })
+      .then(data => {
+        socket.emit("user_activity", {});
+      })
+      .catch(err => {
+        console.log(err);
       });
-    });
   };
 
-  const sendMsg = evt => {
-    evt.preventDefault();
-  };
+  // const sendMsg = evt => {
+  //   evt.preventDefault();
+  // };
 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/userprofile/${user_id}`).then(res => {
@@ -291,11 +309,10 @@ export default function Topbar() {
             <MenuItem></MenuItem>
 
             <MenuItem>
-              {" "}
               <GoogleLogout
                 clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"
                 buttonText="Logout"
-                onLogoutSuccess={Logout}
+                onLogoutSuccess={() => Logout()}
               ></GoogleLogout>
             </MenuItem>
           </Menu>
