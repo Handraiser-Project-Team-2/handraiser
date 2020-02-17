@@ -6,6 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import { useParams } from "react-router-dom";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
@@ -33,8 +34,6 @@ import InQueue from "../student/inQueue/inQueue";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import io from "socket.io-client";
 
-var jwtDecode = require("jwt-decode");
-
 const useStyles = makeStyles(theme => ({
   large: {
     width: theme.spacing(10),
@@ -55,18 +54,20 @@ export default function Topbar() {
   var jwtDecode = require("jwt-decode");
   var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   let history = useHistory();
-  const [user, setUser] = useState("");
+  const [userProfile, setUserProfile] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const user_id = decoded.userid;
   const { setData } = useContext(UserContext);
   const [expanded, setExpanded] = React.useState(false);
+  const [tabValue, setTabValue] = useState(0);
+  let { class_id } = useParams();
 
   const panelDrawer = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.208:5000";
 
   let socket = io(ENDPOINT);
 
@@ -76,6 +77,17 @@ export default function Topbar() {
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
+
+  const [className, setClassName] = React.useState("");
+
+  useEffect(() => {
+    axios({
+      method: "post",
+      url: `/api/classinfo/${class_id}`
+    }).then(res => {
+      setClassName(res.data[0].class_title);
+    });
+  }, []);
 
   const sideList = side => (
     <div
@@ -95,8 +107,8 @@ export default function Topbar() {
           }}
         >
           <span style={{ marginLeft: "10px" }}> PROFILE INFORMATION</span>
-          <div>
-            <CloseIcon />
+          <div style={{ cursor: "pointer" }}>
+            <CloseIcon onClick={toggleDrawer(side, false)} />
           </div>
         </ListItem>
         <Divider />
@@ -109,7 +121,7 @@ export default function Topbar() {
             marginTop: "10px"
           }}
         >
-          <Avatar className={classes.large}></Avatar>
+          <Avatar className={classes.large} src={userProfile.image}></Avatar>
           <div
             style={{
               marginLeft: "20px",
@@ -118,10 +130,10 @@ export default function Topbar() {
             }}
           >
             <span style={{ marginTop: 10, fontWeight: "bold" }}>
-              Lebron James
+              {userProfile.first_name + " " + userProfile.last_name}
             </span>
             <span style={{ marginTop: 10, marginBottom: 10, color: "grey" }}>
-              Lbj@gmail.com
+              {userProfile.email}
             </span>
           </div>
         </ListItem>
@@ -139,9 +151,23 @@ export default function Topbar() {
               >
                 <Typography className={classes.heading}>Classes</Typography>
               </ExpansionPanelSummary>
+
               <ExpansionPanelDetails>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  Shooting Drills
+                  {classData.map(classList => {
+                    return (
+                      <List key={classList.class_id}>
+                        <ListItem
+                          button
+                          onClick={() => {
+                            cardClick(classList.class_id);
+                          }}
+                        >
+                          <ListItemText primary={classList.class_title} />
+                        </ListItem>
+                      </List>
+                    );
+                  })}
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
@@ -170,7 +196,12 @@ export default function Topbar() {
                             selected={selectedIndex === 0}
                             onClick={event => handleListItemClick(event, 0)}
                           >
-                            <ListItemText primary="Request Title" />
+                            <ListItemText
+                              primary="Request Title"
+                              onClick={() => {
+                                setTabValue(0);
+                              }}
+                            />
                           </ListItem>
                         </List>
                       </div>
@@ -188,7 +219,12 @@ export default function Topbar() {
                             selected={selectedIndex === 0}
                             onClick={event => handleListItemClick(event, 0)}
                           >
-                            <ListItemText primary="Request Title" />
+                            <ListItemText
+                              primary="Request Title"
+                              onClick={() => {
+                                setTabValue(1);
+                              }}
+                            />
                           </ListItem>
                         </List>
                       </div>
@@ -206,7 +242,12 @@ export default function Topbar() {
                             selected={selectedIndex === 0}
                             onClick={event => handleListItemClick(event, 0)}
                           >
-                            <ListItemText primary="Request Title" />
+                            <ListItemText
+                              primary="Request Title"
+                              onClick={() => {
+                                setTabValue(2);
+                              }}
+                            />
                           </ListItem>
                         </List>
                       </div>
@@ -252,9 +293,80 @@ export default function Topbar() {
 
   useEffect(() => {
     axios.get(`/api/userprofile/${user_id}`).then(res => {
-      setUser(res.data[0].image);
+      setUserProfile(res.data[0]);
     });
-  });
+  }, []);
+
+  let token = sessionStorage.getItem("token").split(" ")[1];
+  const [userType, setUserType] = useState();
+
+  const changeUserType = e => {
+    setUserType(e.data.user_type_id);
+  };
+
+  useEffect(() => {
+    fetchUserData();
+    userType === 3 ? fetchMyClass() : fetchMentorClass();
+  }, [userType]);
+
+  const [tokState] = useState({ token: token });
+
+  const fetchUserData = () => {
+    axios({
+      method: "post",
+      url: `/api/user/data`,
+      data: tokState
+    })
+      .then(data => {
+        setData(data.data);
+        changeUserType(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const [classData, setClassData] = useState([]);
+
+  // get all class relative to this mentor(if user is verified)
+  const fetchMentorClass = () => {
+    axios({
+      method: "post",
+      url: `/api/my/classes`,
+      data: tokState
+    })
+      .then(data => {
+        setClassData(data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  // get all class relative to student
+  const fetchMyClass = () => {
+    axios({
+      method: "post",
+      url: `/api/student/get/class`,
+      data: tokState
+    })
+      .then(data => {
+        // console.log(data.data);
+        setClassData(data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const cardClick = e => {
+    if (userProfile.user_type_id === 3) {
+      window.location = `/student/${e}`;
+    }
+    if (userProfile.user_type_id === 4) {
+      window.location = `/mentor/${e}`;
+    }
+  };
 
   return (
     <Nav>
@@ -285,7 +397,7 @@ export default function Topbar() {
               onClick={handleMenu}
               color="inherit"
             >
-              <Avatar alt="" src={user} />
+              <Avatar alt="" src={userProfile.image} />
             </IconButton>
           </div>
           <Menu
