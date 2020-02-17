@@ -142,28 +142,6 @@ module.exports = {
         res.status(400).end();
       });
   },
-  mentor_List: (req, res) => {
-    const db = req.app.get("db");
-
-    db.query(`select * from users  where user_type_id = 4;`)
-      .then(data => {
-        res.status(200).json(data);
-      })
-      .catch(err => {
-        res.status(400).end();
-      });
-  },
-  admin_List: (req, res) => {
-    const db = req.app.get("db");
-
-    db.query(`select * from users  where user_type_id = 2;`)
-      .then(data => {
-        res.status(200).json(data);
-      })
-      .catch(err => {
-        res.status(400).end();
-      });
-  },
   getUserProfileByEmail: (req, res) => {
     const db = req.app.get("db");
 

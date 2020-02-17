@@ -66,7 +66,7 @@ export default function Topbar() {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "172.60.62.208:5000";
+  const ENDPOINT = "localhost:5000";
 
   let socket = io(ENDPOINT);
 
