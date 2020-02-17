@@ -79,7 +79,7 @@ export default function InQueue(rowDatahandler) {
   const update = data => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
+      url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
     })
       .then(res => {
         setConcernsData(res.data);

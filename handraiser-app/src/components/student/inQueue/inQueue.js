@@ -106,7 +106,7 @@ export default function InQueue(props) {
   const update = data => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
+      url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
       console.log(res.data.length);
@@ -133,12 +133,12 @@ export default function InQueue(props) {
 
     axios
       .get(
-        `http://localhost:5000/api/concern_list/${concern.concern.concern_id}`
+        `/api/concern_list/${concern.concern.concern_id}`
       )
       .then(data => {
         axios
           .patch(
-            `http://localhost:5000/api/concern_list/${data.data[0].concern_id}`,
+            `/api/concern_list/${data.data[0].concern_id}`,
             {
               concern_id: data.data[0].concern_id,
               concern_title: concernTitle,
@@ -174,7 +174,7 @@ export default function InQueue(props) {
     // if (concern.concern) {
     axios
       .delete(
-        `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
+        `/api/student/request/${concern.concern.concern_id}`,
         {}
       )
       .then(data => {

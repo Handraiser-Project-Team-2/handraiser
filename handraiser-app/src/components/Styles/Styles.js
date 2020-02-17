@@ -125,6 +125,7 @@ export const Div = styled.div`
 `;
 export const Div2 = styled.div`
   width: 25%;
+  background-color: white;
   @media screen and (max-width: 1440px) {
     display: none;
   }
@@ -132,6 +133,7 @@ export const Div2 = styled.div`
 export const Queue = styled.div`
   margin-top: 13px;
   width: 25%;
+  background-color: white;
   border-right: 0.5px solid lightgrey;
   @media (min-width: 100px) and (max-width: 768px) {
     display: none;
@@ -159,6 +161,7 @@ export const Subject = styled.div`
 export const Conversation = styled.div`
   height: 655px;
   overflow: auto;
+  background-color: white;
   border-top: 1px solid lightgrey;
   background-color: white;
   @media (max-height: 894px) {

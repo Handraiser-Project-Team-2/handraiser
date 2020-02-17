@@ -69,7 +69,7 @@ export default function ResponsiveDialog(props) {
     console.log(input);
     axios({
       method: "post",
-      url: "http://localhost:5000/api/student/class/register",
+      url: "/api/student/class/register",
       data: { token: sessionStorage.getItem("token"), supplied_key: input }
     })
       .then(data => {

@@ -172,7 +172,7 @@ export default function Student() {
 
     if (sessionStorage.getItem("token")) {
       axios
-        .post("http://localhost:5000/api/user/data", {
+        .post("/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
@@ -218,7 +218,7 @@ export default function Student() {
     // socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     axios
-      .post(`http://localhost:5000/api/student/request/assistance`, {
+      .post(`/api/student/request/assistance`, {
         class_id: class_id,
         user_id: user_id,
         concern_title: concernTitle,
@@ -281,7 +281,7 @@ export default function Student() {
 
     axios
       .get(
-        `http://localhost:5000/api/userprofile/${rowData.concern.user_id}`,
+        `/api/userprofile/${rowData.concern.user_id}`,
         {}
       )
       .then(data => {
