@@ -73,7 +73,7 @@ export default function Mentor() {
   const [messages, setMessages] = useState([]);
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.208:5000";
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -177,14 +177,9 @@ export default function Mentor() {
       .then(data => {
         socket.emit("handshake", { room: class_id });
 
-        axios
-          .get(`/api/assisted_by/${data.data.user_id}`, {})
-          .then(data => {
-            axios.delete(
-              `/api/assisted_by/${data.data[0].user_student_id}`,
-              {}
-            );
-          });
+        axios.get(`/api/assisted_by/${data.data.user_id}`, {}).then(data => {
+          axios.delete(`/api/assisted_by/${data.data[0].user_student_id}`, {});
+        });
       });
   };
 
