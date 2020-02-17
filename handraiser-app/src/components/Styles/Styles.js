@@ -160,6 +160,7 @@ export const Conversation = styled.div`
   height: 655px;
   overflow: auto;
   border-top: 1px solid lightgrey;
+  background-color: white;
   @media (max-height: 894px) {
     height: 567.5px;
   }

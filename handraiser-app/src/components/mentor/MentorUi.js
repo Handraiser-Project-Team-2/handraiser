@@ -190,7 +190,6 @@ export default function Mentor() {
 
   const rowDatahandler = rowData => {
     setSelection(true);
-    console.log(rowData);
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
@@ -289,7 +288,7 @@ export default function Mentor() {
                     fontSize: "12.4px"
                   }}
                 >
-                  From: ${name}
+                  From: {name}
                 </Typography>
               </TitleName>
               <Option>

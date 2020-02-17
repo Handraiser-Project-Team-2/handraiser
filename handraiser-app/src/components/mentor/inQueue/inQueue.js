@@ -109,13 +109,13 @@ export default function InQueue(rowDatahandler) {
               return (
                 <div key={index}>
                   <ListItem
+                    selected={selectedIndex === index}
                     button
                     style={{
                       borderBottom: "0.5px solid #abababde",
-                      padding: "10px 15px",
-                      backgroundColor: "whitesmoke"
+                      padding: "10px 15px"
                     }}
-                    onClick={() => handleConcernData(data)}
+                    onClick={() => handleConcernData(data, index)}
                   >
                     <ListItemAvatar>
                       <div>
