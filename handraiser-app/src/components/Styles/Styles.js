@@ -87,12 +87,12 @@ export const TableStyle2 = styled.div`
       flex-direction: row;
       border: none;
       position: relative;
-      padding-left: 70px;
+      padding-left: 65px;
     }
     td:before {
       position: absolute;
       align-items: center;
-      top: 6px;
+      top: 1px;
       left: 6px;
       width: 20%;
       padding: 10px;

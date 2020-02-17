@@ -83,7 +83,6 @@ module.exports = {
         res.status(400).end();
       });
   },
-
   // for super admin
   // + key to an email input (setting/promoting to user type)
   add_admin_mentor: (req, res) => {
