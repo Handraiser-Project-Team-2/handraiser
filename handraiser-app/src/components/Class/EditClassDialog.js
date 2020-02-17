@@ -64,7 +64,7 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
 
     axios({
       method: "put",
-      url: `http://localhost:5000/api/mentor/my/class`,
+      url: `/api/mentor/my/class`,
       data: state
     })
       .then(data => {

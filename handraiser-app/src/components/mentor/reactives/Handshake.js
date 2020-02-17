@@ -30,10 +30,9 @@ export default function Handshake(props) {
   });
 
   const accept = highdata => {
-    console.log("hanshake request");
 
     axios
-      .patch(`http://localhost:5000/api/concern_list/${highdata.concern_id}`, {
+      .patch(`/api/concern_list/${highdata.concern_id}`, {
         concern_id: highdata.concern_id,
         concern_title: highdata.concern_title,
         concern_description: highdata.concern_description,
@@ -41,14 +40,11 @@ export default function Handshake(props) {
       })
       .then(data => {
         props.rowDatahandler(data.data);
-
-        console.log(highdata);
-
         socket.emit("handshake", { room: highdata.class_id });
 
         axios
           .get(
-            `http://localhost:5000/api/assisted_by/${highdata.class_id}/${highdata.user_id}`,
+            `/api/assisted_by/${highdata.class_id}/${highdata.user_id}`,
             {}
           )
           .then(data => {
@@ -57,7 +53,7 @@ export default function Handshake(props) {
             // if none then reference this current mentor
             if (data.data.length === 0) {
               axios
-                .post(`http://localhost:5000/api/assisted_by`, {
+                .post(`/api/assisted_by`, {
                   assist_status: "ongoing",
                   class_id: highdata.class_id,
                   // user_mentor_id: 3, //mock user_mentor_id data //used for checking
@@ -74,7 +70,7 @@ export default function Handshake(props) {
               //reflect current mentor
               axios
                 .patch(
-                  `http://localhost:5000/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+                  `/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
                   {
                     assisted_id: data.data[0].assisted_id,
                     user_student_id: data.data[0].user_id,

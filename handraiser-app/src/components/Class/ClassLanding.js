@@ -107,7 +107,7 @@ export default function ClassLanding(props) {
   const fetchMyClass = () => {
     axios({
       method: "post",
-      url: `http://localhost:5000/api/student/get/class`,
+      url: `/api/student/get/class`,
       data: tokState
     })
       .then(data => {

@@ -74,7 +74,7 @@ export default function InQueue(props) {
   const update = data => {
     axios({
       method: "get",
-      url: `http://localhost:5000/api/student/done/order/${props.classReference}/${user_id}?search=${props.search}` //5 here is a class_id example
+      url: `/api/student/done/order/${props.classReference}/${user_id}?search=${props.search}` //5 here is a class_id example
     }).then(res => {
       setConcernsData(res.data);
     });
@@ -100,7 +100,7 @@ export default function InQueue(props) {
     if (concern) {
       axios
         .delete(
-          `http://localhost:5000/api/student/request/${concern.concern.concern_id}`,
+          `/api/student/request/${concern.concern.concern_id}`,
           {}
         )
         .then(data => {

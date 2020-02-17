@@ -119,7 +119,6 @@ massive({
       const users = [];
 
       socket.on("AddRequest", (data, callback) => {
-        // console.log(data);
 
         io.to(data.room).emit("consolidateRequest", data);
 

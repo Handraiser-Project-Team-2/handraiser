@@ -91,7 +91,7 @@ export default function VerificationDialog(props) {
   const checkKey = () => {
     axios({
       method: `post`,
-      url: ` http://localhost:5000/api/admin/verify`,
+      url: ` /api/admin/verify`,
       data: { token: sessionStorage.getItem("token"), supplied_key: input }
     })
       .then(data => {

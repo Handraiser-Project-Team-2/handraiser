@@ -26,7 +26,7 @@ export default function Login(props) {
       setLogged(true);
       axios({
         method: "post",
-        url: "http://localhost:5000/api/login",
+        url: "/api/login",
         data: {
           email: response.profileObj.email,
           last_name: response.profileObj.familyName,
@@ -38,7 +38,7 @@ export default function Login(props) {
       })
         .then(data => {
           axios
-            .patch(`http://localhost:5000/api/users/${data.data.user_id}`, {
+            .patch(`/api/users/${data.data.user_id}`, {
               user_status: 1
             })
             .then(data => {

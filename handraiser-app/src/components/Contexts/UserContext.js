@@ -11,7 +11,7 @@ const UserContextProvider = props => {
   const fetchUserData = () => {
     axios({
       method: "post",
-      url: `http://localhost:5000/api/user/data`,
+      url: `/api/user/data`,
       data: { token: sessionStorage.getItem("token") }
     })
       .then(data => {
