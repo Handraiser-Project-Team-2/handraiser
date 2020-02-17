@@ -15,7 +15,7 @@ export default function Handshake(props) {
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
-  const ENDPOINT = "172.60.62.208:5000";
+  const ENDPOINT = "localhost:5000";
 
   let socket = io(ENDPOINT);
 
@@ -30,6 +30,7 @@ export default function Handshake(props) {
   });
 
   const accept = highdata => {
+
     axios
       .patch(`/api/concern_list/${highdata.concern_id}`, {
         concern_id: highdata.concern_id,
@@ -42,7 +43,10 @@ export default function Handshake(props) {
         socket.emit("handshake", { room: highdata.class_id });
 
         axios
-          .get(`/api/assisted_by/${highdata.class_id}/${highdata.user_id}`, {})
+          .get(
+            `/api/assisted_by/${highdata.class_id}/${highdata.user_id}`,
+            {}
+          )
           .then(data => {
             //get data of who assisted this concern
 

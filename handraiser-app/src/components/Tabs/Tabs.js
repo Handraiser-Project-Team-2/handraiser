@@ -17,7 +17,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 import { TabBox, BtnBox } from "../Styles/Styles";
 
-import { UserList } from "../List/List";
 import { TableCont } from "../Table/Table";
 import { GenerateKey } from "../Generate-Key/Generate";
 // var jwtDecode = require("jwt-decode");
@@ -60,10 +59,8 @@ export const TabBtn = props => {
   }
 
   useEffect(() => {
-    if (!adminEmail.data) {
-      fetchAdminEmail();
-    }
-  }, [adminEmail]);
+    fetchAdminEmail();
+  }, []);
 
   const fetchAdminEmail = () => {
     axios({
@@ -176,15 +173,12 @@ export const TabBtn = props => {
         )}
       </TabBox>
       <TabPanel value={tabValue} index={0}>
-        <UserList />
         <TableCont tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <UserList />
         <TableCont tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <UserList />
         <TableCont tabValue={tabValue} />
       </TabPanel>
       <GenerateKey
@@ -225,6 +219,7 @@ export const TabBtn = props => {
           </Button>
         </DialogActions>
       </Dialog>
+
       <ToastContainer autoClose={1500} />
     </React.Fragment>
   );
