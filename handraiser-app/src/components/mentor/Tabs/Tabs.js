@@ -73,10 +73,6 @@ const TabBtn = ({ class_id, rowDatahandler }) => {
             label="CLOSED"
             onClick={() => setHide(hide === true ? hide : !hide)}
           />
-          <Tab
-            label="ALL"
-            onClick={() => setHide(hide === true ? hide : !hide)}
-          />
         </Tabs>
       </Paper>
 
