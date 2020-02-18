@@ -176,7 +176,6 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          console.log(userImage);
           setUserImage(data.data.image);
           setState({
             user_type: data.data.user_type_id
@@ -264,8 +263,6 @@ export default function Student() {
   };
   //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
-    console.log("here");
-
     setActive(true);
 
     socket.emit(
