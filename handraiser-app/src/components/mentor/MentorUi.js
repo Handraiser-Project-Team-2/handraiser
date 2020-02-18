@@ -190,7 +190,6 @@ export default function Mentor() {
 
   const rowDatahandler = rowData => {
     setSelection(true);
-    console.log(rowData);
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
@@ -261,7 +260,7 @@ export default function Mentor() {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
+        <MenuItem onClick={e => handleDone(rowData)}>Mark as Done</MenuItem>
         <MenuItem onClick={e => handleBackQueue(rowData)}>
           Back to Queue
         </MenuItem>
