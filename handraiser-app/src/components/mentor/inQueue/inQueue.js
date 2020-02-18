@@ -10,6 +10,8 @@ export default function InQueue(rowDatahandler) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState();
+  const open = Boolean(anchorEl);
   const ENDPOINT = "localhost:5000";
   let socket = io(ENDPOINT);
 
