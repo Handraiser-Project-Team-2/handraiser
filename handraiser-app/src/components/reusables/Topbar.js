@@ -30,7 +30,9 @@ import io from "socket.io-client";
 import LockIcon from "@material-ui/icons/Lock";
 import TextField from "@material-ui/core/TextField";
 import SchoolIcon from "@material-ui/icons/School";
-
+import ListItemText from "@material-ui/core/ListItemText";
+import StudentTabs from "../student/Tabs/Tabs";
+import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
   large: {
     width: theme.spacing(10),
@@ -78,7 +80,7 @@ export default function Topbar() {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "172.60.62.208:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let socket = io(ENDPOINT);
 
@@ -106,10 +108,6 @@ export default function Topbar() {
           console.log(err);
         });
     }
-  };
-
-  const handleCloseSide = side => {
-    toggleDrawer(side, false);
   };
 
   const [classMem, setClassMem] = useState([]);
@@ -140,7 +138,25 @@ export default function Topbar() {
     setTempClassMem(filteredMembers);
   };
 
-  const handleShowRequest = () => {};
+  // console.log(rowDatahandler);
+  const [selection, setSelection] = useState(false);
+  const [concernTitle, setConcernTitle] = useState("");
+  const [rowData, setRowData] = useState([]);
+  const [name, setName] = useState("");
+
+  const rowDatahandler = rowData => {
+    setSelection(true);
+    setConcernTitle(rowData.concern_title);
+    setRowData(rowData);
+    axios
+      .get(`/api/userprofile/${rowData.user_id}`, {})
+      .then(data => {
+        setName(data.data[0].first_name + " " + data.data[0].last_name);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   const sideList = side => (
     <div role="presentation">
@@ -158,7 +174,7 @@ export default function Topbar() {
           <span style={{ marginLeft: "10px" }}> PROFILE INFORMATION</span>
           <CloseIcon
             style={{ cursor: "pointer" }}
-            onClick={side => handleCloseSide(side)}
+            onClick={toggleDrawer("left", false)}
           />
         </ListItem>
         <Divider />
@@ -166,7 +182,6 @@ export default function Topbar() {
           style={{
             display: "flex",
             justifyContent: "flex-start",
-
             alignContent: "flex-start",
             marginTop: "10px"
           }}
@@ -233,15 +248,6 @@ export default function Topbar() {
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
-            <Button
-              className={classes.requests}
-              style={{
-                border: "0.5px solid lightgrey"
-              }}
-              onClick={() => handleShowRequest()}
-            >
-              Requests
-            </Button>
             <ExpansionPanel
               expanded={expanded === "panel3"}
               onChange={panelDrawer("panel3")}
@@ -275,7 +281,6 @@ export default function Topbar() {
                           padding: "10px 10px 5px 5px"
                         }}
                       >
-                        <LockIcon />
                         <span>{info.class_title}</span>
                       </span>
                       <span
@@ -444,6 +449,19 @@ export default function Topbar() {
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
+            <div className={classes.requests}>
+              {userProfile.user_type_id === 3 ? (
+                <StudentTabs
+                  classReference={class_id}
+                  rowDatahandler={rowDatahandler}
+                />
+              ) : (
+                <MentorTabs
+                  rowDatahandler={rowDatahandler}
+                  class_id={class_id}
+                />
+              )}
+            </div>
           </div>
         </ListItem>
       </List>

@@ -117,7 +117,7 @@ const DivAnimation = styled.div`
 var jwtDecode = require("jwt-decode");
 let socket;
 export default function Student() {
-  // let socket = io("ws://172.60.62.208:5000", { transports: ["websocket"] });
+  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
@@ -143,7 +143,7 @@ export default function Student() {
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
   const [disable, setDisable] = useState(false);
-  const ENDPOINT = "172.60.62.208:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
 
   const handleMenu = event => {
@@ -414,10 +414,13 @@ export default function Student() {
                 value={concernTitle}
                 fullWidth
                 onChange={e => setConcernTitle(e.target.value)}
+                inputProps={{
+                  maxLength: 50
+                }}
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Subject</Typography>
-                <Typography>{concernTitle.length}/30</Typography>
+                <Typography>{concernTitle.length}/50</Typography>
               </div>
             </TitleName>
             <Option>

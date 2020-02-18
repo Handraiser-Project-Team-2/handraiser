@@ -37,30 +37,30 @@ const useStyles = makeStyles(theme => ({
   active: { backgroundColor: "pink" }
 }));
 
-export default function InQueue(rowDatahandler) {
+export default function InQueue(props) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  const ENDPOINT = "172.60.62.208:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
 
-  const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
+  const rowDataHandlerChild2 = props.rowDatahandler;
 
   useEffect(() => {
     socket = io(ENDPOINT);
 
     socket.emit("join", {
       username: "Admin",
-      room: rowDatahandler.class_id,
+      room: props.class_id,
       image: ""
     });
   }, [ENDPOINT]);
 
   useEffect(() => {
-    if (rowDatahandler.search || !concernsData) {
-      update(rowDatahandler.search);
+    if (props.search || !concernsData) {
+      update(props.search);
     }
 
     socket.on("updateComponents", message => {
@@ -74,12 +74,12 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [rowDatahandler.search, ENDPOINT, concernsData]);
+  }, [props.rowDatahandler.search, ENDPOINT, concernsData]);
 
   const update = data => {
     axios({
       method: "get",
-      url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
+      url: `/api/classes/queue/${props.class_id}?search=${data}`
     })
       .then(res => {
         setConcernsData(res.data);

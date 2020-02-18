@@ -27,7 +27,7 @@ function TabPanel(props) {
     </Typography>
   );
 }
-const TabBtn = ({ class_id, rowDatahandler }) => {
+const TabBtn = props => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [hide, setHide] = useState(false);
@@ -36,7 +36,6 @@ const TabBtn = ({ class_id, rowDatahandler }) => {
     setTabValue(newValue);
   };
 
-  // console.log(search);
   return (
     <React.Fragment>
       <Paper color="primary" style={{ height: "83px" }}>
@@ -82,16 +81,16 @@ const TabBtn = ({ class_id, rowDatahandler }) => {
 
       <TabPanel value={tabValue} index={0}>
         <InQueue
-          rowDatahandler={rowDatahandler}
-          class_id={class_id}
+          rowDatahandler={props.rowDatahandler}
+          class_id={props.class_id}
           search={search}
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <Done class_id={class_id} search={search} />
+        <Done class_id={props.class_id} search={search} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
-        <AllConcern class_id={class_id} search={search} />
+        <AllConcern class_id={props.class_id} search={search} />
       </TabPanel>
     </React.Fragment>
   );
