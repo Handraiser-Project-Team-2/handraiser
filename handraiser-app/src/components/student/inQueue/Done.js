@@ -39,7 +39,7 @@ export default function InQueue(props) {
   const [concern, setConcern] = useState("");
   const open = Boolean(anchorEl);
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.208:5000";
   let socket = io(ENDPOINT);
   const { cstate, getData } = useContext(UserContext);
 

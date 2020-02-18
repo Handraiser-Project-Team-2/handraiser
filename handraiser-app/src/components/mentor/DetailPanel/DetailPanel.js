@@ -192,7 +192,13 @@ export default function SimpleExpansionPanel({
                       Date Created
                     </span>
                     <span style={{ padding: "10px 10px 8px 9px" }}>
-                      {info.class_date_created}
+                      {(function() {
+                        const newD = new Date(
+                          info.class_date_created
+                        ).toLocaleDateString();
+
+                        return newD;
+                      })()}
                     </span>
                   </div>
                 );
