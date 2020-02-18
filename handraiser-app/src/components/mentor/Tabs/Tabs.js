@@ -72,10 +72,6 @@ const TabBtn = props => {
             label="CLOSED"
             onClick={() => setHide(hide === true ? hide : !hide)}
           />
-          <Tab
-            label="ALL"
-            onClick={() => setHide(hide === true ? hide : !hide)}
-          />
         </Tabs>
       </Paper>
 

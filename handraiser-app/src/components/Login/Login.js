@@ -84,7 +84,6 @@ export default function Login(props) {
     <LoginDiv>
       <LoginPic>
         <LinearProgress
-          variant="determinate"
           color="secondary"
           style={{
             display: logged ? "block" : "none",

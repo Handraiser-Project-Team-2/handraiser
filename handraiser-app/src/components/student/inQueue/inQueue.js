@@ -117,6 +117,7 @@ export default function InQueue(props) {
     setConcern(concern);
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -166,13 +167,10 @@ export default function InQueue(props) {
   const handleRemoveReq = () => {
     setAnchorEl(null);
 
-    // if (concern.concern) {
     axios
       .delete(`/api/student/request/${concern.concern.concern_id}`, {})
       .then(data => {
         socket.emit("handshake", { room: props.classReference });
-
-        // alert("Your concern has been removed from the queue");
       })
       .catch(err => {
         console.log(err);

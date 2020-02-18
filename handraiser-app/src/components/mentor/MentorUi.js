@@ -184,7 +184,6 @@ export default function Mentor() {
   };
 
   const rowDatahandler = rowData => {
-    console.log(rowData);
     setSelection(true);
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
@@ -256,7 +255,7 @@ export default function Mentor() {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
+        <MenuItem onClick={e => handleDone(rowData)}>Mark as Done</MenuItem>
         <MenuItem onClick={e => handleBackQueue(rowData)}>
           Back to Queue
         </MenuItem>
