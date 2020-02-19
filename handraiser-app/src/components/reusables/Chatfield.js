@@ -1,7 +1,7 @@
 import React from "react";
 import { Conversation } from "../../Styles/Styles";
 import styled from "styled-components";
-
+import ReactEmoji from "react-emoji";
 const Cont = styled.div`
   display: flex;
   margin-top: 10px;
@@ -135,10 +135,20 @@ const Div = styled.div`
   }
 `;
 
-export default function Chatfield() {
-  return (
-    <Conversation>
-      {/* <h6
+const Chatfield = ({
+  message: { message,user_id },
+  userid
+}) => {
+  // console.log(user_id)
+  // console.log(userid)
+  let isSentByCurrecntUser = false;
+  if (user_id === userid) {
+    isSentByCurrecntUser = true;
+  }
+  return isSentByCurrecntUser ? (
+    // <Conversation>
+    <div>
+      <h6
         style={{
           display: "flex",
           justifyContent: "center",
@@ -154,7 +164,7 @@ export default function Chatfield() {
       <Cont>
         <Sender>
           <Div>
-            
+            <p className="from-me">{ReactEmoji.emojify(message)}</p>
           </Div>
           <h6
             style={{
@@ -167,24 +177,28 @@ export default function Chatfield() {
           </h6>
         </Sender>
       </Cont>
+      </div>
+):(
       <Cont2>
         <Receiver>
           <p className="from-them">
-            
+          {ReactEmoji.emojify(message)}
           </p>
         </Receiver>
       </Cont2>
-      <Cont>
-        <Sender>
-          <Div>
-            <p className="from-me">
-              <span></span>
-              <span></span>
-              <span></span>
-            </p>
-          </Div>
-        </Sender>
-      </Cont> */}
-    </Conversation>
+      // <Cont>
+      //   <Sender>
+      //     <Div>
+      //       <p className="from-me">
+      //         <span></span>
+      //         <span></span>
+      //         <span></span>
+      //       </p>
+      //     </Div>
+      //   </Sender>
+      // </Cont>
+    // </Conversation>
   );
 }
+
+export default Chatfield;
