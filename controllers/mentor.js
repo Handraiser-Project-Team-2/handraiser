@@ -160,7 +160,7 @@ module.exports = {
   edit_class: (req, res) => {
     const db = req.app.get("db");
     const { class_id, class_title, class_description, class_status } = req.body;
-
+    console.log('here')
     db.class
       .update(
         {

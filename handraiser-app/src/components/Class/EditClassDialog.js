@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 export default function EditClassDialog({ data, fetchMentorClass }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [switchBtn, setSwitchBtn] = useState(false);
+  const [switchBtn, setSwitchBtn] = useState(data.class_status === 'open' ? false:true);
 
   const [state, setState] = useState({
     class_id: data.class_id,
@@ -36,6 +36,10 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
     class_description: data.class_description,
     class_status: data.class_status
   });
+
+  useEffect(() => {
+    console.log(data.class_status === 'open')
+  }, [])
 
   const handleSwitch = event => {
     event.persist();
