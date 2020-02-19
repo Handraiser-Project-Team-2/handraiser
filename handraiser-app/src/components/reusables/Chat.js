@@ -31,7 +31,7 @@ export default function Chat() {
   useEffect(() => {
     socket = io(ENDPOINT);
 
-    socket.emit("join", { userid, username, room, image: avatar }, () => {});
+    socket.emit("joinRoom", { userid, username, room, image: avatar }, () => {});
 
     socket.on("old", ({ data }) => {
       // console.log(data);
@@ -76,10 +76,6 @@ export default function Chat() {
 //     socket.emit("not typing", data);
 //   };
 useEffect(() => {
-  socket.on("message", message => {
-    setMessages([...messages, message]);
-  });
-
   if (!cstate) {
     getData();
   }
@@ -91,14 +87,20 @@ useEffect(() => {
     setUsername(cstate.first_name);
   }
 
+}, [cstate])
+useEffect(() => {
+  socket.on("message", message => {
+    setMessages([...messages, message]);
+  });
+
   return () => {
     socket.emit("disconnect");
     socket.off();
   };
-}, [messages, cstate]);
+}, [messages]);
 
-    const sendMessage = evt => {
-      evt.preventDefault();
+    const sendMessage = event => {
+      event.preventDefault();
       const dateToday = new Date();
       setTimeout(() => {
         if (message) {
@@ -113,13 +115,14 @@ useEffect(() => {
             .then(res => {
               console.log(res);
             });
-        }else{
-          // console.log(socket.connected)
-          window.location.reload();
         }
+        // else{
+        //   // console.log(socket.connected)
+        //   window.location.reload();
+        // }
       }, 100);
 
-      setMessage("");
+      // setMessage("");
     };
   const emojiActive = () => {
     if (emoji === true) {
@@ -226,6 +229,9 @@ useEffect(() => {
 
 
   const rowDatahandler = rowData => {
+    if(socket.connected === false){
+      // window.location.reload()
+    }
     if (usertypeid === 3) {
       socket.emit("disconnect");
       socket.off();

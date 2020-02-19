@@ -117,7 +117,7 @@ massive({
 
     io.on("connection", socket => {
       const users = [];
-
+      const joinRoom =[];
       socket.on("AddRequest", (data, callback) => {
 
         io.to(data.room).emit("consolidateRequest", data);
@@ -141,7 +141,18 @@ massive({
 
       console.log("Online");
 
-      socket.on("join", ({userid, username, room, image }, callback) => {
+
+      socket.on("join", ({userid, username, room }, callback) => {
+        const join = {
+          id: socket.id,
+          userid: userid,
+          name: username,
+          room: room,
+        };
+        joinRoom.push(join);
+      });
+
+      socket.on("joinRoom", ({userid, username, room, image }, callback) => {
         const user = {
           id: socket.id,
           userid: userid,

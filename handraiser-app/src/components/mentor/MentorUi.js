@@ -509,7 +509,7 @@ console.log(messages)
                       width: "100%"
                     }}
                   >
-                    <form onSubmit={sendMsg}>
+                    <form onSubmit={sendMessage}>
                       {/* <TextField
                         id="outlined-textarea"
                         multiline
@@ -531,7 +531,7 @@ console.log(messages)
                           marginTop: "15px"
                         }}
                       >
-                        <Send onClick={sendMsg}>SEND</Send>
+                        <Send onClick={sendMessage}>SEND</Send>
                       </div>
                     </form>
                   </div>

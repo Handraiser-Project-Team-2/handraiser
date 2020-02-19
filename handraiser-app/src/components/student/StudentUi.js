@@ -369,7 +369,7 @@ export default function Student({
   //   }
   //   // setEmoji(true)
   // };
-
+console.log(messages)
   return (
     <React.Fragment>
       <Topbar />
