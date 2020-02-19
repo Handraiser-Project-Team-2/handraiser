@@ -87,7 +87,7 @@ export default function InQueue(props) {
 
   const { cstate, getData } = useContext(UserContext);
 
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   let socket = io(ENDPOINT);
 
   useEffect(() => {
@@ -109,7 +109,6 @@ export default function InQueue(props) {
   }, [ENDPOINT]);
 
   useEffect(() => {
-    console.log(props.search)
     update(props.search);
 
     socket.on("updateComponents", message => {
