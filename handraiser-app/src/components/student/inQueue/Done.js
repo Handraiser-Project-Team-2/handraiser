@@ -39,7 +39,7 @@ export default function InQueue(props) {
   const [concern, setConcern] = useState("");
   const open = Boolean(anchorEl);
 
-  const ENDPOINT = "172.60.62.208:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
   const { cstate, getData } = useContext(UserContext);
 
@@ -99,10 +99,7 @@ export default function InQueue(props) {
 
     if (concern) {
       axios
-        .delete(
-          `/api/student/request/${concern.concern.concern_id}`,
-          {}
-        )
+        .delete(`/api/student/request/${concern.concern.concern_id}`, {})
         .then(data => {
           socket.emit("handshake", { room: props.classReference });
         })
