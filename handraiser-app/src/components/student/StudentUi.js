@@ -143,7 +143,7 @@ const DivAnimation = styled.div`
 var jwtDecode = require("jwt-decode");
 let socket;
 export default function Student() {
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
+  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
@@ -154,8 +154,8 @@ export default function Student() {
   const [concernDescription, setConcernDescription] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
   const [userImage, setUserImage] = useState("");
-  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  const user_id = decoded.userid;
+  let decoded = "";
+  let user_id = "";
   const [name, setName] = useState("");
   const { cstate, getData } = useContext(UserContext);
   ///for chat
@@ -169,7 +169,7 @@ export default function Student() {
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
   const [disable, setDisable] = useState(false);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
@@ -188,6 +188,10 @@ export default function Student() {
       console.log('updates')
       existing();
     });
+
+    decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+
+    user_id = decoded.userid
 
   }, []);
 
@@ -217,8 +221,12 @@ export default function Student() {
                 history.push("/mentor");
               } else if (user_type === 1) {
                 history.push("/superadmin");
+              }else{
+                history.push("/")
               }
-            });
+            }).catch(err=>{
+              console.log(err)
+            })
           }
         })
         .catch(err => {
@@ -236,22 +244,17 @@ export default function Student() {
     if (!cstate) {
       getData();
     }
-
     existing();
 
-  
   }, [cstate, ENDPOINT]);
 
   useEffect(() => {
     socket.on("typing", data => {
-      // console.log(data)
       setfeed(data);
     });
     socket.on("not typing", data => {
       setfeed(data);
     });
-
-    
   });
 
   useEffect(() => {
@@ -325,6 +328,7 @@ export default function Student() {
         console.log(err);
       });
   };
+
   //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
     setActive(true);
@@ -350,11 +354,6 @@ export default function Student() {
       });
   };
 
-  ////join to room
-  // const join = () => {
-  //   setActive(true);
-  //   socket.emit("join", { username, room: "team2", image: avatar }, () => {});
-  // };
   useEffect(() => {
     socket.on("message", message => {
       setMessages([...messages, message]);

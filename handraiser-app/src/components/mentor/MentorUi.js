@@ -93,7 +93,7 @@ export default function Mentor() {
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
-  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  // const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
   ///for chat
@@ -105,7 +105,7 @@ export default function Mentor() {
   const [messages, setMessages] = useState([]);
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -230,6 +230,7 @@ export default function Mentor() {
   };
 
   useEffect(() => {
+
     if (sessionStorage.getItem("token")) {
       axios
         .post("/api/user/data", {
@@ -244,7 +245,7 @@ export default function Mentor() {
               title: "You cannot acces this page!"
             }).then(function() {
               if (user_type === 3) {
-                history.push("/student");
+                history.push("/class");
               } else if (user_type === 1) {
                 history.push("/superadmin");
               }
