@@ -185,7 +185,7 @@ export default function Student() {
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     socket.on("updateComponents", data => {
-      console.log('updates')
+      console.log("updates");
       existing();
     });
 
@@ -245,7 +245,6 @@ export default function Student() {
       getData();
     }
     existing();
-
   }, [cstate, ENDPOINT]);
 
   useEffect(() => {
@@ -279,7 +278,6 @@ export default function Student() {
   };
 
   const sendRequest = () => {
-
     axios
       .post(`/api/student/request/assistance`, {
         class_id: class_id,
@@ -300,7 +298,6 @@ export default function Student() {
           title: "Request sent to the mentor"
         })
           .then(flag => {
-
             existing();
 
             socket.emit(
@@ -432,7 +429,6 @@ export default function Student() {
   };
 
   const existing = () => {
-
     axios({
       method: "get",
       url: `/api/student/queue/order/${class_id}/${user_id}?search=${""}`
@@ -451,7 +447,7 @@ export default function Student() {
 
   return (
     <React.Fragment>
-      <Topbar />
+      <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
           <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />

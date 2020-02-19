@@ -27,10 +27,9 @@ export default function InQueue(rowDatahandler) {
 
   useEffect(() => {
     update(rowDatahandler.search);
-  }, [rowDatahandler.search])
+  }, [rowDatahandler.search]);
 
   useEffect(() => {
-
     socket.on("updateComponents", message => {
       update("");
     });
