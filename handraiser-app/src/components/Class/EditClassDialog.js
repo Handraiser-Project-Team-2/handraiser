@@ -37,10 +37,6 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
     class_status: data.class_status
   });
 
-  useEffect(() => {
-    console.log(data.class_status === 'open')
-  }, [])
-
   const handleSwitch = event => {
     event.persist();
     setSwitchBtn(event.target.checked);

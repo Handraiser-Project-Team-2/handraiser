@@ -408,7 +408,7 @@ export default function Student() {
       setEmoji(false);
     } else {
       setEmoji(true);
-    }
+    }7
     // setEmoji(true)
   };
 
