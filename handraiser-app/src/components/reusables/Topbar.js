@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Topbar({ showDiv }) {
+export default function Topbar(props) {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
 
@@ -84,7 +84,7 @@ export default function Topbar({ showDiv }) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let socket = io(ENDPOINT);
 
@@ -118,16 +118,18 @@ export default function Topbar({ showDiv }) {
   const [search, setSearch] = useState("");
 
   const getClassMember = () => {
-    axios({
-      method: "get",
-      url: `/api/classes/members/${class_id}`
-    })
-      .then(res => {
-        setClassMem(res.data);
+    if (class_id) {
+      axios({
+        method: "get",
+        url: `/api/classes/members/${class_id}`
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          setClassMem(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
   const [tempClassMem, setTempClassMem] = useState([]);
   const classMembers = classMem.concat(classInfo);
@@ -140,26 +142,6 @@ export default function Topbar({ showDiv }) {
         el.last_name.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1
     );
     setTempClassMem(filteredMembers);
-  };
-
-  // console.log(rowDatahandler);
-  const [selection, setSelection] = useState(false);
-  const [concernTitle, setConcernTitle] = useState("");
-  const [rowData, setRowData] = useState([]);
-  const [name, setName] = useState("");
-
-  const rowDatahandler = rowData => {
-    setSelection(true);
-    setConcernTitle(rowData.concern_title);
-    setRowData(rowData);
-    axios
-      .get(`/api/userprofile/${rowData.user_id}`, {})
-      .then(data => {
-        setName(data.data[0].first_name + " " + data.data[0].last_name);
-      })
-      .catch(err => {
-        console.log(err);
-      });
   };
 
   const sideList = side => (
@@ -207,35 +189,84 @@ export default function Topbar({ showDiv }) {
           </div>
         </ListItem>
         <Divider />
-        <ListItem>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <ExpansionPanel
-              expanded={expanded === "panel1"}
-              onChange={panelDrawer("panel1")}
-            >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2a-content"
-                id="panel2a-header"
+        {class_id ? (
+          <ListItem>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <ExpansionPanel
+                expanded={expanded === "panel1"}
+                onChange={panelDrawer("panel1")}
               >
-                <Typography className={classes.heading}>Classes</Typography>
-              </ExpansionPanelSummary>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel2a-content"
+                  id="panel2a-header"
+                >
+                  <Typography className={classes.heading}>Classes</Typography>
+                </ExpansionPanelSummary>
 
-              <ExpansionPanelDetails>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  {classData.map(classList => {
+                <ExpansionPanelDetails>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    {classData.map(classList => {
+                      return (
+                        <List
+                          key={classList.class_id}
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            cursor: "pointer"
+                          }}
+                          onClick={() => {
+                            cardClick(classList.class_id);
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              padding: "10px 10px 5px 5px"
+                            }}
+                          >
+                            <SchoolIcon style={{ color: "#372476" }} />
+                            <span style={{ paddingLeft: "10px" }}>
+                              {classList.class_title}
+                            </span>
+                          </span>
+                        </List>
+                      );
+                    })}
+                  </div>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+
+              <ExpansionPanel
+                expanded={expanded === "panel3"}
+                onChange={panelDrawer("panel3")}
+              >
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel3a-content"
+                  id="panel3a-header"
+                  className={classes.details}
+                >
+                  <Typography className={classes.heading}>
+                    Class Details
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  {classInfo.map((info, index) => {
                     return (
-                      <List
-                        key={classList.class_id}
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          cursor: "pointer"
-                        }}
-                        onClick={() => {
-                          cardClick(classList.class_id);
-                        }}
+                      <div
+                        key={index}
+                        style={{ display: "flex", flexDirection: "column" }}
                       >
+                        <span
+                          style={{
+                            padding: "5px 10px 5px 10px",
+                            color: "grey"
+                          }}
+                        >
+                          Name
+                        </span>
                         <span
                           style={{
                             display: "flex",
@@ -243,44 +274,225 @@ export default function Topbar({ showDiv }) {
                             padding: "10px 10px 5px 5px"
                           }}
                         >
-                          <SchoolIcon style={{ color: "#372476" }} />
-                          <span style={{ paddingLeft: "10px" }}>
-                            {classList.class_title}
-                          </span>
+                          <span>{info.class_title}</span>
                         </span>
-                      </List>
+                        <span
+                          style={{
+                            padding: "25px 10px 5px 10px",
+                            color: "grey"
+                          }}
+                        >
+                          Description
+                        </span>
+                        <span
+                          style={{
+                            padding: "10px 10px 8px 9px",
+                            color: "darkblue"
+                          }}
+                        >
+                          {info.class_description}
+                        </span>
+                        <span
+                          style={{
+                            padding: "25px 10px 5px 10px",
+                            color: "grey"
+                          }}
+                        >
+                          Date Created
+                        </span>
+                        <span style={{ padding: "10px 10px 8px 9px" }}>
+                          {info.class_date_created}
+                        </span>
+                      </div>
                     );
                   })}
-                </div>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-
-            <ExpansionPanel
-              expanded={expanded === "panel3"}
-              onChange={panelDrawer("panel3")}
-            >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel3a-content"
-                id="panel3a-header"
-                className={classes.details}
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+              <ExpansionPanel
+                expanded={expanded === "panel4"}
+                onChange={panelDrawer("panel4")}
               >
-                <Typography className={classes.heading}>
-                  Class Details
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                {classInfo.map((info, index) => {
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel4a-content"
+                  id="panel3a-header"
+                  className={classes.members}
+                >
+                  <Typography className={classes.heading}>
+                    Class Members
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails
+                  style={{
+                    display: "flex",
+                    flexDirection: "column"
+                  }}
+                >
+                  {tempClassMem.length === 0
+                    ? classMembers.map((member, index) => {
+                        return (
+                          <List key={index}>
+                            <ListItem>
+                              <Avatar
+                                src={member.image}
+                                style={{
+                                  marginLeft: "-17px"
+                                }}
+                              ></Avatar>
+
+                              {member.user_type_id === 4 ? (
+                                <span
+                                  style={{
+                                    marginLeft: "8px",
+                                    fontWeight: "bold"
+                                  }}
+                                >
+                                  {member.first_name +
+                                    " " +
+                                    member.last_name +
+                                    " (Mentor)"}
+                                </span>
+                              ) : (
+                                <span
+                                  style={{
+                                    marginLeft: "8px",
+                                    fontWeight: "bold"
+                                  }}
+                                >
+                                  {member.first_name + " " + member.last_name}
+                                </span>
+                              )}
+
+                              {member.user_status === 1 ? (
+                                <status-indicator
+                                  positive
+                                  style={{
+                                    marginLeft: "10px"
+                                  }}
+                                ></status-indicator>
+                              ) : (
+                                <status-indicator
+                                  style={{
+                                    marginLeft: "10px"
+                                  }}
+                                ></status-indicator>
+                              )}
+                            </ListItem>
+                          </List>
+                        );
+                      })
+                    : tempClassMem.map((member, index) => {
+                        return (
+                          <List key={index}>
+                            <ListItem>
+                              <Avatar
+                                src={member.image}
+                                style={{
+                                  marginLeft: "-17px"
+                                }}
+                              ></Avatar>
+
+                              {member.user_type_id === 4 ? (
+                                <span
+                                  style={{
+                                    marginLeft: "8px",
+                                    fontWeight: "bold"
+                                  }}
+                                >
+                                  {member.first_name +
+                                    " " +
+                                    member.last_name +
+                                    " (Mentor)"}
+                                </span>
+                              ) : (
+                                <span
+                                  style={{
+                                    marginLeft: "8px",
+                                    fontWeight: "bold"
+                                  }}
+                                >
+                                  {member.first_name + " " + member.last_name}
+                                </span>
+                              )}
+
+                              {member.user_status === 1 ? (
+                                <status-indicator
+                                  positive
+                                  style={{
+                                    marginLeft: "10px"
+                                  }}
+                                ></status-indicator>
+                              ) : (
+                                <status-indicator
+                                  style={{
+                                    marginLeft: "10px"
+                                  }}
+                                ></status-indicator>
+                              )}
+                            </ListItem>
+                          </List>
+                        );
+                      })}
+                  <div
+                    className={classes.root}
+                    style={{
+                      display: "flex"
+                    }}
+                  >
+                    <TextField
+                      id="outlined-basic"
+                      placeholder="Search member..."
+                      fullWidth
+                      onChange={e => handleSearch(e)}
+                    />
+                  </div>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+              <div className={classes.requests}>
+                {userProfile.user_type_id === 3 ? (
+                  <StudentTabs
+                    className={classes.student}
+                    classReference={props.classReference}
+                    rowDatahandler={props.rowDatahandler}
+                  />
+                ) : (
+                  <MentorTabs
+                    className={classes.mentor}
+                    rowDatahandler={props.rowDatahandler}
+                    class_id={class_id}
+                  />
+                )}
+              </div>
+            </div>
+          </ListItem>
+        ) : (
+          <ExpansionPanel
+            expanded={expanded === "panel1"}
+            onChange={panelDrawer("panel1")}
+          >
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel2a-content"
+              id="panel2a-header"
+            >
+              <Typography className={classes.heading}>Classes</Typography>
+            </ExpansionPanelSummary>
+
+            <ExpansionPanelDetails>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {classData.map(classList => {
                   return (
-                    <div
-                      key={index}
-                      style={{ display: "flex", flexDirection: "column" }}
+                    <List
+                      key={classList.class_id}
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        cursor: "pointer"
+                      }}
+                      onClick={() => {
+                        cardClick(classList.class_id);
+                      }}
                     >
-                      <span
-                        style={{ padding: "5px 10px 5px 10px", color: "grey" }}
-                      >
-                        Name
-                      </span>
                       <span
                         style={{
                           display: "flex",
@@ -288,191 +500,18 @@ export default function Topbar({ showDiv }) {
                           padding: "10px 10px 5px 5px"
                         }}
                       >
-                        <span>{info.class_title}</span>
+                        <SchoolIcon style={{ color: "#372476" }} />
+                        <span style={{ paddingLeft: "10px" }}>
+                          {classList.class_title}
+                        </span>
                       </span>
-                      <span
-                        style={{ padding: "25px 10px 5px 10px", color: "grey" }}
-                      >
-                        Description
-                      </span>
-                      <span
-                        style={{
-                          padding: "10px 10px 8px 9px",
-                          color: "darkblue"
-                        }}
-                      >
-                        {info.class_description}
-                      </span>
-                      <span
-                        style={{ padding: "25px 10px 5px 10px", color: "grey" }}
-                      >
-                        Date Created
-                      </span>
-                      <span style={{ padding: "10px 10px 8px 9px" }}>
-                        {info.class_date_created}
-                      </span>
-                    </div>
+                    </List>
                   );
                 })}
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel
-              expanded={expanded === "panel4"}
-              onChange={panelDrawer("panel4")}
-            >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel4a-content"
-                id="panel3a-header"
-                className={classes.members}
-              >
-                <Typography className={classes.heading}>
-                  Class Members
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails
-                style={{
-                  display: "flex",
-                  flexDirection: "column"
-                }}
-              >
-                {tempClassMem.length === 0
-                  ? classMembers.map((member, index) => {
-                      return (
-                        <List key={index}>
-                          <ListItem>
-                            <Avatar
-                              src={member.image}
-                              style={{
-                                marginLeft: "-17px"
-                              }}
-                            ></Avatar>
-
-                            {member.user_type_id === 4 ? (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
-                                {member.first_name +
-                                  " " +
-                                  member.last_name +
-                                  " (Mentor)"}
-                              </span>
-                            ) : (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
-                                {member.first_name + " " + member.last_name}
-                              </span>
-                            )}
-
-                            {member.user_status === 1 ? (
-                              <status-indicator
-                                positive
-                                style={{
-                                  marginLeft: "10px"
-                                }}
-                              ></status-indicator>
-                            ) : (
-                              <status-indicator
-                                style={{
-                                  marginLeft: "10px"
-                                }}
-                              ></status-indicator>
-                            )}
-                          </ListItem>
-                        </List>
-                      );
-                    })
-                  : tempClassMem.map((member, index) => {
-                      return (
-                        <List key={index}>
-                          <ListItem>
-                            <Avatar
-                              src={member.image}
-                              style={{
-                                marginLeft: "-17px"
-                              }}
-                            ></Avatar>
-
-                            {member.user_type_id === 4 ? (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
-                                {member.first_name +
-                                  " " +
-                                  member.last_name +
-                                  " (Mentor)"}
-                              </span>
-                            ) : (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
-                                {member.first_name + " " + member.last_name}
-                              </span>
-                            )}
-
-                            {member.user_status === 1 ? (
-                              <status-indicator
-                                positive
-                                style={{
-                                  marginLeft: "10px"
-                                }}
-                              ></status-indicator>
-                            ) : (
-                              <status-indicator
-                                style={{
-                                  marginLeft: "10px"
-                                }}
-                              ></status-indicator>
-                            )}
-                          </ListItem>
-                        </List>
-                      );
-                    })}
-                <div
-                  className={classes.root}
-                  style={{
-                    display: "flex"
-                  }}
-                >
-                  <TextField
-                    id="outlined-basic"
-                    placeholder="Search member..."
-                    fullWidth
-                    onChange={e => handleSearch(e)}
-                  />
-                </div>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <div className={classes.requests}>
-              {userProfile.user_type_id === 3 ? (
-                <StudentTabs
-                  className={classes.student}
-                  classReference={class_id}
-                  rowDatahandler={rowDatahandler}
-                />
-              ) : (
-                <MentorTabs
-                  className={classes.mentor}
-                  rowDatahandler={rowDatahandler}
-                  class_id={class_id}
-                />
-              )}
-            </div>
-          </div>
-        </ListItem>
+              </div>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        )}
       </List>
     </div>
   );
