@@ -46,13 +46,13 @@ export const TableCont = props => {
               <status-indicator
                 pulse
                 positive
-                style={{ marginRight: "10px", marginLeft: "10px" }}
+                style={{ marginRight: "10px" }}
               />
               <span>Active</span>
             </span>
           ) : (
             <span>
-              <status-indicator negative style={{ marginRight: "10px" }} />
+              <status-indicator style={{ marginRight: "10px" }} />
               <span>Inactive</span>
             </span>
           )
@@ -102,25 +102,21 @@ export const TableCont = props => {
         title: "Status",
         field: "user_status",
         render: row =>
-          tabValue === 1 ? (
-            row.user_status === 1 ? (
-              <span>
-                <status-indicator
-                  active
-                  pulse
-                  positive
-                  style={{ marginRight: "10px", marginLeft: "10px" }}
-                />
-                <span>Active</span>
-              </span>
-            ) : (
-              <span>
-                <status-indicator negative style={{ marginRight: "10px" }} />
-                <span>Inactive</span>
-              </span>
-            )
+          row.user_status === 1 ? (
+            <span>
+              <status-indicator
+                active
+                pulse
+                positive
+                style={{ marginRight: "10px" }}
+              />
+              <span>Active</span>
+            </span>
           ) : (
-            ""
+            <span>
+              <status-indicator style={{ marginRight: "10px" }} />
+              <span>Inactive</span>
+            </span>
           )
       }
     ],

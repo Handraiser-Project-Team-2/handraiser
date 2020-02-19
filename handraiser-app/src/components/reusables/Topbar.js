@@ -84,7 +84,7 @@ export default function Topbar({ showDiv }) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   let socket = io(ENDPOINT);
 

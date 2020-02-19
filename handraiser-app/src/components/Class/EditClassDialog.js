@@ -9,6 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import Switch from "@material-ui/core/Switch";
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -27,17 +28,32 @@ const useStyles = makeStyles(theme => ({
 export default function EditClassDialog({ data, fetchMentorClass }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [switchBtn, setSwitchBtn] = useState(false);
+
+  const [state, setState] = useState({
+    class_id: data.class_id,
+    class_title: data.class_title,
+    class_description: data.class_description,
+    class_status: data.class_status
+  });
+
+  const handleSwitch = event => {
+    event.persist();
+    setSwitchBtn(event.target.checked);
+
+    setState(prevState => {
+      return {
+        ...prevState,
+        class_status: event.target.checked ? "closed" : "open"
+      };
+    });
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
     console.log(data.class_id);
   };
 
-  const [state, setState] = useState({
-    class_id: data.class_id,
-    class_title: data.class_title,
-    class_description: data.class_description
-  });
   const [text, setText] = useState({
     class_title: data.class_title.length,
     class_description: data.class_description.length
@@ -122,6 +138,13 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
               }}
             />
             <span className={classes.span}>{text.class_description}/60</span>
+
+            <span>Classroom is now {switchBtn ? "Closed" : "Open"}: </span>
+            <Switch
+              checked={switchBtn}
+              onChange={e => handleSwitch(e)}
+              inputProps={{ "aria-label": "secondary checkbox" }}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">

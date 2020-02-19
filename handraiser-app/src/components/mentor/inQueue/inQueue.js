@@ -12,7 +12,7 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   let socket = io(ENDPOINT);
 
   useEffect(() => {
@@ -63,6 +63,8 @@ export default function InQueue(rowDatahandler) {
           ? concernsData.map((data, index) => {
               return (
                 <QueQueStub
+                  update={update}
+                  key={index}
                   rowDatahandler={rowDatahandler}
                   data={data}
                   index={index}
