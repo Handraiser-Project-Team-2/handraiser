@@ -10,7 +10,6 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Typography, Paper } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
@@ -39,7 +38,7 @@ export default function InQueue(props) {
   const [concern, setConcern] = useState("");
   const open = Boolean(anchorEl);
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
   const { cstate, getData } = useContext(UserContext);
 
@@ -99,10 +98,7 @@ export default function InQueue(props) {
 
     if (concern) {
       axios
-        .delete(
-          `/api/student/request/${concern.concern.concern_id}`,
-          {}
-        )
+        .delete(`/api/student/request/${concern.concern.concern_id}`, {})
         .then(data => {
           socket.emit("handshake", { room: props.classReference });
         })
@@ -171,7 +167,16 @@ export default function InQueue(props) {
                 </Menu>
                 <ListItemText
                   primary={
-                    <Typography style={{ fontWeight: "bold" }}>
+                    <Typography
+                      style={{
+                        display: "inline-block",
+                        overflow: " hidden",
+                        "text-overflow": "ellipsis",
+                        "white-space": " nowrap",
+                        width: "250px",
+                        fontWeight: "bold"
+                      }}
+                    >
                       {data.concern.concern_title}
                     </Typography>
                   }
@@ -182,6 +187,12 @@ export default function InQueue(props) {
                         variant="body2"
                         className={classes.inline}
                         style={{
+                          display: "inline-block",
+                          overflow: " hidden",
+                          "text-overflow": "ellipsis",
+                          "white-space": " nowrap",
+                          width: "250px",
+
                           color: "grey"
                         }}
                       >

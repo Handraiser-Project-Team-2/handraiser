@@ -113,7 +113,16 @@ export default function InQueue({ class_id, search }) {
                 </Menu>
                 <ListItemText
                   primary={
-                    <Typography style={{ fontWeight: "bold" }}>
+                    <Typography
+                      style={{
+                        display: "inline-block",
+                        overflow: " hidden",
+                        "text-overflow": "ellipsis",
+                        "white-space": " nowrap",
+                        width: "250px",
+                        fontWeight: "bold"
+                      }}
+                    >
                       {data.first_name + " " + data.last_name}
                     </Typography>
                   }
@@ -124,6 +133,12 @@ export default function InQueue({ class_id, search }) {
                         variant="body2"
                         className={classes.inline}
                         style={{
+                          display: "inline-block",
+                          overflow: " hidden",
+                          "text-overflow": "ellipsis",
+                          "white-space": " nowrap",
+                          width: "250px",
+
                           color: "#707070"
                         }}
                       >

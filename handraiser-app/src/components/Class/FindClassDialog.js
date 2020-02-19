@@ -113,7 +113,6 @@ export default function ResponsiveDialog(props) {
             required
             fullWidth
             autoFocus
-            id="standard-required"
             label="Class Code"
             variant="outlined"
             defaultValue={input}

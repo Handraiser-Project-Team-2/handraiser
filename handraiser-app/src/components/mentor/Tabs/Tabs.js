@@ -49,7 +49,6 @@ const TabBtn = ({ class_id, rowDatahandler }) => {
             }}
           >
             <TextField
-              id="outlined-basic"
               placeholder="Search..."
               fullWidth
               onChange={e => setSearch(e.target.value)}
@@ -69,6 +68,7 @@ const TabBtn = ({ class_id, rowDatahandler }) => {
             label="IN QUEUE"
             onClick={() => setHide(hide === false ? hide : !hide)}
           />
+
           <Tab
             label="CLOSED"
             onClick={() => setHide(hide === true ? hide : !hide)}

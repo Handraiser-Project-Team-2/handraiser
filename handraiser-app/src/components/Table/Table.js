@@ -4,9 +4,11 @@ import MaterialTable from "material-table";
 // import Button from "@material-ui/core/Button";
 // import { Tooltip } from "@material-ui/core";
 import axios from "axios";
+import Fade from "@material-ui/core/Fade";
+
 import "../../App.css";
 
-import { TableStyle, TableStyle2 } from "../Styles/Styles";
+import { TableStyle, TableStyle2 } from "../../Styles/Styles";
 
 // COMPONENTS
 import ViewMentorDialog from "./Mentor/ViewMentorDIalog";
@@ -14,6 +16,8 @@ import ViewStudentDialog from "./Student/ViewStudentDialog";
 
 export const TableCont = props => {
   const { tabValue } = props;
+  const [checked, setChecked] = React.useState(false);
+
   const [tableData, setTableData] = useState({
     studentCol: [
       {

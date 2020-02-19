@@ -1,5 +1,5 @@
 import React from "react";
-import { Conversation } from "../Styles/Styles";
+import { Conversation } from "../../Styles/Styles";
 import styled from "styled-components";
 
 const Cont = styled.div`

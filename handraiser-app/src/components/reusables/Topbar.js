@@ -10,7 +10,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Drawer from "@material-ui/core/Drawer";
-import { Nav } from "../Styles/Styles";
+import { Nav } from "../../Styles/Styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
@@ -19,33 +19,48 @@ import Avatar from "@material-ui/core/Avatar";
 import { UserContext } from "../Contexts/UserContext";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
-import { Divider } from "@material-ui/core";
+import { Divider, Tooltip, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import ClassIcon from "@material-ui/icons/Class";
 import CloseIcon from "@material-ui/icons/Close";
 
-import InQueue from "../student/inQueue/inQueue";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import io from "socket.io-client";
 
 var jwtDecode = require("jwt-decode");
 
 const useStyles = makeStyles(theme => ({
+  tab: {
+    flexGrow: 1,
+    width: "300px"
+  },
   large: {
     width: theme.spacing(10),
     height: theme.spacing(10)
   },
   heading: {
     color: "black"
+  },
+  details: {
+    "@media (min-width: 1440px)": {
+      display: "none"
+    }
+  },
+  members: {
+    "@media (min-width: 1440px)": {
+      display: "none"
+    }
+  },
+  requests: {
+    "@media (min-width: 770px)": {
+      display: "none"
+    }
   }
 }));
 
-export default function Topbar() {
+export default function Topbar({ showDiv }) {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
 
@@ -61,20 +76,30 @@ export default function Topbar() {
   const user_id = decoded.userid;
   const { setData } = useContext(UserContext);
   const [expanded, setExpanded] = React.useState(false);
+  const [hide, setHide] = useState(false);
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  function a11yProps(index) {
+    return {
+      id: `scrollable-auto-tab-${index}`,
+      "aria-controls": `scrollable-auto-tabpanel-${index}`
+    };
+  }
 
   const panelDrawer = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let socket = io(ENDPOINT);
 
   const toggleDrawer = (side, open) => event => {
     setState({ left: true, [side]: open });
-  };
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
   };
 
   const sideList = side => (
@@ -145,73 +170,72 @@ export default function Topbar() {
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
+
             <ExpansionPanel
-              expanded={expanded === "panel2"}
-              onChange={panelDrawer("panel2")}
+              expanded={expanded === "panel3"}
+              onChange={panelDrawer("panel3")}
             >
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel3a-content"
                 id="panel3a-header"
+                className={classes.details}
               >
-                <Typography className={classes.heading}>Requests</Typography>
+                <Typography className={classes.heading}>
+                  Class Details
+                </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <ExpansionPanel>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      InQueue
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <List>
-                          <ListItem
-                            button
-                            selected={selectedIndex === 0}
-                            onClick={event => handleListItemClick(event, 0)}
-                          >
-                            <ListItemText primary="Request Title" />
-                          </ListItem>
-                        </List>
-                      </div>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
-                  <ExpansionPanel>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      All
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <List>
-                          <ListItem
-                            button
-                            selected={selectedIndex === 0}
-                            onClick={event => handleListItemClick(event, 0)}
-                          >
-                            <ListItemText primary="Request Title" />
-                          </ListItem>
-                        </List>
-                      </div>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
-                  <ExpansionPanel>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      Closed
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <List>
-                          <ListItem
-                            button
-                            selected={selectedIndex === 0}
-                            onClick={event => handleListItemClick(event, 0)}
-                          >
-                            <ListItemText primary="Request Title" />
-                          </ListItem>
-                        </List>
-                      </div>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column"
+                  }}
+                >
+                  <span style={{ fontWeight: "bold", marginBottom: "10px" }}>
+                    Name:{" "}
+                  </span>
+                  <span style={{ fontWeight: "bold", marginBottom: "10px" }}>
+                    Description:{" "}
+                  </span>
+                  <span style={{ fontWeight: "bold" }}>Date Created: </span>
+                </div>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ExpansionPanel
+              expanded={expanded === "panel4"}
+              onChange={panelDrawer("panel4")}
+            >
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel4a-content"
+                id="panel3a-header"
+                className={classes.members}
+              >
+                <Typography className={classes.heading}>
+                  Class Members
+                </Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row"
+                  }}
+                >
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      marginBottom: "10px",
+                      marginRight: "10px"
+                    }}
+                  >
+                    Lebron James
+                  </span>
+                  <Status-indicator
+                    positive
+                    style={{ marginTop: "10px", marginTop: "5px" }}
+                  ></Status-indicator>
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
@@ -278,7 +302,7 @@ export default function Topbar() {
             </Drawer>
             <Typography variant="h6">Handraiser</Typography>
           </div>
-          <div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
             <IconButton
               aria-label="account of current user"
               edge="end"
@@ -298,8 +322,6 @@ export default function Topbar() {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem></MenuItem>
-
             <MenuItem>
               <GoogleLogout
                 clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"

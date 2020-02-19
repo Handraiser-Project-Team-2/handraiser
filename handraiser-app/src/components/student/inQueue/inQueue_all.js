@@ -8,9 +8,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
 import { Typography, Paper } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+
 import axios from "axios";
 import { UserContext } from "../../Contexts/UserContext";
 import io from "socket.io-client";
@@ -60,7 +58,7 @@ export default function InQueue(props) {
 
   const { cstate, getData } = useContext(UserContext);
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
 
   useEffect(() => {
@@ -139,7 +137,16 @@ export default function InQueue(props) {
 
                 <ListItemText
                   primary={
-                    <Typography style={{ fontWeight: "bold" }}>
+                    <Typography
+                      style={{
+                        display: "inline-block",
+                        overflow: " hidden",
+                        "text-overflow": "ellipsis",
+                        "white-space": " nowrap",
+                        width: "250px",
+                        fontWeight: "bold"
+                      }}
+                    >
                       {concern.concern.first_name +
                         " " +
                         concern.concern.last_name}
@@ -152,6 +159,12 @@ export default function InQueue(props) {
                         variant="body2"
                         className={classes.inline}
                         style={{
+                          display: "inline-block",
+                          overflow: " hidden",
+                          "text-overflow": "ellipsis",
+                          "white-space": " nowrap",
+                          width: "250px",
+
                           color: "grey"
                         }}
                       >

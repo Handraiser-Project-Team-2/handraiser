@@ -33,8 +33,7 @@ const useStyles = makeStyles(theme => ({
     height: "40px",
     border: "1px solid lightgrey",
     borderTop: "10px solid #372476"
-  },
-  active: { backgroundColor: "pink" }
+  }
 }));
 
 export default function InQueue(rowDatahandler) {
@@ -43,7 +42,7 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
 
   const rowDataHandlerChild2 = rowDatahandler.rowDatahandler;
@@ -109,13 +108,13 @@ export default function InQueue(rowDatahandler) {
               return (
                 <div key={index}>
                   <ListItem
+                    selected={selectedIndex === index}
                     button
                     style={{
                       borderBottom: "0.5px solid #abababde",
-                      padding: "10px 15px",
-                      backgroundColor: "whitesmoke"
+                      padding: "10px 15px"
                     }}
-                    onClick={() => handleConcernData(data)}
+                    onClick={() => handleConcernData(data, index)}
                   >
                     <ListItemAvatar>
                       <div>
@@ -157,7 +156,16 @@ export default function InQueue(rowDatahandler) {
                     </Menu>
                     <ListItemText
                       primary={
-                        <Typography style={{ fontWeight: "bold" }}>
+                        <Typography
+                          style={{
+                            display: "inline-block",
+                            overflow: " hidden",
+                            "text-overflow": "ellipsis",
+                            "white-space": " nowrap",
+                            width: "250px",
+                            fontWeight: "bold"
+                          }}
+                        >
                           {data.first_name + " " + data.last_name}
                         </Typography>
                       }
@@ -168,6 +176,11 @@ export default function InQueue(rowDatahandler) {
                             variant="body2"
                             className={classes.inline}
                             style={{
+                              display: "inline-block",
+                              overflow: " hidden",
+                              "text-overflow": "ellipsis",
+                              "white-space": " nowrap",
+                              width: "250px",
                               color: "#707070"
                             }}
                           >

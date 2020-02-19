@@ -7,14 +7,12 @@ import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
-import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import { useHistory, useParams } from "react-router-dom";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import Input from "../reusables/Input";
 import {
   Div,
   // Nav,
@@ -31,15 +29,13 @@ import {
   // Div2,
   // Shared,
   Request
-} from "../Styles/Styles";
+} from "../../Styles/Styles";
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
-import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import styled from "styled-components";
-import { Picker } from "emoji-mart";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
   span: {
@@ -50,8 +46,38 @@ const useStyles = makeStyles(theme => ({
   scrolltobottom: {
     padding: "5% 0",
     overflow: "auto",
-    height: "39.7em",
-    backgroundColor: "#eaeaea"
+    height: "40.9em",
+    backgroundColor: "#eaeaea",
+    "@media (height: 894px)": {
+      height: "35.4em"
+    },
+    "@media (height: 1625px)": {
+      height: "81em"
+    },
+    "@media (height: 1366px)": {
+      height: "64.8em"
+    },
+    "@media (width: 360px) and (height: 640px)": {
+      height: "19.5em"
+    },
+    "@media (width: 411px) and (height: 731px)": {
+      height: "25.2em"
+    },
+    "@media (width: 411px) and (height: 823px)": {
+      height: "31em"
+    },
+    "@media (width: 320px) and (height: 568px)": {
+      height: "15em"
+    },
+    "@media (width: 375px) and (height: 667px)": {
+      height: "21.2em"
+    },
+    "@media (width: 414px) and (height: 736px)": {
+      height: "25.5em"
+    },
+    "@media (width: 375px) and (height: 812px)": {
+      height: "30.3em"
+    }
   },
   cont2: {
     display: " flex",
@@ -117,7 +143,7 @@ const DivAnimation = styled.div`
 var jwtDecode = require("jwt-decode");
 let socket;
 export default function Student() {
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
+  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
@@ -143,7 +169,8 @@ export default function Student() {
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
   const [disable, setDisable] = useState(false);
-  const ENDPOINT = "localhost:5000";
+  const [show, setShow] = useState(true);
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
 
   const handleMenu = event => {
@@ -280,10 +307,7 @@ export default function Student() {
     setConcernTitle(rowData.concern.concern_title);
 
     axios
-      .get(
-        `/api/userprofile/${rowData.concern.user_id}`,
-        {}
-      )
+      .get(`/api/userprofile/${rowData.concern.user_id}`, {})
       .then(data => {
         setName(data.data[0].first_name + " " + data.data[0].last_name);
       })
@@ -459,7 +483,6 @@ export default function Student() {
               </div>
             </Option>
           </Subject>
-
           <ScrollToBottom className={classes.scrolltobottom}>
             {messages.map((message, i) => (
               <div key={i} style={{ overflowWrap: "break-word" }}>

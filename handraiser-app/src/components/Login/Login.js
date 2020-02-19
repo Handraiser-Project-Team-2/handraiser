@@ -12,13 +12,13 @@ import {
   LoginFooter,
   Continue,
   Title
-} from "../Styles/Styles";
+} from "../../Styles/Styles";
 import io from "socket.io-client";
 
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
   const responseGoogle = response => {
     if (response.googleId) {
@@ -84,7 +84,6 @@ export default function Login(props) {
     <LoginDiv>
       <LoginPic>
         <LinearProgress
-          variant="determinate"
           color="secondary"
           style={{
             display: logged ? "block" : "none",

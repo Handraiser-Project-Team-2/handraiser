@@ -70,7 +70,7 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let socket = io(ENDPOINT);
   const [initial, setInitial] = useState();
@@ -132,20 +132,15 @@ export default function InQueue(props) {
     setOpenEdit(false);
 
     axios
-      .get(
-        `/api/concern_list/${concern.concern.concern_id}`
-      )
+      .get(`/api/concern_list/${concern.concern.concern_id}`)
       .then(data => {
         axios
-          .patch(
-            `/api/concern_list/${data.data[0].concern_id}`,
-            {
-              concern_id: data.data[0].concern_id,
-              concern_title: concernTitle,
-              concern_description: concernDescription,
-              concern_status: data.data[0].concern_status
-            }
-          )
+          .patch(`/api/concern_list/${data.data[0].concern_id}`, {
+            concern_id: data.data[0].concern_id,
+            concern_title: concernTitle,
+            concern_description: concernDescription,
+            concern_status: data.data[0].concern_status
+          })
           .then(data => {
             socket.emit("handshake", { room: props.classReference });
           })
@@ -173,10 +168,7 @@ export default function InQueue(props) {
 
     // if (concern.concern) {
     axios
-      .delete(
-        `/api/student/request/${concern.concern.concern_id}`,
-        {}
-      )
+      .delete(`/api/student/request/${concern.concern.concern_id}`, {})
       .then(data => {
         socket.emit("handshake", { room: props.classReference });
 
@@ -236,7 +228,16 @@ export default function InQueue(props) {
 
                     <ListItemText
                       primary={
-                        <Typography style={{ fontWeight: "bold" }}>
+                        <Typography
+                          style={{
+                            display: "inline-block",
+                            overflow: " hidden",
+                            "text-overflow": "ellipsis",
+                            "white-space": " nowrap",
+                            width: "250px",
+                            fontWeight: "bold"
+                          }}
+                        >
                           {concern.concern.concern_title}
                         </Typography>
                       }
