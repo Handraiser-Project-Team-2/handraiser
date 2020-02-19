@@ -101,7 +101,7 @@ export default function StudentProfile({ profileData, classData }) {
                 gutterBottom
                 style={{ borderRadius: "10px", color: "#372476" }}
               >
-                Students Helped
+                Number of Request
               </Typography>
             </Grid>
             <Grid item xs={12} sm={4} style={{ textAlign: "center" }}>
@@ -113,7 +113,7 @@ export default function StudentProfile({ profileData, classData }) {
                 gutterBottom
                 style={{ borderRadius: "10px", color: "#372476" }}
               >
-                Students Handled
+                Request Resolved
               </Typography>
             </Grid>
           </Grid>

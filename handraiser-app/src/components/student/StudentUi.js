@@ -7,14 +7,12 @@ import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
-import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import { useHistory, useParams } from "react-router-dom";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import Input from "../reusables/Input";
 import {
   Div,
   // Nav,
@@ -37,9 +35,7 @@ import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
-import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import styled from "styled-components";
-import { Picker } from "emoji-mart";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
   span: {
@@ -224,7 +220,7 @@ export default function Student() {
         concern_description: message
       })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
 
         // add websocket here to reflect new request;
 
@@ -329,7 +325,7 @@ export default function Student() {
     });
 
     socket.on("old", ({ data }) => {
-      console.log(data);
+      // console.log(data);
       setMessages(data);
     });
 
@@ -363,7 +359,7 @@ export default function Student() {
             user_id: userid
           })
           .then(res => {
-            // console.log(res);
+            console.log(res);
           });
       }
     }, 100);
