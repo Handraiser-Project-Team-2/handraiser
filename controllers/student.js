@@ -21,20 +21,33 @@ module.exports = {
               //if yes send reference data
               res.status(201).json({ ...classref });
             } else {
-              //if not then register
+              //if not check availability , if open then register
+
               console.log(data);
-              db.classroom
-                .save({
-                  class_id: data.class_id,
-                  user_id: parseToken.userid,
-                  date_entered: date
-                }) // register to a certain class
+              db.class
+                .findOne({ class_id: data.class_id })
                 .then(data => {
-                  res.status(201).json(data);
+                  if (data.class_status === "open") {
+                    db.classroom
+                      .save({
+                        class_id: data.class_id,
+                        user_id: parseToken.userid,
+                        date_entered: date
+                      }) // register to a certain class
+                      .then(data => {
+                        res.status(201).json(data);
+                      })
+                      .catch(err => {
+                        console.log(err);
+                        res.status(422).end();
+                      });
+                  }else{
+                    res.status(201).json({message:'Subject is now closed'});
+                  }
                 })
                 .catch(err => {
+                  res.status(503).end();
                   console.log(err);
-                  res.status(422).end();
                 });
             }
           })

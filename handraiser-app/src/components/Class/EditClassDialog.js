@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -21,21 +21,38 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(2)
   },
   edit: {
-    color: "grey"
+    color: "white",
+    "&:hover":{
+      color: '#ffffAA'
+    }
   }
 }));
 
 export default function EditClassDialog({ data, fetchMentorClass }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [switchBtn, setSwitchBtn] = useState(false);
 
-  const [state, setState] = useState({
-    class_id: data.class_id,
-    class_title: data.class_title,
-    class_description: data.class_description,
-    class_status: data.class_status
-  });
+  const [switchBtn, setSwitchBtn] = useState();
+
+  const [state, setState] = useState();
+
+  useEffect(() => {
+
+    setState({
+      class_id: data.class_id,
+      class_title: data.class_title,
+      class_description: data.class_description,
+      class_status: data.class_status
+    })
+
+    setSwitchBtn(data.class_status === 'open' ? false:true)
+
+    return () => {
+      setState();
+      setSwitchBtn(false)
+    };
+
+  }, [data])
 
   const handleSwitch = event => {
     event.persist();
@@ -72,6 +89,8 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
 
   const handleClose = () => {
     setOpen(false);
+    setState();
+      setSwitchBtn(false)
   };
 
   const handleSubmit = e => {

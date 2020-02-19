@@ -26,10 +26,10 @@ export default function InQueue(rowDatahandler) {
   }, [ENDPOINT]);
 
   useEffect(() => {
-    if (rowDatahandler.search || !concernsData) {
-      update(rowDatahandler.search);
-    }
+    update(rowDatahandler.search);
+  }, [rowDatahandler.search]);
 
+  useEffect(() => {
     socket.on("updateComponents", message => {
       update("");
     });
@@ -41,7 +41,7 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [rowDatahandler.search, ENDPOINT, concernsData]);
+  }, [ENDPOINT, concernsData]);
 
   const update = data => {
     axios({

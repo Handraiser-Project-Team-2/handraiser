@@ -71,14 +71,10 @@ const TabBtn = props => {
           <Tab
             label="CLOSED"
             onClick={() => setHide(hide === true ? hide : !hide)}
-          />
-          <Tab
-            label="ALL CONCERN"
-            onClick={() => setHide(hide === true ? hide : !hide)}
-          />
+          />  
         </Tabs>
       </Paper>
-
+      
       <TabPanel value={tabValue} index={0}>
         <InQueue
           rowDatahandler={props.rowDatahandler}

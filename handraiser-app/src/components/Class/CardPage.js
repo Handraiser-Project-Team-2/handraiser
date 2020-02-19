@@ -20,63 +20,6 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const useStyles = makeStyles(theme => ({
-  typoDescription: {
-    color: "grey",
-    overflow: " hidden",
-    "text-overflow": "ellipsis"
-  },
-  typoTitle: {
-    height: theme.spacing(8)
-  },
-  copyIcon: {
-    color: "grey"
-  },
-  actions: {
-    backgroundColor: "#372476",
-    borderTop: "1px solid lightgrey",
-    color: "black",
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  description: {
-    borderTop: "1px solid #372476",
-    marginTop: "-20px",
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "whitesmoke",
-    minHeight: 150,
-    maxHeight: 350
-  },
-  title: {
-    background: `url(${Background})`,
-    backgroundSize: "100% 100%",
-    height: 150
-  },
-  title2: {
-    fontWeight: "bold",
-    color: "black",
-    borderBottom: "1px solid #372476"
-  },
-  mentorName: {
-    marginLeft: "10px",
-    color: "white"
-  },
-  card: {
-    minWidth: 345,
-    maxWidth: 345,
-    float: "left",
-    margin: theme.spacing(2),
-    boxShadow: "10px 10px 8px #888888",
-    overflowWrap: "break-word",
-    borderRadius: 10,
-    border: "1px solid #372476"
-  },
-  media: {
-    height: 140
-  }
-}));
-
 export default function CardPage({ classData, data, fetchMentorClass }) {
   const classes = useStyles();
   let history = useHistory();
@@ -142,6 +85,11 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
             </CardContent>
           </CardActionArea>
           <CardActions className={classes.actions}>
+            
+            {
+              row.class_status === "open" ? <div className={classes.availability_open}>OPEN</div> : <div className={classes.availability_close}>CLOSE</div>
+            }
+
             <div style={{ display: "flex", alignItems: "center" }}>
               <Typography
                 variant="caption"
@@ -174,3 +122,83 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
     </>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  typoDescription: {
+    color: "grey",
+    overflow: " hidden",
+    "text-overflow": "ellipsis"
+  },
+  typoTitle: {
+    height: theme.spacing(8)
+  },
+  copyIcon: {
+    color: "white",
+    "&:hover":{
+      color: '#ffffAA'
+    }
+  },
+  actions: {
+    backgroundColor: "#372476",
+    borderTop: "1px solid lightgrey",
+    color: "black",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  description: {
+    borderTop: "1px solid #372476",
+    marginTop: "-20px",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "whitesmoke",
+    minHeight: 150,
+    maxHeight: 350
+  },
+  title: {
+    background: `url(${Background})`,
+    backgroundSize: "100% 100%",
+    height: 150
+  },
+  title2: {
+    fontWeight: "bold",
+    color: "black",
+    borderBottom: "1px solid #372476"
+  },
+  mentorName: {
+    marginLeft: "3px",
+    color: "white",
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    marginBottom: 'inherit'
+  },
+  card: {
+    minWidth: 345,
+    maxWidth: 345,
+    float: "left",
+    margin: theme.spacing(2),
+    boxShadow: "10px 10px 8px #888888",
+    overflowWrap: "break-word",
+    borderRadius: 10,
+    border: "1px solid #372476"
+  },
+  media: {
+    height: 140
+  },
+  availability_open:{
+    fontSize: '0.7em',
+    padding: '5px',
+    marginLeft: '10px',
+    color: 'white',
+    background:'rebeccapurple',
+  },
+  availability_close:{
+    fontSize: '0.7em',
+    padding: '5px',
+    marginLeft: '10px',
+    color: '#ffffff69',
+    background:'#880E4F',
+  }
+}));
+
