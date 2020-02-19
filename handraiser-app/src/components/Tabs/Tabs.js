@@ -22,6 +22,23 @@ import { TableCont } from "../Table/Table";
 import { GenerateKey } from "../Generate-Key/Generate";
 // var jwtDecode = require("jwt-decode");
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box style={{ paddingTop: "50px" }}>{children}</Box>}
+    </Typography>
+  );
+}
+
 export const TabBtn = props => {
   // const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   // const user_id = decoded.userid;
@@ -40,39 +57,20 @@ export const TabBtn = props => {
     setOpenConfirm(false);
   };
 
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-      <Typography
-        component="div"
-        role="tabpanel"
-        hidden={value !== index}
-        id={`full-width-tabpanel-${index}`}
-        aria-labelledby={`full-width-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box style={{ paddingTop: "50px" }}>{children}</Box>
-        )}
-      </Typography>
-    );
-  }
-
   useEffect(() => {
-    let mounted = true;
     axios({
       method: "post",
       url: `/api/user/data`,
       data: {
         token: sessionStorage.getItem("token")
       }
-    }).then(res => {
-      if (!mounted) setAdminEmail(res.data.email);
-    });
-    return () => {
-      mounted = false;
-    };
+    })
+      .then(res => {
+        setAdminEmail(res.data.email);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }, []);
 
   const handleChange = (event, newValue) => {
