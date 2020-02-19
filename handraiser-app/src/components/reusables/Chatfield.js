@@ -1,5 +1,5 @@
 import React from "react";
-import { Conversation } from "../Styles/Styles";
+import { Conversation } from "../../Styles/Styles";
 import styled from "styled-components";
 import ReactEmoji from "react-emoji";
 const Cont = styled.div`
@@ -159,7 +159,7 @@ const Chatfield = ({
           fontSize: "10px"
         }}
       >
-        Today: 3:57 PM
+
       </h6>
       <Cont>
         <Sender>
@@ -173,7 +173,7 @@ const Chatfield = ({
               fontSize: "10px"
             }}
           >
-            Delivered
+            
           </h6>
         </Sender>
       </Cont>

@@ -6,8 +6,7 @@ import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import Avatar from "@material-ui/core/Avatar";
-import hakeImage from "../images/HandshakeEmoji.png";
+
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
@@ -29,7 +28,7 @@ import {
   Send
   // Div2,
   // Shared
-} from "../Styles/Styles";
+} from "../../Styles/Styles";
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import DetailPanel from "./DetailPanel/DetailPanel";
@@ -91,6 +90,39 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "100%",
     marginRight: "5px",
     animation: "bob 2s infinite"
+  },
+  interact: {
+    height: "96px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    "@media (height: 894px)": {
+      height: "86px"
+    },
+    "@media (height: 1625px)": {
+      height: "210px"
+    },
+    "@media (width: 360px) and (height: 640px)": {
+      height: "40px"
+    },
+    "@media (width: 411px) and (height: 731px)": {
+      height: "50px"
+    },
+    "@media (width: 411px) and (height: 823px)": {
+      height: "50px"
+    },
+    "@media (width: 320px) and (height: 568px)": {
+      height: "30px"
+    },
+    "@media (width: 375px) and (height: 667px)": {
+      height: "45px"
+    },
+    "@media (width: 414px) and (height: 736px)": {
+      height: "55px"
+    },
+    "@media (width: 375px) and (height: 812px)": {
+      height: "75px"
+    }
   }
 }));
 const DivAnimation = styled.div`
@@ -156,15 +188,6 @@ export default function Mentor({
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
-  ///for chat
-  // const [username, setUsername] = useState("");
-  // const [room, setRoom] = useState("");
-  // const [message, setMessage] = useState("");
-  // const [feed, setfeed] = useState("");
-  // const [active, setActive] = useState(false);
-  // const [messages, setMessages] = useState([]);
-  // const [avatar, setAvatar] = useState("");
-  // const [emoji, setEmoji] = useState(false);
   const ENDPOINT = "localhost:5000";
 
   // useEffect(() => {
@@ -188,7 +211,7 @@ export default function Mentor({
   // const handleClose = () => {
   //   setAnchorEl(null);
   //   axios.patch(
-  //     `http://localhost:5001/api/concern_list/${rowData.concern_id}`,
+  //     `http://172.60.62.113:5001/api/concern_list/${rowData.concern_id}`,
   //     {
   //       concern_id: rowData.concern_id,
   //       concern_status: 1
@@ -342,7 +365,7 @@ export default function Mentor({
 console.log(messages)
   return (
     <React.Fragment>
-      <Topbar />
+      <Topbar rowDatahandler={rowDatahandler} class_id={class_id} />
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
@@ -353,7 +376,7 @@ console.log(messages)
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
+        <MenuItem onClick={e => handleDone(rowData)}>Mark as Done</MenuItem>
         <MenuItem onClick={e => handleBackQueue(rowData)}>
           Back to Queue
         </MenuItem>

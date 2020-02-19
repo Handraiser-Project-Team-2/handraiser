@@ -57,6 +57,7 @@ export default function ResponsiveDialog(props) {
   };
 
   const [valid, setValid] = useState(null);
+
   const handleSubmit = () => {
     if (input === ``) {
       setValid(true); //show error
@@ -65,16 +66,22 @@ export default function ResponsiveDialog(props) {
     }
   };
 
+  // here
   const registerToClass = () => {
-    console.log(input);
     axios({
       method: "post",
       url: "/api/student/class/register",
       data: { token: sessionStorage.getItem("token"), supplied_key: input }
     })
       .then(data => {
-        handleClose();
-        history.push(`/student/${data.data.class_id}`);
+        console.log(data.data.message);
+        if (data.data.message === "Subject is now closed") {
+          // handleClose();
+          setValid(true)
+        } else {
+          handleClose();
+          history.push(`/student/${data.data.class_id}`);
+        }
       })
       .catch(err => {
         console.log(err);
@@ -103,7 +110,7 @@ export default function ResponsiveDialog(props) {
           {"Enter a new Class"}
         </DialogTitle>
         {/* ALERT */}
-        {valid ? <Alert severity="error">Error! Invalid input</Alert> : null}
+        {valid ? <Alert severity="error">Registration Failed</Alert> : null}
         <DialogContent>
           <DialogContentText>
             Please enter the class code given by your mentor.
@@ -113,7 +120,6 @@ export default function ResponsiveDialog(props) {
             required
             fullWidth
             autoFocus
-            id="standard-required"
             label="Class Code"
             variant="outlined"
             defaultValue={input}

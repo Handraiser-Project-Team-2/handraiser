@@ -14,9 +14,11 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Fade from "@material-ui/core/Fade";
 
-import { TabBox, BtnBox } from "../Styles/Styles";
+import { TabBox, BtnBox } from "../../Styles/Styles";
 
+import { UserList } from "../List/List";
 import { TableCont } from "../Table/Table";
 import { GenerateKey } from "../Generate-Key/Generate";
 // var jwtDecode = require("jwt-decode");
@@ -59,10 +61,7 @@ export const TabBtn = props => {
   }
 
   useEffect(() => {
-    fetchAdminEmail();
-  }, []);
-
-  const fetchAdminEmail = () => {
+    let mounted = true;
     axios({
       method: "post",
       url: `/api/user/data`,
@@ -70,9 +69,12 @@ export const TabBtn = props => {
         token: sessionStorage.getItem("token")
       }
     }).then(res => {
-      setAdminEmail(res.data.email);
+      if (!mounted) setAdminEmail(res.data.email);
     });
-  };
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const handleChange = (event, newValue) => {
     event.preventDefault();
@@ -172,13 +174,18 @@ export const TabBtn = props => {
           </BtnBox>
         )}
       </TabBox>
+
       <TabPanel value={tabValue} index={0}>
+        <UserList />
         <TableCont tabValue={tabValue} />
       </TabPanel>
+
       <TabPanel value={tabValue} index={1}>
+        <UserList />
         <TableCont tabValue={tabValue} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
+        <UserList />
         <TableCont tabValue={tabValue} />
       </TabPanel>
       <GenerateKey

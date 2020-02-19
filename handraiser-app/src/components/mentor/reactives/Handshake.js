@@ -30,7 +30,6 @@ export default function Handshake(props) {
   });
 
   const accept = highdata => {
-
     axios
       .patch(`/api/concern_list/${highdata.concern_id}`, {
         concern_id: highdata.concern_id,
@@ -43,10 +42,7 @@ export default function Handshake(props) {
         socket.emit("handshake", { room: highdata.class_id });
 
         axios
-          .get(
-            `/api/assisted_by/${highdata.class_id}/${highdata.user_id}`,
-            {}
-          )
+          .get(`/api/assisted_by/${highdata.class_id}/${highdata.user_id}`, {})
           .then(data => {
             //get data of who assisted this concern
 
@@ -223,7 +219,10 @@ const useStyles = makeStyles(theme => ({
     marginLeft: "95px"
   },
   handshake_text_main: {
-    fontSize: "1.5em"
+    fontSize: "1.5em",
+    "@media (max-width: 468px) ": {
+      fontSize: "1em"
+    }
   },
   handshake_text_btn: {
     fontSize: "0.8em",

@@ -6,9 +6,9 @@ import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
-import { Shared, Div2 } from "../../Styles/Styles";
-import InfoIcon from "@material-ui/icons/Info";
-import GroupIcon from "@material-ui/icons/Group";
+import { Shared, Div2 } from "../../../Styles/Styles";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { Avatar, ListItem } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import LockIcon from "@material-ui/icons/Lock";
@@ -142,7 +142,7 @@ export default function SimpleExpansionPanel({
           id="panel3d-header"
           style={{ backgroundColor: "white" }}
         >
-          <InfoIcon
+          <HelpOutlineIcon
             style={{
               marginRight: "15px",
               color: "#372476"
@@ -167,10 +167,9 @@ export default function SimpleExpansionPanel({
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        padding: "10px 10px 5px 5px"
+                        padding: "10px 10px 5px 10px"
                       }}
                     >
-                      <LockIcon />
                       <span>{info.class_title}</span>
                     </span>
                     <span
@@ -192,7 +191,13 @@ export default function SimpleExpansionPanel({
                       Date Created
                     </span>
                     <span style={{ padding: "10px 10px 8px 9px" }}>
-                      {info.class_date_created}
+                      {(function() {
+                        const newD = new Date(
+                          info.class_date_created
+                        ).toLocaleDateString();
+
+                        return newD;
+                      })()}
                     </span>
                   </div>
                 );
@@ -210,7 +215,7 @@ export default function SimpleExpansionPanel({
           id="panel3d-header"
           style={{ backgroundColor: "white" }}
         >
-          <GroupIcon
+          <PeopleOutlineIcon
             style={{
               marginRight: "15px",
               color: "forestgreen"

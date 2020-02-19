@@ -7,7 +7,6 @@ import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
-import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import { useHistory, useParams } from "react-router-dom";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
@@ -15,6 +14,8 @@ import Chatfield from "../reusables/Chatfield";
 import GroupIcon from "@material-ui/icons/Group";
 import HelpIcon from "@material-ui/icons/Help";
 import Input from "../reusables/Input";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import {
   Div,
   Nav,
@@ -31,15 +32,13 @@ import {
   Div2,
   Shared,
   Request
-} from "../Styles/Styles";
+} from "../../Styles/Styles";
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
-import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import styled from "styled-components";
-import { Picker } from "emoji-mart";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
   span: {
@@ -51,7 +50,37 @@ const useStyles = makeStyles(theme => ({
     padding: "5% 0",
     overflow: "auto",
     height: "39.7em",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    "@media (height: 894px)": {
+      height: "35.4em"
+    },
+    "@media (height: 1625px)": {
+      height: "81em"
+    },
+    "@media (height: 1366px)": {
+      height: "64.8em"
+    },
+    "@media (width: 360px) and (height: 640px)": {
+      height: "19.5em"
+    },
+    "@media (width: 411px) and (height: 731px)": {
+      height: "25.2em"
+    },
+    "@media (width: 411px) and (height: 823px)": {
+      height: "31em"
+    },
+    "@media (width: 320px) and (height: 568px)": {
+      height: "15em"
+    },
+    "@media (width: 375px) and (height: 667px)": {
+      height: "21.2em"
+    },
+    "@media (width: 414px) and (height: 736px)": {
+      height: "25.5em"
+    },
+    "@media (width: 375px) and (height: 812px)": {
+      height: "30.3em"
+    }
   },
   cont2: {
     display: " flex",
@@ -129,7 +158,6 @@ export default function Student({
   username,
   room
 }) {
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
@@ -164,6 +192,18 @@ export default function Student({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  // did mount
+  useEffect(() => {
+    socket.emit("join", { username: "Yow", room: class_id, image: "" });
+
+    socket.on("updateComponents", data => {
+      console.log("updates");
+      existing();
+    });
+  }, []);
+
+  //did update
   useEffect(() => {
     // socket = io(ENDPOINT);
 
@@ -173,7 +213,6 @@ export default function Student({
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          console.log(userImage);
           setUserImage(data.data.image);
           setState({
             user_type: data.data.user_type_id
@@ -211,9 +250,38 @@ export default function Student({
     }
   }, [cstate]);
 
-  const sendRequest = () => {
-    // socket.emit("join", { username: "Yow", room: class_id, image: "" });
+  useEffect(() => {
+    socket.on("typing", data => {
+      // console.log(data)
+      setfeed(data);
+    });
+    socket.on("not typing", data => {
+      setfeed(data);
+    });
+  });
 
+  useEffect(() => {
+    const value = message;
+    if (active === true) {
+      if (value.length > 0) {
+        typing(avatar);
+      } else {
+        nottyping();
+      }
+    }
+  });
+
+  ///for typing
+  const typing = data => {
+    socket.emit("typing", data);
+  };
+
+  const nottyping = () => {
+    const data = "";
+    socket.emit("not typing", data);
+  };
+
+  const sendRequest = () => {
     axios
       .post(`http://localhost:5000/api/student/request/assistance`, {
         class_id: class_id,
@@ -222,7 +290,7 @@ export default function Student({
         concern_description: message
       })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
 
         // add websocket here to reflect new request;
 
@@ -233,7 +301,8 @@ export default function Student({
           icon: "success",
           title: "Request sent to the mentor"
         })
-          .then(() => {
+          .then(flag => {
+            existing();
             socket.emit(
               "AddRequest",
               {
@@ -310,69 +379,25 @@ export default function Student({
   //   // console.log(data);
   // };
 
-  // const nottyping = () => {
-  //   const data = "";
-  //   socket.emit("not typing", data);
-  // };
-  // useEffect(() => {
-  //   socket.on("message", message => {
-  //     setMessages([...messages, message]);
-  //   });
-
-  //   socket.on("old", ({ data }) => {
-  //     console.log(data);
-  //     setMessages(data);
-  //   });
-
-  //   if (!cstate) {
-  //     getData();
-  //   }
-  //   if (cstate) {
-  //     // console.log(cstate);
-  //     setUserid(cstate.user_id);
-  //     setAvatar(cstate.image);
-  //     setUsername(cstate.first_name);
-  //   }
-
-  //   return () => {
-  //     socket.emit("disconnect");
-  //     socket.off();
-  //   };
-  // }, [messages, cstate]);
-
-  // const sendMessage = evt => {
-  //   evt.preventDefault();
-  //   const dateToday = new Date();
-  //   setTimeout(() => {
-  //     if (message) {
-  //       socket.emit("sendMessage", message, () => setMessage(""));
-  //       axios
-  //         .post(`/api/chat/send`, {
-  //           message: message,
-  //           chat_date_created: dateToday,
-  //           concern_id: room,
-  //           user_id: userid
-  //         })
-  //         .then(res => {
-  //           // console.log(res);
-  //         });
-  //     }
-  //   }, 100);
-
-  //   setMessage("");
-  // };
-  // const emojiActive = () => {
-  //   if (emoji === true) {
-  //     setEmoji(false);
-  //   } else {
-  //     setEmoji(true);
-  //   }
-  //   // setEmoji(true)
-  // };
-console.log(messages)
+  const existing = () => {
+    axios({
+      method: "get",
+      url: `/api/student/queue/order/${class_id}/${user_id}?search=${""}`
+    })
+      .then(res => {
+        if (res.data.length > 0) {
+          setRequestOpen(false);
+        } else {
+          setRequestOpen(true);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   return (
     <React.Fragment>
-      <Topbar />
+      <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
           <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />
@@ -385,11 +410,13 @@ console.log(messages)
                 value={concernTitle}
                 fullWidthmes0sage
                 onChange={e => setConcernTitle(e.target.value)}
-                // style={{ width: 700 }}
+                inputProps={{
+                  maxLength: 50
+                }}
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Subject</Typography>
-                <Typography>{concernTitle.length}/30</Typography>
+                <Typography>{concernTitle.length}/50</Typography>
               </div>
             </TitleName>
             <Option>
@@ -426,7 +453,6 @@ console.log(messages)
               </div>
             </Option>
           </Subject>
-
           <ScrollToBottom className={classes.scrolltobottom}>
             {messages.map((message, i) => (
               <div key={i} style={{ overflowWrap: "break-word" }}>
@@ -489,18 +515,22 @@ console.log(messages)
                   sendMessage={sendMessage}
                   username={username}
                 />
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "15px"
-                  }}
-                >
-                  <Request onClick={sendRequest}>NEW REQUEST</Request>
-                  <Send onClick={sendMessage}>SEND</Send>
-                </div>
-                {/* </form> */}
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginTop: "15px"
+                    }}
+                  >
+                    {requestOpen ? (
+                      <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    ) : (
+                      ""
+                    )}
+                    <Send onClick={sendMessage}>SEND</Send>
+                  </div>
+                </form>
               </div>
             </Field>
           </Message>
@@ -509,7 +539,4 @@ console.log(messages)
       </Div>
     </React.Fragment>
   );
-  // } else {
-  //   return "";
-  // }
 }
