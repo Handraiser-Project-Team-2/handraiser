@@ -9,7 +9,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import teal from "@material-ui/core/colors/teal";
+import Collapse from "@material-ui/core/Collapse";
 import axios from "axios";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles(theme => ({
   span: {
@@ -28,6 +30,10 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   }
 }));
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function AddClassDialog({ token, fetchMentorClass }) {
   const classes = useStyles();
@@ -71,6 +77,8 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
     console.log(text);
   };
 
+  const [add, setAdd] = useState(false);
+
   const handleSubmit = e => {
     e.preventDefault();
     console.log("token", token);
@@ -83,6 +91,7 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
         console.log(data);
         fetchMentorClass();
         handleClose();
+        setAdd(true);
       })
       .catch(err => {
         console.log(err);
@@ -100,6 +109,16 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
         <AddCircleOutlineIcon className={classes.extendedIcon} />
         Create new class
       </Fab>
+      <Collapse in={add}>
+        <Alert
+          severity="success"
+          onClose={() => {
+            setAdd(false);
+          }}
+        >
+          Class Added!
+        </Alert>
+      </Collapse>
       <Dialog
         open={open}
         onClose={handleClose}
