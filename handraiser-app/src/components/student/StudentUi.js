@@ -7,14 +7,12 @@ import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
-import SentimentVerySatisfiedIcon from "@material-ui/icons/SentimentVerySatisfied";
 import { useHistory, useParams } from "react-router-dom";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import Input from "../reusables/Input";
 import {
   Div,
   // Nav,
@@ -37,9 +35,7 @@ import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
-import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import styled from "styled-components";
-import { Picker } from "emoji-mart";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
   span: {
@@ -143,7 +139,7 @@ export default function Student() {
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
   const [disable, setDisable] = useState(false);
-  const ENDPOINT = "172.60.62.208:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
 
   const handleMenu = event => {
@@ -176,7 +172,6 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          console.log(userImage);
           setUserImage(data.data.image);
           setState({
             user_type: data.data.user_type_id
@@ -225,7 +220,7 @@ export default function Student() {
         concern_description: message
       })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
 
         // add websocket here to reflect new request;
 
@@ -264,8 +259,6 @@ export default function Student() {
   };
   //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
-    console.log("here");
-
     setActive(true);
 
     socket.emit(
@@ -332,7 +325,7 @@ export default function Student() {
     });
 
     socket.on("old", ({ data }) => {
-      console.log(data);
+      // console.log(data);
       setMessages(data);
     });
 
@@ -366,7 +359,7 @@ export default function Student() {
             user_id: userid
           })
           .then(res => {
-            // console.log(res);
+            console.log(res);
           });
       }
     }, 100);
@@ -417,10 +410,13 @@ export default function Student() {
                 value={concernTitle}
                 fullWidth
                 onChange={e => setConcernTitle(e.target.value)}
+                inputProps={{
+                  maxLength: 50
+                }}
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Subject</Typography>
-                <Typography>{concernTitle.length}/30</Typography>
+                <Typography>{concernTitle.length}/50</Typography>
               </div>
             </TitleName>
             <Option>

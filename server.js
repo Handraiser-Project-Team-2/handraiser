@@ -49,6 +49,8 @@ massive({
     app.post("/api/user/data", users.getUser);
     app.get("/api/userprofile/:user_id", users.getUserProfile);
     app.get("/api/user/student_list", users.accessList_student);
+    app.get("/api/user/mentor_list", users.mentor_List);
+    app.get("/api/user/admin_list", users.admin_List);
     app.post("/api/userprofile/", users.getUserProfileByEmail);
     app.post("/api/userprofile/student/", users.getUserProfileByStudentEmail);
     app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
@@ -119,7 +121,6 @@ massive({
       const users = [];
 
       socket.on("AddRequest", (data, callback) => {
-
         io.to(data.room).emit("consolidateRequest", data);
 
         callback();
@@ -133,11 +134,11 @@ massive({
         });
       });
 
-      socket.on("user_activity", data=>{
+      socket.on("user_activity", data => {
         io.emit("updateComponents", {
-          message: 'logout data consolidating'
-        })
-      })
+          message: "logout data consolidating"
+        });
+      });
 
       console.log("Online");
 

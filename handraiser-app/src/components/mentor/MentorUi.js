@@ -73,7 +73,7 @@ export default function Mentor() {
   const [messages, setMessages] = useState([]);
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
-  const ENDPOINT = "172.60.62.208:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -96,7 +96,7 @@ export default function Mentor() {
   // const handleClose = () => {
   //   setAnchorEl(null);
   //   axios.patch(
-  //     `http://localhost:5001/api/concern_list/${rowData.concern_id}`,
+  //     `http://172.60.62.113:5001/api/concern_list/${rowData.concern_id}`,
   //     {
   //       concern_id: rowData.concern_id,
   //       concern_status: 1
@@ -185,7 +185,6 @@ export default function Mentor() {
 
   const rowDatahandler = rowData => {
     setSelection(true);
-    console.log(rowData);
     setConcernTitle(rowData.concern_title);
     setRowData(rowData);
     axios
@@ -256,7 +255,7 @@ export default function Mentor() {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={e => handleDone(rowData)}>Done</MenuItem>
+        <MenuItem onClick={e => handleDone(rowData)}>Mark as Done</MenuItem>
         <MenuItem onClick={e => handleBackQueue(rowData)}>
           Back to Queue
         </MenuItem>

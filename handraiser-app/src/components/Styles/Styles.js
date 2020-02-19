@@ -87,12 +87,12 @@ export const TableStyle2 = styled.div`
       flex-direction: row;
       border: none;
       position: relative;
-      padding-left: 65px;
+      padding-left: 70px;
     }
     td:before {
       position: absolute;
       align-items: center;
-      top: 1px;
+      top: 6px;
       left: 6px;
       width: 20%;
       padding: 10px;
@@ -163,6 +163,7 @@ export const Conversation = styled.div`
   overflow: auto;
   background-color: white;
   border-top: 1px solid lightgrey;
+  background-color: white;
   @media (max-height: 894px) {
     height: 567.5px;
   }
