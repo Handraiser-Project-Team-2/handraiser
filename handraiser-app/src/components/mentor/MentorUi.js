@@ -96,7 +96,7 @@ export default function Mentor() {
   // const handleClose = () => {
   //   setAnchorEl(null);
   //   axios.patch(
-  //     `http://localhost:5001/api/concern_list/${rowData.concern_id}`,
+  //     `http://172.60.62.113:5001/api/concern_list/${rowData.concern_id}`,
   //     {
   //       concern_id: rowData.concern_id,
   //       concern_status: 1
@@ -177,14 +177,9 @@ export default function Mentor() {
       .then(data => {
         socket.emit("handshake", { room: class_id });
 
-        axios
-          .get(`/api/assisted_by/${data.data.user_id}`, {})
-          .then(data => {
-            axios.delete(
-              `/api/assisted_by/${data.data[0].user_student_id}`,
-              {}
-            );
-          });
+        axios.get(`/api/assisted_by/${data.data.user_id}`, {}).then(data => {
+          axios.delete(`/api/assisted_by/${data.data[0].user_student_id}`, {});
+        });
       });
   };
 

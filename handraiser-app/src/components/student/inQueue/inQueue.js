@@ -117,7 +117,7 @@ export default function InQueue(props) {
     setConcern(concern);
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -133,20 +133,15 @@ export default function InQueue(props) {
     setOpenEdit(false);
 
     axios
-      .get(
-        `/api/concern_list/${concern.concern.concern_id}`
-      )
+      .get(`/api/concern_list/${concern.concern.concern_id}`)
       .then(data => {
         axios
-          .patch(
-            `/api/concern_list/${data.data[0].concern_id}`,
-            {
-              concern_id: data.data[0].concern_id,
-              concern_title: concernTitle,
-              concern_description: concernDescription,
-              concern_status: data.data[0].concern_status
-            }
-          )
+          .patch(`/api/concern_list/${data.data[0].concern_id}`, {
+            concern_id: data.data[0].concern_id,
+            concern_title: concernTitle,
+            concern_description: concernDescription,
+            concern_status: data.data[0].concern_status
+          })
           .then(data => {
             socket.emit("handshake", { room: props.classReference });
           })
@@ -171,12 +166,9 @@ export default function InQueue(props) {
 
   const handleRemoveReq = () => {
     setAnchorEl(null);
-    
+
     axios
-      .delete(
-        `/api/student/request/${concern.concern.concern_id}`,
-        {}
-      )
+      .delete(`/api/student/request/${concern.concern.concern_id}`, {})
       .then(data => {
         socket.emit("handshake", { room: props.classReference });
       })
@@ -204,15 +196,30 @@ export default function InQueue(props) {
                     onClose={handleClose}
                     onClick={() => handleConcernData(concern)}
                   >
-                    <status-indicator
-                      style={{
-                        position: "absolute",
-                        marginTop: "15px",
-                        marginLeft: "35px"
-                      }}
-                    ></status-indicator>
                     <ListItemAvatar>
-                      <Avatar src={concern.concern.image}></Avatar>
+                      <div>
+                        {concern.concern.user_status === 1 ? (
+                          <status-indicator
+                            positive
+                            pulse
+                            style={{
+                              position: "absolute",
+                              marginTop: "30px",
+                              marginLeft: "35px"
+                            }}
+                          ></status-indicator>
+                        ) : (
+                          <status-indicator
+                            pulse
+                            style={{
+                              position: "absolute",
+                              marginTop: "30px",
+                              marginLeft: "35px"
+                            }}
+                          ></status-indicator>
+                        )}
+                        <Avatar src={concern.concern.image}></Avatar>
+                      </div>
                     </ListItemAvatar>
                     <Menu
                       id="menu-appbar"

@@ -99,10 +99,7 @@ export default function InQueue(props) {
 
     if (concern) {
       axios
-        .delete(
-          `/api/student/request/${concern.concern.concern_id}`,
-          {}
-        )
+        .delete(`/api/student/request/${concern.concern.concern_id}`, {})
         .then(data => {
           socket.emit("handshake", { room: props.classReference });
         })
