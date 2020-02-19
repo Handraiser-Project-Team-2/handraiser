@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-// import IconButton from "@material-ui/core/IconButton";
-// import AccountCircle from "@material-ui/icons/AccountCircle";
+import IconButton from "@material-ui/core/IconButton";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
@@ -11,23 +11,26 @@ import { useHistory, useParams } from "react-router-dom";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
+import GroupIcon from "@material-ui/icons/Group";
+import HelpIcon from "@material-ui/icons/Help";
+import Input from "../reusables/Input";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import {
   Div,
-  // Nav,
+  Nav,
   Queue,
   Help,
   Subject,
   TitleName,
   Option,
-  // More,
-  // Conversation,
+  More,
+  Conversation,
   Message,
   Field,
   Send,
-  // Div2,
-  // Shared,
+  Div2,
+  Shared,
   Request
 } from "../../Styles/Styles";
 import axios from "axios";
@@ -46,8 +49,8 @@ const useStyles = makeStyles(theme => ({
   scrolltobottom: {
     padding: "5% 0",
     overflow: "auto",
-    height: "40.9em",
-    backgroundColor: "#eaeaea",
+    height: "39.7em",
+    backgroundColor: "white",
     "@media (height: 894px)": {
       height: "35.4em"
     },
@@ -141,38 +144,49 @@ const DivAnimation = styled.div`
 `;
 
 var jwtDecode = require("jwt-decode");
-let socket;
-export default function Student() {
-  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
+// let socket;
+export default function Student({
+  class_id,
+  rowDatahandler,
+  messages,
+  sendMessage,
+  setMessage,
+  message,
+  active,
+  userid,
+  feed,
+  username,
+  room
+}) {
   // let socket;
   const classes = useStyles();
   let history = useHistory();
-  let { class_id } = useParams();
+  // let { class_id } = useParams();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
-  // const open = Boolean(anchorEl);
+  const open = Boolean(anchorEl);
   const [concernDescription, setConcernDescription] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
   const [userImage, setUserImage] = useState("");
-  let decoded = "";
-  let user_id = "";
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+  const user_id = decoded.userid;
   const [name, setName] = useState("");
   const { cstate, getData } = useContext(UserContext);
   ///for chat
-  const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("");
-  const [userid, setUserid] = useState("");
-  const [message, setMessage] = useState("");
-  const [feed, setfeed] = useState("");
-  const [active, setActive] = useState(false);
-  const [messages, setMessages] = useState([]);
+  // const [username, setUsername] = useState("");
+  // const [room, setRoom] = useState("");
+  // const [userid, setUserid] = useState("");
+  // const [feed, setfeed] = useState("");
+  // const [active, setActive] = useState(false);
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
   const [disable, setDisable] = useState(false);
-  const ENDPOINT = "172.60.62.113:5000";
-  let socket = io(ENDPOINT);
+  // const [message, setMessage] = useState("");
+  // const [messages, setMessages] = useState([]);
   const [requestOpen, setRequestOpen] = useState(true);
-
+  const ENDPOINT = "localhost:5000";
+  let socket = io(ENDPOINT);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -189,19 +203,17 @@ export default function Student() {
       existing();
     });
 
-    decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
 
-    user_id = decoded.userid
 
   }, []);
 
   //did update
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
 
     if (sessionStorage.getItem("token")) {
       axios
-        .post("/api/user/data", {
+        .post("http://localhost:5000/api/user/data", {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
@@ -244,17 +256,8 @@ export default function Student() {
     if (!cstate) {
       getData();
     }
-    existing();
-  }, [cstate, ENDPOINT]);
 
-  useEffect(() => {
-    socket.on("typing", data => {
-      setfeed(data);
-    });
-    socket.on("not typing", data => {
-      setfeed(data);
-    });
-  });
+  }, [cstate]);
 
   useEffect(() => {
     const value = message;
@@ -298,6 +301,7 @@ export default function Student() {
           title: "Request sent to the mentor"
         })
           .then(flag => {
+
             existing();
 
             socket.emit(
@@ -327,106 +331,55 @@ export default function Student() {
   };
 
   //send data of active queue where user interacted with from the queue panel
-  const rowDatahandler = rowData => {
-    setActive(true);
+  // const rowDatahandler = rowData => {
 
-    socket.emit(
-      "join",
-      { userid, username, room: rowData.concern.concern_id, image: avatar },
-      message => {
-        console.log(message);
-      }
-    );
+  //   console.log(rowData);
 
-    setRoom(rowData.concern.concern_id);
-    setConcernTitle(rowData.concern.concern_title);
+  //   // setRoom(rowData.concern.concern_id);
+  //   setConcernTitle(rowData.concern.concern_title);
 
-    axios
-      .get(`/api/userprofile/${rowData.concern.user_id}`, {})
-      .then(data => {
-        setName(data.data[0].first_name + " " + data.data[0].last_name);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  //   axios
+  //     .get(
+  //       `http://localhost:5000/api/userprofile/${rowData.concern.user_id}`,
+  //       {}
+  //     )
+  //     .then(data => {
+  //       setName(data.data[0].first_name + " " + data.data[0].last_name);
+  //       setActive(true);
 
-  useEffect(() => {
-    socket.on("message", message => {
-      setMessages([...messages, message]);
-    });
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
 
-    socket.on("old", ({ data }) => {
-      // console.log(data);
-      setMessages(data);
-    });
+  // useEffect(() => {
+  //   socket.on("typing", data => {
+  //     // console.log(data)
+  //     setfeed(data);
+  //   });
+  //   socket.on("not typing", data => {
+  //     setfeed(data);
+  //   });
+  // });
 
-    if (!cstate) {
-      getData();
-    }
-    if (cstate) {
-      // console.log(cstate);
-      setUserid(cstate.user_id);
-      setAvatar(cstate.image);
-      setUsername(cstate.first_name);
-    }
-
-    return () => {
-      socket.emit("disconnect");
-      socket.off();
-    };
-  }, [messages, cstate]);
-
-  const sendMessage = evt => {
-    evt.preventDefault();
-    const dateToday = new Date();
-    setTimeout(() => {
-      if (message) {
-        socket.emit("sendMessage", message, () => setMessage(""));
-        axios
-          .post(`/api/chat/send`, {
-            message: message,
-            chat_date_created: dateToday,
-            concern_id: room,
-            user_id: userid
-          })
-          .then(res => {
-            console.log(res);
-          });
-      }
-    }, 100);
-
-    setMessage("");
-  };
-
-  const emojiActive = () => {
-    if (emoji === true) {
-      setEmoji(false);
-    } else {
-      setEmoji(true);
-    }
-    // setEmoji(true)
-  };
-
-  const addEmoji = e => {
-    let sym = e.unified.split("-");
-    let codesArray = [];
-    sym.forEach(el => codesArray.push("0x" + el));
-    let emoji = String.fromCodePoint(...codesArray);
-    setMessage(message + emoji);
-    emojiActive();
-  };
-  // console.log(messages);
-
-  const [expanded, setExpanded] = React.useState("");
-
-  const handleClickDetail = () => {
-    setExpanded("panel1");
-  };
-
-  const handleClickMember = () => {
-    setExpanded("panel2");
-  };
+  // useEffect(() => {
+  //   // console.log(username)
+  //   const value = message;
+  //   if (active === true) {
+  //     if (value.length > 0 && room) {
+  //       typing(avatar);
+  //       // console.log(avatar)
+  //     } else {
+  //       nottyping();
+  //     }
+  //   }
+  // });
+  // ///for typing
+  // const typing = data => {
+  //   socket.emit("typing", data);
+  //   // console.log(data);
+  // };
 
   const existing = () => {
     axios({
@@ -444,7 +397,6 @@ export default function Student() {
         console.log(err);
       });
   };
-
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
@@ -458,7 +410,7 @@ export default function Student() {
               <TextField
                 id="standard-basic"
                 value={concernTitle}
-                fullWidth
+                fullWidthmessage
                 onChange={e => setConcernTitle(e.target.value)}
                 inputProps={{
                   maxLength: 50
@@ -471,22 +423,22 @@ export default function Student() {
             </TitleName>
             <Option>
               <div>
-                <HelpOutlineIcon
-                  onClick={handleClickDetail}
+                <HelpIcon
                   style={{
                     fontSize: 30,
+                    color: "#c4c4c4",
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
               </div>
               <div>
-                <PeopleOutlineIcon
-                  onClick={handleClickMember}
+                <GroupIcon
                   style={{
                     fontSize: 30,
+                    color: "#c4c4c4",
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
               </div>
@@ -495,8 +447,9 @@ export default function Student() {
                   onClick={handleMenu}
                   style={{
                     fontSize: 30,
-                    color: "grey",
-                    cursor: "pointer"
+                    color: "#c4c4c4",
+                    cursor: "pointer",
+                    color: "#372476"
                   }}
                 />
               </div>
@@ -505,22 +458,21 @@ export default function Student() {
           <ScrollToBottom className={classes.scrolltobottom}>
             {messages.map((message, i) => (
               <div key={i} style={{ overflowWrap: "break-word" }}>
-                <Chatfield
-                  message={message}
-                  username={username}
-                  avatar={avatar}
-                  feed={feed}
-                  active={active}
-                  userid={userid}
-                />
+                {/* {message.concern_id === room ? ( */}
+                  <Chatfield
+                    message={message}
+                    username={username}
+                    feed={feed}
+                    active={active}
+                    userid={userid}
+                  />
+                {/* ):null} */}
               </div>
             ))}
-
             <div>
               {feed && active === true ? (
                 <div className={classes.cont2}>
                   <div className={classes.prof}>
-                    <Avatar src={feed} />
                   </div>
                   <div className={classes.receiver}>
                     <DivAnimation>
@@ -531,6 +483,7 @@ export default function Student() {
                   </div>
                 </div>
               ) : null}
+              
             </div>
           </ScrollToBottom>
           <Message>
@@ -544,11 +497,7 @@ export default function Student() {
                   width: "100%"
                 }}
               >
-                <form
-                  onSubmit={e => {
-                    e.preventDefault();
-                  }}
-                >
+                {/* <form onSubmit={sendMessage}>
                   <TextField
                     id="outlined-textarea"
                     multiline
@@ -560,7 +509,13 @@ export default function Student() {
                       backgroundColor: "white"
                     }}
                     onChange={e => setConcernDescription(e.target.value)}
-                  />
+                  /> */}
+                <Input
+                  message={message}
+                  setMessage={setMessage}
+                  sendMessage={sendMessage}
+                  username={username}
+                />
                   <div
                     style={{
                       width: "100%",
@@ -576,16 +531,12 @@ export default function Student() {
                     )}
                     <Send onClick={sendMessage}>SEND</Send>
                   </div>
-                </form>
+                {/* </form> */}
               </div>
             </Field>
           </Message>
         </Help>
-        <DetailPanel
-          class_id={class_id}
-          expanded={expanded}
-          setExpanded={setExpanded}
-        />
+        <DetailPanel />
       </Div>
     </React.Fragment>
   );

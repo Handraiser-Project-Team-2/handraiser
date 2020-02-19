@@ -85,7 +85,7 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   let socket = io(ENDPOINT);
   const [initial, setInitial] = useState();
@@ -105,6 +105,7 @@ export default function InQueue(props) {
     }
 
     socket.on("updateComponents", message => {
+      console.log("update components");
       update("");
     });
 

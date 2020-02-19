@@ -119,17 +119,15 @@ massive({
 
     io.on("connection", socket => {
       const users = [];
-
+      const joinRoom =[];
       socket.on("AddRequest", (data, callback) => {
-        io.to(data.room).emit("consolidateRequest", data);
 
+        io.emit("consolidateRequest", data);
         callback();
       });
 
       socket.on("handshake", data => {
-        console.log("handshake flag", data);
-
-        io.to(data.room).emit("updateComponents", {
+        io.emit("updateComponents", {
           message: "handshake succesful"
         });
       });
@@ -140,11 +138,20 @@ massive({
         });
       });
 
-      console.log("Online");
+      socket.on("join", ({userid, username, room }, callback) => {
+        const join = {
+          id: socket.id,
+          userid: userid,
+          name: username,
+          room: room,
+        };
+        joinRoom.push(join);
+      });
 
-      socket.on("join", ({ username, room, image }, callback) => {
+      socket.on("joinRoom", ({userid, username, room, image }, callback) => {
         const user = {
           id: socket.id,
+          userid: userid,
           name: username,
           room: room,
           image: image
@@ -154,10 +161,25 @@ massive({
 
         console.log("user", user);
 
-        socket.emit("message", {
-          user: "admin",
-          text: `${user.name},welcome to the room ${user.room} `
-        });
+        user &&
+          db.chat
+            .find({
+              concern_id: user.room
+            })
+            .then(data => {
+              io.to(user.room).emit("old", {
+                data
+              });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+
+            
+        // socket.emit("message", {
+        //   user: "admin",
+        //   text: `${user.name},welcome to the room ${user.room} `
+        // });
 
         socket.join(user.room);
       });
@@ -171,12 +193,15 @@ massive({
 
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
-        // console.log(user);
+        console.log("send",user);
         io.to(user.room).emit("message", {
           user: user.name,
-          text: message,
-          image: user.image
+          message: message,
+          room: user.room,
+          image: user.image,
+          user_id: user.userid
         });
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
 
         callback();
       });
