@@ -12,7 +12,7 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
 
   useEffect(() => {
@@ -26,9 +26,10 @@ export default function InQueue(rowDatahandler) {
   }, [ENDPOINT]);
 
   useEffect(() => {
-    if (rowDatahandler.search || !concernsData) {
-      update(rowDatahandler.search);
-    }
+    update(rowDatahandler.search);
+  }, [rowDatahandler.search])
+
+  useEffect(() => {
 
     socket.on("updateComponents", message => {
       update("");
@@ -41,7 +42,7 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [rowDatahandler.rowDatahandler.search, ENDPOINT, concernsData]);
+  }, [ENDPOINT, concernsData]);
 
   const update = data => {
     axios({
