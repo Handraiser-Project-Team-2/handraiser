@@ -25,7 +25,35 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   inline: {
-    display: "inline"
+    display: "inline",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    color: "grey",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "120px",
+      color: "grey"
+    }
+  },
+  title: {
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
   }
 }));
 
@@ -121,7 +149,6 @@ export default function InQueue(props) {
                 style={{
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px",
-                  backgroundColor: "whitesmoke",
                   cursor: "pointer"
                 }}
                 onClick={() => handleConcernData(data)}
@@ -167,16 +194,7 @@ export default function InQueue(props) {
                 </Menu>
                 <ListItemText
                   primary={
-                    <Typography
-                      style={{
-                        display: "inline-block",
-                        overflow: " hidden",
-                        "text-overflow": "ellipsis",
-                        "white-space": " nowrap",
-                        width: "250px",
-                        fontWeight: "bold"
-                      }}
-                    >
+                    <Typography className={classes.title}>
                       {data.concern.concern_title}
                     </Typography>
                   }
@@ -186,15 +204,6 @@ export default function InQueue(props) {
                         component="span"
                         variant="body2"
                         className={classes.inline}
-                        style={{
-                          display: "inline-block",
-                          overflow: " hidden",
-                          "text-overflow": "ellipsis",
-                          "white-space": " nowrap",
-                          width: "250px",
-
-                          color: "grey"
-                        }}
                       >
                         {data.concern.concern_description}
                       </Typography>

@@ -119,7 +119,6 @@ massive({
       const users = [];
 
       socket.on("AddRequest", (data, callback) => {
-
         io.to(data.room).emit("consolidateRequest", data);
 
         callback();
@@ -133,11 +132,11 @@ massive({
         });
       });
 
-      socket.on("user_activity", data=>{
+      socket.on("user_activity", data => {
         io.emit("updateComponents", {
-          message: 'logout data consolidating'
-        })
-      })
+          message: "logout data consolidating"
+        });
+      });
 
       console.log("Online");
 

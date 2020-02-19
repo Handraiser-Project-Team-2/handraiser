@@ -143,7 +143,7 @@ const DivAnimation = styled.div`
 var jwtDecode = require("jwt-decode");
 let socket;
 export default function Student() {
-  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
+  // let socket = io("ws://172.60.62.208:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
@@ -169,7 +169,6 @@ export default function Student() {
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
   const [disable, setDisable] = useState(false);
-  const [show, setShow] = useState(true);
   const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
 
@@ -203,7 +202,6 @@ export default function Student() {
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          console.log(userImage);
           setUserImage(data.data.image);
           setState({
             user_type: data.data.user_type_id
@@ -291,8 +289,6 @@ export default function Student() {
   };
   //send data of active queue where user interacted with from the queue panel
   const rowDatahandler = rowData => {
-    console.log("here");
-
     setActive(true);
 
     socket.emit(
@@ -444,10 +440,13 @@ export default function Student() {
                 value={concernTitle}
                 fullWidth
                 onChange={e => setConcernTitle(e.target.value)}
+                inputProps={{
+                  maxLength: 50
+                }}
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Subject</Typography>
-                <Typography>{concernTitle.length}/30</Typography>
+                <Typography>{concernTitle.length}/50</Typography>
               </div>
             </TitleName>
             <Option>

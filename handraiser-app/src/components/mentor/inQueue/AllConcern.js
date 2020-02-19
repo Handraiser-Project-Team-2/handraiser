@@ -16,6 +16,7 @@ import axios from "axios";
 import "status-indicator/styles.css";
 import io from "socket.io-client";
 import { UserContext } from "../../Contexts/UserContext";
+import QueueStub from "../../reusables/Queue/QueueStub";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -109,139 +110,23 @@ export default function InQueue({ class_id, search }) {
   };
 
   return (
-    <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
+    <Paper
+      style={{
+        height: "820px",
+        overflow: "auto"
+      }}
+    >
       <List className={classes.root}>
         {concernsData
           ? concernsData.map((data, index) => {
               return (
-                <div key={index}>
-                  <ListItem
-                    button
-                    style={{
-                      borderBottom: "0.5px solid #abababde",
-                      padding: "10px 15px",
-                      backgroundColor: "whitesmoke"
-                    }}
-                    // onClick={() => handleConcernData(data)}
-                  >
-                    <ListItemAvatar>
-                      <div>
-                        {data.user_status === 1 ? (
-                          <status-indicator
-                            positive
-                            pulse
-                            style={{
-                              position: "absolute",
-                              marginTop: "30px",
-                              marginLeft: "35px"
-                            }}
-                          ></status-indicator>
-                        ) : (
-                          <status-indicator
-                            pulse
-                            style={{
-                              position: "absolute",
-                              marginTop: "30px",
-                              marginLeft: "35px"
-                            }}
-                          ></status-indicator>
-                        )}
-                        <Avatar src={data.image}></Avatar>
-                      </div>
-                    </ListItemAvatar>
-                    <Menu
-                      id="menu-appbar"
-                      anchorEl={anchorEl}
-                      anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right"
-                      }}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <MenuItem onClick={handleClose}>Profile</MenuItem>
-                      <MenuItem onClick={handleClose}>Log Out</MenuItem>
-                    </Menu>
-                    <ListItemText
-                      primary={
-                        <Typography
-                          style={{
-                            display: "inline-block",
-                            overflow: " hidden",
-                            "text-overflow": "ellipsis",
-                            "white-space": " nowrap",
-                            width: "250px",
-                            fontWeight: "bold"
-                          }}
-                        >
-                          {data.first_name + " " + data.last_name}
-                        </Typography>
-                      }
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            className={classes.inline}
-                            style={{
-                              display: "inline-block",
-                              overflow: " hidden",
-                              "text-overflow": "ellipsis",
-                              "white-space": " nowrap",
-                              width: "250px",
-
-                              color: "#707070"
-                            }}
-                          >
-                            {data.concern_title}
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                    <ListItemSecondaryAction style={{ display: "flex" }}>
-                      <span
-                        style={{
-                          marginRight: "10px",
-                          color: "grey",
-                          fontSize: "10px"
-                        }}
-                      >
-                        5:00 PM
-                      </span>
-                      <Avatar
-                        variant="square"
-                        className={classes.small}
-                        style={{
-                          backgroundColor: "transparent"
-                        }}
-                      >
-                        {data.concern_status === 3 ? (
-                          <div className={classes.done}>
-                            <DoneIcon style={{ color: "teal" }} />
-                          </div>
-                        ) : data.concern_status === 1 ? (
-                          <Avatar variant="square" src={Handshake} />
-                        ) : (
-                          <div className={classes.queue}>
-                            <span
-                              style={{ color: "darkblue", fontSize: "10px" }}
-                            >
-                              QUEUE
-                            </span>
-                          </div>
-                        )}
-                      </Avatar>
-                      <MoreVertIcon
-                        onClick={handleMenu}
-                        style={{
-                          fontSize: 35,
-                          color: "#372476",
-                          cursor: "pointer"
-                        }}
-                      />
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </div>
+                <QueueStub
+                  rowDatahandler={{
+                    class_id
+                  }}
+                  data={data}
+                  index={index}
+                />
               );
             })
           : ""}

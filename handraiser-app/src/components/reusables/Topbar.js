@@ -6,6 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import { useParams } from "react-router-dom";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
@@ -19,18 +20,19 @@ import Avatar from "@material-ui/core/Avatar";
 import { UserContext } from "../Contexts/UserContext";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 import { Divider, Tooltip, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ClassIcon from "@material-ui/icons/Class";
 import CloseIcon from "@material-ui/icons/Close";
-
 import io from "socket.io-client";
-
-var jwtDecode = require("jwt-decode");
-
+import LockIcon from "@material-ui/icons/Lock";
+import TextField from "@material-ui/core/TextField";
+import SchoolIcon from "@material-ui/icons/School";
+import ListItemText from "@material-ui/core/ListItemText";
+import StudentTabs from "../student/Tabs/Tabs";
+import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
   tab: {
     flexGrow: 1,
@@ -70,25 +72,13 @@ export default function Topbar({ showDiv }) {
   var jwtDecode = require("jwt-decode");
   var decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   let history = useHistory();
-  const [user, setUser] = useState("");
+  const [userProfile, setUserProfile] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const user_id = decoded.userid;
   const { setData } = useContext(UserContext);
   const [expanded, setExpanded] = React.useState(false);
-  const [hide, setHide] = useState(false);
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  function a11yProps(index) {
-    return {
-      id: `scrollable-auto-tab-${index}`,
-      "aria-controls": `scrollable-auto-tabpanel-${index}`
-    };
-  }
+  let { class_id } = useParams();
 
   const panelDrawer = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -102,13 +92,79 @@ export default function Topbar({ showDiv }) {
     setState({ left: true, [side]: open });
   };
 
+  const [classInfo, setClassInfo] = React.useState([]);
+
+  useEffect(() => {
+    getclassInfo();
+    getClassMember();
+  }, []);
+
+  const getclassInfo = () => {
+    if (class_id) {
+      axios({
+        method: "post",
+        url: `/api/classinfo/${class_id}`
+      })
+        .then(res => {
+          setClassInfo(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
+
+  const [classMem, setClassMem] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const getClassMember = () => {
+    axios({
+      method: "get",
+      url: `/api/classes/members/${class_id}`
+    })
+      .then(res => {
+        setClassMem(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+  const [tempClassMem, setTempClassMem] = useState([]);
+  const classMembers = classMem.concat(classInfo);
+  const handleSearch = e => {
+    setSearch(e.target.value);
+    const filteredMembers = classMembers.filter(
+      el =>
+        el.first_name.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+          -1 ||
+        el.last_name.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1
+    );
+    setTempClassMem(filteredMembers);
+  };
+
+  // console.log(rowDatahandler);
+  const [selection, setSelection] = useState(false);
+  const [concernTitle, setConcernTitle] = useState("");
+  const [rowData, setRowData] = useState([]);
+  const [name, setName] = useState("");
+
+  const rowDatahandler = rowData => {
+    setSelection(true);
+    setConcernTitle(rowData.concern_title);
+    setRowData(rowData);
+    axios
+      .get(`/api/userprofile/${rowData.user_id}`, {})
+      .then(data => {
+        setName(data.data[0].first_name + " " + data.data[0].last_name);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   const sideList = side => (
-    <div
-      role="presentation"
-      onClick={toggleDrawer(side, true)}
-      onKeyDown={toggleDrawer(side, false)}
-    >
-      <List style={{ minWidth: 250, maxWidth: 400 }}>
+    <div role="presentation">
+      <List style={{ minWidth: 150, maxWidth: 500 }}>
         <ListItem
           style={{
             display: "flex",
@@ -120,21 +176,21 @@ export default function Topbar({ showDiv }) {
           }}
         >
           <span style={{ marginLeft: "10px" }}> PROFILE INFORMATION</span>
-          <div>
-            <CloseIcon />
-          </div>
+          <CloseIcon
+            style={{ cursor: "pointer" }}
+            onClick={toggleDrawer("left", false)}
+          />
         </ListItem>
         <Divider />
         <ListItem
           style={{
             display: "flex",
             justifyContent: "flex-start",
-
             alignContent: "flex-start",
             marginTop: "10px"
           }}
         >
-          <Avatar className={classes.large}></Avatar>
+          <Avatar className={classes.large} src={userProfile.image}></Avatar>
           <div
             style={{
               marginLeft: "20px",
@@ -143,10 +199,10 @@ export default function Topbar({ showDiv }) {
             }}
           >
             <span style={{ marginTop: 10, fontWeight: "bold" }}>
-              Lebron James
+              {userProfile.first_name + " " + userProfile.last_name}
             </span>
             <span style={{ marginTop: 10, marginBottom: 10, color: "grey" }}>
-              Lbj@gmail.com
+              {userProfile.email}
             </span>
           </div>
         </ListItem>
@@ -164,9 +220,37 @@ export default function Topbar({ showDiv }) {
               >
                 <Typography className={classes.heading}>Classes</Typography>
               </ExpansionPanelSummary>
+
               <ExpansionPanelDetails>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  Shooting Drills
+                  {classData.map(classList => {
+                    return (
+                      <List
+                        key={classList.class_id}
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          cursor: "pointer"
+                        }}
+                        onClick={() => {
+                          cardClick(classList.class_id);
+                        }}
+                      >
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            padding: "10px 10px 5px 5px"
+                          }}
+                        >
+                          <SchoolIcon style={{ color: "#372476" }} />
+                          <span style={{ paddingLeft: "10px" }}>
+                            {classList.class_title}
+                          </span>
+                        </span>
+                      </List>
+                    );
+                  })}
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
@@ -186,20 +270,50 @@ export default function Topbar({ showDiv }) {
                 </Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column"
-                  }}
-                >
-                  <span style={{ fontWeight: "bold", marginBottom: "10px" }}>
-                    Name:{" "}
-                  </span>
-                  <span style={{ fontWeight: "bold", marginBottom: "10px" }}>
-                    Description:{" "}
-                  </span>
-                  <span style={{ fontWeight: "bold" }}>Date Created: </span>
-                </div>
+                {classInfo.map((info, index) => {
+                  return (
+                    <div
+                      key={index}
+                      style={{ display: "flex", flexDirection: "column" }}
+                    >
+                      <span
+                        style={{ padding: "5px 10px 5px 10px", color: "grey" }}
+                      >
+                        Name
+                      </span>
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "10px 10px 5px 5px"
+                        }}
+                      >
+                        <span>{info.class_title}</span>
+                      </span>
+                      <span
+                        style={{ padding: "25px 10px 5px 10px", color: "grey" }}
+                      >
+                        Description
+                      </span>
+                      <span
+                        style={{
+                          padding: "10px 10px 8px 9px",
+                          color: "darkblue"
+                        }}
+                      >
+                        {info.class_description}
+                      </span>
+                      <span
+                        style={{ padding: "25px 10px 5px 10px", color: "grey" }}
+                      >
+                        Date Created
+                      </span>
+                      <span style={{ padding: "10px 10px 8px 9px" }}>
+                        {info.class_date_created}
+                      </span>
+                    </div>
+                  );
+                })}
               </ExpansionPanelDetails>
             </ExpansionPanel>
             <ExpansionPanel
@@ -216,29 +330,147 @@ export default function Topbar({ showDiv }) {
                   Class Members
                 </Typography>
               </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
+              <ExpansionPanelDetails
+                style={{
+                  display: "flex",
+                  flexDirection: "column"
+                }}
+              >
+                {tempClassMem.length === 0
+                  ? classMembers.map((member, index) => {
+                      return (
+                        <List key={index}>
+                          <ListItem>
+                            <Avatar
+                              src={member.image}
+                              style={{
+                                marginLeft: "-17px"
+                              }}
+                            ></Avatar>
+
+                            {member.user_type_id === 4 ? (
+                              <span
+                                style={{
+                                  marginLeft: "8px",
+                                  fontWeight: "bold"
+                                }}
+                              >
+                                {member.first_name +
+                                  " " +
+                                  member.last_name +
+                                  " (Mentor)"}
+                              </span>
+                            ) : (
+                              <span
+                                style={{
+                                  marginLeft: "8px",
+                                  fontWeight: "bold"
+                                }}
+                              >
+                                {member.first_name + " " + member.last_name}
+                              </span>
+                            )}
+
+                            {member.user_status === 1 ? (
+                              <status-indicator
+                                positive
+                                style={{
+                                  marginLeft: "10px"
+                                }}
+                              ></status-indicator>
+                            ) : (
+                              <status-indicator
+                                style={{
+                                  marginLeft: "10px"
+                                }}
+                              ></status-indicator>
+                            )}
+                          </ListItem>
+                        </List>
+                      );
+                    })
+                  : tempClassMem.map((member, index) => {
+                      return (
+                        <List key={index}>
+                          <ListItem>
+                            <Avatar
+                              src={member.image}
+                              style={{
+                                marginLeft: "-17px"
+                              }}
+                            ></Avatar>
+
+                            {member.user_type_id === 4 ? (
+                              <span
+                                style={{
+                                  marginLeft: "8px",
+                                  fontWeight: "bold"
+                                }}
+                              >
+                                {member.first_name +
+                                  " " +
+                                  member.last_name +
+                                  " (Mentor)"}
+                              </span>
+                            ) : (
+                              <span
+                                style={{
+                                  marginLeft: "8px",
+                                  fontWeight: "bold"
+                                }}
+                              >
+                                {member.first_name + " " + member.last_name}
+                              </span>
+                            )}
+
+                            {member.user_status === 1 ? (
+                              <status-indicator
+                                positive
+                                style={{
+                                  marginLeft: "10px"
+                                }}
+                              ></status-indicator>
+                            ) : (
+                              <status-indicator
+                                style={{
+                                  marginLeft: "10px"
+                                }}
+                              ></status-indicator>
+                            )}
+                          </ListItem>
+                        </List>
+                      );
+                    })}
                 <div
+                  className={classes.root}
                   style={{
-                    display: "flex",
-                    flexDirection: "row"
+                    display: "flex"
                   }}
                 >
-                  <span
-                    style={{
-                      fontWeight: "bold",
-                      marginBottom: "10px",
-                      marginRight: "10px"
-                    }}
-                  >
-                    Lebron James
-                  </span>
-                  <Status-indicator
-                    positive
-                    style={{ marginTop: "10px", marginTop: "5px" }}
-                  ></Status-indicator>
+                  <TextField
+                    id="outlined-basic"
+                    placeholder="Search member..."
+                    fullWidth
+                    onChange={e => handleSearch(e)}
+                  />
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
+            <div className={classes.requests}>
+              {userProfile.user_type_id === 3 ? (
+                <StudentTabs
+                  className={classes.student}
+                  classReference={class_id}
+                  rowDatahandler={rowDatahandler}
+                />
+              ) : (
+                <MentorTabs
+                  className={classes.mentor}
+                  rowDatahandler={rowDatahandler}
+                  class_id={class_id}
+                />
+              )}
+            </div>
           </div>
         </ListItem>
       </List>
@@ -276,9 +508,80 @@ export default function Topbar({ showDiv }) {
 
   useEffect(() => {
     axios.get(`/api/userprofile/${user_id}`).then(res => {
-      setUser(res.data[0].image);
+      setUserProfile(res.data[0]);
     });
-  });
+  }, []);
+
+  let token = sessionStorage.getItem("token").split(" ")[1];
+  const [userType, setUserType] = useState();
+
+  const changeUserType = e => {
+    setUserType(e.data.user_type_id);
+  };
+
+  useEffect(() => {
+    fetchUserData();
+    userType === 3 ? fetchMyClass() : fetchMentorClass();
+  }, [userType]);
+
+  const [tokState] = useState({ token: token });
+
+  const fetchUserData = () => {
+    axios({
+      method: "post",
+      url: `/api/user/data`,
+      data: tokState
+    })
+      .then(data => {
+        setData(data.data);
+        changeUserType(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const [classData, setClassData] = useState([]);
+
+  // get all class relative to this mentor(if user is verified)
+  const fetchMentorClass = () => {
+    axios({
+      method: "post",
+      url: `/api/my/classes`,
+      data: tokState
+    })
+      .then(data => {
+        setClassData(data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  // get all class relative to student
+  const fetchMyClass = () => {
+    axios({
+      method: "post",
+      url: `/api/student/get/class`,
+      data: tokState
+    })
+      .then(data => {
+        // console.log(data.data);
+        setClassData(data.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const cardClick = e => {
+    if (userProfile.user_type_id === 3) {
+      window.location = `/student/${e}`;
+    }
+    if (userProfile.user_type_id === 4) {
+      window.location = `/mentor/${e}`;
+    }
+  };
 
   return (
     <Nav>
@@ -309,7 +612,7 @@ export default function Topbar({ showDiv }) {
               onClick={handleMenu}
               color="inherit"
             >
-              <Avatar alt="" src={user} />
+              <Avatar alt="" src={userProfile.image} />
             </IconButton>
           </div>
           <Menu

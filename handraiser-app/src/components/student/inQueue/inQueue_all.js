@@ -19,7 +19,21 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   inline: {
-    display: "inline"
+    display: "inline",
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    color: "grey",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "120px",
+      color: "grey"
+    }
   },
   small: {
     width: theme.spacing(4),
@@ -48,6 +62,21 @@ const useStyles = makeStyles(theme => ({
     height: "40px",
     border: "1px solid lightgrey",
     borderTop: "10px solid #372476"
+  },
+  name: {
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
   }
 }));
 
@@ -105,8 +134,7 @@ export default function InQueue(props) {
               <ListItem
                 style={{
                   borderBottom: "0.5px solid #abababde",
-                  padding: "10px 15px",
-                  backgroundColor: "whitesmoke"
+                  padding: "10px 15px"
                 }}
               >
                 <ListItemAvatar>
@@ -137,16 +165,7 @@ export default function InQueue(props) {
 
                 <ListItemText
                   primary={
-                    <Typography
-                      style={{
-                        display: "inline-block",
-                        overflow: " hidden",
-                        "text-overflow": "ellipsis",
-                        "white-space": " nowrap",
-                        width: "250px",
-                        fontWeight: "bold"
-                      }}
-                    >
+                    <Typography className={classes.name}>
                       {concern.concern.first_name +
                         " " +
                         concern.concern.last_name}
@@ -158,15 +177,6 @@ export default function InQueue(props) {
                         component="span"
                         variant="body2"
                         className={classes.inline}
-                        style={{
-                          display: "inline-block",
-                          overflow: " hidden",
-                          "text-overflow": "ellipsis",
-                          "white-space": " nowrap",
-                          width: "250px",
-
-                          color: "grey"
-                        }}
                       >
                         {/* {name} */}
                         {concern.concern.concern_title}

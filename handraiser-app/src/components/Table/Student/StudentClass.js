@@ -14,8 +14,7 @@ export default function StudentClass({ classData, profileData }) {
       },
       {
         title: "Date Created",
-        field: "class_date_created"
-        // render: row => Date.parse(row.class_date_created)
+        render: row => new Date(row.class_date_created).toLocaleString()
       },
       {
         title: "Mentor",

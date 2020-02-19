@@ -53,6 +53,21 @@ const useStyles = makeStyles(theme => ({
     height: "40px",
     border: "1px solid lightgrey",
     borderTop: "10px solid #372476"
+  },
+  title: {
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
   }
 }));
 
@@ -117,6 +132,7 @@ export default function InQueue(props) {
     setConcern(concern);
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -166,13 +182,10 @@ export default function InQueue(props) {
   const handleRemoveReq = () => {
     setAnchorEl(null);
 
-    // if (concern.concern) {
     axios
       .delete(`/api/student/request/${concern.concern.concern_id}`, {})
       .then(data => {
         socket.emit("handshake", { room: props.classReference });
-
-        // alert("Your concern has been removed from the queue");
       })
       .catch(err => {
         console.log(err);
@@ -191,22 +204,36 @@ export default function InQueue(props) {
                     style={{
                       borderBottom: "0.5px solid #abababde",
                       padding: "10px 15px",
-                      cursor: "pointer",
-                      backgroundColor: "whitesmoke"
+                      cursor: "pointer"
                     }}
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                     onClick={() => handleConcernData(concern)}
                   >
-                    <status-indicator
-                      style={{
-                        position: "absolute",
-                        marginTop: "15px",
-                        marginLeft: "35px"
-                      }}
-                    ></status-indicator>
                     <ListItemAvatar>
-                      <Avatar src={concern.concern.image}></Avatar>
+                      <div>
+                        {concern.concern.user_status === 1 ? (
+                          <status-indicator
+                            positive
+                            pulse
+                            style={{
+                              position: "absolute",
+                              marginTop: "30px",
+                              marginLeft: "35px"
+                            }}
+                          ></status-indicator>
+                        ) : (
+                          <status-indicator
+                            pulse
+                            style={{
+                              position: "absolute",
+                              marginTop: "30px",
+                              marginLeft: "35px"
+                            }}
+                          ></status-indicator>
+                        )}
+                        <Avatar src={concern.concern.image}></Avatar>
+                      </div>
                     </ListItemAvatar>
                     <Menu
                       id="menu-appbar"
@@ -228,16 +255,7 @@ export default function InQueue(props) {
 
                     <ListItemText
                       primary={
-                        <Typography
-                          style={{
-                            display: "inline-block",
-                            overflow: " hidden",
-                            "text-overflow": "ellipsis",
-                            "white-space": " nowrap",
-                            width: "250px",
-                            fontWeight: "bold"
-                          }}
-                        >
+                        <Typography className={classes.title}>
                           {concern.concern.concern_title}
                         </Typography>
                       }

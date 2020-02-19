@@ -138,7 +138,7 @@ const Div = styled.div`
 export default function Chatfield() {
   return (
     <Conversation>
-      <h6
+      {/* <h6
         style={{
           display: "flex",
           justifyContent: "center",
@@ -149,12 +149,12 @@ export default function Chatfield() {
           fontSize: "10px"
         }}
       >
-        Today: 3:57 PM
+
       </h6>
       <Cont>
         <Sender>
           <Div>
-            <p className="from-me">Hello</p>
+            
           </Div>
           <h6
             style={{
@@ -163,14 +163,14 @@ export default function Chatfield() {
               fontSize: "10px"
             }}
           >
-            Delivered
+            
           </h6>
         </Sender>
       </Cont>
       <Cont2>
         <Receiver>
           <p className="from-them">
-            NANANANNANANNANANANANNANANANANANANANNANANANANANANAN
+            
           </p>
         </Receiver>
       </Cont2>
@@ -184,7 +184,7 @@ export default function Chatfield() {
             </p>
           </Div>
         </Sender>
-      </Cont>
+      </Cont> */}
     </Conversation>
   );
 }
