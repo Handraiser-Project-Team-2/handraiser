@@ -141,6 +141,7 @@ export default function Student() {
   const [disable, setDisable] = useState(false);
   const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
+  const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -148,21 +149,19 @@ export default function Student() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  // const sendMsg = evt => {
-  //   evt.preventDefault();
-  //   // console.log(concernDescription);
-  // };
 
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-
-  //   console.log(socket);
-  // }, [ENDPOINT]);
-
+  // did mount
   useEffect(() => {
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
+
+    socket.on("updateComponents", data => {
+      console.log('updates')
+      existing();
+    });
+
   }, []);
 
+  //did update
   useEffect(() => {
     socket = io(ENDPOINT);
 
@@ -207,10 +206,46 @@ export default function Student() {
     if (!cstate) {
       getData();
     }
+
+    existing();
+
+  
   }, [cstate, ENDPOINT]);
 
+  useEffect(() => {
+    socket.on("typing", data => {
+      // console.log(data)
+      setfeed(data);
+    });
+    socket.on("not typing", data => {
+      setfeed(data);
+    });
+
+    
+  });
+
+  useEffect(() => {
+    const value = message;
+    if (active === true) {
+      if (value.length > 0) {
+        typing(avatar);
+      } else {
+        nottyping();
+      }
+    }
+  });
+
+  ///for typing
+  const typing = data => {
+    socket.emit("typing", data);
+  };
+
+  const nottyping = () => {
+    const data = "";
+    socket.emit("not typing", data);
+  };
+
   const sendRequest = () => {
-    // socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     axios
       .post(`/api/student/request/assistance`, {
@@ -232,6 +267,9 @@ export default function Student() {
           title: "Request sent to the mentor"
         })
           .then(flag => {
+
+            existing();
+
             socket.emit(
               "AddRequest",
               {
@@ -282,38 +320,6 @@ export default function Student() {
       });
   };
 
-  useEffect(() => {
-    socket.on("typing", data => {
-      // console.log(data)
-      setfeed(data);
-    });
-    socket.on("not typing", data => {
-      setfeed(data);
-    });
-  });
-
-  useEffect(() => {
-    // console.log(username)
-    const value = message;
-    if (active === true) {
-      if (value.length > 0) {
-        typing(avatar);
-        // console.log(avatar)
-      } else {
-        nottyping();
-      }
-    }
-  });
-  ///for typing
-  const typing = data => {
-    socket.emit("typing", data);
-    // console.log(data);
-  };
-
-  const nottyping = () => {
-    const data = "";
-    socket.emit("not typing", data);
-  };
   ////join to room
   // const join = () => {
   //   setActive(true);
@@ -366,6 +372,7 @@ export default function Student() {
 
     setMessage("");
   };
+
   const emojiActive = () => {
     if (emoji === true) {
       setEmoji(false);
@@ -393,6 +400,24 @@ export default function Student() {
 
   const handleClickMember = () => {
     setExpanded("panel2");
+  };
+
+  const existing = () => {
+
+    axios({
+      method: "get",
+      url: `/api/student/queue/order/${class_id}/${user_id}?search=${""}`
+    })
+      .then(res => {
+        if (res.data.length > 0) {
+          setRequestOpen(false);
+        } else {
+          setRequestOpen(true);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
@@ -512,12 +537,6 @@ export default function Student() {
                     }}
                     onChange={e => setConcernDescription(e.target.value)}
                   />
-                  {/* <Input
-                  message={message}
-                  setMessage={setMessage}
-                  sendMessage={sendMessage}
-                  username={username}
-                /> */}
                   <div
                     style={{
                       width: "100%",
@@ -526,7 +545,11 @@ export default function Student() {
                       marginTop: "15px"
                     }}
                   >
-                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    {requestOpen ? (
+                      <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    ) : (
+                      ""
+                    )}
                     <Send onClick={sendMessage}>SEND</Send>
                   </div>
                 </form>
@@ -542,7 +565,4 @@ export default function Student() {
       </Div>
     </React.Fragment>
   );
-  // } else {
-  //   return "";
-  // }
 }

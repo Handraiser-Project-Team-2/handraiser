@@ -63,6 +63,8 @@ export default function InQueue(rowDatahandler) {
           ? concernsData.map((data, index) => {
               return (
                 <QueQueStub
+                  update={update}
+                  key={index}
                   rowDatahandler={rowDatahandler}
                   data={data}
                   index={index}
