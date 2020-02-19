@@ -18,7 +18,7 @@ import io from "socket.io-client";
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
 
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   let socket = io(ENDPOINT);
   const responseGoogle = response => {
     if (response.googleId) {
