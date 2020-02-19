@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import backgroundImg from "../images/programmer_1.png";
+import backgroundImg from "../components/images/programmer_1.png";
 //Table Styles
 export const TabBox = styled.div`
   display: flex;
@@ -87,12 +87,12 @@ export const TableStyle2 = styled.div`
       flex-direction: row;
       border: none;
       position: relative;
-      padding-left: 70px;
+      padding-left: 65px;
     }
     td:before {
       position: absolute;
       align-items: center;
-      top: 6px;
+      top: 1px;
       left: 6px;
       width: 20%;
       padding: 10px;
@@ -163,18 +163,35 @@ export const Conversation = styled.div`
   overflow: auto;
   background-color: white;
   border-top: 1px solid lightgrey;
-  background-color: white;
   @media (max-height: 894px) {
-    height: 560px;
+    height: 567px;
   }
   @media (height: 1024px) {
-    height: 698px;
+    height: 695px;
   }
   @media (height: 1366px) {
-    height: 1040px;
+    height: 1035px;
   }
-  @media (height: 1051px) {
-    height: 725px;
+  @media (width: 360px) and (height: 640px) {
+    height: 313px;
+  }
+  @media (width: 411px) and (height: 731px) {
+    height: 404px;
+  }
+  @media (width: 411px) and (height: 823px) {
+    height: 496px;
+  }
+  @media (width: 320px) and (height: 568px) {
+    height: 251px;
+  }
+  @media (width: 375px) and (height: 667px) {
+    height: 340px;
+  }
+  @media (width: 414px) and (height: 736px) {
+    height: 409px;
+  }
+  @media (width: 375px) and (height: 812px) {
+    height: 485px;
   }
 `;
 
@@ -191,6 +208,11 @@ export const TitleName = styled.div`
   @media (min-width: 768px) and (max-width: 1024px) {
     width: 95%;
   }
+  @media (width: 320px) and (height: 568px) {
+    h5 {
+      font-size: 15px;
+    }
+  }
 `;
 export const Field = styled.div`
   width: 100%;
@@ -202,6 +224,9 @@ export const Option = styled.div`
   align-content: center;
   align-items: center;
   width: 145px;
+  @media (max-width: 780px) {
+    display: none;
+  }
 `;
 export const Shared = styled.div`
   background-color: whitesmoke;

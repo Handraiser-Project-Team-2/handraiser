@@ -150,8 +150,7 @@ export default function QueueStub(props) {
         button
         style={{
           borderBottom: "0.5px solid #abababde",
-          padding: "10px 15px",
-          backgroundColor: "whitesmoke"
+          padding: "10px 15px"
         }}
         onClick={() => handleConcernData(props.data)}
       >
@@ -203,7 +202,7 @@ export default function QueueStub(props) {
         </Menu>
         <ListItemText
           primary={
-            <Typography style={{ fontWeight: "bold" }}>
+            <Typography className={classes.name}>
               {props.data.first_name + " " + props.data.last_name}
             </Typography>
           }
@@ -276,7 +275,19 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   inline: {
-    display: "inline"
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
   },
   queue: {
     display: "flex",
@@ -302,5 +313,20 @@ const useStyles = makeStyles(theme => ({
     height: "40px",
     border: "1px solid lightgrey",
     borderTop: "10px solid #372476"
+  },
+  name: {
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
   }
 }));

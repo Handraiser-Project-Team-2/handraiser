@@ -11,7 +11,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Drawer from "@material-ui/core/Drawer";
-import { Nav } from "../Styles/Styles";
+import { Nav } from "../../Styles/Styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
@@ -22,10 +22,10 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
-import { Divider } from "@material-ui/core";
+import { Divider, Tooltip, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import ClassIcon from "@material-ui/icons/Class";
 import CloseIcon from "@material-ui/icons/Close";
-import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
 import LockIcon from "@material-ui/icons/Lock";
 import TextField from "@material-ui/core/TextField";
@@ -34,6 +34,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import StudentTabs from "../student/Tabs/Tabs";
 import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
+  tab: {
+    flexGrow: 1,
+    width: "300px"
+  },
   large: {
     width: theme.spacing(10),
     height: theme.spacing(10)
@@ -58,7 +62,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Topbar() {
+export default function Topbar({ showDiv }) {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
 
@@ -160,7 +164,7 @@ export default function Topbar() {
 
   const sideList = side => (
     <div role="presentation">
-      <List style={{ minWidth: 250, maxWidth: 400 }}>
+      <List style={{ minWidth: 150, maxWidth: 500 }}>
         <ListItem
           style={{
             display: "flex",
@@ -239,8 +243,10 @@ export default function Topbar() {
                             padding: "10px 10px 5px 5px"
                           }}
                         >
-                          <SchoolIcon />
-                          <span>{classList.class_title}</span>
+                          <SchoolIcon style={{ color: "#372476" }} />
+                          <span style={{ paddingLeft: "10px" }}>
+                            {classList.class_title}
+                          </span>
                         </span>
                       </List>
                     );
@@ -248,6 +254,7 @@ export default function Topbar() {
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
+
             <ExpansionPanel
               expanded={expanded === "panel3"}
               onChange={panelDrawer("panel3")}
@@ -452,11 +459,13 @@ export default function Topbar() {
             <div className={classes.requests}>
               {userProfile.user_type_id === 3 ? (
                 <StudentTabs
+                  className={classes.student}
                   classReference={class_id}
                   rowDatahandler={rowDatahandler}
                 />
               ) : (
                 <MentorTabs
+                  className={classes.mentor}
                   rowDatahandler={rowDatahandler}
                   class_id={class_id}
                 />
@@ -596,7 +605,7 @@ export default function Topbar() {
             </Drawer>
             <Typography variant="h6">Handraiser</Typography>
           </div>
-          <div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
             <IconButton
               aria-label="account of current user"
               edge="end"
@@ -616,8 +625,6 @@ export default function Topbar() {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem></MenuItem>
-
             <MenuItem>
               <GoogleLogout
                 clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"

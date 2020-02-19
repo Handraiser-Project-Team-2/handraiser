@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import axios from "axios";
 import QueueStub from "../../reusables/Queue/QueueStub";
-import {Paper} from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,9 +44,8 @@ export default function InQueue({ class_id, search }) {
       .catch(err => console.log(err));
   }, [search]);
 
-
   return (
-    <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
+    <Paper style={{ maxHeight: "820px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData
           ? concernsData.map((data, index) => {

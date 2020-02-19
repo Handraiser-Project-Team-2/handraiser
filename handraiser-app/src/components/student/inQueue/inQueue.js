@@ -53,6 +53,21 @@ const useStyles = makeStyles(theme => ({
     height: "40px",
     border: "1px solid lightgrey",
     borderTop: "10px solid #372476"
+  },
+  title: {
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
   }
 }));
 
@@ -189,8 +204,7 @@ export default function InQueue(props) {
                     style={{
                       borderBottom: "0.5px solid #abababde",
                       padding: "10px 15px",
-                      cursor: "pointer",
-                      backgroundColor: "whitesmoke"
+                      cursor: "pointer"
                     }}
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
@@ -241,7 +255,7 @@ export default function InQueue(props) {
 
                     <ListItemText
                       primary={
-                        <Typography style={{ fontWeight: "bold" }}>
+                        <Typography className={classes.title}>
                           {concern.concern.concern_title}
                         </Typography>
                       }

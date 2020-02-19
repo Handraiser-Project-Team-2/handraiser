@@ -57,7 +57,7 @@ export default function InQueue(rowDatahandler) {
   };
 
   return (
-    <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
+    <Paper style={{ maxHeight: "820px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData
           ? concernsData.map((data, index) => {

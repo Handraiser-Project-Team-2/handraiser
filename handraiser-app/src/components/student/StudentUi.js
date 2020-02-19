@@ -29,7 +29,7 @@ import {
   // Div2,
   // Shared,
   Request
-} from "../Styles/Styles";
+} from "../../Styles/Styles";
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
@@ -46,8 +46,38 @@ const useStyles = makeStyles(theme => ({
   scrolltobottom: {
     padding: "5% 0",
     overflow: "auto",
-    height: "39.7em",
-    backgroundColor: "#eaeaea"
+    height: "40.9em",
+    backgroundColor: "#eaeaea",
+    "@media (height: 894px)": {
+      height: "35.4em"
+    },
+    "@media (height: 1625px)": {
+      height: "81em"
+    },
+    "@media (height: 1366px)": {
+      height: "64.8em"
+    },
+    "@media (width: 360px) and (height: 640px)": {
+      height: "19.5em"
+    },
+    "@media (width: 411px) and (height: 731px)": {
+      height: "25.2em"
+    },
+    "@media (width: 411px) and (height: 823px)": {
+      height: "31em"
+    },
+    "@media (width: 320px) and (height: 568px)": {
+      height: "15em"
+    },
+    "@media (width: 375px) and (height: 667px)": {
+      height: "21.2em"
+    },
+    "@media (width: 414px) and (height: 736px)": {
+      height: "25.5em"
+    },
+    "@media (width: 375px) and (height: 812px)": {
+      height: "30.3em"
+    }
   },
   cont2: {
     display: " flex",
@@ -477,7 +507,6 @@ export default function Student() {
               </div>
             </Option>
           </Subject>
-
           <ScrollToBottom className={classes.scrolltobottom}>
             {messages.map((message, i) => (
               <div key={i} style={{ overflowWrap: "break-word" }}>

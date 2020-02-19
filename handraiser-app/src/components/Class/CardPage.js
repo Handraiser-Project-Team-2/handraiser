@@ -4,9 +4,6 @@ import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import blueGrey from "@material-ui/core/colors/blueGrey";
-import Avatar from "@material-ui/core/Avatar";
-import deepOrange from "@material-ui/core/colors/deepOrange";
 import CardActions from "@material-ui/core/CardActions";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
@@ -16,7 +13,6 @@ import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
 import EditClassDialog from "./EditClassDialog";
-import teal from "@material-ui/core/colors/teal";
 
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -26,7 +22,9 @@ function Alert(props) {
 
 const useStyles = makeStyles(theme => ({
   typoDescription: {
-    color: "grey"
+    color: "grey",
+    overflow: " hidden",
+    "text-overflow": "ellipsis"
   },
   typoTitle: {
     height: theme.spacing(8)
@@ -46,9 +44,6 @@ const useStyles = makeStyles(theme => ({
     marginTop: "-20px",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
     backgroundColor: "whitesmoke",
     minHeight: 150,
     maxHeight: 350
