@@ -14,8 +14,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Fade from "@material-ui/core/Fade";
 
-import { TabBox, BtnBox } from "../Styles/Styles";
+import { TabBox, BtnBox } from "../../Styles/Styles";
 
 import { UserList } from "../List/List";
 import { TableCont } from "../Table/Table";
@@ -165,10 +166,12 @@ export const TabBtn = props => {
           </BtnBox>
         )}
       </TabBox>
+
       <TabPanel value={tabValue} index={0}>
         <UserList />
         <TableCont tabValue={tabValue} />
       </TabPanel>
+
       <TabPanel value={tabValue} index={1}>
         <UserList />
         <TableCont tabValue={tabValue} />

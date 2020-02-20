@@ -5,7 +5,7 @@ import Container from "@material-ui/core/Container";
 import axios from "axios";
 import { useTheme } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
-
+import background from "../images/undraw_teaching_f1cm.svg";
 // COMPONENTS
 import CardPage from "./CardPage";
 import FindClassDialog from "./FindClassDialog";
@@ -31,8 +31,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary
+    textAlign: "center"
   }
 }));
 

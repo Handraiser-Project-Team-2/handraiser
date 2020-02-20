@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
+import Fade from "@material-ui/core/Fade";
+
 import "../../App.css";
 
 import { TableStyle, TableStyle2, TableStyle3 } from "../Styles/Styles2";
@@ -11,6 +13,8 @@ import ViewStudentDialog from "./Student/ViewStudentDialog";
 
 export const TableCont = props => {
   const { tabValue } = props;
+  const [checked, setChecked] = React.useState(false);
+
   const [tableData, setTableData] = useState({
     studentCol: [
       {

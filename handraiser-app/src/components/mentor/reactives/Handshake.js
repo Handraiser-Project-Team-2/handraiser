@@ -219,7 +219,10 @@ const useStyles = makeStyles(theme => ({
     marginLeft: "95px"
   },
   handshake_text_main: {
-    fontSize: "1.5em"
+    fontSize: "1.5em",
+    "@media (max-width: 468px) ": {
+      fontSize: "1em"
+    }
   },
   handshake_text_btn: {
     fontSize: "0.8em",

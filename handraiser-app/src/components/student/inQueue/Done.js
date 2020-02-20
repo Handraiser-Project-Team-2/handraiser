@@ -10,7 +10,6 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Typography, Paper } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
@@ -26,7 +25,35 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   inline: {
-    display: "inline"
+    display: "inline",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    color: "grey",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "120px",
+      color: "grey"
+    }
+  },
+  title: {
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
   }
 }));
 
@@ -122,7 +149,6 @@ export default function InQueue(props) {
                 style={{
                   borderBottom: "0.5px solid #abababde",
                   padding: "10px 15px",
-                  backgroundColor: "whitesmoke",
                   cursor: "pointer"
                 }}
                 onClick={() => handleConcernData(data)}
@@ -168,7 +194,7 @@ export default function InQueue(props) {
                 </Menu>
                 <ListItemText
                   primary={
-                    <Typography style={{ fontWeight: "bold" }}>
+                    <Typography className={classes.title}>
                       {data.concern.concern_title}
                     </Typography>
                   }
@@ -178,9 +204,6 @@ export default function InQueue(props) {
                         component="span"
                         variant="body2"
                         className={classes.inline}
-                        style={{
-                          color: "grey"
-                        }}
                       >
                         {data.concern.concern_description}
                       </Typography>

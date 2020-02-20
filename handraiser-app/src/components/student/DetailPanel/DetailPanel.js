@@ -6,12 +6,10 @@ import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
-import { Shared, Div2 } from "../../Styles/Styles";
+import { Shared, Div2 } from "../../../Styles/Styles";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import James from "../../images/1966.png";
-import DescriptionIcon from "@material-ui/icons/Description";
-import { Avatar, ListItemText, ListItem } from "@material-ui/core";
+import { Avatar, ListItem } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import LockIcon from "@material-ui/icons/Lock";
 

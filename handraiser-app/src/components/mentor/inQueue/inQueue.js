@@ -26,10 +26,10 @@ export default function InQueue(rowDatahandler) {
   }, [ENDPOINT]);
 
   useEffect(() => {
-    if (rowDatahandler.search || !concernsData) {
-      update(rowDatahandler.search);
-    }
+    update(rowDatahandler.search);
+  }, [rowDatahandler.search]);
 
+  useEffect(() => {
     socket.on("updateComponents", message => {
       update("");
     });
@@ -41,7 +41,7 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [rowDatahandler.rowDatahandler.search, ENDPOINT, concernsData]);
+  }, [ENDPOINT, concernsData]);
 
   const update = data => {
     axios({
@@ -57,12 +57,14 @@ export default function InQueue(rowDatahandler) {
   };
 
   return (
-    <Paper style={{ maxHeight: "830px", overflow: "auto" }}>
+    <Paper style={{ maxHeight: "820px", overflow: "auto" }}>
       <List className={classes.root}>
         {concernsData
           ? concernsData.map((data, index) => {
               return (
                 <QueQueStub
+                  update={update}
+                  key={index}
                   rowDatahandler={rowDatahandler}
                   data={data}
                   index={index}

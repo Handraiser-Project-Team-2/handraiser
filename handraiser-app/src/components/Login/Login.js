@@ -12,7 +12,7 @@ import {
   LoginFooter,
   Continue,
   Title
-} from "../Styles/Styles";
+} from "../../Styles/Styles";
 import io from "socket.io-client";
 
 export default function Login(props) {

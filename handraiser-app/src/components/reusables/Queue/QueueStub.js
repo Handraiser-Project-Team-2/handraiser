@@ -55,6 +55,8 @@ export default function QueueStub(props) {
       });
     }
     setAnchorEl(null);
+
+
     axios
       .patch(`/api/concern_list/${concern.concern_id}`, {
         concern_id: concern.concern_id,
@@ -63,11 +65,25 @@ export default function QueueStub(props) {
         concern_status: 2
       })
       .then(data => {
+        if (props.update) props.update("");
+
         socket.emit("handshake", { room: props.rowDatahandler.class_id });
 
-        axios.get(`/api/assisted_by/${data.data.user_id}`, {}).then(data => {
-          axios.delete(`/api/assisted_by/${data.data[0].user_student_id}`, {});
-        });
+        axios
+          .get(`/api/assisted_by/${data.data.user_id}`, {})
+          .then(data => {
+            axios
+              .delete(`/api/assisted_by/${data.data[0].user_student_id}`, {})
+              .then(data => {
+                console.log(data);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          })
+          .catch(err => {
+            console.log(err);
+          });
       })
       .catch(err => {
         console.log(err);
@@ -105,6 +121,8 @@ export default function QueueStub(props) {
                 socket.emit("handshake", {
                   room: props.rowDatahandler.class_id
                 });
+
+                if (props.update) props.update("");
               })
               .catch(err => {
                 console.log(err);
@@ -128,11 +146,11 @@ export default function QueueStub(props) {
   return (
     <div key={props.index}>
       <ListItem
+        key={props.index}
         button
         style={{
           borderBottom: "0.5px solid #abababde",
-          padding: "10px 15px",
-          backgroundColor: "whitesmoke"
+          padding: "10px 15px"
         }}
         onClick={() => handleConcernData(props.data)}
       >
@@ -174,17 +192,17 @@ export default function QueueStub(props) {
           {props.data.concern_status === 3 ? (
             ""
           ) : (
-            <>
+            <div>
               <MenuItem onClick={e => handleDone()}>Mark as Done</MenuItem>
               <MenuItem onClick={e => handleBackQueue()}>
                 Back to Queue
               </MenuItem>
-            </>
+            </div>
           )}
         </Menu>
         <ListItemText
           primary={
-            <Typography style={{ fontWeight: "bold" }}>
+            <Typography className={classes.name}>
               {props.data.first_name + " " + props.data.last_name}
             </Typography>
           }
@@ -257,7 +275,19 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   inline: {
-    display: "inline"
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
   },
   queue: {
     display: "flex",
@@ -283,5 +313,20 @@ const useStyles = makeStyles(theme => ({
     height: "40px",
     border: "1px solid lightgrey",
     borderTop: "10px solid #372476"
+  },
+  name: {
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
   }
 }));

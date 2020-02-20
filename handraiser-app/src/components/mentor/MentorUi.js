@@ -6,8 +6,7 @@ import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import Avatar from "@material-ui/core/Avatar";
-import hakeImage from "../images/HandshakeEmoji.png";
+
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
@@ -27,7 +26,7 @@ import {
   Send
   // Div2,
   // Shared
-} from "../Styles/Styles";
+} from "../../Styles/Styles";
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import DetailPanel from "./DetailPanel/DetailPanel";
@@ -49,11 +48,44 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       cursor: "pointer"
     }
+  },
+  interact: {
+    height: "96px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    "@media (height: 894px)": {
+      height: "86px"
+    },
+    "@media (height: 1625px)": {
+      height: "210px"
+    },
+    "@media (width: 360px) and (height: 640px)": {
+      height: "40px"
+    },
+    "@media (width: 411px) and (height: 731px)": {
+      height: "50px"
+    },
+    "@media (width: 411px) and (height: 823px)": {
+      height: "50px"
+    },
+    "@media (width: 320px) and (height: 568px)": {
+      height: "30px"
+    },
+    "@media (width: 375px) and (height: 667px)": {
+      height: "45px"
+    },
+    "@media (width: 414px) and (height: 736px)": {
+      height: "55px"
+    },
+    "@media (width: 375px) and (height: 812px)": {
+      height: "75px"
+    }
   }
 }));
 
 export default function Mentor() {
-  // const classes = useStyles();
+  const classes = useStyles();
   let history = useHistory();
   let { class_id } = useParams();
   const [rowData, setRowData] = useState([]);
@@ -244,7 +276,7 @@ export default function Mentor() {
 
   return (
     <React.Fragment>
-      <Topbar />
+      <Topbar rowDatahandler={rowDatahandler} class_id={class_id} />
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
@@ -323,14 +355,7 @@ export default function Mentor() {
               </Option>
             </Subject>
           ) : (
-            <div
-              style={{
-                height: "96px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
+            <div className={classes.interact}>
               <Typography variant="h5" style={{ color: "#bcbcbc" }}>
                 Select any concern to interact
               </Typography>

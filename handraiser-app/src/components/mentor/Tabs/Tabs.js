@@ -48,7 +48,6 @@ const TabBtn = props => {
             }}
           >
             <TextField
-              id="outlined-basic"
               placeholder="Search..."
               fullWidth
               onChange={e => setSearch(e.target.value)}
@@ -80,6 +79,9 @@ const TabBtn = props => {
         <Done class_id={props.class_id} search={search} />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
+        <AllConcern class_id={props.class_id} search={search} />
+      </TabPanel>
+      <TabPanel value={tabValue} index={3}>
         <AllConcern class_id={props.class_id} search={search} />
       </TabPanel>
     </React.Fragment>

@@ -11,7 +11,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Drawer from "@material-ui/core/Drawer";
-import { Nav } from "../Styles/Styles";
+import { Nav } from "../../Styles/Styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
@@ -22,8 +22,9 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
-import { Divider } from "@material-ui/core";
+import { Divider, Tooltip, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import ClassIcon from "@material-ui/icons/Class";
 import CloseIcon from "@material-ui/icons/Close";
 import io from "socket.io-client";
 import TextField from "@material-ui/core/TextField";
@@ -31,6 +32,10 @@ import SchoolIcon from "@material-ui/icons/School";
 import StudentTabs from "../student/Tabs/Tabs";
 import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
+  tab: {
+    flexGrow: 1,
+    width: "300px"
+  },
   large: {
     width: theme.spacing(10),
     height: theme.spacing(10)
@@ -55,7 +60,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Topbar() {
+export default function Topbar(props) {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = React.useState(1);
 
@@ -137,29 +142,9 @@ export default function Topbar() {
     setTempClassMem(filteredMembers);
   };
 
-  // console.log(rowDatahandler);
-  const [selection, setSelection] = useState(false);
-  const [concernTitle, setConcernTitle] = useState("");
-  const [rowData, setRowData] = useState([]);
-  const [name, setName] = useState("");
-
-  const rowDatahandler = rowData => {
-    setSelection(true);
-    setConcernTitle(rowData.concern_title);
-    setRowData(rowData);
-    axios
-      .get(`/api/userprofile/${rowData.user_id}`, {})
-      .then(data => {
-        setName(data.data[0].first_name + " " + data.data[0].last_name);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
   const sideList = side => (
     <div role="presentation">
-      <List style={{ minWidth: 250, maxWidth: 400 }}>
+      <List style={{ minWidth: 150, maxWidth: 500 }}>
         <ListItem
           style={{
             display: "flex",
@@ -202,35 +187,84 @@ export default function Topbar() {
           </div>
         </ListItem>
         <Divider />
-        <ListItem>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <ExpansionPanel
-              expanded={expanded === "panel1"}
-              onChange={panelDrawer("panel1")}
-            >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2a-content"
-                id="panel2a-header"
+        {class_id ? (
+          <ListItem>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <ExpansionPanel
+                expanded={expanded === "panel1"}
+                onChange={panelDrawer("panel1")}
               >
-                <Typography className={classes.heading}>Classes</Typography>
-              </ExpansionPanelSummary>
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel2a-content"
+                  id="panel2a-header"
+                >
+                  <Typography className={classes.heading}>Classes</Typography>
+                </ExpansionPanelSummary>
 
-              <ExpansionPanelDetails>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  {classData.map(classList => {
+                <ExpansionPanelDetails>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    {classData.map(classList => {
+                      return (
+                        <List
+                          key={classList.class_id}
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            cursor: "pointer"
+                          }}
+                          onClick={() => {
+                            cardClick(classList.class_id);
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              padding: "10px 10px 5px 5px"
+                            }}
+                          >
+                            <SchoolIcon style={{ color: "#372476" }} />
+                            <span style={{ paddingLeft: "10px" }}>
+                              {classList.class_title}
+                            </span>
+                          </span>
+                        </List>
+                      );
+                    })}
+                  </div>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+
+              <ExpansionPanel
+                expanded={expanded === "panel3"}
+                onChange={panelDrawer("panel3")}
+              >
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel3a-content"
+                  id="panel3a-header"
+                  className={classes.details}
+                >
+                  <Typography className={classes.heading}>
+                    Class Details
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  {classInfo.map((info, index) => {
                     return (
-                      <List
-                        key={classList.class_id}
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          cursor: "pointer"
-                        }}
-                        onClick={() => {
-                          cardClick(classList.class_id);
-                        }}
+                      <div
+                        key={index}
+                        style={{ display: "flex", flexDirection: "column" }}
                       >
+                        <span
+                          style={{
+                            padding: "5px 10px 5px 10px",
+                            color: "grey"
+                          }}
+                        >
+                          Name
+                        </span>
                         <span
                           style={{
                             display: "flex",
@@ -238,41 +272,225 @@ export default function Topbar() {
                             padding: "10px 10px 5px 5px"
                           }}
                         >
-                          <SchoolIcon />
-                          <span>{classList.class_title}</span>
+                          <span>{info.class_title}</span>
                         </span>
-                      </List>
+                        <span
+                          style={{
+                            padding: "25px 10px 5px 10px",
+                            color: "grey"
+                          }}
+                        >
+                          Description
+                        </span>
+                        <span
+                          style={{
+                            padding: "10px 10px 8px 9px",
+                            color: "darkblue"
+                          }}
+                        >
+                          {info.class_description}
+                        </span>
+                        <span
+                          style={{
+                            padding: "25px 10px 5px 10px",
+                            color: "grey"
+                          }}
+                        >
+                          Date Created
+                        </span>
+                        <span style={{ padding: "10px 10px 8px 9px" }}>
+                          {info.class_date_created}
+                        </span>
+                      </div>
                     );
                   })}
-                </div>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel
-              expanded={expanded === "panel3"}
-              onChange={panelDrawer("panel3")}
-            >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel3a-content"
-                id="panel3a-header"
-                className={classes.details}
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+              <ExpansionPanel
+                expanded={expanded === "panel4"}
+                onChange={panelDrawer("panel4")}
               >
-                <Typography className={classes.heading}>
-                  Class Details
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                {classInfo.map((info, index) => {
+                <ExpansionPanelSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel4a-content"
+                  id="panel3a-header"
+                  className={classes.members}
+                >
+                  <Typography className={classes.heading}>
+                    Class Members
+                  </Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails
+                  style={{
+                    display: "flex",
+                    flexDirection: "column"
+                  }}
+                >
+                  {tempClassMem.length === 0
+                    ? classMembers.map((member, index) => {
+                        return (
+                          <List key={index}>
+                            <ListItem>
+                              <Avatar
+                                src={member.image}
+                                style={{
+                                  marginLeft: "-17px"
+                                }}
+                              ></Avatar>
+
+                              {member.user_type_id === 4 ? (
+                                <span
+                                  style={{
+                                    marginLeft: "8px",
+                                    fontWeight: "bold"
+                                  }}
+                                >
+                                  {member.first_name +
+                                    " " +
+                                    member.last_name +
+                                    " (Mentor)"}
+                                </span>
+                              ) : (
+                                <span
+                                  style={{
+                                    marginLeft: "8px",
+                                    fontWeight: "bold"
+                                  }}
+                                >
+                                  {member.first_name + " " + member.last_name}
+                                </span>
+                              )}
+
+                              {member.user_status === 1 ? (
+                                <status-indicator
+                                  positive
+                                  style={{
+                                    marginLeft: "10px"
+                                  }}
+                                ></status-indicator>
+                              ) : (
+                                <status-indicator
+                                  style={{
+                                    marginLeft: "10px"
+                                  }}
+                                ></status-indicator>
+                              )}
+                            </ListItem>
+                          </List>
+                        );
+                      })
+                    : tempClassMem.map((member, index) => {
+                        return (
+                          <List key={index}>
+                            <ListItem>
+                              <Avatar
+                                src={member.image}
+                                style={{
+                                  marginLeft: "-17px"
+                                }}
+                              ></Avatar>
+
+                              {member.user_type_id === 4 ? (
+                                <span
+                                  style={{
+                                    marginLeft: "8px",
+                                    fontWeight: "bold"
+                                  }}
+                                >
+                                  {member.first_name +
+                                    " " +
+                                    member.last_name +
+                                    " (Mentor)"}
+                                </span>
+                              ) : (
+                                <span
+                                  style={{
+                                    marginLeft: "8px",
+                                    fontWeight: "bold"
+                                  }}
+                                >
+                                  {member.first_name + " " + member.last_name}
+                                </span>
+                              )}
+
+                              {member.user_status === 1 ? (
+                                <status-indicator
+                                  positive
+                                  style={{
+                                    marginLeft: "10px"
+                                  }}
+                                ></status-indicator>
+                              ) : (
+                                <status-indicator
+                                  style={{
+                                    marginLeft: "10px"
+                                  }}
+                                ></status-indicator>
+                              )}
+                            </ListItem>
+                          </List>
+                        );
+                      })}
+                  <div
+                    className={classes.root}
+                    style={{
+                      display: "flex"
+                    }}
+                  >
+                    <TextField
+                      id="outlined-basic"
+                      placeholder="Search member..."
+                      fullWidth
+                      onChange={e => handleSearch(e)}
+                    />
+                  </div>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+              <div className={classes.requests}>
+                {userProfile.user_type_id === 3 ? (
+                  <StudentTabs
+                    className={classes.student}
+                    classReference={props.classReference}
+                    rowDatahandler={props.rowDatahandler}
+                  />
+                ) : (
+                  <MentorTabs
+                    className={classes.mentor}
+                    rowDatahandler={props.rowDatahandler}
+                    class_id={class_id}
+                  />
+                )}
+              </div>
+            </div>
+          </ListItem>
+        ) : (
+          <ExpansionPanel
+            expanded={expanded === "panel1"}
+            onChange={panelDrawer("panel1")}
+          >
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel2a-content"
+              id="panel2a-header"
+            >
+              <Typography className={classes.heading}>Classes</Typography>
+            </ExpansionPanelSummary>
+
+            <ExpansionPanelDetails>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {classData.map(classList => {
                   return (
-                    <div
-                      key={index}
-                      style={{ display: "flex", flexDirection: "column" }}
+                    <List
+                      key={classList.class_id}
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        cursor: "pointer"
+                      }}
+                      onClick={() => {
+                        cardClick(classList.class_id);
+                      }}
                     >
-                      <span
-                        style={{ padding: "5px 10px 5px 10px", color: "grey" }}
-                      >
-                        Name
-                      </span>
                       <span
                         style={{
                           display: "flex",
@@ -280,189 +498,18 @@ export default function Topbar() {
                           padding: "10px 10px 5px 5px"
                         }}
                       >
-                        <span>{info.class_title}</span>
+                        <SchoolIcon style={{ color: "#372476" }} />
+                        <span style={{ paddingLeft: "10px" }}>
+                          {classList.class_title}
+                        </span>
                       </span>
-                      <span
-                        style={{ padding: "25px 10px 5px 10px", color: "grey" }}
-                      >
-                        Description
-                      </span>
-                      <span
-                        style={{
-                          padding: "10px 10px 8px 9px",
-                          color: "darkblue"
-                        }}
-                      >
-                        {info.class_description}
-                      </span>
-                      <span
-                        style={{ padding: "25px 10px 5px 10px", color: "grey" }}
-                      >
-                        Date Created
-                      </span>
-                      <span style={{ padding: "10px 10px 8px 9px" }}>
-                        {new Date(info.class_date_created).toLocaleString()}
-                      </span>
-                    </div>
+                    </List>
                   );
                 })}
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel
-              expanded={expanded === "panel4"}
-              onChange={panelDrawer("panel4")}
-            >
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel4a-content"
-                id="panel3a-header"
-                className={classes.members}
-              >
-                <Typography className={classes.heading}>
-                  Class Members
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails
-                style={{
-                  display: "flex",
-                  flexDirection: "column"
-                }}
-              >
-                {tempClassMem.length === 0
-                  ? classMembers.map((member, index) => {
-                      return (
-                        <List key={index}>
-                          <ListItem>
-                            <Avatar
-                              src={member.image}
-                              style={{
-                                marginLeft: "-17px"
-                              }}
-                            ></Avatar>
-
-                            {member.user_type_id === 4 ? (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
-                                {member.first_name +
-                                  " " +
-                                  member.last_name +
-                                  " (Mentor)"}
-                              </span>
-                            ) : (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
-                                {member.first_name + " " + member.last_name}
-                              </span>
-                            )}
-
-                            {member.user_status === 1 ? (
-                              <status-indicator
-                                positive
-                                style={{
-                                  marginLeft: "10px"
-                                }}
-                              ></status-indicator>
-                            ) : (
-                              <status-indicator
-                                style={{
-                                  marginLeft: "10px"
-                                }}
-                              ></status-indicator>
-                            )}
-                          </ListItem>
-                        </List>
-                      );
-                    })
-                  : tempClassMem.map((member, index) => {
-                      return (
-                        <List key={index}>
-                          <ListItem>
-                            <Avatar
-                              src={member.image}
-                              style={{
-                                marginLeft: "-17px"
-                              }}
-                            ></Avatar>
-
-                            {member.user_type_id === 4 ? (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
-                                {member.first_name +
-                                  " " +
-                                  member.last_name +
-                                  " (Mentor)"}
-                              </span>
-                            ) : (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
-                                {member.first_name + " " + member.last_name}
-                              </span>
-                            )}
-
-                            {member.user_status === 1 ? (
-                              <status-indicator
-                                positive
-                                style={{
-                                  marginLeft: "10px"
-                                }}
-                              ></status-indicator>
-                            ) : (
-                              <status-indicator
-                                style={{
-                                  marginLeft: "10px"
-                                }}
-                              ></status-indicator>
-                            )}
-                          </ListItem>
-                        </List>
-                      );
-                    })}
-                <div
-                  className={classes.root}
-                  style={{
-                    display: "flex"
-                  }}
-                >
-                  <TextField
-                    id="outlined-basic"
-                    placeholder="Search member..."
-                    fullWidth
-                    onChange={e => handleSearch(e)}
-                  />
-                </div>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <div className={classes.requests}>
-              {userProfile.user_type_id === 3 ? (
-                <StudentTabs
-                  classReference={class_id}
-                  rowDatahandler={rowDatahandler}
-                />
-              ) : (
-                <MentorTabs
-                  rowDatahandler={rowDatahandler}
-                  class_id={class_id}
-                />
-              )}
-            </div>
-          </div>
-        </ListItem>
+              </div>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        )}
       </List>
     </div>
   );
@@ -595,7 +642,7 @@ export default function Topbar() {
             </Drawer>
             <Typography variant="h6">Handraiser</Typography>
           </div>
-          <div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
             <IconButton
               aria-label="account of current user"
               edge="end"
@@ -615,8 +662,6 @@ export default function Topbar() {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem></MenuItem>
-
             <MenuItem>
               <GoogleLogout
                 clientId="239954847882-ilomcrsuv3b0oke6tsbl7ofajjb11nkl.apps.googleusercontent.com"
