@@ -25,12 +25,9 @@ import Swal from "sweetalert2";
 import { Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
-import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
-import LockIcon from "@material-ui/icons/Lock";
 import TextField from "@material-ui/core/TextField";
 import SchoolIcon from "@material-ui/icons/School";
-import ListItemText from "@material-ui/core/ListItemText";
 import StudentTabs from "../student/Tabs/Tabs";
 import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
@@ -114,16 +111,18 @@ export default function Topbar() {
   const [search, setSearch] = useState("");
 
   const getClassMember = () => {
-    axios({
-      method: "get",
-      url: `/api/classes/members/${class_id}`
-    })
-      .then(res => {
-        setClassMem(res.data);
+    if (class_id) {
+      axios({
+        method: "get",
+        url: `/api/classes/members/${class_id}`
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          setClassMem(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
   const [tempClassMem, setTempClassMem] = useState([]);
   const classMembers = classMem.concat(classInfo);
@@ -302,7 +301,7 @@ export default function Topbar() {
                         Date Created
                       </span>
                       <span style={{ padding: "10px 10px 8px 9px" }}>
-                        {info.class_date_created}
+                        {new Date(info.class_date_created).toLocaleString()}
                       </span>
                     </div>
                   );

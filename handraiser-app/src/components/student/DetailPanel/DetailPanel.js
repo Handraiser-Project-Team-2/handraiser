@@ -99,16 +99,16 @@ export default function SimpleExpansionPanel({
       })
       .catch(err => {
         console.log(err);
-      }); 
+      });
   };
 
-  const getclassInfo = () => {  
+  const getclassInfo = () => {
     axios({
       method: "post",
       url: `/api/classinfo/${class_id}`
     })
       .then(res => {
-        setClassInfo(res.data); 
+        setClassInfo(res.data);
         setTempClassInfo(res.data);
       })
       .catch(err => {
@@ -183,7 +183,8 @@ export default function SimpleExpansionPanel({
                     <span
                       style={{
                         padding: "10px 10px 8px 9px",
-                        color: "darkblue"
+                        color: "darkblue",
+                        wordBreak: "break-word"
                       }}
                     >
                       {info.class_description}
@@ -194,7 +195,7 @@ export default function SimpleExpansionPanel({
                       Date Created
                     </span>
                     <span style={{ padding: "10px 10px 8px 9px" }}>
-                      {info.class_date_created}
+                      {new Date(info.class_date_created).toLocaleString()}
                     </span>
                   </div>
                 );

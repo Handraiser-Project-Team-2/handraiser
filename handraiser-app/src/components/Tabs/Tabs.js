@@ -78,16 +78,12 @@ export const TabBtn = props => {
     setTabValue(newValue);
   };
 
-  const handleOnChange = (e, tab) => {
+  const handleOnChange = e => {
     let email = e.target.name;
     let value = e.target.value;
     userData[email] = value;
     setUserData(userData);
-    if (tab === 1) {
-      setType("mentor");
-    } else {
-      setType("admin");
-    }
+    setType("mentor");
   };
 
   const handleOpen = () => {
@@ -99,7 +95,6 @@ export const TabBtn = props => {
   };
 
   const handleAdd = () => {
-    let isSubscribed = true;
     setOpenConfirm(true);
     axios
       .post(`/api/admin/keygen`, { ...userData, type })
@@ -115,7 +110,6 @@ export const TabBtn = props => {
           console.log(errors);
         }
       });
-    return () => (isSubscribed = false);
   };
 
   const handleConfirm = () => {
@@ -154,8 +148,8 @@ export const TabBtn = props => {
               onClick={() => setHide(hide === true ? hide : !hide)}
             />
             <Tab
-              label="Admins"
-              onClick={() => setHide(hide === true ? hide : !hide)}
+              label="Classes"
+              onClick={() => setHide(hide === false ? hide : !hide)}
             />
           </Tabs>
         </Paper>
@@ -166,7 +160,7 @@ export const TabBtn = props => {
               color="primary"
               onClick={() => handleOpen(props)}
             >
-              Generate Key
+              Add Mentor
             </Button>
           </BtnBox>
         )}
@@ -205,7 +199,7 @@ export const TabBtn = props => {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            name="name"
             label="Password"
             type="password"
             fullWidth
