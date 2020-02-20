@@ -307,7 +307,7 @@ useEffect(() => {
     }
 
     if(socket.connected === false){
-      alert("Oops! You're clicking too fast..")
+      alert("Oops! You're clicking too fast")
       window.location.reload();
     }
     // setRoom(rowData.concern.concern_id);
