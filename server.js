@@ -72,7 +72,7 @@ massive({
       "/api/assistance/:assisted_id/:class_id/:user_student_id",
       mentor.done
     );
-    app.get("/api/classes`/all/:class_id", mentor.get_all);
+    app.get("/api/classes/all/:class_id", mentor.get_all);
     app.post("/api/mentor/classroom/add", mentor.add_classroom); // register a new classroom
     app.get("/api/classes/queue/:class_id", mentor.get_inqueue); // get all assistance request
     app.post("/api/my/classes", mentor.get_my_classroom); // get all classroom referenced to the current user
@@ -82,7 +82,7 @@ massive({
 
     // student endpoints
     app.get("/api/student/queue/order/:class_id", student.queue_order_all);
-    app.patch("/api/student/request/:concern_id", student.delete);
+    app.delete("/api/student/request/:concern_id", student.delete);
 
     app.patch("/api/concern_list/:concern_id", student.updateConcern);
     app.post("/api/assisted_by", student.assisted_by);
@@ -118,9 +118,6 @@ massive({
     app.post("/api/sendMail", mail.sendEmail);
 
     io.on("connection", socket => {
-
-      console.log('connection established');
-
       const users = [];
       const joinRoom =[];
       socket.on("AddRequest", (data, callback) => {
@@ -162,7 +159,7 @@ massive({
 
         users.push(user);
 
-        //console.log("user", user);
+        console.log("user", user);
 
         user &&
           db.chat
@@ -175,7 +172,7 @@ massive({
               });
             })
             .catch(err => {
-              //console.log(err);
+              console.log(err);
             });
 
             
@@ -196,7 +193,7 @@ massive({
 
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
-        //console.log("send",user);
+        console.log("send",user);
         io.to(user.room).emit("message", {
           user: user.name,
           message: message,
@@ -204,19 +201,19 @@ massive({
           image: user.image,
           user_id: user.userid
         });
-        //console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
 
         callback();
       });
 
       socket.on("disconnect", () => {
-        //console.log("user disconnected");
+        console.log("user disconnected");
       });
     });
     server.listen(PORT, () => {
-      //console.log(`Server started on port ${PORT}`);
+      console.log(`Server started on port ${PORT}`);
     });
   })
   .catch(err => {
-    //console.error(err);
+    console.error(err);
   });

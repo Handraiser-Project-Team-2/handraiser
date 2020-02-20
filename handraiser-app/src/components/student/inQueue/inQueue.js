@@ -182,9 +182,8 @@ export default function InQueue(props) {
   const handleRemoveReq = () => {
     setAnchorEl(null);
 
-    // must only update the concern as closed
     axios
-      .patch(`/api/student/request/${concern.concern.concern_id}`, {})
+      .delete(`/api/student/request/${concern.concern.concern_id}`, {})
       .then(data => {
         socket.emit("handshake", { room: props.classReference });
       })
@@ -247,10 +246,10 @@ export default function InQueue(props) {
                       onClose={handleClose}
                     >
                       <MenuItem onClick={() => handleRemoveReq()}>
-                        Close
+                        Remove request
                       </MenuItem>
                       <MenuItem onClick={() => handleClickOpen()}>
-                        Edit
+                        Edit Request
                       </MenuItem>
                     </Menu>
 

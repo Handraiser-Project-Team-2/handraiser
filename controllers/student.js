@@ -66,7 +66,7 @@ module.exports = {
 
     const { class_id, user_id, concern_title, concern_description } = req.body;
 
-    console.log("here 39A", class_id, user_id, concern_title, concern_description);
+    console.log("here",req.body);
 
     db.concern_list
       .save({
@@ -77,12 +77,11 @@ module.exports = {
         concern_status: 2 //inqueue by default
       })
       .then(data => {
-        console.log(data)
         res.status(201).json(data);
       })
       .catch(err => {
         console.log(err);
-        res.status(401).json();
+        res.status(401).end();
       });
   },
   queue_order: (req, res) => {
@@ -222,19 +221,14 @@ module.exports = {
     const db = req.app.get("db");
 
     db.concern_list
-      .update(
-        {
-          concern_id: req.params.concern_id
-        },
-        {
-          concern_status: 3
-        }
-      )
+      .destroy({
+        concern_id: req.params.concern_id
+      })
       .then(data => {
         res.status(201).json(data);
       })
       .catch(err => {
-        res.status(401).end();
+        res.status(401).end(err);
       });
   },
   get_my_classroom: (req, res) => {
