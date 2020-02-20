@@ -3,9 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
-import { useTheme } from "@material-ui/core/styles";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import background from "../images/undraw_teaching_f1cm.svg";
+
 // COMPONENTS
 import CardPage from "./CardPage";
 import FindClassDialog from "./FindClassDialog";
