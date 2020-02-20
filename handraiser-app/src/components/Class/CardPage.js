@@ -13,6 +13,8 @@ import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
 import EditClassDialog from "./EditClassDialog";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -23,6 +25,7 @@ function Alert(props) {
 export default function CardPage({ classData, data, fetchMentorClass }) {
   const classes = useStyles();
   let history = useHistory();
+
   const { cstate, getData } = useContext(UserContext);
 
   useEffect(() => {
@@ -53,7 +56,7 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
   return (
     <>
       <Collapse in={copied}>
-        <Alert severity="success">Copied to clipboard!</Alert>
+        ;<Alert severity="success">Copied to clipboard!</Alert>
       </Collapse>
       {classData.map(row => (
         <Card className={classes.card} key={row.class_id}>
@@ -85,10 +88,11 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
             </CardContent>
           </CardActionArea>
           <CardActions className={classes.actions}>
-            
-            {
-              row.class_status === "open" ? <div className={classes.availability_open}>OPEN</div> : <div className={classes.availability_close}>CLOSE</div>
-            }
+            {row.class_status === "open" ? (
+              <div className={classes.availability_open}>OPEN</div>
+            ) : (
+              <div className={classes.availability_close}>CLOSE</div>
+            )}
 
             <div style={{ display: "flex", alignItems: "center" }}>
               <Typography
@@ -124,6 +128,10 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
 }
 
 const useStyles = makeStyles(theme => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff"
+  },
   typoDescription: {
     color: "grey",
     overflow: " hidden",
@@ -134,8 +142,8 @@ const useStyles = makeStyles(theme => ({
   },
   copyIcon: {
     color: "white",
-    "&:hover":{
-      color: '#ffffAA'
+    "&:hover": {
+      color: "#ffffAA"
     }
   },
   actions: {
@@ -168,10 +176,10 @@ const useStyles = makeStyles(theme => ({
   mentorName: {
     marginLeft: "3px",
     color: "white",
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
-    marginBottom: 'inherit'
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "inherit"
   },
   card: {
     minWidth: 345,
@@ -186,19 +194,18 @@ const useStyles = makeStyles(theme => ({
   media: {
     height: 140
   },
-  availability_open:{
-    fontSize: '0.7em',
-    padding: '5px',
-    marginLeft: '10px',
-    color: 'white',
-    background:'rebeccapurple',
+  availability_open: {
+    fontSize: "0.7em",
+    padding: "5px",
+    marginLeft: "10px",
+    color: "white",
+    background: "rebeccapurple"
   },
-  availability_close:{
-    fontSize: '0.7em',
-    padding: '5px',
-    marginLeft: '10px',
-    color: '#ffffff69',
-    background:'#880E4F',
+  availability_close: {
+    fontSize: "0.7em",
+    padding: "5px",
+    marginLeft: "10px",
+    color: "#ffffff69",
+    background: "#880E4F"
   }
 }));
-

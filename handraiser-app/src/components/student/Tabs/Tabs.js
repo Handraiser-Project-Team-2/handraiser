@@ -49,7 +49,7 @@ const TabBtn = props => {
             }}
           >
             <TextField
-              id="outlined-basic"
+              id="outlined-basic3"
               placeholder="Search"
               fullWidth
               onChange={e => setSearch(e.target.value)}

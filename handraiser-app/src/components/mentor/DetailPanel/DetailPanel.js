@@ -350,7 +350,7 @@ export default function SimpleExpansionPanel({
               }}
             >
               <TextField
-                id="outlined-basic"
+                id="outlined-basic1"
                 placeholder="Search member..."
                 fullWidth
                 onChange={e => handleSearch(e)}

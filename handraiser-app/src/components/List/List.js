@@ -63,7 +63,7 @@ export const UserList = () => {
             backgroundColor: "white",
             marginLeft: "5px",
             textAlign: "center",
-            border: "2px solid gray",
+            border: "2px solid #372476",
             borderRadius: "20px"
           }}
         >
@@ -86,7 +86,7 @@ export const UserList = () => {
             backgroundColor: "white",
             marginLeft: "5px",
             textAlign: "center",
-            border: "2px solid gray",
+            border: "2px solid #372476",
             borderRadius: "20px"
           }}
         >
@@ -108,7 +108,7 @@ export const UserList = () => {
           style={{
             backgroundColor: "white",
             textAlign: "center",
-            border: "2px solid gray",
+            border: "2px solid #372476",
             borderRadius: "20px"
           }}
         >
