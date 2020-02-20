@@ -85,8 +85,7 @@ export default function Topbar(props) {
   };
 
   const ENDPOINT = "localhost:5000";
-
-  let socket = io(ENDPOINT);
+  let socket;
 
   const toggleDrawer = (side, open) => event => {
     setState({ left: true, [side]: open });
@@ -97,6 +96,7 @@ export default function Topbar(props) {
   useEffect(() => {
     getclassInfo();
     getClassMember();
+    socket = io(ENDPOINT);
   }, []);
 
   const getclassInfo = () => {
