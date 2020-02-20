@@ -195,7 +195,7 @@ export default function Mentor({
   // const [messages, setMessages] = useState([]);
   // const [avatar, setAvatar] = useState("");
   // const [emoji, setEmoji] = useState(false);
-  // const ENDPOINT = "localhost:5000";
+//   const ENDPOINT = "localhost:5000";
 
   // useEffect(() => {
   //   socket = io(ENDPOINT);
@@ -366,7 +366,7 @@ export default function Mentor({
 
   return (
     <React.Fragment>
-      <Topbar />
+      <Topbar rowDatahandler={rowDatahandler} class_id={class_id} />
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}

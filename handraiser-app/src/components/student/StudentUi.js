@@ -254,7 +254,6 @@ export default function Student({
 
     existing();
   }, [cstate]);
-
   const sendRequest = () => {
     axios
       .post(`/api/student/request/assistance`, {
@@ -429,7 +428,7 @@ export default function Student({
 
   return (
     <React.Fragment>
-      <Topbar />
+      <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
           <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />

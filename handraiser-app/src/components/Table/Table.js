@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
-// import EditIcon from "@material-ui/icons/Edit";
-// import Button from "@material-ui/core/Button";
-// import { Tooltip } from "@material-ui/core";
 import axios from "axios";
 import Fade from "@material-ui/core/Fade";
 
 import "../../App.css";
 
-import { TableStyle, TableStyle2 } from "../../Styles/Styles";
+import { TableStyle, TableStyle2, TableStyle3 } from "../Styles/Styles2";
 
 // COMPONENTS
 import ViewMentorDialog from "./Mentor/ViewMentorDIalog";
@@ -48,30 +45,15 @@ export const TableCont = props => {
                 positive
                 style={{ marginRight: "10px" }}
               />
-              <span>Active</span>
+              <span>Online</span>
             </span>
           ) : (
             <span>
               <status-indicator style={{ marginRight: "10px" }} />
-              <span>Inactive</span>
+              <span>Offline</span>
             </span>
           )
       }
-      // {
-      //   title: "Actions",
-      //   field: "",
-      //   render: rowData => (
-      //     <React.Fragment>
-      //       <RowCont>
-      //         <Tooltip title="Edit">
-      //           <Button>
-      //             <EditIcon />
-      //           </Button>
-      //         </Tooltip>
-      //       </RowCont>
-      //     </React.Fragment>
-      //   )
-      // }
     ],
     mentorCol: [
       {
@@ -94,9 +76,30 @@ export const TableCont = props => {
       },
       {
         title: "Email Status",
-        field: "validation_status",
         render: row =>
-          row.validation_status === "true" ? "Verified" : "Not yet Verified"
+          row.validation_status === "true" ? (
+            <div style={{ display: "flex", textAlign: "center" }}>
+              <span
+                style={{
+                  border: "1px solid green",
+                  padding: "5px",
+                  borderRadius: "5px"
+                }}
+              >
+                <span style={{ color: "green" }}>Verified</span>
+              </span>
+            </div>
+          ) : (
+            <span
+              style={{
+                border: "1px solid red",
+                padding: "5px",
+                borderRadius: "5px"
+              }}
+            >
+              <span style={{ color: "red" }}>Not yet Verified</span>
+            </span>
+          )
       },
       {
         title: "Status",
@@ -110,68 +113,105 @@ export const TableCont = props => {
                 positive
                 style={{ marginRight: "10px" }}
               />
-              <span>Active</span>
+              <span>Online</span>
             </span>
           ) : (
             <span>
               <status-indicator style={{ marginRight: "10px" }} />
-              <span>Inactive</span>
+              <span>Offline</span>
             </span>
           )
       }
     ],
-    adminCol: [
+    classCol: [
       {
         title: "",
         field: ""
       },
       {
-        title: "Email",
-        field: "validation_email",
+        title: "Class Name",
+        render: row => (
+          <span
+            style={{
+              wordBreak: "break-word"
+            }}
+          >
+            {row.class_title}
+          </span>
+        )
+      },
+      {
+        title: "Description",
+        render: row => (
+          <span
+            style={{
+              wordBreak: "break-word"
+            }}
+          >
+            {row.class_description}
+          </span>
+        )
+      },
+      {
+        title: "Date Created",
+        render: row => new Date(row.class_date_created).toLocaleString()
+      },
+      {
+        title: "Created by",
+        field: "first_name",
+        render: row => (
+          <React.Fragment>
+            <span>{row.last_name + ", " + row.first_name}</span>
+          </React.Fragment>
+        )
+      },
+      {
+        title: "Status",
         render: row =>
-          row.validation_status === "true" ? (
-            <ViewMentorDialog data={row} />
+          row.class_status === "open" ? (
+            <span
+              style={{
+                border: "1px solid green",
+                padding: "5px",
+                borderRadius: "5px"
+              }}
+            >
+              <span style={{ color: "green" }}>Open</span>
+            </span>
           ) : (
-            row.validation_email
+            <span
+              style={{
+                border: "1px solid red",
+                padding: "5px",
+                borderRadius: "5px"
+              }}
+            >
+              <span style={{ color: "red" }}>Closed</span>
+            </span>
           )
-      },
-      {
-        title: "Key",
-        field: "validation_key"
-      },
-      {
-        title: "Email Status",
-        field: "validation_status",
-        render: row =>
-          row.validation_status === "true" ? "Verified" : "Not yet Verified"
       }
     ]
   });
-  const [mentorURL] = useState("api/admin/mentor_list");
-  const [adminURL] = useState("/api/admin/admins_list");
   const [studentURL] = useState("/api/user/student_list");
-
-  useEffect(() => {
-    if (!tableData.data) {
-      fetchData();
-    }
-  }, [tableData]);
+  const [mentorURL] = useState("api/admin/mentor_list");
+  const [classURL] = useState("/api/classes");
 
   const fetchData = async () => {
     let source = axios.CancelToken.source();
 
     try {
-      const mentor = await axios(mentorURL, { cancelToken: source.token });
-      const admin = await axios(adminURL, { cancelToken: source.token });
       const student = await axios(studentURL, {
         cancelToken: source.token
       });
+      const mentor = await axios(mentorURL, { cancelToken: source.token });
+      const classes = await axios(classURL, { cancelToken: source.token });
+
       if (tabValue === 0) {
         setTableData(tableData => ({ ...tableData, data: student.data }));
       } else if (tabValue === 1) {
         setTableData(tableData => ({ ...tableData, data: mentor.data }));
       } else if (tabValue === 2) {
-        setTableData(tableData => ({ ...tableData, data: admin.data }));
+        setTableData(tableData => ({ ...tableData, data: classes.data }));
       }
     } catch (err) {
       if (axios.isCancel(err)) {
@@ -181,19 +221,19 @@ export const TableCont = props => {
     }
   };
 
+  useEffect(() => {
+    if (!tableData.data) {
+      fetchData();
+    }
+  }, [tableData]);
+
   return (
     <React.Fragment>
       {tabValue === 0 ? (
         <TableStyle2>
           <MaterialTable
             title=""
-            columns={
-              tabValue === 1
-                ? tableData.mentorCol
-                : tabValue === 2
-                ? tableData.adminCol
-                : tableData.studentCol
-            }
+            columns={tableData.studentCol}
             data={tableData.data}
             options={{
               pageSize: 5,
@@ -210,17 +250,11 @@ export const TableCont = props => {
             }}
           />
         </TableStyle2>
-      ) : (
+      ) : tabValue === 1 ? (
         <TableStyle>
           <MaterialTable
             title=""
-            columns={
-              tabValue === 1
-                ? tableData.mentorCol
-                : tabValue === 2
-                ? tableData.adminCol
-                : tableData.studentCol
-            }
+            columns={tableData.mentorCol}
             data={tableData.data}
             options={{
               pageSize: 5,
@@ -237,6 +271,27 @@ export const TableCont = props => {
             }}
           />
         </TableStyle>
+      ) : (
+        <TableStyle3>
+          <MaterialTable
+            title=""
+            columns={tableData.classCol}
+            data={tableData.data}
+            options={{
+              pageSize: 5,
+              pageSizeOptions: [5, 10, 15, 20],
+              actionsColumnIndex: -1,
+              draggable: false,
+              headerStyle: {
+                fontSize: 18
+              },
+              cellStyle: {
+                width: 900,
+                maxWidth: 280
+              }
+            }}
+          />
+        </TableStyle3>
       )}
     </React.Fragment>
   );

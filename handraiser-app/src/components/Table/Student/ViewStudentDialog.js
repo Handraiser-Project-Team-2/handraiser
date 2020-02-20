@@ -34,7 +34,7 @@ export default function ViewStudentDialog({ data }) {
       data: { email: data.email }
     })
       .then(data => {
-        console.log(data.data);
+        // console.log(data.data);
         setProfileData(data.data);
       })
       .catch(err => {
