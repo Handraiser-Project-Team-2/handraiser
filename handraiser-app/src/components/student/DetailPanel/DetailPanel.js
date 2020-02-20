@@ -202,7 +202,7 @@ export default function SimpleExpansionPanel({
                       Date Created
                     </span>
                     <span style={{ padding: "10px 10px 8px 9px" }}>
-                      {info.class_date_created}
+                      {new Date(info.class_date_created).toLocaleString()}
                     </span>
                   </div>
                 );

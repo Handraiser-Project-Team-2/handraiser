@@ -11,6 +11,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
 import HelpIcon from "@material-ui/icons/Help";
+import ScrollToBottom from "react-scroll-to-bottom";
+import styled from "styled-components";
 import {
   Div,
   // Nav,
@@ -49,7 +51,78 @@ const useStyles = makeStyles(theme => ({
       cursor: "pointer"
     }
   },
-  interact: {
+  span: {
+    position: "fixed",
+    bottom: theme.spacing(2),
+    right: theme.spacing(5)
+  },
+  scrolltobottom: {
+    padding: "5% 0",
+    overflow: "auto",
+    height: "39.7em",
+    backgroundColor: "white"
+  },
+  cont2: {
+    display: " flex",
+    marginTop: "10px",
+    marginRight: "15px",
+    padding: "10px",
+    flexDirection: "row"
+  },
+  prof: {
+    display: "flex",
+    marginLeft: "10px",
+    alignItems: "flex-end"
+  },
+  receiver: {
+    marginLeft: "10px",
+    backgroundColor: "white",
+    maxWidth: "450px",
+    padding: "10px 20px 10px 20px",
+    borderRadius: "10px 10px 10px 0px"
+  },
+  animation: {
+    display: "inline-block",
+    backgroundColor: "white",
+    width: "5px",
+    height: "5px",
+    borderRadius: "100%",
+    marginRight: "5px",
+    animation: "bob 2s infinite"
+  }
+}));
+const DivAnimation = styled.div`
+  span {
+    display: inline-block;
+    background-color: white;
+    width: 5px;
+    height: 5px;
+    border-radius: 100%;
+    margin-right: 5px;
+    animation: bob 2s infinite;
+  }
+  span:nth-child(1) {
+    animation-delay: -1s;
+  }
+  span:nth-child(2) {
+    animation-delay: -0.85s;
+  }
+  span:nth-child(3) {
+    animation-delay: -0.7s;
+    margin-right: 0;
+  }
+  @keyframes bob {
+    10% {
+      transform: translateY(-10px);
+      background-color: #9e9da2;
+    }
+    50% {
+      transform: translateY(0);
+      background-color: #b6b5ba;
+    }
+  }
+`;
+ const interact = {
     height: "96px",
     display: "flex",
     justifyContent: "center",
@@ -82,13 +155,30 @@ const useStyles = makeStyles(theme => ({
       height: "75px"
     }
   }
-}));
 
-export default function Mentor() {
+
+export default function Mentor({
+  class_id,
+  rowDatahandler,
+  messages,
+  sendMessage,
+  setMessage,
+  setMessages,
+  message,
+  active,
+  userid,
+  feed,
+  username,
+  room,
+  handleBackQueue,
+  handleDone,
+  selection,
+  rowData
+}) {
   const classes = useStyles();
   let history = useHistory();
-  let { class_id } = useParams();
-  const [rowData, setRowData] = useState([]);
+  // let { class_id } = useParams();
+  // const [rowData, setRowData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
@@ -97,20 +187,20 @@ export default function Mentor() {
   // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
   ///for chat
-  const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("");
-  const [message, setMessage] = useState("");
-  const [feed, setfeed] = useState("");
-  const [active, setActive] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [avatar, setAvatar] = useState("");
-  const [emoji, setEmoji] = useState(false);
-  const ENDPOINT = "172.60.62.113:5000";
+  // const [username, setUsername] = useState("");
+  // const [room, setRoom] = useState("");
+  // const [message, setMessage] = useState("");
+  // const [feed, setfeed] = useState("");
+  // const [active, setActive] = useState(false);
+  // const [messages, setMessages] = useState([]);
+  // const [avatar, setAvatar] = useState("");
+  // const [emoji, setEmoji] = useState(false);
+//   const ENDPOINT = "localhost:5000";
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    console.log(socket);
-  }, [ENDPOINT]);
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  //   console.log(socket);
+  // }, [ENDPOINT]);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -120,10 +210,10 @@ export default function Mentor() {
     setAnchorEl(null);
   };
 
-  const sendMsg = evt => {
-    evt.preventDefault();
-    // console.log(name);
-  };
+  // const sendMsg = evt => {
+  //   evt.preventDefault();
+  //   // console.log(name);
+  // };
 
   // const handleClose = () => {
   //   setAnchorEl(null);
@@ -136,98 +226,98 @@ export default function Mentor() {
   //   );
   // };
 
-  const handleDone = rowData => {
-    setSelection(false);
+  // const handleDone = rowData => {
+  //   setSelection(false);
 
-    if (rowData.length === 0) {
-      Swal.fire({
-        icon: "error",
-        title: "No concern selected!",
-        text: "Please select a concern."
-      });
-    }
-    setConcernTitle("");
-    setName("");
-    setAnchorEl(null);
+  //   if (rowData.length === 0) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "No concern selected!",
+  //       text: "Please select a concern."
+  //     });
+  //   }
+  //   setConcernTitle("");
+  //   setName("");
+  //   setAnchorEl(null);
 
-    axios
-      .patch(`/api/concern_list/${rowData.concern_id}`, {
-        concern_id: rowData.concern_id,
-        concern_title: rowData.concern_title,
-        concern_description: rowData.concern_description,
-        concern_status: 3
-      })
-      .then(data => {
-        axios
-          .get(
-            `/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
-            {}
-          )
-          .then(data => {
-            axios
-              .patch(
-                `/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-                {
-                  assisted_id: data.data[0].assisted_id,
-                  user_student_id: data.data[0].user_id,
-                  class_id: data.data[0].class_id,
-                  assist_status: "done"
-                }
-              )
-              .then(data => {
-                socket.emit("handshake", { room: class_id });
-              })
-              .catch(err => {
-                console.log(err);
-              });
-          });
-      });
-  };
+  //   axios
+  //     .patch(`/api/concern_list/${rowData.concern_id}`, {
+  //       concern_id: rowData.concern_id,
+  //       concern_title: rowData.concern_title,
+  //       concern_description: rowData.concern_description,
+  //       concern_status: 3
+  //     })
+  //     .then(data => {
+  //       axios
+  //         .get(
+  //           `/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
+  //           {}
+  //         )
+  //         .then(data => {
+  //           axios
+  //             .patch(
+  //               `/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
+  //               {
+  //                 assisted_id: data.data[0].assisted_id,
+  //                 user_student_id: data.data[0].user_id,
+  //                 class_id: data.data[0].class_id,
+  //                 assist_status: "done"
+  //               }
+  //             )
+  //             .then(data => {
+  //               socket.emit("handshake", { room: class_id });
+  //             })
+  //             .catch(err => {
+  //               console.log(err);
+  //             });
+  //         });
+  //     });
+  // };
 
-  const [selection, setSelection] = useState(false);
+  // const [selection, setSelection] = useState(false);
 
-  const handleBackQueue = rowData => {
-    setSelection(false);
+  // const handleBackQueue = rowData => {
+  //   setSelection(false);
 
-    if (rowData.length === 0) {
-      Swal.fire({
-        icon: "error",
-        title: "No concern selected!",
-        text: "Please select a concern."
-      });
-    }
-    setConcernTitle("");
-    setName("");
-    setAnchorEl(null);
-    axios
-      .patch(`/api/concern_list/${rowData.concern_id}`, {
-        concern_id: rowData.concern_id,
-        concern_title: rowData.concern_title,
-        concern_description: rowData.concern_description,
-        concern_status: 2
-      })
-      .then(data => {
-        socket.emit("handshake", { room: class_id });
+  //   if (rowData.length === 0) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "No concern selected!",
+  //       text: "Please select a concern."
+  //     });
+  //   }
+  //   setConcernTitle("");
+  //   setName("");
+  //   setAnchorEl(null);
+  //   axios
+  //     .patch(`/api/concern_list/${rowData.concern_id}`, {
+  //       concern_id: rowData.concern_id,
+  //       concern_title: rowData.concern_title,
+  //       concern_description: rowData.concern_description,
+  //       concern_status: 2
+  //     })
+  //     .then(data => {
+  //       socket.emit("handshake", { room: class_id });
 
-        axios.get(`/api/assisted_by/${data.data.user_id}`, {}).then(data => {
-          axios.delete(`/api/assisted_by/${data.data[0].user_student_id}`, {});
-        });
-      });
-  };
+  //       axios.get(`/api/assisted_by/${data.data.user_id}`, {}).then(data => {
+  //         axios.delete(`/api/assisted_by/${data.data[0].user_student_id}`, {});
+  //       });
+  //     });
+  // };
 
-  const rowDatahandler = rowData => {
-    setSelection(true);
-    setConcernTitle(rowData.concern_title);
-    setRowData(rowData);
-    axios
-      .get(`/api/userprofile/${rowData.user_id}`, {})
-      .then(data => {
-        setName(data.data[0].first_name + " " + data.data[0].last_name);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  // const rowDatahandler = rowData => {
+  //   setSelection(true);
+  //   setConcernTitle(rowData.concern_title);
+  //   setRowData(rowData);
+  //   axios
+  //     .get(`/api/userprofile/${rowData.user_id}`, {})
+  //     .then(data => {
+  //       setName(data.data[0].first_name + " " + data.data[0].last_name);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
@@ -373,7 +463,40 @@ export default function Mentor() {
           )}
 
           {selection ? (
-            <Chatfield />
+             <ScrollToBottom className={classes.scrolltobottom}>
+             {messages.map((message, i) => (
+               <div key={i} style={{ overflowWrap: "break-word" }}>
+              
+                   <Chatfield
+                 
+                     message={message}
+                     username={username}
+                     feed={feed}
+                     active={active}
+                     userid={userid}
+                   />
+               
+               </div>
+              
+             ))}
+    
+             <div>
+               {feed && active === true ? (
+                 <div className={classes.cont2}>
+                   <div className={classes.prof}>
+                     {/* <Avatar src={feed} /> */}
+                   </div>
+                   <div className={classes.receiver}>
+                     <DivAnimation>
+                       <span></span>
+                       <span></span>
+                       <span></span>
+                     </DivAnimation>
+                   </div>
+                 </div>
+               ) : null}
+             </div>
+           </ScrollToBottom>
           ) : (
             <div
               style={{
@@ -399,7 +522,7 @@ export default function Mentor() {
                       width: "100%"
                     }}
                   >
-                    <form onSubmit={sendMsg}>
+                    <form onSubmit={sendMessage}>
                       {/* <TextField
                         id="outlined-textarea"
                         multiline
@@ -407,8 +530,12 @@ export default function Mentor() {
                         fullWidth
                         rows="3"
                       /> */}
-                      <Input />
-
+                      <Input
+                      message={message}
+                      setMessage={setMessage}
+                      sendMessage={sendMessage}
+                      username={username}
+                    />
                       <div
                         style={{
                           display: "flex",
@@ -416,7 +543,7 @@ export default function Mentor() {
                           marginTop: "15px"
                         }}
                       >
-                        <Send onClick={sendMsg}>SEND</Send>
+                        <Send onClick={sendMessage}>SEND</Send>
                       </div>
                     </form>
                   </div>
