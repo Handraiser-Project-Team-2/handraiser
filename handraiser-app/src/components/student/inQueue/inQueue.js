@@ -88,7 +88,6 @@ export default function InQueue(props) {
   const ENDPOINT = "localhost:5000";
 
   let socket = io(ENDPOINT);
-  const [initial, setInitial] = useState();
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -110,7 +109,7 @@ export default function InQueue(props) {
     });
 
     socket.on("consolidateRequest", message => {
-      console.log("message recieved", message);
+      // console.log("message recieved", message);
       update("");
     });
 
@@ -125,6 +124,7 @@ export default function InQueue(props) {
       url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
+      // console.log(res.data.length);
     });
   };
 
@@ -164,7 +164,7 @@ export default function InQueue(props) {
             console.log(err);
           });
 
-        console.log(data);
+        // console.log(data);
       })
       .catch(err => {
         console.log(err);

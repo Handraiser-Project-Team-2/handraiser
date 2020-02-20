@@ -27,10 +27,10 @@ function TabPanel(props) {
     </Typography>
   );
 }
+
 const TabBtn = props => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
-  const [hide, setHide] = useState(false);
   const [search, setSearch] = useState("");
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -63,18 +63,11 @@ const TabBtn = props => {
             color: "white"
           }}
         >
-          <Tab
-            label="IN QUEUE"
-            onClick={() => setHide(hide === false ? hide : !hide)}
-          />
-
-          <Tab
-            label="CLOSED"
-            onClick={() => setHide(hide === true ? hide : !hide)}
-          />  
+          <Tab label="IN QUEUE" />
+          <Tab label="CLOSED" />
         </Tabs>
       </Paper>
-      
+
       <TabPanel value={tabValue} index={0}>
         <InQueue
           rowDatahandler={props.rowDatahandler}

@@ -23,6 +23,23 @@ import { TableCont } from "../Table/Table";
 import { GenerateKey } from "../Generate-Key/Generate";
 // var jwtDecode = require("jwt-decode");
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box style={{ paddingTop: "50px" }}>{children}</Box>}
+    </Typography>
+  );
+}
+
 export const TabBtn = props => {
   // const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   // const user_id = decoded.userid;
@@ -41,39 +58,20 @@ export const TabBtn = props => {
     setOpenConfirm(false);
   };
 
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-      <Typography
-        component="div"
-        role="tabpanel"
-        hidden={value !== index}
-        id={`full-width-tabpanel-${index}`}
-        aria-labelledby={`full-width-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box style={{ paddingTop: "50px" }}>{children}</Box>
-        )}
-      </Typography>
-    );
-  }
-
   useEffect(() => {
-    let mounted = true;
     axios({
       method: "post",
       url: `/api/user/data`,
       data: {
         token: sessionStorage.getItem("token")
       }
-    }).then(res => {
-      if (!mounted) setAdminEmail(res.data.email);
-    });
-    return () => {
-      mounted = false;
-    };
+    })
+      .then(res => {
+        setAdminEmail(res.data.email);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -81,16 +79,12 @@ export const TabBtn = props => {
     setTabValue(newValue);
   };
 
-  const handleOnChange = (e, tab) => {
+  const handleOnChange = e => {
     let email = e.target.name;
     let value = e.target.value;
     userData[email] = value;
     setUserData(userData);
-    if (tab === 1) {
-      setType("mentor");
-    } else {
-      setType("admin");
-    }
+    setType("mentor");
   };
 
   const handleOpen = () => {
@@ -102,7 +96,6 @@ export const TabBtn = props => {
   };
 
   const handleAdd = () => {
-    let isSubscribed = true;
     setOpenConfirm(true);
     axios
       .post(`/api/admin/keygen`, { ...userData, type })
@@ -118,7 +111,6 @@ export const TabBtn = props => {
           console.log(errors);
         }
       });
-    return () => (isSubscribed = false);
   };
 
   const handleConfirm = () => {
@@ -157,8 +149,8 @@ export const TabBtn = props => {
               onClick={() => setHide(hide === true ? hide : !hide)}
             />
             <Tab
-              label="Admins"
-              onClick={() => setHide(hide === true ? hide : !hide)}
+              label="Classes"
+              onClick={() => setHide(hide === false ? hide : !hide)}
             />
           </Tabs>
         </Paper>
@@ -169,7 +161,7 @@ export const TabBtn = props => {
               color="primary"
               onClick={() => handleOpen(props)}
             >
-              Generate Key
+              Add Mentor
             </Button>
           </BtnBox>
         )}
@@ -210,7 +202,7 @@ export const TabBtn = props => {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            name="name"
             label="Password"
             type="password"
             fullWidth
