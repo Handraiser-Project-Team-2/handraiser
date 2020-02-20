@@ -443,7 +443,7 @@ export default function Student() {
 
   return (
     <React.Fragment>
-      <Topbar />
+      <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
           <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />

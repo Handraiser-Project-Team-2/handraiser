@@ -56,6 +56,7 @@ export default function InQueue({ class_id, search }) {
                   }}
                   data={data}
                   index={index}
+                  key={index}
                 />
               );
             })
