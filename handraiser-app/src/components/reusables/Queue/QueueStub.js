@@ -23,12 +23,12 @@ export default function QueueStub(props) {
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-  const ENDPOINT = "localhost:5000";
-  let socket = io(ENDPOINT);
+  // const ENDPOINT = "localhost:5000";
+  // let socket = io(ENDPOINT);
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
-  }, [ENDPOINT]);
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  // }, [ENDPOINT]);
 
   const handleMenu = (event, concern) => {
     setConcern(concern);
@@ -67,7 +67,7 @@ export default function QueueStub(props) {
       .then(data => {
         if (props.update) props.update("");
 
-        socket.emit("handshake", { room: props.rowDatahandler.class_id });
+        // socket.emit("handshake", { room: props.rowDatahandler.class_id });
 
         axios
           .get(`/api/assisted_by/${data.data.user_id}`, {})
@@ -118,9 +118,9 @@ export default function QueueStub(props) {
                 }
               )
               .then(data => {
-                socket.emit("handshake", {
-                  room: props.rowDatahandler.class_id
-                });
+                // socket.emit("handshake", {
+                //   room: props.rowDatahandler.class_id
+                // });
 
                 if (props.update) props.update("");
               })

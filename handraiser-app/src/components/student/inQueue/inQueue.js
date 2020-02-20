@@ -85,38 +85,38 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "localhost:5000";
 
-  let socket = io(ENDPOINT);
+  // let socket = io(ENDPOINT);
   const [initial, setInitial] = useState();
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("join", {
-      username: "Admin",
-      room: props.classReference,
-      image: ""
-    });
-  }, [ENDPOINT]);
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  //   socket.emit("join", {
+  //     username: "Admin",
+  //     room: props.classReference,
+  //     image: ""
+  //   });
+  // }, [ENDPOINT]);
 
   useEffect(() => {
     if (props.search || !concernsData) {
       update(props.search);
     }
 
-    socket.on("updateComponents", message => {
-      update("");
-    });
+    // socket.on("updateComponents", message => {
+    //   update("");
+    // });
 
-    socket.on("consolidateRequest", message => {
-      console.log("message recieved", message);
-      update("");
-    });
+    // socket.on("consolidateRequest", message => {
+    //   console.log("message recieved", message);
+    //   update("");
+    // });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected to server");
-    });
-  }, [props.search, ENDPOINT, concernsData]); //class_id
+    // socket.on("disconnect", () => {
+    //   console.log("Disconnected to server");
+    // });
+  }, [props.search, concernsData]); //class_id
 
   const update = data => {
     axios({
@@ -158,7 +158,7 @@ export default function InQueue(props) {
             concern_status: data.data[0].concern_status
           })
           .then(data => {
-            socket.emit("handshake", { room: props.classReference });
+            // socket.emit("handshake", { room: props.classReference });
           })
           .catch(err => {
             console.log(err);
@@ -185,7 +185,7 @@ export default function InQueue(props) {
     axios
       .delete(`/api/student/request/${concern.concern.concern_id}`, {})
       .then(data => {
-        socket.emit("handshake", { room: props.classReference });
+        // socket.emit("handshake", { room: props.classReference });
       })
       .catch(err => {
         console.log(err);

@@ -12,36 +12,36 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
 
-    socket.emit("join", {
-      username: "Admin",
-      room: rowDatahandler.class_id,
-      image: ""
-    });
-  }, [ENDPOINT]);
+  //   socket.emit("join", {
+  //     username: "Admin",
+  //     room: rowDatahandler.class_id,
+  //     image: ""
+  //   });
+  // }, [ENDPOINT]);
 
   useEffect(() => {
     if (rowDatahandler.search || !concernsData) {
       update(rowDatahandler.search);
     }
 
-    socket.on("updateComponents", message => {
-      update("");
-    });
+    // socket.on("updateComponents", message => {
+    //   update("");
+    // });
 
-    socket.on("consolidateRequest", message => {
-      update("");
-    });
+    // socket.on("consolidateRequest", message => {
+    //   update("");
+    // });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected to server");
-    });
-  }, [rowDatahandler.rowDatahandler.search, ENDPOINT, concernsData]);
+    // socket.on("disconnect", () => {
+    //   console.log("Disconnected to server");
+    // });
+  }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
   const update = data => {
     axios({

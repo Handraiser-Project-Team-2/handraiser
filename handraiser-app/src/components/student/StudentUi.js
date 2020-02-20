@@ -184,7 +184,7 @@ export default function Student({
   // const [avatar, setAvatar] = useState("");
   // const [emoji, setEmoji] = useState(false);
   // const [disable, setDisable] = useState(false);
-  const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
@@ -196,15 +196,15 @@ export default function Student({
   };
 
   // did mount
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("join", { username: "Yow", room: class_id, image: "" });
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  //   socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
-    socket.on("updateComponents", data => {
-      console.log("updates");
-      existing();
-    });
-  }, []);
+  //   socket.on("updateComponents", data => {
+  //     console.log("updates");
+  //     existing();
+  //   });
+  // }, [ENDPOINT]);
 
   //did update
   useEffect(() => {

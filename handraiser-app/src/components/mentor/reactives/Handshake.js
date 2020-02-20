@@ -15,19 +15,19 @@ export default function Handshake(props) {
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
-  const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "localhost:5000";
 
-  let socket = io(ENDPOINT);
+  // let socket = io(ENDPOINT);
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
 
-    socket.emit("join", {
-      username: "hanshakes",
-      room: class_id,
-      image: ""
-    });
-  });
+  //   socket.emit("join", {
+  //     username: "hanshakes",
+  //     room: class_id,
+  //     image: ""
+  //   });
+  // });
 
   const accept = highdata => {
     axios
@@ -39,7 +39,7 @@ export default function Handshake(props) {
       })
       .then(data => {
         props.rowDatahandler(data.data);
-        socket.emit("handshake", { room: highdata.class_id });
+        // socket.emit("handshake", { room: highdata.class_id });
 
         axios
           .get(`/api/assisted_by/${highdata.class_id}/${highdata.user_id}`, {})
