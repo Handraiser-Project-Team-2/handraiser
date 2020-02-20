@@ -32,14 +32,20 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
   }, [cstate, getData]);
 
   const cardClick = e => {
-    if (cstate) {
-      if (cstate.user_type_id === 3) {
-        history.push(`/student/${e}`);
-      }
-      if (cstate.user_type_id === 4) {
-        history.push(`/mentor/${e}`);
-      }
+   
+    history.push(`/classroom`)
+
+    if(cstate){
+      history.push(`/classroom/${e}`)
     }
+    // if (cstate) {
+    //   if (cstate.user_type_id === 3) {
+    //     history.push(`/student/${e}`);
+    //   }
+    //   if (cstate.user_type_id === 4) {
+    //     history.push(`/mentor/${e}`);
+    //   }
+    // }
   };
 
   const [copied, setCopied] = useState(false);
