@@ -19,7 +19,6 @@ export const BtnBox = styled.div`
 export const RowCont = styled.div`
   margin-top: -5px;
 `;
-
 //Student and Mentor Ui Styles
 export const Nav = styled.div`
   width: 100%;
@@ -279,6 +278,9 @@ export const LoginButton = styled.button`
   border-radius: 100px;
   border: none;
   cursor: pointer;
+  button:focus {
+    outline: none;
+  }
   @media screen and (max-width: 300px) {
     width: 160px;
     padding: 6px;

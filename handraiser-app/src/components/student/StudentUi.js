@@ -201,7 +201,6 @@ export default function Student({
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     socket.on("updateComponents", data => {
-      console.log("updates");
       existing();
     });
   }, []);
@@ -451,32 +450,32 @@ export default function Student({
               </div>
             </TitleName>
             <Option>
-              <div>
+              <span>
                 <HelpOutlineIcon
                   onClick={handleClickDetail}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
-              </div>
-              <div>
+              </span>
+              <span>
                 <PeopleOutlineIcon
                   onClick={handleClickMember}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
-              </div>
+              </span>
               <div>
                 <MoreVertIcon
                   onClick={handleMenu}
                   style={{
                     fontSize: 30,
-                    color: "grey",
+                    color: "#372476",
                     cursor: "pointer"
                   }}
                 />
