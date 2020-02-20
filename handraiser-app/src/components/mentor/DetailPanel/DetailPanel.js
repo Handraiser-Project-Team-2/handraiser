@@ -22,6 +22,22 @@ const useStyles = makeStyles(theme => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular
+  },
+  title: {
+    display: "inline-block",
+    overflow: " hidden",
+    width: "250px",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap"
+  },
+  desc: {
+    padding: "10px 10px 8px 9px",
+    color: "darkblue",
+    width: "250px",
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap"
   }
 }));
 
@@ -170,19 +186,14 @@ export default function SimpleExpansionPanel({
                         padding: "10px 10px 5px 10px"
                       }}
                     >
-                      <span>{info.class_title}</span>
+                      <span className={classes.title}>{info.class_title}</span>
                     </span>
                     <span
                       style={{ padding: "25px 10px 5px 10px", color: "grey" }}
                     >
                       Description
                     </span>
-                    <span
-                      style={{
-                        padding: "10px 10px 8px 9px",
-                        color: "darkblue"
-                      }}
-                    >
+                    <span className={classes.desc}>
                       {info.class_description}
                     </span>
                     <span

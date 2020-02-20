@@ -105,7 +105,7 @@ export default function Mentor() {
   const [messages, setMessages] = useState([]);
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -319,34 +319,34 @@ export default function Mentor() {
                 </Typography>
               </TitleName>
               <Option>
-                <div>
+                <span>
                   <HelpIcon
                     onClick={handleClickDetail}
                     style={{
                       fontSize: 30,
-                      color: "#c4c4c4",
+
                       cursor: "pointer",
                       color: "#372476"
                     }}
                   />
-                </div>
-                <div>
+                </span>
+                <span>
                   <GroupIcon
                     onClick={handleClickMember}
                     style={{
                       fontSize: 30,
-                      color: "#c4c4c4",
+
                       cursor: "pointer",
                       color: "#372476"
                     }}
                   />
-                </div>
+                </span>
                 <div>
                   <MoreVertIcon
                     onClick={handleMenu}
                     style={{
                       fontSize: 30,
-                      color: "#c4c4c4",
+
                       cursor: "pointer",
                       color: "#372476"
                     }}

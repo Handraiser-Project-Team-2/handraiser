@@ -15,7 +15,7 @@ export default function Handshake(props) {
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let socket = io(ENDPOINT);
 
@@ -232,8 +232,7 @@ const useStyles = makeStyles(theme => ({
   handshake_text_btn_2: {
     fontSize: "3em",
     color: "white",
-    fontWeight: "800",
-    fontWeight: "200"
+    fontWeight: "800"
   },
   handshake_img: {
     backgroundSize: "cover",

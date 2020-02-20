@@ -225,7 +225,9 @@ export const Option = styled.div`
   align-items: center;
   width: 145px;
   @media (max-width: 780px) {
-    display: none;
+    span {
+      display: none;
+    }
   }
 `;
 export const Shared = styled.div`

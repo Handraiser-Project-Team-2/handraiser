@@ -1,17 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Handshake from "../../images/handshake.gif";
-import DoneIcon from "@material-ui/icons/Done";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import Avatar from "@material-ui/core/Avatar";
-import { Typography, Paper } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import { Paper } from "@material-ui/core";
 import axios from "axios";
 import "status-indicator/styles.css";
 import io from "socket.io-client";
@@ -60,7 +50,7 @@ export default function InQueue({ class_id, search }) {
 
   const { cstate, getData } = useContext(UserContext);
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
 
   useEffect(() => {
@@ -100,13 +90,6 @@ export default function InQueue({ class_id, search }) {
       .catch(err => {
         console.log(err);
       });
-  };
-
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   return (

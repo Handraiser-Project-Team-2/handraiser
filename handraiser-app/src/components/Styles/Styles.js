@@ -92,7 +92,7 @@ export const TableStyle2 = styled.div`
     td:before {
       position: absolute;
       align-items: center;
-      top: 6px;
+      top: 20px;
       left: 6px;
       width: 20%;
       padding: 10px;
@@ -370,6 +370,9 @@ export const LoginButton = styled.button`
   border-radius: 100px;
   border: none;
   cursor: pointer;
+  button:focus {
+    outline: none;
+  }
   @media screen and (max-width: 300px) {
     width: 160px;
     padding: 6px;

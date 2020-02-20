@@ -28,6 +28,19 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     flexGrow: 1
+  },
+  name: {
+    "@media (max-width: 862px)": {
+      textAlign: "center"
+    }
+  },
+  helped: {
+    textAlign: "center",
+    borderRight: "1px solid lightgrey"
+  },
+  attended: {
+    textAlign: "center",
+    borderRight: "1px solid lightgrey"
   }
 }));
 
@@ -44,7 +57,7 @@ export default function MentorProfile({ profileData, classData }) {
               src={profileData.image}
               className={classes.avatar}
             />
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" gutterBottom className={classes.name}>
               {`${profileData.first_name} ${profileData.last_name}`}
             </Typography>
             <Typography
@@ -69,15 +82,7 @@ export default function MentorProfile({ profileData, classData }) {
             alignItems="center"
             className={classes.statsCont}
           >
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              style={{
-                textAlign: "center",
-                borderRight: "1px solid lightgrey"
-              }}
-            >
+            <Grid className={classes.attended} item xs={12} sm={4}>
               <Typography variant="h3" gutterBottom>
                 {Object.keys(classData).length}
               </Typography>
@@ -89,15 +94,7 @@ export default function MentorProfile({ profileData, classData }) {
                 Class Attended
               </Typography>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              style={{
-                textAlign: "center",
-                borderRight: "1px solid lightgrey"
-              }}
-            >
+            <Grid className={classes.helped} item xs={12} sm={4}>
               <Typography variant="h3" gutterBottom>
                 {profileData.stud_helped}
               </Typography>

@@ -143,7 +143,7 @@ const DivAnimation = styled.div`
 var jwtDecode = require("jwt-decode");
 let socket;
 export default function Student() {
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
+  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
@@ -169,7 +169,7 @@ export default function Student() {
   const [avatar, setAvatar] = useState("");
   const [emoji, setEmoji] = useState(false);
   const [disable, setDisable] = useState(false);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
@@ -185,10 +185,8 @@ export default function Student() {
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     socket.on("updateComponents", data => {
-      console.log('updates')
       existing();
     });
-
   }, []);
 
   //did update
@@ -238,8 +236,6 @@ export default function Student() {
     }
 
     existing();
-
-  
   }, [cstate, ENDPOINT]);
 
   useEffect(() => {
@@ -250,8 +246,6 @@ export default function Student() {
     socket.on("not typing", data => {
       setfeed(data);
     });
-
-    
   });
 
   useEffect(() => {
@@ -276,7 +270,6 @@ export default function Student() {
   };
 
   const sendRequest = () => {
-
     axios
       .post(`/api/student/request/assistance`, {
         class_id: class_id,
@@ -297,7 +290,6 @@ export default function Student() {
           title: "Request sent to the mentor"
         })
           .then(flag => {
-
             existing();
 
             socket.emit(
@@ -433,7 +425,6 @@ export default function Student() {
   };
 
   const existing = () => {
-
     axios({
       method: "get",
       url: `/api/student/queue/order/${class_id}/${user_id}?search=${""}`
@@ -475,32 +466,32 @@ export default function Student() {
               </div>
             </TitleName>
             <Option>
-              <div>
+              <span>
                 <HelpOutlineIcon
                   onClick={handleClickDetail}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
-              </div>
-              <div>
+              </span>
+              <span>
                 <PeopleOutlineIcon
                   onClick={handleClickMember}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
-              </div>
+              </span>
               <div>
                 <MoreVertIcon
                   onClick={handleMenu}
                   style={{
                     fontSize: 30,
-                    color: "grey",
+                    color: "#372476",
                     cursor: "pointer"
                   }}
                 />
