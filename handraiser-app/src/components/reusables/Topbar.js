@@ -466,51 +466,7 @@ export default function Topbar(props) {
             </div>
           </ListItem>
         ) : (
-          <ExpansionPanel
-            expanded={expanded === "panel1"}
-            onChange={panelDrawer("panel1")}
-          >
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2a-content"
-              id="panel2a-header"
-            >
-              <Typography className={classes.heading}>Classes</Typography>
-            </ExpansionPanelSummary>
-
-            <ExpansionPanelDetails>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                {classData.map(classList => {
-                  return (
-                    <List
-                      key={classList.class_id}
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        cursor: "pointer"
-                      }}
-                      onClick={() => {
-                        cardClick(classList.class_id);
-                      }}
-                    >
-                      <span
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "10px 10px 5px 5px"
-                        }}
-                      >
-                        <SchoolIcon style={{ color: "#372476" }} />
-                        <span style={{ paddingLeft: "10px" }}>
-                          {classList.class_title}
-                        </span>
-                      </span>
-                    </List>
-                  );
-                })}
-              </div>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+          ""
         )}
       </List>
     </div>
