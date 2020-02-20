@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 
-const Input = ({ concernDescription, sendMessage, setconcernDescription }) => (
+const Input = ({ message, sendMessage, setMessage }) => (
   <React.Fragment>
     <TextField
       id="outlined-textarea"
@@ -9,8 +9,8 @@ const Input = ({ concernDescription, sendMessage, setconcernDescription }) => (
       variant="outlined"
       fullWidth
       rows="2"
-      value={concernDescription}
-      onChange={event => setconcernDescription(event.target.value)}
+      value={message}
+      onChange={event => setMessage(event.target.value)}
       onKeyPress={event => (event.key === "Enter" ? sendMessage(event) : null)}
       style={{
         backgroundColor: "white"

@@ -5,7 +5,7 @@ import { Paper } from "@material-ui/core";
 import QueQueStub from "../../reusables/Queue/QueueStub";
 import axios from "axios";
 import io from "socket.io-client";
-
+let socket;
 export default function InQueue(rowDatahandler) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState();
@@ -13,7 +13,7 @@ export default function InQueue(rowDatahandler) {
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
   const ENDPOINT = "localhost:5000";
-  let socket = io(ENDPOINT);
+  // let socket = io(ENDPOINT);
 
   useEffect(() => {
     socket = io(ENDPOINT);
