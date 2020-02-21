@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -14,15 +14,17 @@ import {
   Title
 } from "../../Styles/Styles";
 import io from "socket.io-client";
-
+import { UserContext } from "../Contexts/UserContext";
 // COMPONENT
 import SetSuperAdminDialog from "./SetSuperAdminDialog";
-
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
-
+  const { socket } = useContext(UserContext);
   const ENDPOINT = "localhost:5000";
-  let socket = io(ENDPOINT);
+  // let socket ;
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  // }, [ENDPOINT])
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);

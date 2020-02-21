@@ -17,6 +17,7 @@ const authorization = require("./controllers/authorization");
 const chat = require("./controllers/chat");
 
 const mail = require("./controllers/mail");
+const classCodeEmail = require("./controllers/classcodeEmail");
 
 require("dotenv").config();
 massive({
@@ -103,7 +104,7 @@ massive({
     app.post("/api/student/get/class", student.get_my_classroom);
     app.post("/api/student/get/class/:user_id", student.get_my_classroom_all);
     app.post("/api/classinfo/:class_id", classes.getClassDetails); //get class details including class mentor
-  
+
     // class endpoints
     app.get("/api/classes", classes.getAllClass); // get all available classes
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
@@ -116,10 +117,11 @@ massive({
 
     //sending email
     app.post("/api/sendMail", mail.sendEmail);
+    app.post("/api/sendClassCode", classCodeEmail.sendEmail);
 
     io.on("connection", socket => {
       const users = [];
-      const joinRoom =[];
+
       socket.on("AddRequest", (data, callback) => {
         io.to(data.room).emit("consolidateRequest", data);
 
@@ -140,40 +142,39 @@ massive({
         });
       });
 
-      console.log("Online");
-
-      socket.on("join", ({userid, username, room, image }, callback) => {
+      socket.on("join", ({ userid, username, room }, callback) => {
         const user = {
           id: socket.id,
           userid: userid,
           name: username,
-          room: room,
-          image: image
+          room: room
         };
+
+        console.log("Online");
 
         users.push(user);
         socket.on(`leave_room`, ({ room }) => {
           socket.leave(`${room}`);
-       });
-        console.log("user", user);
+        });
+        console.log("user", users);
 
         // socket.emit("message", {
         //   user: "admin",
         //   text: `${user.name},welcome to the room ${user.room} `
         // });
         user &&
-        db.chat
-          .find({
-            concern_id: user.room
-          })
-          .then(data => {
-            io.to(user.room).emit("old", {
-              data
+          db.chat
+            .find({
+              concern_id: user.room
+            })
+            .then(data => {
+              io.to(user.room).emit("old", {
+                data
+              });
+            })
+            .catch(err => {
+              console.log(err);
             });
-          })
-          .catch(err => {
-            console.log(err);
-          });
 
         socket.join(user.room);
       });
@@ -185,10 +186,9 @@ massive({
         socket.broadcast.emit("not typing", data);
       });
 
-      
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
-        console.log("send",user);
+        console.log("send", user);
         io.to(user.room).emit("message", {
           user: user.name,
           message: message,
@@ -196,7 +196,8 @@ massive({
           image: user.image,
           user_id: user.userid
         });
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
+
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
 
         callback();
       });

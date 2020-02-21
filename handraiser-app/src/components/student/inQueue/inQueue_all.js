@@ -84,13 +84,13 @@ export default function InQueue(props) {
 
   const classes = useStyles();
 
-  const { cstate, getData } = useContext(UserContext);
+  const { cstate, getData, socket } = useContext(UserContext);
 
-  const ENDPOINT = "localhost:5000";
-  let socket = io(ENDPOINT);
+  // const ENDPOINT = "localhost:5000";
+  // let socket = io(ENDPOINT);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
 
     if (!cstate) {
       getData();
@@ -99,13 +99,12 @@ export default function InQueue(props) {
     if (cstate) {
       socket.emit("join", {
         username: cstate.user_id,
-        room: props.classReference,
-        image: ""
+        room: props.classReference
       });
     }
 
     update("");
-  }, [ENDPOINT]);
+  }, []);
 
   useEffect(() => {
     update(props.search);
