@@ -37,48 +37,13 @@ export default function Chat() {
   useEffect(() => {
     socket = io({ localhost: ENDPOINT });
 
-    socket.emit("join", { userid, username, room, image: avatar }, () => {});
+    socket.emit("join", { userid, username, room }, () => {});
 
     socket.on("old", ({ data }) => {
       setMessages(data);
     });
-
-    // console.log(room);
-    console.log(socket);
   }, [ENDPOINT, room]);
 
-  //   useEffect(() => {
-  //     socket.on("typing", data => {
-  //       // console.log(data)
-  //       setfeed(data);
-  //     });
-  //     socket.on("not typing", data => {
-  //       setfeed(data);
-  //     });
-  //   });
-
-  //   useEffect(() => {
-  //     // console.log(username)
-  //     const value = message;
-  //     if (active === true) {
-  //       if (value.length > 0 && room) {
-  //         typing(avatar);
-  //         // console.log(avatar)
-  //       } else {
-  //         nottyping();
-  //       }
-  //     }
-  //   });
-  //   ///for typing
-  //   const typing = data => {
-  //     socket.emit("typing", data);
-  //     // console.log(data);
-  //   };
-
-  //   const nottyping = () => {
-  //     const data = "";
-  //     socket.emit("not typing", data);
-  //   };
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -119,18 +84,11 @@ export default function Chat() {
             console.log(res);
           });
       }
-      // else{
-      //   // console.log(socket.connected)
-      //   window.location.reload();
-      // }
     }, 100);
-
-    // setMessage("");
   };
 
   useEffect(() => {
     socket.on("typing", data => {
-      // console.log(data)
       setfeed(data);
     });
     socket.on("not typing", data => {
@@ -167,17 +125,8 @@ export default function Chat() {
     } else {
       setEmoji(true);
     }
-    // setEmoji(true)
   };
 
-  //   const addEmoji = e => {
-  //     let sym = e.unified.split("-");
-  //     let codesArray = [];
-  //     sym.forEach(el => codesArray.push("0x" + el));
-  //     let emoji = String.fromCodePoint(...codesArray);
-  //     setMessage(message + emoji);
-  //     emojiActive();
-  //   };
   const handleDone = rowData => {
     setSelection(false);
 
@@ -268,7 +217,6 @@ export default function Chat() {
 
       setRoom(rowData.concern.concern_id);
       setConcernTitle(rowData.concern.concern_title);
-      
 
       axios
         .get(`/api/userprofile/${rowData.concern.user_id}`, {})
@@ -308,6 +256,12 @@ export default function Chat() {
     // setConcernTitle(rowData.concern.concern_title);
   };
   // console.log("nor")
+
+  const closeFlag = () => {
+    
+    setConcernTitle("")
+  }
+
   return (
     <div>
       {usertypeid === 3 ? (
@@ -326,6 +280,7 @@ export default function Chat() {
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
           concernTitle={concernTitle}
+          closeFlag={closeFlag}
         />
       ) : null}
       {usertypeid === 4 ? (

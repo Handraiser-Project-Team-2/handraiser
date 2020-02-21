@@ -120,10 +120,7 @@ massive({
     io.on("connection", socket => {
 
       const users = [];
-      const joinRoom =[];
-
-      console.log("socket connection at ", socket.handshake.query.fcomponent)
-
+  
       socket.on("AddRequest", (data, callback) => {
 
         io.emit("consolidateRequest", data);
@@ -142,24 +139,17 @@ massive({
         });
       });
 
-      socket.on("join", ({userid, username, room }, callback) => {
-        const join = {
-          id: socket.id,
-          userid: userid,
-          name: username,
-          room: room,
-        };
-        joinRoom.push(join);
-      });
 
-      socket.on("join", ({userid, username, room, image }, callback) => {
+      socket.on("join", ({userid, username, room }, callback) => {
         const user = {
           id: socket.id,
           userid: userid,
           name: username,
           room: room,
-          image: image
+        
         };
+
+      console.log("Online");
 
         users.push(user);
         socket.on(`leave_room`, ({ room }) => {
@@ -168,7 +158,7 @@ massive({
         //console.log("user", user);
 
         // socket.emit("message", {
-        //   user: "admin",
+        //   user: "admin", 
         //   text: `${user.name},welcome to the room ${user.room} `
         // });
         user &&

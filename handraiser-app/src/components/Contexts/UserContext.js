@@ -1,12 +1,20 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import io from "socket.io-client";
+const ENDPOINT = "localhost:5000";
+const socket = io(ENDPOINT);
 
 export const UserContext = createContext({
-  state: ""
+  state: "",
+  socket: ""
 });
 
 const UserContextProvider = props => {
   const [userData, setData] = useState();
+
+  const getSocket = () => {
+    return socket;
+  };
 
   const fetchUserData = () => {
 
@@ -38,7 +46,9 @@ const UserContextProvider = props => {
       value={{
         cstate: userData,
         getData: () => fetchUserData(),
-        setData: () => flushData()
+        setData: () => flushData(),
+        socket,
+        resocket: () => getSocket()
       }}
     >
       {props.children}

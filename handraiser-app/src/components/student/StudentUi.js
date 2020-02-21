@@ -40,108 +40,6 @@ import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
-const useStyles = makeStyles(theme => ({
-  span: {
-    position: "fixed",
-    bottom: theme.spacing(2),
-    right: theme.spacing(5)
-  },
-  scrolltobottom: {
-    padding: "5% 0",
-    overflow: "auto",
-    height: "40.9em",
-    backgroundColor: "white",
-    "@media (height: 894px)": {
-      height: "35.4em"
-    },
-    "@media (height: 1625px)": {
-      height: "81em"
-    },
-    "@media (height: 1366px)": {
-      height: "64.8em"
-    },
-    "@media (width: 360px) and (height: 640px)": {
-      height: "19.5em"
-    },
-    "@media (width: 411px) and (height: 731px)": {
-      height: "25.2em"
-    },
-    "@media (width: 411px) and (height: 823px)": {
-      height: "31em"
-    },
-    "@media (width: 320px) and (height: 568px)": {
-      height: "15em"
-    },
-    "@media (width: 375px) and (height: 667px)": {
-      height: "21.2em"
-    },
-    "@media (width: 414px) and (height: 736px)": {
-      height: "25.5em"
-    },
-    "@media (width: 375px) and (height: 812px)": {
-      height: "30.3em"
-    }
-  },
-  cont2: {
-    display: " flex",
-    marginTop: "10px",
-    marginRight: "15px",
-    padding: "10px",
-    flexDirection: "row"
-  },
-  prof: {
-    display: "flex",
-    marginLeft: "10px",
-    alignItems: "flex-end"
-  },
-  receiver: {
-    marginLeft: "10px",
-    backgroundColor: "white",
-    maxWidth: "450px",
-    padding: "10px 20px 10px 20px",
-    borderRadius: "10px 10px 10px 0px"
-  },
-  animation: {
-    display: "inline-block",
-    backgroundColor: "white",
-    width: "5px",
-    height: "5px",
-    borderRadius: "100%",
-    marginRight: "5px",
-    animation: "bob 2s infinite"
-  }
-}));
-const DivAnimation = styled.div`
-  span {
-    display: inline-block;
-    background-color: white;
-    width: 5px;
-    height: 5px;
-    border-radius: 100%;
-    margin-right: 5px;
-    animation: bob 2s infinite;
-  }
-  span:nth-child(1) {
-    animation-delay: -1s;
-  }
-  span:nth-child(2) {
-    animation-delay: -0.85s;
-  }
-  span:nth-child(3) {
-    animation-delay: -0.7s;
-    margin-right: 0;
-  }
-  @keyframes bob {
-    10% {
-      transform: translateY(-10px);
-      background-color: #9e9da2;
-    }
-    50% {
-      transform: translateY(0);
-      background-color: #b6b5ba;
-    }
-  }
-`;
 
 var jwtDecode = require("jwt-decode");
 let socket;
@@ -158,36 +56,21 @@ export default function Student({
   username,
   room,
   concernTitle,
-  setConcernTitle
+  setConcernTitle,
+  closeFlag
 }) {
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
-  // let socket;
   const classes = useStyles();
   let history = useHistory();
-  // let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
   const open = Boolean(anchorEl);
   const [concernDescription, setConcernDescription] = useState("");
-  // const [concernTitle, setConcernTitle] = useState("");
   const [userImage, setUserImage] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
   const { cstate, getData } = useContext(UserContext);
-  ///for chat
-  // const [username, setUsername] = useState("");
-  // const [room, setRoom] = useState("");
-  // const [userid, setUserid] = useState("");
-  // const [message, setMessage] = useState("");
-  // const [feed, setfeed] = useState("");
-  // const [active, setActive] = useState(false);
-  // const [messages, setMessages] = useState([]);
-  // const [avatar, setAvatar] = useState("");
-  // const [emoji, setEmoji] = useState(false);
-  // const [disable, setDisable] = useState(false);
   const ENDPOINT = "localhost:5000";
-  // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
   let socket = io(ENDPOINT);
   const handleMenu = event => {
@@ -197,9 +80,9 @@ export default function Student({
     setAnchorEl(null);
   };
 
-  // did mount
   useEffect(() => {
     socket = io(ENDPOINT);
+
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     socket.on("updateComponents", data => {
@@ -207,10 +90,7 @@ export default function Student({
     });
   }, []);
 
-  //did update
   useEffect(() => {
-    // socket = io(ENDPOINT);
-
     if (sessionStorage.getItem("token")) {
       axios
         .post("http://localhost:5000/api/user/data", {
@@ -270,10 +150,6 @@ export default function Student({
         concern_description: message
       })
       .then(data => {
-        // console.log(data.data);
-
-        // add websocket here to reflect new request;
-
         setConcernTitle("");
         setMessage("");
 
@@ -309,132 +185,8 @@ export default function Student({
         console.log(err);
       });
   };
-  //send data of active queue where user interacted with from the queue panel
-  // const rowDatahandler = rowData => {
-  //   setActive(true);
-
-  //   socket.emit(
-  //     "join",
-  //     { userid, username, room: rowData.concern.concern_id, image: avatar },
-  //     message => {
-  //       console.log(message);
-  //     }
-  //   );
-
-  //   setRoom(rowData.concern.concern_id);
-  //   setConcernTitle(rowData.concern.concern_title);
-
-  //   axios
-  //     .get(`/api/userprofile/${rowData.concern.user_id}`, {})
-  //     .then(data => {
-  //       setName(data.data[0].first_name + " " + data.data[0].last_name);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
-
-  ////join to room
-  // const join = () => {
-  //   setActive(true);
-  //   socket.emit("join", { username, room: "team2", image: avatar }, () => {});
-  // };
-  // useEffect(() => {
-  //   socket.on("message", message => {
-  //     setMessages([...messages, message]);
-  //   });
-
-  //   socket.on("old", ({ data }) => {
-  //     // console.log(data);
-  //     setMessages(data);
-  //   });
-
-  //   if (!cstate) {
-  //     getData();
-  //   }
-  //   if (cstate) {
-  //     // console.log(cstate);
-  //     setUserid(cstate.user_id);
-  //     setAvatar(cstate.image);
-  //     setUsername(cstate.first_name);
-  //   }
-
-  //   return () => {
-  //     socket.emit("disconnect");
-  //     socket.off();
-  //   };
-  // }, [messages, cstate]);
-
-  // const sendMessage = evt => {
-  //   evt.preventDefault();
-  //   const dateToday = new Date();
-  //   setTimeout(() => {
-  //     if (message) {
-  //       socket.emit("sendMessage", message, () => setMessage(""));
-  //       axios
-  //         .post(`/api/chat/send`, {
-  //           message: message,
-  //           chat_date_created: dateToday,
-  //           concern_id: room,
-  //           user_id: userid
-  //         })
-  //         .then(res => {
-  //           console.log(res);
-  //         });
-  //     }
-  //   }, 100);
-
-  //   setMessage("");
-  // };
-
-  // const emojiActive = () => {
-  //   if (emoji === true) {
-  //     setEmoji(false);
-  //   } else {
-  //     setEmoji(true);
-  //   }
-  //   // setEmoji(true)
-  // };
-
-  // const addEmoji = e => {
-  //   let sym = e.unified.split("-");
-  //   let codesArray = [];
-  //   sym.forEach(el => codesArray.push("0x" + el));
-  //   let emoji = String.fromCodePoint(...codesArray);
-  //   setMessage(message + emoji);
-  //   emojiActive();
-  // };
-  // console.log(messages);
 
   const [expanded, setExpanded] = React.useState("");
-
-  // useEffect(() => {
-  //   socket.on("typing", data => {
-  //     // console.log(data)
-  //     setfeed(data);
-  //   });
-  //   socket.on("not typing", data => {
-  //     setfeed(data);
-  //   });
-  // });
-
-  // useEffect(() => {
-  //   // console.log(username)
-  //   const value = message;
-  //   if (active === true) {
-  //     if (value.length > 0 && room) {
-  //       typing(avatar);
-  //       // console.log(avatar)
-  //     } else {
-  //       nottyping();
-  //     }
-  //   }
-  // });
-  // ///for typing
-  // const typing = data => {
-  //   socket.emit("typing", data);
-  //   // console.log(data);
-  // };
 
   const handleClickDetail = () => {
     setExpanded("panel1");
@@ -460,12 +212,19 @@ export default function Student({
         console.log(err);
       });
   };
+
+  // const closeFlag = () => {
+  //   setRequestOpen(false);
+  //   setConcernTitle();
+  //   console.log(concernTitle)
+  // };
+
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />
+          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} closeFlag={closeFlag}/>
         </Queue>
         <Help>
           <Subject>
@@ -473,7 +232,7 @@ export default function Student({
               <TextField
                 id="standard-basic"
                 value={concernTitle}
-                fullWidthmessage
+                fullWidth
                 onChange={e => setConcernTitle(e.target.value)}
                 inputProps={{
                   maxLength: 50
@@ -605,3 +364,106 @@ export default function Student({
     </React.Fragment>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  span: {
+    position: "fixed",
+    bottom: theme.spacing(2),
+    right: theme.spacing(5)
+  },
+  scrolltobottom: {
+    padding: "5% 0",
+    overflow: "auto",
+    height: "40.9em",
+    backgroundColor: "white",
+    "@media (height: 894px)": {
+      height: "35.4em"
+    },
+    "@media (height: 1625px)": {
+      height: "81em"
+    },
+    "@media (height: 1366px)": {
+      height: "64.8em"
+    },
+    "@media (width: 360px) and (height: 640px)": {
+      height: "19.5em"
+    },
+    "@media (width: 411px) and (height: 731px)": {
+      height: "25.2em"
+    },
+    "@media (width: 411px) and (height: 823px)": {
+      height: "31em"
+    },
+    "@media (width: 320px) and (height: 568px)": {
+      height: "15em"
+    },
+    "@media (width: 375px) and (height: 667px)": {
+      height: "21.2em"
+    },
+    "@media (width: 414px) and (height: 736px)": {
+      height: "25.5em"
+    },
+    "@media (width: 375px) and (height: 812px)": {
+      height: "30.3em"
+    }
+  },
+  cont2: {
+    display: " flex",
+    marginTop: "10px",
+    marginRight: "15px",
+    padding: "10px",
+    flexDirection: "row"
+  },
+  prof: {
+    display: "flex",
+    marginLeft: "10px",
+    alignItems: "flex-end"
+  },
+  receiver: {
+    marginLeft: "10px",
+    backgroundColor: "white",
+    maxWidth: "450px",
+    padding: "10px 20px 10px 20px",
+    borderRadius: "10px 10px 10px 0px"
+  },
+  animation: {
+    display: "inline-block",
+    backgroundColor: "white",
+    width: "5px",
+    height: "5px",
+    borderRadius: "100%",
+    marginRight: "5px",
+    animation: "bob 2s infinite"
+  }
+}));
+const DivAnimation = styled.div`
+  span {
+    display: inline-block;
+    background-color: white;
+    width: 5px;
+    height: 5px;
+    border-radius: 100%;
+    margin-right: 5px;
+    animation: bob 2s infinite;
+  }
+  span:nth-child(1) {
+    animation-delay: -1s;
+  }
+  span:nth-child(2) {
+    animation-delay: -0.85s;
+  }
+  span:nth-child(3) {
+    animation-delay: -0.7s;
+    margin-right: 0;
+  }
+  @keyframes bob {
+    10% {
+      transform: translateY(-10px);
+      background-color: #9e9da2;
+    }
+    50% {
+      transform: translateY(0);
+      background-color: #b6b5ba;
+    }
+  }
+`;

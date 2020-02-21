@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -14,34 +14,10 @@ import {
   Title
 } from "../../Styles/Styles";
 import io from "socket.io-client";
-
-const ENDPOINT = "localhost:5000";
-let socket = "";
-
-// let socket = io({
-//   localhost: ENDPOINT,
-//   query: {
-//     fcomponent: "Login.js"
-//   }
-// });
-
+import { UserContext } from "../Contexts/UserContext";
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
-
-  useEffect(() => {
-    socket = io({
-      localhost: ENDPOINT,
-      query: {
-        fcomponent: "Login.js"
-      }
-    });
-
-    return () => {
-      socket.emit("disconnect");
-      socket.disconnect();
-      socket.off();
-    };
-  }, []);
+  const { socket } = useContext(UserContext);
 
   const responseGoogle = response => {
     if (response.googleId) {
@@ -65,6 +41,7 @@ export default function Login(props) {
               user_status: 1
             })
             .then(data => {
+              console.log("updating user activity");
               socket.emit("user_activity", {});
             })
             .catch(err => {
