@@ -119,7 +119,7 @@ massive({
 
     io.on("connection", socket => {
       const users = [];
-      const joinRoom =[];
+  
       socket.on("AddRequest", (data, callback) => {
         io.to(data.room).emit("consolidateRequest", data);
 
@@ -140,25 +140,26 @@ massive({
         });
       });
 
-      console.log("Online");
 
-      socket.on("join", ({userid, username, room, image }, callback) => {
+      socket.on("join", ({userid, username, room }, callback) => {
         const user = {
           id: socket.id,
           userid: userid,
           name: username,
           room: room,
-          image: image
+        
         };
+
+      console.log("Online");
 
         users.push(user);
         socket.on(`leave_room`, ({ room }) => {
           socket.leave(`${room}`);
        });
-        console.log("user", user);
+        console.log("user", users);
 
         // socket.emit("message", {
-        //   user: "admin",
+        //   user: "admin", 
         //   text: `${user.name},welcome to the room ${user.room} `
         // });
         user &&
@@ -196,7 +197,8 @@ massive({
           image: user.image,
           user_id: user.userid
         });
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
+        
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
 
         callback();
       });

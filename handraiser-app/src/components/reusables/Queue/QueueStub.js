@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Handshake from "../../images/handshake.gif";
 import Badge from "@material-ui/core/Badge";
 import ListItem from "@material-ui/core/ListItem";
@@ -15,6 +15,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import DoneIcon from "@material-ui/icons/Done";
+import { UserContext } from "../../Contexts/UserContext";
 
 const StyledBadgeGreen = withStyles(theme => ({
   badge: {
@@ -63,6 +64,7 @@ const StyledBadgeGrey = withStyles(theme => ({
 }))(Badge);
 
 export default function QueueStub(props) {
+  const { socket } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const [concernsData, setConcernsData] = useState();
@@ -70,12 +72,12 @@ export default function QueueStub(props) {
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-  const ENDPOINT = "172.60.62.113:5000";
-  let socket = io(ENDPOINT);
+  // const ENDPOINT = "localhost:5000";
+  // // let socket = io(ENDPOINT);
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
-  }, [ENDPOINT]);
+  // useEffect(() => {
+  //   console.log("asdsad",socket)
+  // }, [ENDPOINT]);
 
   const handleMenu = (event, concern) => {
     setConcern(concern);

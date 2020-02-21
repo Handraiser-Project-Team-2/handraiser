@@ -43,18 +43,19 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InQueue({ class_id, search }) {
+  // const { socket } = useContext(UserContext);
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const { cstate, getData } = useContext(UserContext);
+  const { cstate, getData,socket } = useContext(UserContext);
 
-  const ENDPOINT = "172.60.62.113:5000";
-  let socket = io(ENDPOINT);
+  // const ENDPOINT = "localhost:5000";
+  // let socket = io(ENDPOINT);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
 
     if (!cstate) {
       getData();
@@ -69,7 +70,7 @@ export default function InQueue({ class_id, search }) {
     }
 
     update("");
-  }, [ENDPOINT]);
+  }, []);
 
   useEffect(() => {
     update(search);
