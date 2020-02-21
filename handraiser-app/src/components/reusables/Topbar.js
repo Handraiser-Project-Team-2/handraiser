@@ -191,16 +191,18 @@ export default function Topbar({ showDiv }) {
   const [search, setSearch] = useState("");
 
   const getClassMember = () => {
-    axios({
-      method: "get",
-      url: `/api/classes/members/${class_id}`
-    })
-      .then(res => {
-        setClassMem(res.data);
+    if (class_id) {
+      axios({
+        method: "get",
+        url: `/api/classes/members/${class_id}`
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          setClassMem(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
   const [tempClassMem, setTempClassMem] = useState([]);
   const classMembers = classMem.concat(classInfo);

@@ -84,9 +84,9 @@ export default function InQueue(props) {
 
   const classes = useStyles();
 
-  const { cstate, getData,socket } = useContext(UserContext);
+  const { cstate, getData, socket } = useContext(UserContext);
 
-  // const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
 
   useEffect(() => {
@@ -99,8 +99,7 @@ export default function InQueue(props) {
     if (cstate) {
       socket.emit("join", {
         username: cstate.user_id,
-        room: props.classReference,
-
+        room: props.classReference
       });
     }
 
