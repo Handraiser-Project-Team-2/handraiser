@@ -24,7 +24,7 @@ export default function Chat() {
   const [concernTitle, setConcernTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   let { class_id } = useParams();
 

@@ -13,6 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
 import EditClassDialog from "./EditClassDialog";
+import SendEmailClassCode from "./SendClassCodeEmail";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -35,11 +36,10 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
   }, [cstate, getData]);
 
   const cardClick = e => {
-   
-    history.push(`/classroom`)
+    history.push(`/classroom`);
 
-    if(cstate){
-      history.push(`/classroom/${e}`)
+    if (cstate) {
+      history.push(`/classroom/${e}`);
     }
     // if (cstate) {
     //   if (cstate.user_type_id === 3) {
@@ -123,6 +123,9 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
                 </CopyToClipboard>
               ) : null}
             </div>
+            {cstate && cstate.user_type_id === 4 ? (
+              <SendEmailClassCode data={row} />
+            ) : null}
             {cstate && cstate.user_type_id === 4 ? (
               <EditClassDialog data={row} fetchMentorClass={fetchMentorClass} />
             ) : null}

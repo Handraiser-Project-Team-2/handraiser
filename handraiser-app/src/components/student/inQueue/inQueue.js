@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -85,7 +85,7 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   // let socket = io(ENDPOINT);
   const [initial, setInitial] = useState();
@@ -94,10 +94,9 @@ export default function InQueue(props) {
     // socket = io(ENDPOINT);
     socket.emit("join", {
       username: "Admin",
-      room: props.classReference,
-
+      room: props.classReference
     });
-    console.log("inqueue mentor",socket)
+    console.log("inqueue mentor", socket);
   }, []);
 
   useEffect(() => {
@@ -120,13 +119,15 @@ export default function InQueue(props) {
   }, [props.search, concernsData]); //class_id
 
   const update = data => {
-    axios({
-      method: "get",
-      url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
-    }).then(res => {
-      setConcernsData(res.data);
-      // console.log(res.data.length);
-    });
+    if (props.classReference) {
+      axios({
+        method: "get",
+        url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
+      }).then(res => {
+        setConcernsData(res.data);
+        // console.log(res.data.length);
+      });
+    }
   };
 
   const handleMenu = (event, concern) => {

@@ -14,7 +14,7 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
 
   useEffect(() => {
@@ -47,16 +47,18 @@ export default function InQueue(rowDatahandler) {
   }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
   const update = data => {
-    axios({
-      method: "get",
-      url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
-    })
-      .then(res => {
-        setConcernsData(res.data);
+    if (rowDatahandler.class_id) {
+      axios({
+        method: "get",
+        url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          setConcernsData(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   return (

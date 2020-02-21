@@ -22,8 +22,8 @@ const useStyles = makeStyles(theme => ({
   },
   edit: {
     color: "white",
-    "&:hover":{
-      color: '#ffffAA'
+    "&:hover": {
+      color: "#ffffAA"
     }
   }
 }));
@@ -37,22 +37,20 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
   const [state, setState] = useState();
 
   useEffect(() => {
-
     setState({
       class_id: data.class_id,
       class_title: data.class_title,
       class_description: data.class_description,
       class_status: data.class_status
-    })
+    });
 
-    setSwitchBtn(data.class_status === 'open' ? false:true)
+    setSwitchBtn(data.class_status === "open" ? false : true);
 
     return () => {
       setState();
-      setSwitchBtn(false)
+      setSwitchBtn(false);
     };
-
-  }, [data])
+  }, [data]);
 
   const handleSwitch = event => {
     event.persist();
@@ -90,7 +88,7 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
   const handleClose = () => {
     setOpen(false);
     setState();
-      setSwitchBtn(false)
+    setSwitchBtn(false);
   };
 
   const handleSubmit = e => {
