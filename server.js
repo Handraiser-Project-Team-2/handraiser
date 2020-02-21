@@ -121,7 +121,11 @@ massive({
 
     io.on("connection", socket => {
       const users = [];
+<<<<<<< HEAD
       const joinRoom = [];
+=======
+  
+>>>>>>> b9f081358336e0bf51fd0e026a3839766b8f3c44
       socket.on("AddRequest", (data, callback) => {
         io.to(data.room).emit("consolidateRequest", data);
 
@@ -142,25 +146,35 @@ massive({
         });
       });
 
-      console.log("Online");
 
+<<<<<<< HEAD
       socket.on("join", ({ userid, username, room, image }, callback) => {
+=======
+      socket.on("join", ({userid, username, room }, callback) => {
+>>>>>>> b9f081358336e0bf51fd0e026a3839766b8f3c44
         const user = {
           id: socket.id,
           userid: userid,
           name: username,
           room: room,
-          image: image
+        
         };
+
+      console.log("Online");
 
         users.push(user);
         socket.on(`leave_room`, ({ room }) => {
           socket.leave(`${room}`);
+<<<<<<< HEAD
         });
         console.log("user", user);
+=======
+       });
+        console.log("user", users);
+>>>>>>> b9f081358336e0bf51fd0e026a3839766b8f3c44
 
         // socket.emit("message", {
-        //   user: "admin",
+        //   user: "admin", 
         //   text: `${user.name},welcome to the room ${user.room} `
         // });
         user &&
@@ -197,7 +211,12 @@ massive({
           image: user.image,
           user_id: user.userid
         });
+<<<<<<< HEAD
         console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", user.userid);
+=======
+        
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
+>>>>>>> b9f081358336e0bf51fd0e026a3839766b8f3c44
 
         callback();
       });

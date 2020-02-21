@@ -66,12 +66,12 @@ export default function InQueue(props) {
   const [concern, setConcern] = useState("");
   const open = Boolean(anchorEl);
 
-  const ENDPOINT = "localhost:5000";
-  let socket = io(ENDPOINT);
-  const { cstate, getData } = useContext(UserContext);
+  // const ENDPOINT = "172.60.62.113:5000";
+  // let socket = io(ENDPOINT);
+  const { cstate, getData, socket } = useContext(UserContext);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
 
     if (!cstate) {
       getData();
@@ -86,7 +86,7 @@ export default function InQueue(props) {
     }
 
     update("");
-  }, [ENDPOINT]);
+  }, []);
 
   useEffect(() => {
     if (props.search || !concernsData) {

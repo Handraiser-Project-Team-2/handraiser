@@ -24,7 +24,7 @@ export default function Chat() {
   const [concernTitle, setConcernTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let { class_id } = useParams();
 
@@ -35,7 +35,7 @@ export default function Chat() {
   useEffect(() => {
     socket = io(ENDPOINT);
 
-    socket.emit("join", { userid, username, room, image: avatar }, () => {});
+    socket.emit("join", { userid, username, room }, () => {});
 
     socket.on("old", ({ data }) => {
       setMessages(data);
