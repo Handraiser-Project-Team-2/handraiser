@@ -26,8 +26,14 @@ const useStyles = makeStyles(theme => ({
     color: "white"
   },
   fab: {
+    display: "flex",
     float: "right",
-    backgroundColor: teal[500]
+    backgroundColor: teal[500],
+    "@media (max-width: 834px)": {
+      marginLeft: "20px",
+      float: "left",
+      marginTop: "10px"
+    }
   },
   extendedIcon: {
     marginRight: theme.spacing(1)
@@ -77,7 +83,7 @@ export default function ResponsiveDialog(props) {
         console.log(data.data.message);
         if (data.data.message === "Subject is now closed") {
           // handleClose();
-          setValid(true)
+          setValid(true);
         } else {
           handleClose();
           history.push(`/student/${data.data.class_id}`);

@@ -1,29 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import { Paper } from "@material-ui/core";
 import QueQueStub from "../../reusables/Queue/QueueStub";
 import axios from "axios";
 import io from "socket.io-client";
-
+import { UserContext } from "../../Contexts/UserContext";
+// let socket;
 export default function InQueue(rowDatahandler) {
+  const { socket } = useContext(UserContext);
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  const ENDPOINT = "172.60.62.113:5000";
-  let socket = io(ENDPOINT);
+  const ENDPOINT = "localhost:5000";
+  // let socket = io(ENDPOINT);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
 
     socket.emit("join", {
+      userid:"null",
       username: "Admin",
       room: rowDatahandler.class_id,
-      image: ""
     });
-  }, [ENDPOINT]);
+    console.log("inqueue student",socket)
+  }, []);
 
   useEffect(() => {
     update(rowDatahandler.search);
@@ -41,7 +44,7 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [ENDPOINT, concernsData]);
+  }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
   const update = data => {
     axios({

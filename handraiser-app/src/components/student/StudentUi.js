@@ -13,6 +13,7 @@ import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Input from "../reusables/Input";
 import {
   Div,
   // Nav,
@@ -47,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     padding: "5% 0",
     overflow: "auto",
     height: "40.9em",
-    backgroundColor: "#eaeaea",
+    backgroundColor: "white",
     "@media (height: 894px)": {
       height: "35.4em"
     },
@@ -142,35 +143,49 @@ const DivAnimation = styled.div`
 
 var jwtDecode = require("jwt-decode");
 let socket;
-export default function Student() {
-  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
+export default function Student({
+  class_id,
+  rowDatahandler,
+  messages,
+  sendMessage,
+  setMessage,
+  message,
+  active,
+  userid,
+  feed,
+  username,
+  room,
+  concernTitle,
+  setConcernTitle
+}) {
+  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
-  let { class_id } = useParams();
+  // let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
   // const open = Boolean(anchorEl);
   const [concernDescription, setConcernDescription] = useState("");
-  const [concernTitle, setConcernTitle] = useState("");
+  // const [concernTitle, setConcernTitle] = useState("");
   const [userImage, setUserImage] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
-  const { cstate, getData } = useContext(UserContext);
+  const { cstate, getData,socket } = useContext(UserContext);
   ///for chat
-  const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("");
-  const [userid, setUserid] = useState("");
-  const [message, setMessage] = useState("");
-  const [feed, setfeed] = useState("");
-  const [active, setActive] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [avatar, setAvatar] = useState("");
-  const [emoji, setEmoji] = useState(false);
-  const [disable, setDisable] = useState(false);
-  const ENDPOINT = "172.60.62.113:5000";
-  let socket = io(ENDPOINT);
+  // const [username, setUsername] = useState("");
+  // const [room, setRoom] = useState("");
+  // const [userid, setUserid] = useState("");
+  // const [message, setMessage] = useState("");
+  // const [feed, setfeed] = useState("");
+  // const [active, setActive] = useState(false);
+  // const [messages, setMessages] = useState([]);
+  // const [avatar, setAvatar] = useState("");
+  // const [emoji, setEmoji] = useState(false);
+  // const [disable, setDisable] = useState(false);
+  const ENDPOINT = "localhost:5000";
+  // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
@@ -182,17 +197,17 @@ export default function Student() {
 
   // did mount
   useEffect(() => {
-    socket.emit("join", { username: "Yow", room: class_id, image: "" });
+    // socket = io(ENDPOINT);
+    socket.emit("join", { username: "Yow", room: class_id});
 
     socket.on("updateComponents", data => {
-      console.log("updates");
       existing();
     });
-  }, []);
+  }, [ENDPOINT]);
 
   //did update
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
 
     if (sessionStorage.getItem("token")) {
       axios
@@ -237,39 +252,7 @@ export default function Student() {
     }
 
     existing();
-  }, [cstate, ENDPOINT]);
-
-  useEffect(() => {
-    socket.on("typing", data => {
-      // console.log(data)
-      setfeed(data);
-    });
-    socket.on("not typing", data => {
-      setfeed(data);
-    });
-  });
-
-  useEffect(() => {
-    const value = message;
-    if (active === true) {
-      if (value.length > 0) {
-        typing(avatar);
-      } else {
-        nottyping();
-      }
-    }
-  });
-
-  ///for typing
-  const typing = data => {
-    socket.emit("typing", data);
-  };
-
-  const nottyping = () => {
-    const data = "";
-    socket.emit("not typing", data);
-  };
-
+  }, [cstate]);
   const sendRequest = () => {
     axios
       .post(`/api/student/request/assistance`, {
@@ -319,100 +302,100 @@ export default function Student() {
       });
   };
   //send data of active queue where user interacted with from the queue panel
-  const rowDatahandler = rowData => {
-    setActive(true);
+  // const rowDatahandler = rowData => {
+  //   setActive(true);
 
-    socket.emit(
-      "join",
-      { userid, username, room: rowData.concern.concern_id, image: avatar },
-      message => {
-        console.log(message);
-      }
-    );
+  //   socket.emit(
+  //     "join",
+  //     { userid, username, room: rowData.concern.concern_id, image: avatar },
+  //     message => {
+  //       console.log(message);
+  //     }
+  //   );
 
-    setRoom(rowData.concern.concern_id);
-    setConcernTitle(rowData.concern.concern_title);
+  //   setRoom(rowData.concern.concern_id);
+  //   setConcernTitle(rowData.concern.concern_title);
 
-    axios
-      .get(`/api/userprofile/${rowData.concern.user_id}`, {})
-      .then(data => {
-        setName(data.data[0].first_name + " " + data.data[0].last_name);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  //   axios
+  //     .get(`/api/userprofile/${rowData.concern.user_id}`, {})
+  //     .then(data => {
+  //       setName(data.data[0].first_name + " " + data.data[0].last_name);
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
 
   ////join to room
   // const join = () => {
   //   setActive(true);
   //   socket.emit("join", { username, room: "team2", image: avatar }, () => {});
   // };
-  useEffect(() => {
-    socket.on("message", message => {
-      setMessages([...messages, message]);
-    });
+  // useEffect(() => {
+  //   socket.on("message", message => {
+  //     setMessages([...messages, message]);
+  //   });
 
-    socket.on("old", ({ data }) => {
-      // console.log(data);
-      setMessages(data);
-    });
+  //   socket.on("old", ({ data }) => {
+  //     // console.log(data);
+  //     setMessages(data);
+  //   });
 
-    if (!cstate) {
-      getData();
-    }
-    if (cstate) {
-      // console.log(cstate);
-      setUserid(cstate.user_id);
-      setAvatar(cstate.image);
-      setUsername(cstate.first_name);
-    }
+  //   if (!cstate) {
+  //     getData();
+  //   }
+  //   if (cstate) {
+  //     // console.log(cstate);
+  //     setUserid(cstate.user_id);
+  //     setAvatar(cstate.image);
+  //     setUsername(cstate.first_name);
+  //   }
 
-    return () => {
-      socket.emit("disconnect");
-      socket.off();
-    };
-  }, [messages, cstate]);
+  //   return () => {
+  //     socket.emit("disconnect");
+  //     socket.off();
+  //   };
+  // }, [messages, cstate]);
 
-  const sendMessage = evt => {
-    evt.preventDefault();
-    const dateToday = new Date();
-    setTimeout(() => {
-      if (message) {
-        socket.emit("sendMessage", message, () => setMessage(""));
-        axios
-          .post(`/api/chat/send`, {
-            message: message,
-            chat_date_created: dateToday,
-            concern_id: room,
-            user_id: userid
-          })
-          .then(res => {
-            console.log(res);
-          });
-      }
-    }, 100);
+  // const sendMessage = evt => {
+  //   evt.preventDefault();
+  //   const dateToday = new Date();
+  //   setTimeout(() => {
+  //     if (message) {
+  //       socket.emit("sendMessage", message, () => setMessage(""));
+  //       axios
+  //         .post(`/api/chat/send`, {
+  //           message: message,
+  //           chat_date_created: dateToday,
+  //           concern_id: room,
+  //           user_id: userid
+  //         })
+  //         .then(res => {
+  //           console.log(res);
+  //         });
+  //     }
+  //   }, 100);
 
-    setMessage("");
-  };
+  //   setMessage("");
+  // };
 
-  const emojiActive = () => {
-    if (emoji === true) {
-      setEmoji(false);
-    } else {
-      setEmoji(true);
-    }
-    // setEmoji(true)
-  };
+  // const emojiActive = () => {
+  //   if (emoji === true) {
+  //     setEmoji(false);
+  //   } else {
+  //     setEmoji(true);
+  //   }
+  //   // setEmoji(true)
+  // };
 
-  const addEmoji = e => {
-    let sym = e.unified.split("-");
-    let codesArray = [];
-    sym.forEach(el => codesArray.push("0x" + el));
-    let emoji = String.fromCodePoint(...codesArray);
-    setMessage(message + emoji);
-    emojiActive();
-  };
+  // const addEmoji = e => {
+  //   let sym = e.unified.split("-");
+  //   let codesArray = [];
+  //   sym.forEach(el => codesArray.push("0x" + el));
+  //   let emoji = String.fromCodePoint(...codesArray);
+  //   setMessage(message + emoji);
+  //   emojiActive();
+  // };
   // console.log(messages);
 
   const [expanded, setExpanded] = React.useState("");
@@ -467,32 +450,32 @@ export default function Student() {
               </div>
             </TitleName>
             <Option>
-              <div>
+              <span>
                 <HelpOutlineIcon
                   onClick={handleClickDetail}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
-              </div>
-              <div>
+              </span>
+              <span>
                 <PeopleOutlineIcon
                   onClick={handleClickMember}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
-              </div>
+              </span>
               <div>
                 <MoreVertIcon
                   onClick={handleMenu}
                   style={{
                     fontSize: 30,
-                    color: "grey",
+                    color: "#372476",
                     cursor: "pointer"
                   }}
                 />
@@ -505,7 +488,6 @@ export default function Student() {
                 <Chatfield
                   message={message}
                   username={username}
-                  avatar={avatar}
                   feed={feed}
                   active={active}
                   userid={userid}
@@ -541,7 +523,7 @@ export default function Student() {
                   width: "100%"
                 }}
               >
-                <form
+                {/* <form
                   onSubmit={e => {
                     e.preventDefault();
                   }}
@@ -557,7 +539,13 @@ export default function Student() {
                       backgroundColor: "white"
                     }}
                     onChange={e => setConcernDescription(e.target.value)}
-                  />
+                  /> */}
+                   <Input
+                  message={message}
+                  setMessage={setMessage}
+                  sendMessage={sendMessage}
+                  username={username}
+                />
                   <div
                     style={{
                       width: "100%",
@@ -573,7 +561,7 @@ export default function Student() {
                     )}
                     <Send onClick={sendMessage}>SEND</Send>
                   </div>
-                </form>
+                {/* </form> */}
               </div>
             </Field>
           </Message>

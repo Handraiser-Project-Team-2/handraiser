@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useContext } from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import io from "socket.io-client";
 import { useHistory, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { UserContext } from "../../Contexts/UserContext";
 
 var jwtDecode = require("jwt-decode");
 
@@ -14,18 +15,17 @@ export default function Handshake(props) {
   const classes = useStyles();
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
+  const {socket } = useContext(UserContext);
+  // const ENDPOINT = "localhost:5000";
 
-  const ENDPOINT = "172.60.62.113:5000";
-
-  let socket = io(ENDPOINT);
+  // let socket = io(ENDPOINT);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
 
     socket.emit("join", {
       username: "hanshakes",
       room: class_id,
-      image: ""
     });
   });
 
@@ -232,8 +232,7 @@ const useStyles = makeStyles(theme => ({
   handshake_text_btn_2: {
     fontSize: "3em",
     color: "white",
-    fontWeight: "800",
-    fontWeight: "200"
+    fontWeight: "800"
   },
   handshake_img: {
     backgroundSize: "cover",

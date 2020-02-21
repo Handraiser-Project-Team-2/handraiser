@@ -19,7 +19,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   inline: {
-    display: "inline",
     display: "inline-block",
     overflow: " hidden",
     "text-overflow": "ellipsis",
@@ -85,13 +84,13 @@ export default function InQueue(props) {
 
   const classes = useStyles();
 
-  const { cstate, getData } = useContext(UserContext);
+  const { cstate, getData,socket } = useContext(UserContext);
 
-  const ENDPOINT = "172.60.62.113:5000";
-  let socket = io(ENDPOINT);
+  // const ENDPOINT = "localhost:5000";
+  // let socket = io(ENDPOINT);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
 
     if (!cstate) {
       getData();
@@ -101,12 +100,12 @@ export default function InQueue(props) {
       socket.emit("join", {
         username: cstate.user_id,
         room: props.classReference,
-        image: ""
+
       });
     }
 
     update("");
-  }, [ENDPOINT]);
+  }, []);
 
   useEffect(() => {
     update(props.search);

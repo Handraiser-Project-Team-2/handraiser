@@ -119,7 +119,7 @@ massive({
 
     io.on("connection", socket => {
       const users = [];
-
+  
       socket.on("AddRequest", (data, callback) => {
         io.to(data.room).emit("consolidateRequest", data);
 
@@ -140,24 +140,41 @@ massive({
         });
       });
 
-      console.log("Online");
 
-      socket.on("join", ({ username, room, image }, callback) => {
+      socket.on("join", ({userid, username, room }, callback) => {
         const user = {
           id: socket.id,
+          userid: userid,
           name: username,
           room: room,
-          image: image
+        
         };
 
+      console.log("Online");
+
         users.push(user);
+        socket.on(`leave_room`, ({ room }) => {
+          socket.leave(`${room}`);
+       });
+        console.log("user", users);
 
-        console.log("user", user);
-
-        socket.emit("message", {
-          user: "admin",
-          text: `${user.name},welcome to the room ${user.room} `
-        });
+        // socket.emit("message", {
+        //   user: "admin", 
+        //   text: `${user.name},welcome to the room ${user.room} `
+        // });
+        user &&
+        db.chat
+          .find({
+            concern_id: user.room
+          })
+          .then(data => {
+            io.to(user.room).emit("old", {
+              data
+            });
+          })
+          .catch(err => {
+            console.log(err);
+          });
 
         socket.join(user.room);
       });
@@ -169,14 +186,19 @@ massive({
         socket.broadcast.emit("not typing", data);
       });
 
+      
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
-        // console.log(user);
+        console.log("send",user);
         io.to(user.room).emit("message", {
           user: user.name,
-          text: message,
-          image: user.image
+          message: message,
+          room: user.room,
+          image: user.image,
+          user_id: user.userid
         });
+        
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
 
         callback();
       });

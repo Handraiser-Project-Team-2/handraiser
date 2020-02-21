@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Handshake from "../../images/handshake.gif";
-import Bear from "../../images/bear.gif";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
@@ -21,7 +20,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
-
+import { UserContext } from "../../Contexts/UserContext";
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
@@ -73,6 +72,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function InQueue(props) {
   var jwtDecode = require("jwt-decode");
+  const { socket } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState();
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -87,16 +87,18 @@ export default function InQueue(props) {
   const user_id = decoded.userid;
   const ENDPOINT = "172.60.62.113:5000";
 
-  let socket = io(ENDPOINT);
+  // let socket = io(ENDPOINT);
+  const [initial, setInitial] = useState();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
     socket.emit("join", {
       username: "Admin",
       room: props.classReference,
-      image: ""
+
     });
-  }, [ENDPOINT]);
+    console.log("inqueue mentor",socket)
+  }, []);
 
   useEffect(() => {
     if (props.search || !concernsData) {
@@ -115,7 +117,7 @@ export default function InQueue(props) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [props.search, ENDPOINT, concernsData]); //class_id
+  }, [props.search, concernsData]); //class_id
 
   const update = data => {
     axios({
