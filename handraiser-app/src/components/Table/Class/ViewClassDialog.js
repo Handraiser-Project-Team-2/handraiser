@@ -8,50 +8,32 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 
 // COMPONENTS
-import StudentTabs from "./StudentTabs";
+import ClassMembers from "./ClassMembers";
 
 const useStyles = makeStyles(theme => ({
-  name: {
+  class: {
     "&:hover": {
       color: "blue",
       cursor: "pointer"
     }
   }
 }));
-export default function ViewStudentDialog({ data }) {
+
+export default function ViewMentorDialog({ data }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [profileData, setProfileData] = useState([]);
-  const handleClickOpen = data => {
-    setOpen(true);
-    fetchProfileData();
-    fetchStudentClass(data);
-  };
-  const fetchProfileData = () => {
-    axios({
-      method: "post",
-      url: `/api/userprofile/student/`,
-      data: { email: data.email }
-    })
-      .then(data => {
-        // console.log(data.data);
-        setProfileData(data.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
   const [classData, setClassData] = useState([]);
-  const fetchStudentClass = data => {
+  const handleClickOpen = () => {
+    setOpen(true);
+    fetchClassData();
+  };
+  const fetchClassData = () => {
     axios({
-      method: "post",
-      url: `/api/student/get/class/${data.user_id}`,
-      data: { email: data.email }
+      method: "get",
+      url: `/api/classes/members/${data.class_id}`
     })
-      .then(data => {
-        // console.log(data.data);
-        setClassData(data.data);
+      .then(res => {
+        setClassData(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -67,23 +49,21 @@ export default function ViewStudentDialog({ data }) {
       <Typography
         variant="body2"
         gutterBottom
-        onClick={() => handleClickOpen(data)}
-        className={classes.name}
+        onClick={handleClickOpen}
+        className={classes.class}
       >
-        {data.first_name + " " + data.last_name}
+        {data.class_title}
       </Typography>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
         maxWidth="lg"
-        fullWidth
       >
-        <DialogContent>
-          {/* Students TABS */}
-          <StudentTabs profileData={profileData} classData={classData} />
+        <DialogContent style={{ backgroundColor: "whitesmoke" }}>
+          <ClassMembers classData={classData} />
         </DialogContent>
-        <DialogActions>
+        <DialogActions style={{ backgroundColor: "whitesmoke" }}>
           <Button onClick={handleClose} color="primary">
             Close
           </Button>

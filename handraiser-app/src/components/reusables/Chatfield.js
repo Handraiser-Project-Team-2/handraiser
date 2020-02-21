@@ -84,13 +84,13 @@ const Div = styled.div`
 
   .from-me {
     color: white;
-    background: forestgreen;
+    background: #0b93f6;
     align-self: flex-end;
   }
 
   .from-me:before {
     right: -7px;
-    border-right: 20px solid forestgreen;
+    border-right: 20px solid #0b93f6;
     border-bottom-left-radius: 16px 14px;
     -webkit-transform: translate(0, -2px);
     transform: translate(0, -2px);
@@ -136,7 +136,6 @@ const Div = styled.div`
 `;
 
 const Chatfield = ({ message: { message, user_id }, userid, date,time }) => {
-  console.log(date)
   let isSentByCurrecntUser = false;
   if (user_id === userid) {
     isSentByCurrecntUser = true;
@@ -169,7 +168,7 @@ const Chatfield = ({ message: { message, user_id }, userid, date,time }) => {
           </Div>
           <h6
             style={{
-              marginLeft: "35px",
+              float: "right",
               color: "lightgrey",
               fontSize: "10px"
             }}

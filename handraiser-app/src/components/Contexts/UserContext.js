@@ -17,17 +17,21 @@ const UserContextProvider = props => {
   };
 
   const fetchUserData = () => {
+
+    console.log(sessionStorage.getItem("token"))
+    
     axios({
       method: "post",
       url: `/api/user/data`,
       data: { token: sessionStorage.getItem("token") }
     })
       .then(data => {
-        console.log(data);
+        // console.log(data);
         setData(data.data);
       })
       .catch(err => {
         console.log(err);
+
         if (window.location.href.includes("/class")) {
           fetchUserData();
         }

@@ -17,6 +17,7 @@ const authorization = require("./controllers/authorization");
 const chat = require("./controllers/chat");
 
 const mail = require("./controllers/mail");
+const classCodeEmail = require("./controllers/classcodeEmail");
 
 require("dotenv").config();
 massive({
@@ -54,6 +55,7 @@ massive({
     app.post("/api/userprofile/", users.getUserProfileByEmail);
     app.post("/api/userprofile/student/", users.getUserProfileByStudentEmail);
     app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
+    app.put("/api/login/superadmin", users.patchSuperAdmin); //Update super admin
 
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor); //reference a mentor user type to an email
@@ -82,7 +84,7 @@ massive({
 
     // student endpoints
     app.get("/api/student/queue/order/:class_id", student.queue_order_all);
-    app.delete("/api/student/request/:concern_id", student.delete);
+    app.patch("/api/student/request/:concern_id", student.delete);
 
     app.patch("/api/concern_list/:concern_id", student.updateConcern);
     app.post("/api/assisted_by", student.assisted_by);
@@ -103,7 +105,7 @@ massive({
     app.post("/api/student/get/class", student.get_my_classroom);
     app.post("/api/student/get/class/:user_id", student.get_my_classroom_all);
     app.post("/api/classinfo/:class_id", classes.getClassDetails); //get class details including class mentor
-  
+
     // class endpoints
     app.get("/api/classes", classes.getAllClass); // get all available classes
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
@@ -116,20 +118,20 @@ massive({
 
     //sending email
     app.post("/api/sendMail", mail.sendEmail);
+    app.post("/api/sendClassCode", classCodeEmail.sendEmail);
 
     io.on("connection", socket => {
-      const users = [];
-  
-      socket.on("AddRequest", (data, callback) => {
-        io.to(data.room).emit("consolidateRequest", data);
 
+      const users = [];
+
+      socket.on("AddRequest", (data, callback) => {
+
+        io.emit("consolidateRequest", data);
         callback();
       });
 
       socket.on("handshake", data => {
-        console.log("handshake flag", data);
-        console.log(users)
-        io.to(data.room).emit("updateComponents", {
+        io.emit("updateComponents", {
           message: "handshake succesful"
         });
       });
@@ -140,17 +142,15 @@ massive({
         });
       });
 
-
-      socket.on("join", ({userid, username, room }, callback) => {
+      socket.on("join", ({ userid, username, room }, callback) => {
         const user = {
           id: socket.id,
           userid: userid,
           name: username,
-          room: room,
-        
+          room: room
         };
 
-      console.log("Online");
+        console.log("Online");
 
         users.push(user);
         socket.on(`leave_room`, ({ room }) => {
@@ -169,7 +169,7 @@ massive({
             });
           })
           .catch(err => {
-            console.log(err);
+            //console.log(err);
           });
 
         socket.join(user.room);
@@ -185,7 +185,6 @@ massive({
       const date= new Date();
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
-        console.log("send",user);
         io.to(user.room).emit("message", {
           user: user.name,
           message: message,
@@ -193,16 +192,15 @@ massive({
           chat_date_created: date,
           user_id: user.userid
         });
-        
         callback();
       });
 
       socket.on("disconnect", () => {
-        console.log("user disconnected");
+        console.log("disconnected at" , socket.handshake.query.fcomponent)
       });
     });
     server.listen(PORT, () => {
-      console.log(`Server started on port ${PORT}`);
+      //console.log(`Server started on port ${PORT}`);
     });
   })
   .catch(err => {

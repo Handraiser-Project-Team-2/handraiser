@@ -225,7 +225,9 @@ export const Option = styled.div`
   align-items: center;
   width: 145px;
   @media (max-width: 780px) {
-    display: none;
+    span {
+      display: none;
+    }
   }
 `;
 export const Shared = styled.div`
@@ -306,7 +308,7 @@ export const LoginDiv = styled.div`
     background-image: url(${backgroundImg});
     background-size: 135%;
     background-repeat: no-repeat;
-    background-position: -115px bottom;
+    background-position: -130px bottom;
   }
 `;
 export const LoginMain = styled.div`
@@ -415,7 +417,7 @@ export const LoginFooter = styled.div`
     font-size: 13px;
     color: grey;
   }
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1024px) {
     display: none;
   }
 `;

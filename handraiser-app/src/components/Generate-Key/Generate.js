@@ -61,4 +61,4 @@ export const GenerateKey = props => {
   );
 };
 
-const emailRegex = /^\w+([\.-]?\w+)*@\w+(boom)*(\.camp)+$/;
+const emailRegex = /^\w+([\.-]?\w+)*@\w+(boom)*(.camp)+$/;

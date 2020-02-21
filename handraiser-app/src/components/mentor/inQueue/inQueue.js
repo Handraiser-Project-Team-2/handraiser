@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import { Paper } from "@material-ui/core";
@@ -21,17 +21,10 @@ export default function InQueue(rowDatahandler) {
     // socket = io(ENDPOINT);
 
     socket.emit("join", {
-      userid:"null",
+      userid: "null",
       username: "Admin",
-      room: rowDatahandler.class_id,
+      room: rowDatahandler.class_id
     });
-    console.log("inqueue student",socket)
-  }, []);
-
-  useEffect(() => {
-    if (rowDatahandler.search || !concernsData) {
-      update(rowDatahandler.search);
-    }
 
     socket.on("updateComponents", message => {
       update("");
@@ -44,19 +37,30 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [rowDatahandler.rowDatahandler.search, concernsData]);
+    
+  }, []);
+
+  useEffect(() => {
+    update(rowDatahandler.search);
+  }, [rowDatahandler.search]);
+
+  // useEffect(() => {
+  
+  // }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
   const update = data => {
-    axios({
-      method: "get",
-      url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
-    })
-      .then(res => {
-        setConcernsData(res.data);
+    if (rowDatahandler.class_id) {
+      axios({
+        method: "get",
+        url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          setConcernsData(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -68,6 +72,7 @@ export default function InQueue(rowDatahandler) {
                 <QueQueStub
                   update={update}
                   key={index}
+                  // setSelection={rowDatahandler.setSelection}
                   rowDatahandler={rowDatahandler}
                   data={data}
                   index={index}

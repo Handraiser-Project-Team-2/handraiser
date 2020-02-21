@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import MaterialTable from "material-table";
 
+import ViewClassDialog from "../Class/ViewClassDialog";
+
 export default function MentorClass({ classData, profileData }) {
   const [tableData] = useState({
     columns: [
@@ -10,11 +12,27 @@ export default function MentorClass({ classData, profileData }) {
       },
       {
         title: "Class Name",
-        field: "class_title"
+        render: row => (
+          <span
+            style={{
+              wordBreak: "break-word"
+            }}
+          >
+            <ViewClassDialog data={row} />
+          </span>
+        )
       },
       {
         title: "Description",
-        field: "class_description"
+        render: row => (
+          <span
+            style={{
+              wordBreak: "break-word"
+            }}
+          >
+            {row.class_description}
+          </span>
+        )
       },
       {
         title: "Date Created",
@@ -22,7 +40,28 @@ export default function MentorClass({ classData, profileData }) {
       },
       {
         title: "Status",
-        field: "class_status"
+        render: row =>
+          row.class_status === "open" ? (
+            <span
+              style={{
+                border: "1px solid green",
+                padding: "5px",
+                borderRadius: "5px"
+              }}
+            >
+              <span style={{ color: "green" }}>Open</span>
+            </span>
+          ) : (
+            <span
+              style={{
+                border: "1px solid red",
+                padding: "5px",
+                borderRadius: "5px"
+              }}
+            >
+              <span style={{ color: "red" }}>Closed</span>
+            </span>
+          )
       },
       {
         title: "Key",
