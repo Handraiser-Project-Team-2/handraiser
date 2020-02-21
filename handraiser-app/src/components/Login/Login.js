@@ -15,10 +15,11 @@ import {
 } from "../../Styles/Styles";
 import io from "socket.io-client";
 import { UserContext } from "../Contexts/UserContext";
+// COMPONENT
+import SetSuperAdminDialog from "./SetSuperAdminDialog";
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
   const { socket } = useContext(UserContext);
-
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);
@@ -80,8 +81,19 @@ export default function Login(props) {
     }
   };
 
+  const [toggleDialog, setToggleDialog] = useState(false);
+  const handleKeyDown = event => {
+    if (event.ctrlKey && event.keyCode == 90) {
+      setToggleDialog(true);
+      // console.log('he')
+    }
+  };
   return (
-    <LoginDiv>
+    <LoginDiv onKeyDown={e => handleKeyDown(e)} tabIndex="0">
+      <SetSuperAdminDialog
+        toggleDialog={toggleDialog}
+        setToggleDialog={setToggleDialog}
+      />
       <LoginPic>
         <LinearProgress
           color="secondary"

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import MaterialTable from "material-table";
 
+import ViewClassDialog from "../Class/ViewClassDialog";
+
 export default function StudentClass({ classData, profileData }) {
   const [tableData] = useState({
     columns: [
@@ -10,13 +12,14 @@ export default function StudentClass({ classData, profileData }) {
       },
       {
         title: "Class Name",
+        field: "class_title",
         render: row => (
           <span
             style={{
               wordBreak: "break-word"
             }}
           >
-            {row.class_title}
+            <ViewClassDialog data={row} />
           </span>
         )
       },

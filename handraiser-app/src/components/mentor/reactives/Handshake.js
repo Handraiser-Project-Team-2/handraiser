@@ -1,4 +1,4 @@
-import React, { useEffect,useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
@@ -15,7 +15,7 @@ export default function Handshake(props) {
   const classes = useStyles();
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
-  const {socket } = useContext(UserContext);
+  const { socket } = useContext(UserContext);
   // const ENDPOINT = "localhost:5000";
 
   // let socket = io(ENDPOINT);
@@ -25,7 +25,7 @@ export default function Handshake(props) {
 
     socket.emit("join", {
       username: "hanshakes",
-      room: class_id,
+      room: class_id
     });
   });
 

@@ -8,6 +8,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
 import { useHistory, useParams } from "react-router-dom";
+import SendIcon from "@material-ui/icons/Send";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
@@ -74,7 +75,6 @@ export default function Student({
   const ENDPOINT = "localhost:5000";
   const [requestOpen, setRequestOpen] = useState(true);
   const [concernSelection, setConcernSelection] = useState(false);
-
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -83,8 +83,7 @@ export default function Student({
   };
 
   useEffect(() => {
-    socket.emit("join", { username: "Yow", room: class_id, image: "" });
-
+    socket.emit("join", { username: "Yow", room: class_id });
     socket.on("updateComponents", data => {
       existing();
     });
@@ -235,7 +234,7 @@ export default function Student({
             <TitleName>
               <TextField
                 id="standard-basic"
-                value={concernTitle}
+                value={concernTitle ? concernTitle : ""}
                 fullWidth
                 onChange={e => setConcernTitle(e.target.value)}
                 inputProps={{
@@ -244,7 +243,9 @@ export default function Student({
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Subject</Typography>
-                <Typography>{concernTitle.length}/50</Typography>
+                <Typography>
+                  {concernTitle ? concernTitle.length : "0"}/50
+                </Typography>
               </div>
             </TitleName>
             <Option>
@@ -316,9 +317,9 @@ export default function Student({
               <div
                 style={{
                   display: "flex",
-                  flexWrap: "wrap",
                   justifyContent: "space-between",
                   flexDirection: "column",
+                  alignItems: "center",
                   width: "100%"
                 }}
               >
@@ -346,14 +347,18 @@ export default function Student({
                   ) : concernSelection ? (
                     <Send onClick={sendMessage}>SEND</Send>
                   ) : (
-                    ""
+                    <Send onClick={sendMessage}>SEND</Send>
                   )}
                 </div>
               </div>
             </Field>
           </Message>
         </Help>
-        <DetailPanel />
+        <DetailPanel
+          class_id={class_id}
+          expanded={expanded}
+          setExpanded={setExpanded}
+        />
       </Div>
     </React.Fragment>
   );

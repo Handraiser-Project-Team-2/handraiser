@@ -43,7 +43,6 @@ export default function Chat() {
       setMessages(data);
     });
   }, [ENDPOINT, room]);
-
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -231,10 +230,8 @@ export default function Chat() {
       setSelection(true);
 
       console.log(rowData);
-      // console.log(concernFrom);
       setConcernFrom(rowData.first_name + " " + rowData.last_name);
       setConcernTitle(rowData.concern_title);
-
       setRowData(rowData);
       axios
         .get(`/api/userprofile/${rowData.user_id}`, {})
