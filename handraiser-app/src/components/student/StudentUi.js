@@ -156,7 +156,8 @@ export default function Student({
   username,
   room,
   concernTitle,
-  setConcernTitle
+  setConcernTitle,
+  time
 }) {
   // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
   // let socket;
@@ -173,19 +174,7 @@ export default function Student({
   const user_id = decoded.userid;
   const [name, setName] = useState("");
   const { cstate, getData,socket } = useContext(UserContext);
-  ///for chat
-  // const [username, setUsername] = useState("");
-  // const [room, setRoom] = useState("");
-  // const [userid, setUserid] = useState("");
-  // const [message, setMessage] = useState("");
-  // const [feed, setfeed] = useState("");
-  // const [active, setActive] = useState(false);
-  // const [messages, setMessages] = useState([]);
-  // const [avatar, setAvatar] = useState("");
-  // const [emoji, setEmoji] = useState(false);
-  // const [disable, setDisable] = useState(false);
   const ENDPOINT = "localhost:5000";
-  // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
@@ -197,7 +186,6 @@ export default function Student({
 
   // did mount
   useEffect(() => {
-    // socket = io(ENDPOINT);
     socket.emit("join", { username: "Yow", room: class_id});
 
     socket.on("updateComponents", data => {
@@ -206,9 +194,7 @@ export default function Student({
     });
   }, [ENDPOINT]);
 
-  //did update
   useEffect(() => {
-    // socket = io(ENDPOINT);
 
     if (sessionStorage.getItem("token")) {
       axios
@@ -426,7 +412,8 @@ export default function Student({
         console.log(err);
       });
   };
-
+  let currDate = "";
+let same = true;
   return (
     <React.Fragment>
       <Topbar />
@@ -485,35 +472,53 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {messages.map((message, i) => (
-              <div key={i} style={{ overflowWrap: "break-word" }}>
-                <Chatfield
-                  message={message}
-                  username={username}
-                  feed={feed}
-                  active={active}
-                  userid={userid}
-                />
-              </div>
-            ))}
+              {messages.map((message, i) => {
+                const ndate = new Date(
+                  message.chat_date_created
+                ).toLocaleDateString();
 
-            <div>
-              {feed && active === true ? (
-                <div className={classes.cont2}>
-                  <div className={classes.prof}>
-                    <Avatar src={feed} />
+                const ntime = new Date(message.chat_date_created).toLocaleTimeString();
+
+                console.log(ndate);
+                same = false;
+
+                if (ndate !== currDate) {
+                  currDate = ndate;
+                  same = true;
+                }
+
+                return (
+                  <div key={i} style={{ overflowWrap: "break-word" }}>
+                    <Chatfield
+                      message={message}
+                      username={username}
+                      feed={feed}
+                      active={active}
+                      userid={userid}
+                      date={same?currDate:""}
+                      time={ntime}
+                    />
                   </div>
-                  <div className={classes.receiver}>
-                    <DivAnimation>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </DivAnimation>
+                );
+              })}
+
+              <div>
+                {feed && active === true ? (
+                  <div className={classes.cont2}>
+                    <div className={classes.prof}>
+                      {/* <Avatar src={feed} /> */}
+                    </div>
+                    <div className={classes.receiver}>
+                      <DivAnimation>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </DivAnimation>
+                    </div>
                   </div>
-                </div>
-              ) : null}
-            </div>
-          </ScrollToBottom>
+                ) : null}
+              </div>
+            </ScrollToBottom>
           <Message>
             <Field>
               <div
@@ -525,23 +530,7 @@ export default function Student({
                   width: "100%"
                 }}
               >
-                {/* <form
-                  onSubmit={e => {
-                    e.preventDefault();
-                  }}
-                >
-                  <TextField
-                    id="outlined-textarea"
-                    multiline
-                    variant="outlined"
-                    fullWidth
-                    rows="2"
-                    // value={concernDescription}
-                    style={{
-                      backgroundColor: "white"
-                    }}
-                    onChange={e => setConcernDescription(e.target.value)}
-                  /> */}
+          
                    <Input
                   message={message}
                   setMessage={setMessage}
@@ -563,7 +552,6 @@ export default function Student({
                     )}
                     <Send onClick={sendMessage}>SEND</Send>
                   </div>
-                {/* </form> */}
               </div>
             </Field>
           </Message>

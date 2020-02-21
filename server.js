@@ -128,7 +128,7 @@ massive({
 
       socket.on("handshake", data => {
         console.log("handshake flag", data);
-
+        console.log(users)
         io.to(data.room).emit("updateComponents", {
           message: "handshake succesful"
         });
@@ -157,17 +157,13 @@ massive({
           socket.leave(`${room}`);
        });
         console.log("user", users);
-
-        // socket.emit("message", {
-        //   user: "admin", 
-        //   text: `${user.name},welcome to the room ${user.room} `
-        // });
         user &&
         db.chat
           .find({
             concern_id: user.room
           })
           .then(data => {
+         
             io.to(user.room).emit("old", {
               data
             });
@@ -186,7 +182,7 @@ massive({
         socket.broadcast.emit("not typing", data);
       });
 
-      
+      const date= new Date();
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
         console.log("send",user);
@@ -194,12 +190,10 @@ massive({
           user: user.name,
           message: message,
           room: user.room,
-          image: user.image,
+          chat_date_created: date,
           user_id: user.userid
         });
         
-        // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
-
         callback();
       });
 

@@ -122,40 +122,39 @@ const DivAnimation = styled.div`
     }
   }
 `;
- const interact = {
-    height: "96px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    "@media (height: 894px)": {
-      height: "86px"
-    },
-    "@media (height: 1625px)": {
-      height: "210px"
-    },
-    "@media (width: 360px) and (height: 640px)": {
-      height: "40px"
-    },
-    "@media (width: 411px) and (height: 731px)": {
-      height: "50px"
-    },
-    "@media (width: 411px) and (height: 823px)": {
-      height: "50px"
-    },
-    "@media (width: 320px) and (height: 568px)": {
-      height: "30px"
-    },
-    "@media (width: 375px) and (height: 667px)": {
-      height: "45px"
-    },
-    "@media (width: 414px) and (height: 736px)": {
-      height: "55px"
-    },
-    "@media (width: 375px) and (height: 812px)": {
-      height: "75px"
-    }
+const interact = {
+  height: "96px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  "@media (height: 894px)": {
+    height: "86px"
+  },
+  "@media (height: 1625px)": {
+    height: "210px"
+  },
+  "@media (width: 360px) and (height: 640px)": {
+    height: "40px"
+  },
+  "@media (width: 411px) and (height: 731px)": {
+    height: "50px"
+  },
+  "@media (width: 411px) and (height: 823px)": {
+    height: "50px"
+  },
+  "@media (width: 320px) and (height: 568px)": {
+    height: "30px"
+  },
+  "@media (width: 375px) and (height: 667px)": {
+    height: "45px"
+  },
+  "@media (width: 414px) and (height: 736px)": {
+    height: "55px"
+  },
+  "@media (width: 375px) and (height: 812px)": {
+    height: "75px"
   }
-
+};
 
 export default function Mentor({
   class_id,
@@ -173,16 +172,17 @@ export default function Mentor({
   handleBackQueue,
   handleDone,
   selection,
-  rowData
+  rowData,
+  dateTime,
+  concernTitle
 }) {
   const classes = useStyles();
-  let history = useHistory();
+  let history = useHistory(); 
   // let { class_id } = useParams();
   // const [rowData, setRowData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
-  const [concernTitle, setConcernTitle] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
@@ -363,7 +363,9 @@ export default function Mentor({
   const handleClickMember = () => {
     setExpanded("panel2");
   };
-
+  console.log(messages)
+  let currDate = "";
+let same = true;
   return (
     <React.Fragment>
       <Topbar />
@@ -463,40 +465,54 @@ export default function Mentor({
           )}
 
           {selection ? (
-             <ScrollToBottom className={classes.scrolltobottom}>
-             {messages.map((message, i) => (
-               <div key={i} style={{ overflowWrap: "break-word" }}>
-              
-                   <Chatfield
-                 
-                     message={message}
-                     username={username}
-                     feed={feed}
-                     active={active}
-                     userid={userid}
-                   />
-               
-               </div>
-              
-             ))}
-    
-             <div>
-               {feed && active === true ? (
-                 <div className={classes.cont2}>
-                   <div className={classes.prof}>
-                     {/* <Avatar src={feed} /> */}
-                   </div>
-                   <div className={classes.receiver}>
-                     <DivAnimation>
-                       <span></span>
-                       <span></span>
-                       <span></span>
-                     </DivAnimation>
-                   </div>
-                 </div>
-               ) : null}
-             </div>
-           </ScrollToBottom>
+            <ScrollToBottom className={classes.scrolltobottom}>
+              {messages.map((message, i) => {
+                const ndate = new Date(
+                  message.chat_date_created
+                ).toLocaleDateString();
+
+                const ntime = new Date(message.chat_date_created).toLocaleTimeString();
+
+                console.log(ndate);
+                same = false;
+
+                if (ndate !== currDate) {
+                  currDate = ndate;
+                  same = true;
+                }
+
+                return (
+                  <div key={i} style={{ overflowWrap: "break-word" }}>
+                    <Chatfield
+                      message={message}
+                      username={username}
+                      feed={feed}
+                      active={active}
+                      userid={userid}
+                      date={same?currDate:""}
+                      time={ntime}
+                    />
+                  </div>
+                );
+              })}
+
+              <div>
+                {feed && active === true ? (
+                  <div className={classes.cont2}>
+                    <div className={classes.prof}>
+                      {/* <Avatar src={feed} /> */}
+                    </div>
+                    <div className={classes.receiver}>
+                      <DivAnimation>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </DivAnimation>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </ScrollToBottom>
           ) : (
             <div
               style={{
@@ -531,11 +547,11 @@ export default function Mentor({
                         rows="3"
                       /> */}
                       <Input
-                      message={message}
-                      setMessage={setMessage}
-                      sendMessage={sendMessage}
-                      username={username}
-                    />
+                        message={message}
+                        setMessage={setMessage}
+                        sendMessage={sendMessage}
+                        username={username}
+                      />
                       <div
                         style={{
                           display: "flex",

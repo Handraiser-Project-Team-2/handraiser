@@ -1,4 +1,4 @@
-import React, { useEffect,useContext } from "react";
+import React, { useEffect,useContext,useState } from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
@@ -15,7 +15,8 @@ export default function Handshake(props) {
   const classes = useStyles();
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
-  const {socket } = useContext(UserContext);
+  const {socket  } = useContext(UserContext);
+ 
   // const ENDPOINT = "localhost:5000";
 
   // let socket = io(ENDPOINT);
@@ -28,6 +29,16 @@ export default function Handshake(props) {
       room: class_id,
     });
   });
+  // useEffect(() => {
+  //   if (!cstate) {
+  //     getData();
+  //   }
+  //   if (cstate) {
+  //     console.log(cstate.user_type_id);
+  //     setUserid(cstate.user_id);
+  //     setUsername(cstate.first_name);
+  //   }
+  // }, [cstate]);
 
   const accept = highdata => {
     axios
@@ -40,7 +51,8 @@ export default function Handshake(props) {
       .then(data => {
         props.rowDatahandler(data.data);
         socket.emit("handshake", { room: highdata.class_id });
-
+        // socket.emit("join", { userid, username, room:data.data.concern_id }, () => {});
+      
         axios
           .get(`/api/assisted_by/${highdata.class_id}/${highdata.user_id}`, {})
           .then(data => {

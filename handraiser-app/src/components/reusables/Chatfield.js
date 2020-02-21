@@ -135,16 +135,17 @@ const Div = styled.div`
   }
 `;
 
-const Chatfield = ({
-  message: { message,user_id },
-  userid
-}) => {
-  console.log(user_id)
-  console.log(userid)
+const Chatfield = ({ message: { message, user_id }, userid, date,time }) => {
+  console.log(date)
   let isSentByCurrecntUser = false;
   if (user_id === userid) {
     isSentByCurrecntUser = true;
   }
+  
+// console.log(time)
+  // const ndate = new Date(date).toLocaleDateString();
+  
+
   return isSentByCurrecntUser ? (
     // <Conversation>
     <div>
@@ -159,7 +160,7 @@ const Chatfield = ({
           fontSize: "10px"
         }}
       >
-        Today: 3:57 PM
+        {date}
       </h6>
       <Cont>
         <Sender>
@@ -173,32 +174,56 @@ const Chatfield = ({
               fontSize: "10px"
             }}
           >
-            Delivered
+            {time}
           </h6>
         </Sender>
       </Cont>
-      </div>
-):(
-      <Cont2>
-        <Receiver>
-          <p className="from-them">
-          {ReactEmoji.emojify(message)}
-          </p>
-        </Receiver>
-      </Cont2>
-      // <Cont>
-      //   <Sender>
-      //     <Div>
-      //       <p className="from-me">
-      //         <span></span>
-      //         <span></span>
-      //         <span></span>
-      //       </p>
-      //     </Div>
-      //   </Sender>
-      // </Cont>
+    </div>
+  ) : (
+    <>
+    <h6
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignContent: "center",
+      alignItems: "center",
+      marginTop: "10px",
+      color: "grey",
+      fontSize: "10px"
+    }}
+  >
+    {date}
+  </h6>
+    <Cont2>
+      <Receiver>
+        <p className="from-them">{ReactEmoji.emojify(message)}</p>
+        <h6
+            style={{
+              marginLeft: "35px",
+              color: "lightgrey",
+              fontSize: "10px"
+            }}
+          >
+            {time}
+          </h6>
+      </Receiver>
+      
+
+    </Cont2>
+    </>
+    // <Cont>
+    //   <Sender>
+    //     <Div>
+    //       <p className="from-me">
+    //         <span></span>
+    //         <span></span>
+    //         <span></span>
+    //       </p>
+    //     </Div>
+    //   </Sender>
+    // </Cont>
     // </Conversation>
   );
-}
+};
 
 export default Chatfield;
