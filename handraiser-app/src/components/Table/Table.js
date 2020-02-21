@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
-import Fade from "@material-ui/core/Fade";
 
 import "../../App.css";
 
-import { TableStyle, TableStyle2, TableStyle3 } from "../Styles/Styles2";
+import {
+  TableStyle,
+  TableStyle2,
+  TableStyle3,
+  TableBox
+} from "../Styles/Styles2";
 
 // COMPONENTS
 import ViewMentorDialog from "./Mentor/ViewMentorDIalog";
 import ViewStudentDialog from "./Student/ViewStudentDialog";
+import ViewClassDialog from "./Class/ViewClassDialog";
 
 export const TableCont = props => {
   const { tabValue } = props;
-  const [checked, setChecked] = React.useState(false);
 
   const [tableData, setTableData] = useState({
     studentCol: [
@@ -76,6 +80,7 @@ export const TableCont = props => {
       },
       {
         title: "Email Status",
+        field: "validation_status",
         render: row =>
           row.validation_status === "true" ? (
             <div style={{ display: "flex", textAlign: "center" }}>
@@ -83,10 +88,11 @@ export const TableCont = props => {
                 style={{
                   border: "1px solid green",
                   padding: "5px",
-                  borderRadius: "5px"
+                  borderRadius: "5px",
+                  backgroundColor: "green"
                 }}
               >
-                <span style={{ color: "green" }}>Verified</span>
+                <span style={{ color: "white" }}>Verified</span>
               </span>
             </div>
           ) : (
@@ -94,10 +100,11 @@ export const TableCont = props => {
               style={{
                 border: "1px solid red",
                 padding: "5px",
-                borderRadius: "5px"
+                borderRadius: "5px",
+                backgroundColor: "red"
               }}
             >
-              <span style={{ color: "red" }}>Not yet Verified</span>
+              <span style={{ color: "white" }}>Not yet Verified</span>
             </span>
           )
       },
@@ -130,18 +137,20 @@ export const TableCont = props => {
       },
       {
         title: "Class Name",
+        field: "class_title",
         render: row => (
           <span
             style={{
               wordBreak: "break-word"
             }}
           >
-            {row.class_title}
+            <ViewClassDialog data={row} />
           </span>
         )
       },
       {
         title: "Description",
+        field: "class_description",
         render: row => (
           <span
             style={{
@@ -154,6 +163,7 @@ export const TableCont = props => {
       },
       {
         title: "Date Created",
+        feild: "class_date_created",
         render: row => new Date(row.class_date_created).toLocaleString()
       },
       {
@@ -167,6 +177,7 @@ export const TableCont = props => {
       },
       {
         title: "Status",
+        field: "class_status",
         render: row =>
           row.class_status === "open" ? (
             <span
@@ -228,7 +239,7 @@ export const TableCont = props => {
   }, [tableData]);
 
   return (
-    <React.Fragment>
+    <TableBox>
       {tabValue === 0 ? (
         <TableStyle2>
           <MaterialTable
@@ -293,6 +304,6 @@ export const TableCont = props => {
           />
         </TableStyle3>
       )}
-    </React.Fragment>
+    </TableBox>
   );
 };

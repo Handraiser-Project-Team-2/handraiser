@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MaterialTable from "material-table";
 
-// import { TableCol } from "../../Styles/Styles2";
+import ViewClassDialog from "../Class/ViewClassDialog";
 
 export default function MentorClass({ classData, profileData }) {
   const [tableData] = useState({
@@ -18,7 +18,7 @@ export default function MentorClass({ classData, profileData }) {
               wordBreak: "break-word"
             }}
           >
-            {row.class_title}
+            <ViewClassDialog data={row} />
           </span>
         )
       },

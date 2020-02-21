@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+export const TableBox = styled.div`
+  margin-bottom: 25px;
+`;
+
 export const ListCont = styled.div`
   display: flex;
   flex-direction: row-reverse;
