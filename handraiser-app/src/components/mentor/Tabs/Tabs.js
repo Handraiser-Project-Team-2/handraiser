@@ -32,7 +32,9 @@ const TabBtn = props => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [search, setSearch] = useState("");
+
   const handleChange = (event, newValue) => {
+    event.preventDefault();
     setTabValue(newValue);
   };
 

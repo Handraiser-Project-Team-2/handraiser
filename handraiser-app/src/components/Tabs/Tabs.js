@@ -104,11 +104,11 @@ export const TabBtn = props => {
         setKey(res.data.data.validation_key);
         setOpen(false);
       })
-      .catch(errors => {
+      .catch(err => {
         try {
-          toast.error(errors.res.data.error);
+          toast.error(err.res.data.err);
         } catch {
-          console.log(errors);
+          console.log(err);
         }
       });
   };
