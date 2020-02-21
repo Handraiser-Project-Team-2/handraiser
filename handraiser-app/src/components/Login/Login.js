@@ -15,6 +15,9 @@ import {
 } from "../../Styles/Styles";
 import io from "socket.io-client";
 
+// COMPONENT
+import SetSuperAdminDialog from "./SetSuperAdminDialog";
+
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
 
@@ -132,7 +135,7 @@ export default function Login(props) {
             </LoginButton>
           )}
         />
-
+        <SetSuperAdminDialog />
         <LoginFooter>
           <p>BOOM CAMP / BATCH 2 / TEAM 2 / 2020</p>
         </LoginFooter>
