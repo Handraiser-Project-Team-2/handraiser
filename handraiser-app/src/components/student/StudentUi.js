@@ -158,7 +158,7 @@ export default function Student({
   concernTitle,
   setConcernTitle
 }) {
-  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
+  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
@@ -184,7 +184,7 @@ export default function Student({
   // const [avatar, setAvatar] = useState("");
   // const [emoji, setEmoji] = useState(false);
   // const [disable, setDisable] = useState(false);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
