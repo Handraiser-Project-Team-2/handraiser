@@ -187,6 +187,9 @@ export default function Student({
   // const [avatar, setAvatar] = useState("");
   // const [emoji, setEmoji] = useState(false);
   // const [disable, setDisable] = useState(false);
+
+  const [concernSelection, setConcernSelection] = useState();
+
   const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
@@ -433,8 +436,8 @@ export default function Student({
         .catch(err => {
           console.log(err);
         });
-    }
-  };
+    };
+
   let currDate = "";
   let same = true;
   return (
@@ -442,7 +445,7 @@ export default function Student({
       <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />
+          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} setConcernSelection={setConcernSelection} />
         </Queue>
         <Help>
           <Subject>
@@ -528,9 +531,10 @@ export default function Student({
                       time={ntime}
                     />
                   </div>
-                ))
-              : ""}
-
+                )
+              })
+            }
+            
             <div>
               {feed && active === true ? (
                 <div className={classes.cont2}>
