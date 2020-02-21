@@ -14,6 +14,7 @@ import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
 import EditClassDialog from "./EditClassDialog";
 import MuiAlert from "@material-ui/lab/Alert";
+import SendEmailClassCode from "./SendClassCodeEmail";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -48,14 +49,11 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
   }, [cstate, getData]);
 
   const cardClick = e => {
-    loading();
-    setTimeout(() => {
-      history.push(`/classroom`);
-      if (cstate) {
-        history.push(`/classroom/${e}`);
-      }
-    }, 1000);
+    history.push(`/classroom`);
 
+    if (cstate) {
+      history.push(`/classroom/${e}`);
+    }
     // if (cstate) {
     //   if (cstate.user_type_id === 3) {
     //     history.push(`/student/${e}`);
@@ -141,6 +139,9 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
                 </CopyToClipboard>
               ) : null}
             </div>
+            {cstate && cstate.user_type_id === 4 ? (
+              <SendEmailClassCode data={row} />
+            ) : null}
             {cstate && cstate.user_type_id === 4 ? (
               <EditClassDialog data={row} fetchMentorClass={fetchMentorClass} />
             ) : null}

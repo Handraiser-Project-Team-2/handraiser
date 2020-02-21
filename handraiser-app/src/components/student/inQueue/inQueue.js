@@ -167,13 +167,15 @@ export default function InQueue(props) {
   }, [props.search, concernsData]); //class_id
 
   const update = data => {
-    axios({
-      method: "get",
-      url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
-    }).then(res => {
-      setConcernsData(res.data);
-      // console.log(res.data.length);
-    });
+    if (props.classReference) {
+      axios({
+        method: "get",
+        url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
+      }).then(res => {
+        setConcernsData(res.data);
+        // console.log(res.data.length);
+      });
+    }
   };
 
   const handleMenu = (event, concern) => {

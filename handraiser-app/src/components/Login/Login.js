@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -17,7 +17,7 @@ import io from "socket.io-client";
 import { UserContext } from "../Contexts/UserContext";
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
-  const {socket } = useContext(UserContext);
+  const { socket } = useContext(UserContext);
   const ENDPOINT = "172.60.62.113:5000";
   // let socket ;
   // useEffect(() => {

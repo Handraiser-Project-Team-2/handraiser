@@ -412,20 +412,22 @@ export default function Student({
   };
 
   const existing = () => {
-    axios({
-      method: "get",
-      url: `/api/student/queue/order/${class_id}/${user_id}?search=${""}`
-    })
-      .then(res => {
-        if (res.data.length > 0) {
-          setRequestOpen(false);
-        } else {
-          setRequestOpen(true);
-        }
+    if (class_id) {
+      axios({
+        method: "get",
+        url: `/api/student/queue/order/${class_id}/${user_id}?search=${""}`
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          if (res.data.length > 0) {
+            setRequestOpen(false);
+          } else {
+            setRequestOpen(true);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -440,7 +442,7 @@ export default function Student({
             <TitleName>
               <TextField
                 id="standard-basic"
-                value={concernTitle}
+                value={concernTitle ? concernTitle : ""}
                 fullWidth
                 onChange={e => setConcernTitle(e.target.value)}
                 inputProps={{
@@ -449,7 +451,9 @@ export default function Student({
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Subject</Typography>
-                <Typography>{concernTitle.length}/50</Typography>
+                <Typography>
+                  {concernTitle ? concernTitle.length : "0"}/50
+                </Typography>
               </div>
             </TitleName>
             <Option>
@@ -486,17 +490,19 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {messages.map((message, i) => (
-              <div key={i} style={{ overflowWrap: "break-word" }}>
-                <Chatfield
-                  message={message}
-                  username={username}
-                  feed={feed}
-                  active={active}
-                  userid={userid}
-                />
-              </div>
-            ))}
+            {messages
+              ? messages.map((message, i) => (
+                  <div key={i} style={{ overflowWrap: "break-word" }}>
+                    <Chatfield
+                      message={message}
+                      username={username}
+                      feed={feed}
+                      active={active}
+                      userid={userid}
+                    />
+                  </div>
+                ))
+              : ""}
 
             <div>
               {feed && active === true ? (
@@ -562,7 +568,6 @@ export default function Student({
                   ) : (
                     ""
                   )}
-
                   <Send onClick={sendMessage}>SEND</Send>
                 </div>
                 {/* </form> */}
