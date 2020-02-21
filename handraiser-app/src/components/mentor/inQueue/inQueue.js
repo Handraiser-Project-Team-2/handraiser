@@ -26,14 +26,7 @@ export default function InQueue(rowDatahandler) {
       room: rowDatahandler.class_id,
     });
     console.log("inqueue student",socket)
-    
-  }, []);
 
-  useEffect(() => {
-    update(rowDatahandler.search);
-  }, [rowDatahandler.search]);
-
-  useEffect(() => {
     socket.on("updateComponents", message => {
       update("");
     });
@@ -45,7 +38,16 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [rowDatahandler.rowDatahandler.search, concernsData]);
+    
+  }, []);
+
+  useEffect(() => {
+    update(rowDatahandler.search);
+  }, [rowDatahandler.search]);
+
+  // useEffect(() => {
+  
+  // }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
   const update = data => {
     axios({

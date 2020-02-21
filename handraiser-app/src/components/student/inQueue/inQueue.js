@@ -128,6 +128,8 @@ export default function InQueue(props) {
       url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
+      console.log(props.concernSelection);
+      // if (props.concernSelection) props.setConcernSelection(true);
       // console.log(res.data.length);
     });
   };
@@ -176,7 +178,9 @@ export default function InQueue(props) {
   };
 
   const handleConcernData = data => {
-    console.log("handling");
+    console.log("AA,inqueue.js(handleConcernData)");
+
+    props.setConcernSelection(true);
     props.rowDatahandler(data);
   };
 
@@ -189,7 +193,8 @@ export default function InQueue(props) {
 
     setTimeout(() => {
       console.log("removing");
-
+      props.setConcernSelection(false);
+      console.log("AA,inqueue.js(handleRemoveReq)");
       setConcernTitle("");
       setConcernDescription("");
       props.closeFlag();

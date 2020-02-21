@@ -258,7 +258,7 @@ export default function Chat() {
   // console.log("nor")
 
   const closeFlag = () => {
-    
+    setMessages([])
     setConcernTitle("")
   }
 
@@ -281,6 +281,7 @@ export default function Chat() {
           setConcernTitle={setConcernTitle}
           concernTitle={concernTitle}
           closeFlag={closeFlag}
+          setMessages={setMessages}
         />
       ) : null}
       {usertypeid === 4 ? (

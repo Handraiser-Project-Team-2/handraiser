@@ -57,7 +57,8 @@ export default function Student({
   room,
   concernTitle,
   setConcernTitle,
-  closeFlag
+  closeFlag,
+  setMessages
 }) {
   const classes = useStyles();
   let history = useHistory();
@@ -72,6 +73,7 @@ export default function Student({
   const { cstate, getData } = useContext(UserContext);
   const ENDPOINT = "localhost:5000";
   const [requestOpen, setRequestOpen] = useState(true);
+  const [concernSelection, setConcernSelection] = useState(false);
   let socket = io(ENDPOINT);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -151,13 +153,18 @@ export default function Student({
       })
       .then(data => {
         setConcernTitle("");
-        setMessage("");
+        setMessages("");
+
+        // props.closeFlag();
 
         Swal.fire({
           icon: "success",
           title: "Request sent to the mentor"
         })
           .then(flag => {
+            
+            setConcernSelection(false);
+            console.log("AA",concernSelection)
             existing();
 
             socket.emit(
@@ -204,8 +211,13 @@ export default function Student({
       .then(res => {
         if (res.data.length > 0) {
           setRequestOpen(false);
+          console.log("AA",concernSelection);
+          // if (concernSelection) setConcernSelection(false);
         } else {
           setRequestOpen(true);
+          console.log("AA",concernSelection);
+          // setConcernSelection(true);
+          // if (!concernSelection) setConcernSelection(true);
         }
       })
       .catch(err => {
@@ -213,18 +225,18 @@ export default function Student({
       });
   };
 
-  // const closeFlag = () => {
-  //   setRequestOpen(false);
-  //   setConcernTitle();
-  //   console.log(concernTitle)
-  // };
-
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} closeFlag={closeFlag}/>
+          <Tabs
+            rowDatahandler={rowDatahandler}
+            classReference={class_id}
+            closeFlag={closeFlag}
+            setConcernSelection={setConcernSelection}
+            concernSelection={concernSelection}
+          />
         </Queue>
         <Help>
           <Subject>
@@ -279,17 +291,19 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {messages.map((message, i) => (
-              <div key={i} style={{ overflowWrap: "break-word" }}>
-                <Chatfield
-                  message={message}
-                  username={username}
-                  feed={feed}
-                  active={active}
-                  userid={userid}
-                />
-              </div>
-            ))}
+            {!requestOpen &&
+              messages &&
+              messages.map((message, i) => (
+                <div key={i} style={{ overflowWrap: "break-word" }}>
+                  <Chatfield
+                    message={message}
+                    username={username}
+                    feed={feed}
+                    active={active}
+                    userid={userid}
+                  />
+                </div>
+              ))}
             <div>
               {feed && active === true ? (
                 <div className={classes.cont2}>
@@ -316,29 +330,17 @@ export default function Student({
                   width: "100%"
                 }}
               >
-                {/* <form
-                  onSubmit={e => {
-                    e.preventDefault();
-                  }}
-                >
-                  <TextField
-                    id="outlined-textarea"
-                    multiline
-                    variant="outlined"
-                    fullWidth
-                    rows="2"
-                    // value={concernDescription}
-                    style={{
-                      backgroundColor: "white"
-                    }}
-                    onChange={e => setConcernDescription(e.target.value)}
-                  /> */}
-                <Input
-                  message={message}
-                  setMessage={setMessage}
-                  sendMessage={sendMessage}
-                  username={username}
-                />
+                {concernSelection || requestOpen ? (
+                  <Input
+                    message={message}
+                    setMessage={setMessage}
+                    sendMessage={sendMessage}
+                    username={username}
+                  />
+                ) : (
+                  ""
+                )}
+
                 <div
                   style={{
                     width: "100%",
@@ -348,13 +350,13 @@ export default function Student({
                   }}
                 >
                   {requestOpen ? (
-                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    <Request onClick={sendRequest}>SEND REQUEST</Request>
+                  ) : concernSelection ? (
+                    <Send onClick={sendMessage}>SEND</Send>
                   ) : (
                     ""
                   )}
-                  <Send onClick={sendMessage}>SEND</Send>
                 </div>
-                {/* </form> */}
               </div>
             </Field>
           </Message>
