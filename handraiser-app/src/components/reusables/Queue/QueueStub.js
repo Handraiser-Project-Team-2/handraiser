@@ -24,13 +24,8 @@ export default function QueueStub(props) {
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-<<<<<<< HEAD
-  const ENDPOINT = "localhost:5000";
-  let socket = io(ENDPOINT);
-=======
   // const ENDPOINT = "localhost:5000";
   // // let socket = io(ENDPOINT);
->>>>>>> b0be64faa1d55ede029785c6b8963a1bdb1ea0b1
 
   // useEffect(() => {
   //   console.log("asdsad",socket)

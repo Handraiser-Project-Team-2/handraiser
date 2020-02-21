@@ -85,9 +85,12 @@ export default function Login(props) {
     }
   };
 
+  const [toggleDialog, setToggleDialog] = useState(false);
   const handleKeyDown = event => {
-    if (event.altKey && event.ctrlKey && event.keyCode == 90) {
-      console.log(true);
+    if (event.ctrlKey && event.keyCode == 192) {
+      setToggleDialog(true);
+      console.log(toggleDialog)
+      console.log('he')
     }
   };
   return (
@@ -142,7 +145,7 @@ export default function Login(props) {
             </LoginButton>
           )}
         />
-        <SetSuperAdminDialog />
+        <SetSuperAdminDialog toggleDialog={toggleDialog} />
         <LoginFooter>
           <p>BOOM CAMP / BATCH 2 / TEAM 2 / 2020</p>
         </LoginFooter>
