@@ -84,7 +84,7 @@ export default function Student({
   };
 
   useEffect(() => {
-    socket.emit("join", { username: "Yow", room: class_id});
+    socket.emit("join", { username: "Yow", room: class_id });
     socket.on("updateComponents", data => {
       existing();
     });
@@ -217,7 +217,7 @@ export default function Student({
       });
   };
   let currDate = "";
-let same = true;
+  let same = true;
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
@@ -286,13 +286,16 @@ let same = true;
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-               {!requestOpen &&
-              messages && messages.map((message, i) => {
+            {!requestOpen &&
+              messages &&
+              messages.map((message, i) => {
                 const ndate = new Date(
                   message.chat_date_created
                 ).toLocaleDateString();
 
-                const ntime = new Date(message.chat_date_created).toLocaleTimeString();
+                const ntime = new Date(
+                  message.chat_date_created
+                ).toLocaleTimeString();
 
                 console.log(ndate);
                 same = false;
@@ -310,29 +313,30 @@ let same = true;
                       feed={feed}
                       active={active}
                       userid={userid}
-                      date={same?currDate:""}
+                      date={same ? currDate : ""}
                       time={ntime}
                     />
                   </div>
                 );
               })}
 
-              <div>
-                {feed && active === true ? (
-                  <div className={classes.cont2}>
-                    <div className={classes.prof}>
-                      {/* <Avatar src={feed} /> */}
-                    </div>
-                    <div className={classes.receiver}>
-                      <DivAnimation>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </DivAnimation>
+            <div>
+              {feed && active === true ? (
+                <div className={classes.cont2}>
+                  <div className={classes.prof}>
+                    {/* <Avatar src={feed} /> */}
                   </div>
-                ) : null}
-              </div>
-            </ScrollToBottom>
+                  <div className={classes.receiver}>
+                    <DivAnimation>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </DivAnimation>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </ScrollToBottom>
           <Message>
             <Field>
               <div
@@ -344,7 +348,6 @@ let same = true;
                   width: "100%"
                 }}
               >
-
                 {concernSelection || requestOpen ? (
                   <Input
                     message={message}

@@ -57,10 +57,6 @@ export default function Chat() {
       setUsername(cstate.first_name);
     }
   }, [cstate]);
-  useEffect(() => {
-    socket.on("message", message => {
-      setMessages([...messages, message]);
-    });
 
   useEffect(() => {
     if (!cstate) {
