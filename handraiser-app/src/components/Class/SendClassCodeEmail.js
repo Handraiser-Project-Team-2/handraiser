@@ -10,6 +10,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import EmailIcon from "@material-ui/icons/Email";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
+import { toast, ToastContainer } from "react-toastify";
 
 const useStyles = makeStyles(theme => ({
   email: {
@@ -30,15 +31,22 @@ export default function FormDialog({ data }) {
   const [emailTo, setEmailto] = React.useState("");
   const [classMembers, setClassMembers] = useState([]);
 
-  useEffect(() => {
-    getAdminEmail();
-  }, []);
-
   const handleClickOpen = data => {
-    setOpenAdd(false);
-    setOpen(true);
-    setClassroomKey(data.classroom_key);
-    setClassName(data.class_title);
+    if (
+      emailTo !== "" &&
+      /^[a-zA-Z0-9-.-_]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(emailTo) === true
+    ) {
+      setErrorMsgEmail("");
+      getAdminEmail();
+      setOpenAdd(false);
+      setOpen(true);
+      setClassroomKey(data.classroom_key);
+      setClassName(data.class_title);
+    } else if (
+      /^[a-zA-Z0-9-.-_]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(emailTo) === false
+    ) {
+      setErrorMsgEmail("Invalid Email");
+    }
   };
 
   const openAddEmail = data => {
@@ -70,15 +78,23 @@ export default function FormDialog({ data }) {
   };
 
   const handleConfirm = () => {
-    axios.post(`/api/sendClassCode`, {
-      emailTo: emailTo,
-      classroom_key: classroomKey,
-      adminEmail: adminEmail,
-      adminPass: adminPass,
-      class_title: className
-    });
-    setOpen(false);
+    if (data) {
+      axios.post(`/api/sendClassCode`, {
+        emailTo: emailTo,
+        classroom_key: classroomKey,
+        adminEmail: adminEmail,
+        adminPass: adminPass,
+        class_title: className
+      });
+      toast.success("Classroom Key sent to the student", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+
+      setOpen(false);
+    }
   };
+
+  const [errorMsgEmail, setErrorMsgEmail] = useState("");
 
   return (
     <div>
@@ -131,6 +147,8 @@ export default function FormDialog({ data }) {
             type="email"
             fullWidth
             onChange={e => setEmailto(e.target.value)}
+            error={errorMsgEmail === "" ? false : true}
+            helperText={errorMsgEmail ? errorMsgEmail : ""}
           />
         </DialogContent>
         <DialogActions>
@@ -142,6 +160,7 @@ export default function FormDialog({ data }) {
           </Button>
         </DialogActions>
       </Dialog>
+      <ToastContainer autoClose={1500} />
     </div>
   );
 }
