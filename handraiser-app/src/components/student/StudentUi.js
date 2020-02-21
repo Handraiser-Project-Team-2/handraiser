@@ -172,7 +172,7 @@ export default function Student({
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
-  const { cstate, getData } = useContext(UserContext);
+  const { cstate, getData,socket } = useContext(UserContext);
   ///for chat
   // const [username, setUsername] = useState("");
   // const [room, setRoom] = useState("");
@@ -197,13 +197,13 @@ export default function Student({
 
   // did mount
   useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("join", { username: "Yow", room: class_id, image: "" });
+    // socket = io(ENDPOINT);
+    socket.emit("join", { username: "Yow", room: class_id});
 
     socket.on("updateComponents", data => {
       existing();
     });
-  }, []);
+  }, [ENDPOINT]);
 
   //did update
   useEffect(() => {

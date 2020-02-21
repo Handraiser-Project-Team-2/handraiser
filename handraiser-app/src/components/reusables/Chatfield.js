@@ -139,8 +139,8 @@ const Chatfield = ({
   message: { message,user_id },
   userid
 }) => {
-  // console.log(user_id)
-  // console.log(userid)
+  console.log(user_id)
+  console.log(userid)
   let isSentByCurrecntUser = false;
   if (user_id === userid) {
     isSentByCurrecntUser = true;

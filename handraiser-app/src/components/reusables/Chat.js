@@ -35,7 +35,7 @@ export default function Chat() {
   useEffect(() => {
     socket = io(ENDPOINT);
 
-    socket.emit("join", { userid, username, room, image: avatar }, () => {});
+    socket.emit("join", { userid, username, room }, () => {});
 
     socket.on("old", ({ data }) => {
       setMessages(data);
