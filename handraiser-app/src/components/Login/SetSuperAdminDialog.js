@@ -50,7 +50,7 @@ export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
         <DialogTitle id="responsive-dialog-title">
           {"Update Superadmin Email"}
         </DialogTitle>
-        <form autoComplete="off" onSubmit={handleSubmit(handleSubmitEmail)}>
+        <form autoComplete="off" onSubmit={handleSubmitEmail}>
           <DialogContent>
             <TextField
               error={!!errors.email}
