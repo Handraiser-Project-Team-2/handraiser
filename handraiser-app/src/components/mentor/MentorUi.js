@@ -6,7 +6,9 @@ import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+import SendIcon from "@material-ui/icons/Send";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
@@ -40,7 +42,6 @@ import Input from "../reusables/Input";
 // import ScrollToBottom from "react-scroll-to-bottom";
 import "emoji-mart/css/emoji-mart.css";
 var jwtDecode = require("jwt-decode");
-
 
 export default function Mentor({
   class_id,
@@ -122,9 +123,9 @@ export default function Mentor({
   const handleClickMember = () => {
     setExpanded("panel2");
   };
-  console.log(messages)
+  console.log(messages);
   let currDate = "";
-let same = true;
+  let same = true;
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} class_id={class_id} />
@@ -241,7 +242,9 @@ let same = true;
                   message.chat_date_created
                 ).toLocaleDateString();
 
-                const ntime = new Date(message.chat_date_created).toLocaleTimeString();
+                const ntime = new Date(
+                  message.chat_date_created
+                ).toLocaleTimeString();
 
                 console.log(ndate);
                 same = false;
@@ -259,7 +262,7 @@ let same = true;
                       feed={feed}
                       active={active}
                       userid={userid}
-                      date={same?currDate:""}
+                      date={same ? currDate : ""}
                       time={ntime}
                     />
                   </div>
@@ -329,7 +332,22 @@ let same = true;
                           marginTop: "15px"
                         }}
                       >
-                        <Send onClick={sendMessage}>SEND</Send>
+                        <Fab
+                          variant="extended"
+                          size="small"
+                          className={classes.margin}
+                          onClick={sendMessage}
+                          style={{
+                            backgroundColor: "#372476",
+                            color: "white"
+                          }}
+                        >
+                          <SendIcon
+                            className={classes.extendedIcon}
+                            style={{ marginRight: "5px", color: "white" }}
+                          />
+                          SEND
+                        </Fab>
                       </div>
                     </form>
                   </div>
