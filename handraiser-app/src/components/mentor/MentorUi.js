@@ -59,6 +59,7 @@ export default function Mentor({
   handleDone,
   selection,
   rowData,
+  dateTime,
   setSelection,
   concernTitle,
   concernUser
@@ -121,7 +122,9 @@ export default function Mentor({
   const handleClickMember = () => {
     setExpanded("panel2");
   };
-  console.log(messages);
+  console.log(messages)
+  let currDate = "";
+let same = true;
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} class_id={class_id} />
@@ -233,17 +236,35 @@ export default function Mentor({
 
           {selection ? (
             <ScrollToBottom className={classes.scrolltobottom}>
-              {messages.map((message, i) => (
-                <div key={i} style={{ overflowWrap: "break-word" }}>
-                  <Chatfield
-                    message={message}
-                    username={username}
-                    feed={feed}
-                    active={active}
-                    userid={userid}
-                  />
-                </div>
-              ))}
+              {messages.map((message, i) => {
+                const ndate = new Date(
+                  message.chat_date_created
+                ).toLocaleDateString();
+
+                const ntime = new Date(message.chat_date_created).toLocaleTimeString();
+
+                console.log(ndate);
+                same = false;
+
+                if (ndate !== currDate) {
+                  currDate = ndate;
+                  same = true;
+                }
+
+                return (
+                  <div key={i} style={{ overflowWrap: "break-word" }}>
+                    <Chatfield
+                      message={message}
+                      username={username}
+                      feed={feed}
+                      active={active}
+                      userid={userid}
+                      date={same?currDate:""}
+                      time={ntime}
+                    />
+                  </div>
+                );
+              })}
 
               <div>
                 {feed && active === true ? (

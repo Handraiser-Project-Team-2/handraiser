@@ -156,17 +156,14 @@ massive({
         socket.on(`leave_room`, ({ room }) => {
           socket.leave(`${room}`);
        });
-
-        // socket.emit("message", {
-        //   user: "admin",
-        //   text: `${user.name},welcome to the room ${user.room} `
-        // });
-         user &&
+        console.log("user", users);
+        user &&
         db.chat
           .find({
             concern_id: user.room
           })
           .then(data => {
+         
             io.to(user.room).emit("old", {
               data
             });
@@ -185,16 +182,16 @@ massive({
         socket.broadcast.emit("not typing", data);
       });
 
+      const date= new Date();
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
         io.to(user.room).emit("message", {
           user: user.name,
           message: message,
           room: user.room,
-          image: user.image,
+          chat_date_created: date,
           user_id: user.userid
         });
-
         callback();
       });
 
