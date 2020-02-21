@@ -379,7 +379,11 @@ export default function Student({
             </Field>
           </Message>
         </Help>
-        <DetailPanel />
+        <DetailPanel
+          class_id={class_id}
+          expanded={expanded}
+          setExpanded={setExpanded}
+        />
       </Div>
     </React.Fragment>
   );
