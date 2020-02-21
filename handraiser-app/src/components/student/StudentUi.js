@@ -58,6 +58,7 @@ export default function Student({
   room,
   concernTitle,
   setConcernTitle,
+  time,
   closeFlag,
   setMessages
 }) {
@@ -83,7 +84,7 @@ export default function Student({
   };
 
   useEffect(() => {
-    socket.emit("join", { username: "Yow", room: class_id });
+    socket.emit("join", { username: "Yow", room: class_id});
     socket.on("updateComponents", data => {
       existing();
     });
@@ -215,7 +216,8 @@ export default function Student({
         console.log(err);
       });
   };
-
+  let currDate = "";
+let same = true;
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
@@ -284,34 +286,53 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {!requestOpen &&
-              messages &&
-              messages.map((message, i) => (
-                <div key={i} style={{ overflowWrap: "break-word" }}>
-                  <Chatfield
-                    message={message}
-                    username={username}
-                    feed={feed}
-                    active={active}
-                    userid={userid}
-                  />
-                </div>
-              ))}
-            <div>
-              {feed && active === true ? (
-                <div className={classes.cont2}>
-                  <div className={classes.prof}></div>
-                  <div className={classes.receiver}>
-                    <DivAnimation>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </DivAnimation>
+               {!requestOpen &&
+              messages && messages.map((message, i) => {
+                const ndate = new Date(
+                  message.chat_date_created
+                ).toLocaleDateString();
+
+                const ntime = new Date(message.chat_date_created).toLocaleTimeString();
+
+                console.log(ndate);
+                same = false;
+
+                if (ndate !== currDate) {
+                  currDate = ndate;
+                  same = true;
+                }
+
+                return (
+                  <div key={i} style={{ overflowWrap: "break-word" }}>
+                    <Chatfield
+                      message={message}
+                      username={username}
+                      feed={feed}
+                      active={active}
+                      userid={userid}
+                      date={same?currDate:""}
+                      time={ntime}
+                    />
                   </div>
-                </div>
-              ) : null}
-            </div>
-          </ScrollToBottom>
+                );
+              })}
+
+              <div>
+                {feed && active === true ? (
+                  <div className={classes.cont2}>
+                    <div className={classes.prof}>
+                      {/* <Avatar src={feed} /> */}
+                    </div>
+                    <div className={classes.receiver}>
+                      <DivAnimation>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </DivAnimation>
+                  </div>
+                ) : null}
+              </div>
+            </ScrollToBottom>
           <Message>
             <Field>
               <div
@@ -323,6 +344,7 @@ export default function Student({
                   width: "100%"
                 }}
               >
+
                 {concernSelection || requestOpen ? (
                   <Input
                     message={message}

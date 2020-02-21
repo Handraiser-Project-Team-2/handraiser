@@ -24,6 +24,7 @@ export default function Chat() {
   const [concernTitle, setConcernTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
+  const [dateTime, setDateTime] = useState([]);
   const [concernFrom, setConcernFrom] = useState();
 
   const ENDPOINT = "localhost:5000";
@@ -42,6 +43,7 @@ export default function Chat() {
     socket.on("old", ({ data }) => {
       setMessages(data);
     });
+
   }, [ENDPOINT, room]);
   useEffect(() => {
     if (!cstate) {
@@ -60,6 +62,23 @@ export default function Chat() {
       setMessages([...messages, message]);
     });
 
+  useEffect(() => {
+    if (!cstate) {
+      getData();
+    }
+    if (cstate) {
+      console.log(cstate.user_type_id);
+      setUsertypeid(cstate.user_type_id);
+      setUserid(cstate.user_id);
+      setAvatar(cstate.image);
+      setUsername(cstate.first_name);
+    }
+  }, [cstate]);
+
+  useEffect(() => {
+    socket.on("message", message => {
+      setMessages([...messages, message]);
+    });
     return () => {
       socket.emit("disconnect");
       socket.off();
@@ -72,6 +91,7 @@ export default function Chat() {
     setTimeout(() => {
       if (message) {
         socket.emit("sendMessage", message, () => setMessage(""));
+      
         axios
           .post(`/api/chat/send`, {
             message: message,
@@ -166,6 +186,7 @@ export default function Chat() {
               )
               .then(data => {
                 socket.emit("handshake", { room: class_id });
+               
               })
               .catch(err => {
                 console.log(err);
@@ -238,8 +259,9 @@ export default function Chat() {
         .then(data => {
           setRoom(rowData.concern_id);
           setName(data.data[0].first_name + " " + data.data[0].last_name);
-          // localStorage.setItem("room",rowData.concern_id)
-        })
+
+        }) 
+   
         .catch(err => {
           console.log(err);
         });
@@ -258,7 +280,6 @@ export default function Chat() {
     setMessages([])
     setConcernTitle("")
   }
-
   return (
     <div>
       {usertypeid === 3 ? (
@@ -276,7 +297,6 @@ export default function Chat() {
           name={name}
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
-          concernTitle={concernTitle}
           closeFlag={closeFlag}
           setMessages={setMessages}
         />
