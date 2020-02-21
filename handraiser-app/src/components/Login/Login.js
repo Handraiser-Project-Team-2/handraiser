@@ -21,7 +21,7 @@ export default function Login(props) {
   const ENDPOINT = "172.60.62.113:5000";
   // let socket ;
   // useEffect(() => {
-  // let socket = io(ENDPOINT);
+  //   socket = io(ENDPOINT);
   // }, [ENDPOINT])
   const responseGoogle = response => {
     if (response.googleId) {
