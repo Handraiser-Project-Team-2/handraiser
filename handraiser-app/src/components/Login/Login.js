@@ -83,8 +83,13 @@ export default function Login(props) {
     }
   };
 
+  const handleKeyDown = event => {
+    if (event.altKey && event.ctrlKey && event.keyCode == 90) {
+      console.log(true);
+    }
+  };
   return (
-    <LoginDiv>
+    <LoginDiv onKeyDown={e => handleKeyDown(e)} tabIndex="0">
       <LoginPic>
         <LinearProgress
           color="secondary"
