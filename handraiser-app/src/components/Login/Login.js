@@ -15,10 +15,12 @@ import {
 } from "../../Styles/Styles";
 import io from "socket.io-client";
 import { UserContext } from "../Contexts/UserContext";
+// COMPONENT
+import SetSuperAdminDialog from "./SetSuperAdminDialog";
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
   const { socket } = useContext(UserContext);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   // let socket ;
   // useEffect(() => {
   //   socket = io(ENDPOINT);
@@ -83,8 +85,16 @@ export default function Login(props) {
     }
   };
 
+  const [toggleDialog, setToggleDialog] = useState(false);
+  const handleKeyDown = event => {
+    if (event.ctrlKey && event.keyCode == 90) {
+      setToggleDialog(true);
+      console.log('he')
+    }
+  };
   return (
-    <LoginDiv>
+    <LoginDiv onKeyDown={e => handleKeyDown(e)} tabIndex="0">
+      <SetSuperAdminDialog toggleDialog={toggleDialog} setToggleDialog={setToggleDialog} />
       <LoginPic>
         <LinearProgress
           color="secondary"
@@ -135,7 +145,7 @@ export default function Login(props) {
             </LoginButton>
           )}
         />
-
+        
         <LoginFooter>
           <p>BOOM CAMP / BATCH 2 / TEAM 2 / 2020</p>
         </LoginFooter>

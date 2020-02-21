@@ -55,6 +55,7 @@ massive({
     app.post("/api/userprofile/", users.getUserProfileByEmail);
     app.post("/api/userprofile/student/", users.getUserProfileByStudentEmail);
     app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
+    app.put("/api/login/superadmin", users.patchSuperAdmin); //Update super admin
 
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor); //reference a mentor user type to an email
