@@ -557,9 +557,8 @@ export default function Student({
                   {requestOpen ? (
                     <Request onClick={sendRequest}>NEW REQUEST</Request>
                   ) : (
-                    ""
+                    <Send onClick={sendMessage}>SEND</Send>
                   )}
-                  <Send onClick={sendMessage}>SEND</Send>
                 </div>
                 {/* </form> */}
               </div>
