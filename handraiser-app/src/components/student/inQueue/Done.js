@@ -68,7 +68,7 @@ export default function InQueue(props) {
 
   // const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
-  const { cstate, getData } = useContext(UserContext);
+  const { cstate, getData,socket } = useContext(UserContext);
 
   useEffect(() => {
     // socket = io(ENDPOINT);
@@ -78,11 +78,11 @@ export default function InQueue(props) {
     }
 
     if (cstate) {
-      // socket.emit("join", {
-      //   username: cstate.user_id,
-      //   room: props.classReference,
-      //   image: ""
-      // });
+      socket.emit("join", {
+        username: cstate.user_id,
+        room: props.classReference,
+        image: ""
+      });
     }
 
     update("");
@@ -93,9 +93,9 @@ export default function InQueue(props) {
       update(props.search);
     }
 
-    // socket.on("updateComponents", message => {
-    //   update("");
-    // });
+    socket.on("updateComponents", message => {
+      update("");
+    });
   }, [props.search]);
 
   const update = data => {
@@ -128,7 +128,7 @@ export default function InQueue(props) {
       axios
         .delete(`/api/student/request/${concern.concern.concern_id}`, {})
         .then(data => {
-          // socket.emit("handshake", { room: props.classReference });
+          socket.emit("handshake", { room: props.classReference });
         })
         .catch(err => {
           console.log(err);

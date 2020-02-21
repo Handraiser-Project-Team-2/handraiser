@@ -53,12 +53,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function InQueue({ class_id, search }) {
+  // const { socket } = useContext(UserContext);
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const { cstate, getData } = useContext(UserContext);
+  const { cstate, getData,socket } = useContext(UserContext);
 
   // const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
@@ -71,11 +72,11 @@ export default function InQueue({ class_id, search }) {
     }
 
     if (cstate) {
-      // socket.emit("join", {
-      //   username: cstate.user_id,
-      //   room: class_id,
-      //   image: ""
-      // });
+      socket.emit("join", {
+        username: cstate.user_id,
+        room: class_id,
+        image: ""
+      });
     }
 
     update("");
@@ -84,9 +85,9 @@ export default function InQueue({ class_id, search }) {
   useEffect(() => {
     update(search);
 
-    // socket.on("updateComponents", message => {
-    //   update("");
-    // });
+    socket.on("updateComponents", message => {
+      update("");
+    });
   }, [search]);
 
   const update = data => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import Handshake from "../../images/handshake.gif";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -14,8 +14,9 @@ import axios from "axios";
 import io from "socket.io-client";
 import { makeStyles } from "@material-ui/core/styles";
 import DoneIcon from "@material-ui/icons/Done";
-
+import { UserContext } from "../../Contexts/UserContext";
 export default function QueueStub(props) {
+  const { socket } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const [concernsData, setConcernsData] = useState();
@@ -24,10 +25,10 @@ export default function QueueStub(props) {
   const open = Boolean(anchorEl);
 
   // const ENDPOINT = "localhost:5000";
-  // let socket = io(ENDPOINT);
+  // // let socket = io(ENDPOINT);
 
   // useEffect(() => {
-  //   socket = io(ENDPOINT);
+  //   console.log("asdsad",socket)
   // }, [ENDPOINT]);
 
   const handleMenu = (event, concern) => {
@@ -67,7 +68,7 @@ export default function QueueStub(props) {
       .then(data => {
         if (props.update) props.update("");
 
-        // socket.emit("handshake", { room: props.rowDatahandler.class_id });
+        socket.emit("handshake", { room: props.rowDatahandler.class_id });
 
         axios
           .get(`/api/assisted_by/${data.data.user_id}`, {})
@@ -118,9 +119,9 @@ export default function QueueStub(props) {
                 }
               )
               .then(data => {
-                // socket.emit("handshake", {
-                //   room: props.rowDatahandler.class_id
-                // });
+                socket.emit("handshake", {
+                  room: props.rowDatahandler.class_id
+                });
 
                 if (props.update) props.update("");
               })

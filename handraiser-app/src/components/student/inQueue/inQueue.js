@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -21,7 +21,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
-
+import { UserContext } from "../../Contexts/UserContext";
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
@@ -73,6 +73,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function InQueue(props) {
   var jwtDecode = require("jwt-decode");
+  const { socket } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const [concernsData, setConcernsData] = useState();
   const [openEdit, setOpenEdit] = React.useState(false);
@@ -85,37 +86,38 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  // const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "localhost:5000";
 
   // let socket = io(ENDPOINT);
   const [initial, setInitial] = useState();
 
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-  //   socket.emit("join", {
-  //     username: "Admin",
-  //     room: props.classReference,
-  //     image: ""
-  //   });
-  // }, [ENDPOINT]);
+  useEffect(() => {
+    // socket = io(ENDPOINT);
+    socket.emit("join", {
+      username: "Admin",
+      room: props.classReference,
+
+    });
+    console.log("inqueue mentor",socket)
+  }, []);
 
   useEffect(() => {
     if (props.search || !concernsData) {
       update(props.search);
     }
 
-    // socket.on("updateComponents", message => {
-    //   update("");
-    // });
+    socket.on("updateComponents", message => {
+      update("");
+    });
 
-    // socket.on("consolidateRequest", message => {
-    //   console.log("message recieved", message);
-    //   update("");
-    // });
+    socket.on("consolidateRequest", message => {
+      console.log("message recieved", message);
+      update("");
+    });
 
-    // socket.on("disconnect", () => {
-    //   console.log("Disconnected to server");
-    // });
+    socket.on("disconnect", () => {
+      console.log("Disconnected to server");
+    });
   }, [props.search, concernsData]); //class_id
 
   const update = data => {
@@ -158,7 +160,7 @@ export default function InQueue(props) {
             concern_status: data.data[0].concern_status
           })
           .then(data => {
-            // socket.emit("handshake", { room: props.classReference });
+            socket.emit("handshake", { room: props.classReference });
           })
           .catch(err => {
             console.log(err);
@@ -185,7 +187,7 @@ export default function InQueue(props) {
     axios
       .delete(`/api/student/request/${concern.concern.concern_id}`, {})
       .then(data => {
-        // socket.emit("handshake", { room: props.classReference });
+        socket.emit("handshake", { room: props.classReference });
       })
       .catch(err => {
         console.log(err);

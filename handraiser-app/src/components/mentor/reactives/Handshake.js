@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useContext } from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import io from "socket.io-client";
 import { useHistory, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { UserContext } from "../../Contexts/UserContext";
 
 var jwtDecode = require("jwt-decode");
 
@@ -14,20 +15,19 @@ export default function Handshake(props) {
   const classes = useStyles();
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
-
+  const {socket } = useContext(UserContext);
   // const ENDPOINT = "localhost:5000";
 
   // let socket = io(ENDPOINT);
 
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
+  useEffect(() => {
+    // socket = io(ENDPOINT);
 
-  //   socket.emit("join", {
-  //     username: "hanshakes",
-  //     room: class_id,
-  //     image: ""
-  //   });
-  // });
+    socket.emit("join", {
+      username: "hanshakes",
+      room: class_id,
+    });
+  });
 
   const accept = highdata => {
     axios
@@ -39,7 +39,7 @@ export default function Handshake(props) {
       })
       .then(data => {
         props.rowDatahandler(data.data);
-        // socket.emit("handshake", { room: highdata.class_id });
+        socket.emit("handshake", { room: highdata.class_id });
 
         axios
           .get(`/api/assisted_by/${highdata.class_id}/${highdata.user_id}`, {})
