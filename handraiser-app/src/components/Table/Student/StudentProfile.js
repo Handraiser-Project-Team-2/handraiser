@@ -17,6 +17,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    alignContent: "center",
     backgroundColor: "#f4f4f4",
     borderRadius: "20px"
   },
@@ -28,6 +29,11 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     flexGrow: 1
+  },
+  name: {
+    "@media (max-width: 862px)": {
+      textAlign: "center"
+    }
   }
 }));
 
@@ -44,7 +50,7 @@ export default function StudentProfile({ profileData, classData }) {
               src={profileData.image}
               className={classes.avatar}
             />
-            <Typography variant="h4" gutterBottom style={{ color: "black" }}>
+            <Typography variant="h4" gutterBottom className={classes.name}>
               {`${profileData.first_name} ${profileData.last_name}`}
             </Typography>
             <Typography

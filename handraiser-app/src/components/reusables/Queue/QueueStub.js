@@ -23,7 +23,7 @@ export default function QueueStub(props) {
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   let socket = io(ENDPOINT);
 
   useEffect(() => {
@@ -280,7 +280,7 @@ const useStyles = makeStyles(theme => ({
     "text-overflow": "ellipsis",
     "white-space": " nowrap",
     width: "250px",
-    fontWeight: "bold",
+
     "@media (max-width: 600px)": {
       display: "inline-block",
       overflow: " hidden",

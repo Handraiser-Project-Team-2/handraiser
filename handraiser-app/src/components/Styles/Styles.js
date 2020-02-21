@@ -19,98 +19,6 @@ export const BtnBox = styled.div`
 export const RowCont = styled.div`
   margin-top: -5px;
 `;
-export const TableStyle = styled.div`
-  @media only screen and (max-width: 750px) {
-    table,
-    thead,
-    tbody,
-    th,
-    td,
-    tr {
-      display: block;
-    }
-    thead tr {
-      display: none;
-    }
-    tr {
-      border: 1px solid lightgray;
-      border-radius: 10px;
-    }
-    td {
-      display: flex;
-      flex-direction: row;
-      border: none;
-      position: relative;
-      padding-left: 65px;
-    }
-    td:before {
-      position: absolute;
-      align-items: center;
-      top: 6px;
-      left: 6px;
-      width: 20%;
-      padding: 10px;
-    }
-    td:nth-of-type(2):before {
-      content: "Email: ";
-    }
-    td:nth-of-type(3):before {
-      content: "Key: ";
-    }
-    td:nth-of-type(4):before {
-      content: "Email Status: ";
-    }
-    td:nth-of-type(5):before {
-      content: "Status: ";
-    }
-  }
-`;
-export const TableStyle2 = styled.div`
-  @media only screen and (max-width: 750px) {
-    table,
-    thead,
-    tbody,
-    th,
-    td,
-    tr {
-      display: block;
-    }
-    thead tr {
-      display: none;
-    }
-    tr {
-      border: 1px solid lightgray;
-      border-radius: 10px;
-    }
-    td {
-      display: flex;
-      flex-direction: row;
-      border: none;
-      position: relative;
-      padding-left: 70px;
-    }
-    td:before {
-      position: absolute;
-      align-items: center;
-      top: 6px;
-      left: 6px;
-      width: 20%;
-      padding: 10px;
-    }
-    td:nth-of-type(2):before {
-      content: "Name: ";
-    }
-    td:nth-of-type(3):before {
-      content: "Email: ";
-    }
-    td:nth-of-type(4):before {
-      content: "Status: ";
-    }
-    td:nth-of-type(5):before {
-      content: "Action: ";
-    }
-  }
-`;
 //Student and Mentor Ui Styles
 export const Nav = styled.div`
   width: 100%;
@@ -370,6 +278,9 @@ export const LoginButton = styled.button`
   border-radius: 100px;
   border: none;
   cursor: pointer;
+  button:focus {
+    outline: none;
+  }
   @media screen and (max-width: 300px) {
     width: 160px;
     padding: 6px;

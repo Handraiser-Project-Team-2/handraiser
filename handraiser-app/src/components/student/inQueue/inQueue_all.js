@@ -19,7 +19,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   inline: {
-    display: "inline",
     display: "inline-block",
     overflow: " hidden",
     "text-overflow": "ellipsis",
@@ -87,7 +86,7 @@ export default function InQueue(props) {
 
   const { cstate, getData } = useContext(UserContext);
 
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   let socket = io(ENDPOINT);
 
   useEffect(() => {

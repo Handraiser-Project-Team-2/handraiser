@@ -4,7 +4,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Handshake from "../../images/handshake.gif";
-import Bear from "../../images/bear.gif";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
@@ -85,10 +84,9 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   let socket = io(ENDPOINT);
-  const [initial, setInitial] = useState();
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -109,7 +107,7 @@ export default function InQueue(props) {
     });
 
     socket.on("consolidateRequest", message => {
-      console.log("message recieved", message);
+      // console.log("message recieved", message);
       update("");
     });
 
@@ -119,12 +117,15 @@ export default function InQueue(props) {
   }, [props.search, ENDPOINT, concernsData]); //class_id
 
   const update = data => {
-    axios({
-      method: "get",
-      url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
-    }).then(res => {
-      setConcernsData(res.data);
-    });
+    if (props.classReference) {
+      axios({
+        method: "get",
+        url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
+      }).then(res => {
+        setConcernsData(res.data);
+        // console.log(res.data.length);
+      });
+    }
   };
 
   const handleMenu = (event, concern) => {
@@ -163,7 +164,7 @@ export default function InQueue(props) {
             console.log(err);
           });
 
-        console.log(data);
+        // console.log(data);
       })
       .catch(err => {
         console.log(err);

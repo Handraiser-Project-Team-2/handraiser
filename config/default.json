@@ -2,7 +2,7 @@
   "db": {
     "user": "postgres",
     "password": "handraiser",
-    "host": "localhost",
+    "host": "172.60.62.113",
     "port": 5433,
     "database": "handraiser"
   }
