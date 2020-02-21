@@ -1,54 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import axios from "axios";
 
-export default function ResponsiveDialog({ toggleDialog }) {
-  const [open, setOpen] = React.useState(toggleDialog);
+export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [text, setText] = useState("");
 
   const handleClose = () => {
-    setOpen(false);
+    setToggleDialog(false);
+  };
+  const handleChange = e => {
+    setText(e.target.value);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    axios({
+      method: "put",
+      url: `/api/login/superadmin`,
+      data: { email: text }
+    })
+      .then(data => {
+        handleClose();
+        setText("");
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open responsive dialog
-      </Button>
       <Dialog
         fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
+        open={toggleDialog}
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          {"Use Google's location service?"}
+          {"Update Superadmin Email"}
         </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-            Disagree
-          </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
+        <form autoComplete="off" onSubmit={handleSubmit}>
+          <DialogContent>
+            <TextField
+              id="standard-basic"
+              label="Superadmin Email"
+              fullWidth
+              required
+              autoFocus
+              defaultValue={text}
+              onChange={e => handleChange(e)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary">
+              Set
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );

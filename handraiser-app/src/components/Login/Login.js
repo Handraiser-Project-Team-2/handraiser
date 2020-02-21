@@ -87,14 +87,14 @@ export default function Login(props) {
 
   const [toggleDialog, setToggleDialog] = useState(false);
   const handleKeyDown = event => {
-    if (event.ctrlKey && event.keyCode == 192) {
+    if (event.ctrlKey && event.keyCode == 90) {
       setToggleDialog(true);
-      console.log(toggleDialog)
       console.log('he')
     }
   };
   return (
     <LoginDiv onKeyDown={e => handleKeyDown(e)} tabIndex="0">
+      <SetSuperAdminDialog toggleDialog={toggleDialog} setToggleDialog={setToggleDialog} />
       <LoginPic>
         <LinearProgress
           color="secondary"
@@ -145,7 +145,7 @@ export default function Login(props) {
             </LoginButton>
           )}
         />
-        <SetSuperAdminDialog toggleDialog={toggleDialog} />
+        
         <LoginFooter>
           <p>BOOM CAMP / BATCH 2 / TEAM 2 / 2020</p>
         </LoginFooter>
