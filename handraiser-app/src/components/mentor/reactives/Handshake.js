@@ -16,7 +16,7 @@ export default function Handshake(props) {
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
   const { socket } = useContext(UserContext);
-  // const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "172.60.62.113:5000";
 
   // let socket = io(ENDPOINT);
 

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import InputBase from "@material-ui/core/InputBase";
 
 const useStyles = makeStyles(theme => ({
-  display: "flex",
   search: {
-    "@media (height: 894px)": {
-      marginLeft: "30px"
-    }
+    marginLeft: "25px",
+    backgroundColor: "white",
+    borderRadius: "15px"
+  },
+  floatingLabelFocusStyle: {
+    color: "#372476"
   }
 }));
 
@@ -30,10 +31,14 @@ export default function SearchComponent({ setTempClassData, classData }) {
   return (
     <TextField
       className={classes.search}
+      variant="filled"
       id="standard-basic"
-      label="Search Class"
+      label="Search..."
       defaultValue={searchValue}
       onChange={e => handleChange(e)}
+      InputLabelProps={{
+        className: classes.floatingLabelFocusStyle
+      }}
     />
   );
 }
