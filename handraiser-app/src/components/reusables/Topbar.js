@@ -29,6 +29,7 @@ import io from "socket.io-client";
 import TextField from "@material-ui/core/TextField";
 import SchoolIcon from "@material-ui/icons/School";
 import StudentTabs from "../student/Tabs/Tabs";
+import Bkg from "../images/classroom-background-clipart-11.jpg";
 import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
   tab: {

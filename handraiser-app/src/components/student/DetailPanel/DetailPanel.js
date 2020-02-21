@@ -11,7 +11,6 @@ import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { Avatar, ListItem } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
-import LockIcon from "@material-ui/icons/Lock";
 
 const useStyles = makeStyles(theme => ({
   root: {

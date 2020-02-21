@@ -14,6 +14,8 @@ import Chatfield from "../reusables/Chatfield";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Input from "../reusables/Input";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 import {
   Div,
   // Nav,
@@ -540,27 +542,27 @@ export default function Student({
                     }}
                     onChange={e => setConcernDescription(e.target.value)}
                   /> */}
-                   <Input
+                <Input
                   message={message}
                   setMessage={setMessage}
                   sendMessage={sendMessage}
                   username={username}
                 />
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "15px"
-                    }}
-                  >
-                    {requestOpen ? (
-                      <Request onClick={sendRequest}>NEW REQUEST</Request>
-                    ) : (
-                      ""
-                    )}
-                    <Send onClick={sendMessage}>SEND</Send>
-                  </div>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "15px"
+                  }}
+                >
+                  {requestOpen ? (
+                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                  ) : (
+                    ""
+                  )}
+                  <Send onClick={sendMessage}>SEND</Send>
+                </div>
                 {/* </form> */}
               </div>
             </Field>

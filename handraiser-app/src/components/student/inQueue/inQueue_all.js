@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
+import Badge from "@material-ui/core/Badge";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Handshake from "../../images/handshake.gif";
@@ -12,6 +13,52 @@ import { Typography, Paper } from "@material-ui/core";
 import axios from "axios";
 import { UserContext } from "../../Contexts/UserContext";
 import io from "socket.io-client";
+
+const StyledBadgeGreen = withStyles(theme => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0
+    }
+  }
+}))(Badge);
+const StyledBadgeGrey = withStyles(theme => ({
+  badge: {
+    backgroundColor: "lightgrey",
+    color: "lightgrey",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  }
+}))(Badge);
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -139,26 +186,28 @@ export default function InQueue(props) {
                 <ListItemAvatar>
                   <div>
                     {concern.concern.user_status === 1 ? (
-                      <status-indicator
-                        positive
-                        pulse
-                        style={{
-                          position: "absolute",
-                          marginTop: "30px",
-                          marginLeft: "35px"
+                      <StyledBadgeGreen
+                        overlap="circle"
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right"
                         }}
-                      ></status-indicator>
+                        variant="dot"
+                      >
+                        <Avatar src={concern.concern.image} />
+                      </StyledBadgeGreen>
                     ) : (
-                      <status-indicator
-                        pulse
-                        style={{
-                          position: "absolute",
-                          marginTop: "30px",
-                          marginLeft: "35px"
+                      <StyledBadgeGrey
+                        overlap="circle"
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right"
                         }}
-                      ></status-indicator>
+                        variant="dot"
+                      >
+                        <Avatar src={concern.concern.image} />
+                      </StyledBadgeGrey>
                     )}
-                    <Avatar src={concern.concern.image}></Avatar>
                   </div>
                 </ListItemAvatar>
 
@@ -222,15 +271,6 @@ export default function InQueue(props) {
                       )}
                     </div>
                   </Avatar>
-                  <span
-                    style={{
-                      marginLeft: "10px",
-                      color: "grey",
-                      fontSize: "10px"
-                    }}
-                  >
-                    5:00 PM
-                  </span>
                 </ListItemSecondaryAction>
               </ListItem>
             </div>
