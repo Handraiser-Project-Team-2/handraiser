@@ -8,14 +8,15 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
 import { useHistory, useParams } from "react-router-dom";
+import SendIcon from "@material-ui/icons/Send";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import Input from "../reusables/Input";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
+
+import Input from "../reusables/Input";
 import {
   Div,
   // Nav,
@@ -160,7 +161,7 @@ export default function Student({
   concernTitle,
   setConcernTitle
 }) {
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
+  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
@@ -174,7 +175,7 @@ export default function Student({
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
-  const { cstate, getData,socket } = useContext(UserContext);
+  const { cstate, getData, socket } = useContext(UserContext);
   ///for chat
   // const [username, setUsername] = useState("");
   // const [room, setRoom] = useState("");
@@ -186,7 +187,7 @@ export default function Student({
   // const [avatar, setAvatar] = useState("");
   // const [emoji, setEmoji] = useState(false);
   // const [disable, setDisable] = useState(false);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
@@ -200,7 +201,7 @@ export default function Student({
   // did mount
   useEffect(() => {
     // socket = io(ENDPOINT);
-    socket.emit("join", { username: "Yow", room: class_id});
+    socket.emit("join", { username: "Yow", room: class_id });
 
     socket.on("updateComponents", data => {
       existing();
@@ -519,9 +520,9 @@ export default function Student({
               <div
                 style={{
                   display: "flex",
-                  flexWrap: "wrap",
                   justifyContent: "space-between",
                   flexDirection: "column",
+                  alignItems: "center",
                   width: "100%"
                 }}
               >
@@ -561,6 +562,7 @@ export default function Student({
                   ) : (
                     ""
                   )}
+
                   <Send onClick={sendMessage}>SEND</Send>
                 </div>
                 {/* </form> */}
