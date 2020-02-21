@@ -3,14 +3,13 @@ var nodemailer = require("nodemailer");
 module.exports = {
   sendEmail: (req, res) => {
     const {
-      maillist,
+      emailTo,
       classroom_key,
       adminEmail,
       adminPass,
       class_title
     } = req.body;
 
-    maillist.toString();
     {
       var transporter = nodemailer.createTransport({
         service: "gmail",
@@ -24,8 +23,8 @@ module.exports = {
 
       var mailOptions = {
         from: adminEmail,
-        to: maillist,
-        subject: "Confirmation Code",
+        to: emailTo,
+        subject: `Classroom Code for ${class_title}`,
         text: `Good Day! This is your classroom code for ${class_title} class: ${classroom_key}`
       };
 

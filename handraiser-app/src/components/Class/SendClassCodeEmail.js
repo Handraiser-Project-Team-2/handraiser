@@ -23,9 +23,11 @@ const useStyles = makeStyles(theme => ({
 export default function FormDialog({ data }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [openAdd, setOpenAdd] = React.useState(false);
 
   const [classroomKey, setClassroomKey] = React.useState("");
   const [className, setClassName] = React.useState("");
+  const [emailTo, setEmailto] = React.useState("");
   const [classMembers, setClassMembers] = useState([]);
 
   useEffect(() => {
@@ -33,27 +35,19 @@ export default function FormDialog({ data }) {
   }, []);
 
   const handleClickOpen = data => {
+    setOpenAdd(false);
     setOpen(true);
     setClassroomKey(data.classroom_key);
     setClassName(data.class_title);
-    if (data.class_id) {
-      axios({
-        method: "get",
-        url: `/api/classes/members/${data.class_id}`
-      })
-        .then(res => {
-          res.data.map(member => {
-            classMembers.push(member.email);
-          });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
+  };
+
+  const openAddEmail = data => {
+    setOpenAdd(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setOpenAdd(false);
   };
 
   const [adminPass, setAdminPass] = useState("");
@@ -75,9 +69,9 @@ export default function FormDialog({ data }) {
       });
   };
 
-  const handleConfirm = classMembers => {
+  const handleConfirm = () => {
     axios.post(`/api/sendClassCode`, {
-      maillist: classMembers,
+      emailTo: emailTo,
       classroom_key: classroomKey,
       adminEmail: adminEmail,
       adminPass: adminPass,
@@ -88,10 +82,7 @@ export default function FormDialog({ data }) {
 
   return (
     <div>
-      <IconButton
-        onClick={() => handleClickOpen(data)}
-        className={classes.email}
-      >
+      <IconButton onClick={() => openAddEmail(data)} className={classes.email}>
         <EmailIcon />
       </IconButton>
       <Dialog
@@ -120,6 +111,34 @@ export default function FormDialog({ data }) {
           </Button>
           <Button onClick={() => handleConfirm(classMembers)} color="primary">
             Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openAdd}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Add Student Email</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Please Add Student Email.</DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="name"
+            label="Email"
+            type="email"
+            fullWidth
+            onChange={e => setEmailto(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => handleClickOpen(data)} color="primary">
+            Send Code
           </Button>
         </DialogActions>
       </Dialog>
