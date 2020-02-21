@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue({ class_id, search }) {
+export default function InQueue({ class_id, search, rowDatahandler}) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -52,7 +52,7 @@ export default function InQueue({ class_id, search }) {
               return (
                 <QueueStub
                   rowDatahandler={{
-                    class_id
+                    class_id,rowDatahandler
                   }}
                   data={data}
                   index={index}

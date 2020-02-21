@@ -48,6 +48,7 @@ const StyledBadgeGreen = withStyles(theme => ({
     }
   }
 }))(Badge);
+
 const StyledBadgeGrey = withStyles(theme => ({
   badge: {
     backgroundColor: "lightgrey",
