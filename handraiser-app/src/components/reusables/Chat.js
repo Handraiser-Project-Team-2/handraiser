@@ -24,10 +24,7 @@ export default function Chat() {
   const [concernTitle, setConcernTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
-  const [dateTime, setDateTime] = useState([]);
-  const [concernFrom, setConcernFrom] = useState();
-
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let { class_id } = useParams();
 
@@ -36,7 +33,7 @@ export default function Chat() {
   // }, [ENDPOINT])
 
   useEffect(() => {
-    socket = io({ localhost: ENDPOINT });
+    socket = io(ENDPOINT);
 
     socket.emit("join", { userid, username, room }, () => {});
 
@@ -44,20 +41,42 @@ export default function Chat() {
       setMessages(data);
     });
 
+    // console.log(room);
+    console.log(socket);
   }, [ENDPOINT, room]);
-  useEffect(() => {
-    if (!cstate) {
-      getData();
-    }
-    if (cstate) {
-      console.log(cstate.user_type_id);
-      setUsertypeid(cstate.user_type_id);
-      setUserid(cstate.user_id);
-      setAvatar(cstate.image);
-      setUsername(cstate.first_name);
-    }
-  }, [cstate]);
 
+  //   useEffect(() => {
+  //     socket.on("typing", data => {
+  //       // console.log(data)
+  //       setfeed(data);
+  //     });
+  //     socket.on("not typing", data => {
+  //       setfeed(data);
+  //     });
+  //   });
+
+  //   useEffect(() => {
+  //     // console.log(username)
+  //     const value = message;
+  //     if (active === true) {
+  //       if (value.length > 0 && room) {
+  //         typing(avatar);
+  //         // console.log(avatar)
+  //       } else {
+  //         nottyping();
+  //       }
+  //     }
+  //   });
+  //   ///for typing
+  //   const typing = data => {
+  //     socket.emit("typing", data);
+  //     // console.log(data);
+  //   };
+
+  //   const nottyping = () => {
+  //     const data = "";
+  //     socket.emit("not typing", data);
+  //   };
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -75,6 +94,7 @@ export default function Chat() {
     socket.on("message", message => {
       setMessages([...messages, message]);
     });
+
     return () => {
       socket.emit("disconnect");
       socket.off();
@@ -87,7 +107,6 @@ export default function Chat() {
     setTimeout(() => {
       if (message) {
         socket.emit("sendMessage", message, () => setMessage(""));
-      
         axios
           .post(`/api/chat/send`, {
             message: message,
@@ -99,11 +118,18 @@ export default function Chat() {
             console.log(res);
           });
       }
+      // else{
+      //   // console.log(socket.connected)
+      //   window.location.reload();
+      // }
     }, 100);
+
+    // setMessage("");
   };
 
   useEffect(() => {
     socket.on("typing", data => {
+      // console.log(data)
       setfeed(data);
     });
     socket.on("not typing", data => {
@@ -140,8 +166,17 @@ export default function Chat() {
     } else {
       setEmoji(true);
     }
+    // setEmoji(true)
   };
 
+  //   const addEmoji = e => {
+  //     let sym = e.unified.split("-");
+  //     let codesArray = [];
+  //     sym.forEach(el => codesArray.push("0x" + el));
+  //     let emoji = String.fromCodePoint(...codesArray);
+  //     setMessage(message + emoji);
+  //     emojiActive();
+  //   };
   const handleDone = rowData => {
     setSelection(false);
 
@@ -182,7 +217,6 @@ export default function Chat() {
               )
               .then(data => {
                 socket.emit("handshake", { room: class_id });
-               
               })
               .catch(err => {
                 console.log(err);
@@ -203,11 +237,9 @@ export default function Chat() {
         text: "Please select a concern."
       });
     }
-
     setConcernTitle("");
     setName("");
     setAnchorEl(null);
-
     axios
       .patch(`/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
@@ -245,9 +277,7 @@ export default function Chat() {
     } else {
       socket.emit(`leave_room`, { room: room });
       setSelection(true);
-
       console.log(rowData);
-      setConcernFrom(rowData.first_name + " " + rowData.last_name);
       setConcernTitle(rowData.concern_title);
       setRowData(rowData);
       axios
@@ -255,9 +285,8 @@ export default function Chat() {
         .then(data => {
           setRoom(rowData.concern_id);
           setName(data.data[0].first_name + " " + data.data[0].last_name);
-
-        }) 
-   
+          // localStorage.setItem("room",rowData.concern_id)
+        })
         .catch(err => {
           console.log(err);
         });
@@ -271,11 +300,6 @@ export default function Chat() {
     // setConcernTitle(rowData.concern.concern_title);
   };
   // console.log("nor")
-
-  const closeFlag = () => {
-    setMessages([])
-    setConcernTitle("")
-  }
   return (
     <div>
       {usertypeid === 3 ? (
@@ -293,8 +317,7 @@ export default function Chat() {
           name={name}
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
-          closeFlag={closeFlag}
-          setMessages={setMessages}
+          concernTitle={concernTitle}
         />
       ) : null}
       {usertypeid === 4 ? (
@@ -314,10 +337,6 @@ export default function Chat() {
           handleBackQueue={handleBackQueue}
           selection={selection}
           rowData={rowData}
-          concernTitle={concernTitle}
-          setConcernTitle={setConcernTitle}
-          concernTitle={concernTitle}
-          concernUser={concernFrom}
         />
       ) : null}
     </div>
