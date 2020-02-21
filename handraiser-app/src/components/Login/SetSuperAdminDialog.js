@@ -39,7 +39,7 @@ export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
         console.log(err);
       });
   };
-
+// HEHE
   return (
     <div>
       <Dialog
