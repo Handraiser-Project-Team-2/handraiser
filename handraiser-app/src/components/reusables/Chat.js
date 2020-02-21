@@ -24,6 +24,8 @@ export default function Chat() {
   const [concernTitle, setConcernTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
+  const [concernFrom, setConcernFrom] = useState();
+
   const ENDPOINT = "localhost:5000";
 
   let { class_id } = useParams();
@@ -33,8 +35,7 @@ export default function Chat() {
   // }, [ENDPOINT])
 
   useEffect(() => {
-  
-    socket = io({ localhost: ENDPOINT});
+    socket = io({ localhost: ENDPOINT });
 
     socket.emit("join", { userid, username, room, image: avatar }, () => {});
 
@@ -102,7 +103,6 @@ export default function Chat() {
   }, [messages]);
 
   const sendMessage = event => {
-
     event.preventDefault();
     const dateToday = new Date();
     setTimeout(() => {
@@ -238,7 +238,7 @@ export default function Chat() {
         text: "Please select a concern."
       });
     }
-    
+
     setConcernTitle("");
     setName("");
     setAnchorEl(null);
@@ -268,6 +268,7 @@ export default function Chat() {
 
       setRoom(rowData.concern.concern_id);
       setConcernTitle(rowData.concern.concern_title);
+      
 
       axios
         .get(`/api/userprofile/${rowData.concern.user_id}`, {})
@@ -280,8 +281,12 @@ export default function Chat() {
     } else {
       socket.emit(`leave_room`, { room: room });
       setSelection(true);
+
       console.log(rowData);
+      // console.log(concernFrom);
+      setConcernFrom(rowData.first_name + " " + rowData.last_name);
       setConcernTitle(rowData.concern_title);
+
       setRowData(rowData);
       axios
         .get(`/api/userprofile/${rowData.user_id}`, {})
@@ -340,6 +345,10 @@ export default function Chat() {
           handleBackQueue={handleBackQueue}
           selection={selection}
           rowData={rowData}
+          concernTitle={concernTitle}
+          setConcernTitle={setConcernTitle}
+          concernTitle={concernTitle}
+          concernUser={concernFrom}
         />
       ) : null}
     </div>

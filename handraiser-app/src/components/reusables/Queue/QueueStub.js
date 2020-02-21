@@ -15,6 +15,9 @@ import io from "socket.io-client";
 import { makeStyles } from "@material-ui/core/styles";
 import DoneIcon from "@material-ui/icons/Done";
 
+const ENDPOINT = "localhost:5000";
+let socket = "";
+
 export default function QueueStub(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
@@ -23,12 +26,9 @@ export default function QueueStub(props) {
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-  const ENDPOINT = "localhost:5000";
-  let socket = io(ENDPOINT);
-
   useEffect(() => {
     socket = io({localhost:ENDPOINT, transports:['websocket']});
-  }, [ENDPOINT]);
+  }, []);
 
   const handleMenu = (event, concern) => {
     setConcern(concern);
@@ -44,6 +44,8 @@ export default function QueueStub(props) {
       props.rowDatahandler.rowDatahandler(data);
     }
     setSelectedIndex(index);
+
+
   };
 
   const handleBackQueue = () => {
@@ -286,7 +288,7 @@ const useStyles = makeStyles(theme => ({
     "text-overflow": "ellipsis",
     "white-space": " nowrap",
     width: "250px",
-    fontWeight: "bold",
+
     "@media (max-width: 600px)": {
       display: "inline-block",
       overflow: " hidden",

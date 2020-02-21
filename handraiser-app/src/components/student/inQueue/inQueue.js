@@ -4,7 +4,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Handshake from "../../images/handshake.gif";
-import Bear from "../../images/bear.gif";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";

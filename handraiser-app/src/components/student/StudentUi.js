@@ -203,12 +203,8 @@ export default function Student({
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     socket.on("updateComponents", data => {
-      console.log("updates");
       existing();
     });
-
-
-
   }, []);
 
   //did update
@@ -232,17 +228,19 @@ export default function Student({
             Swal.fire({
               icon: "error",
               title: "You cannot access this page!"
-            }).then(function() {
-              if (user_type === 4) {
-                history.push("/mentor");
-              } else if (user_type === 1) {
-                history.push("/superadmin");
-              }else{
-                history.push("/")
-              }
-            }).catch(err=>{
-              console.log(err)
             })
+              .then(function() {
+                if (user_type === 4) {
+                  history.push("/mentor");
+                } else if (user_type === 1) {
+                  history.push("/superadmin");
+                } else {
+                  history.push("/");
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
           }
         })
         .catch(err => {
@@ -284,7 +282,6 @@ export default function Student({
           title: "Request sent to the mentor"
         })
           .then(flag => {
-
             existing();
 
             socket.emit(
@@ -439,6 +436,14 @@ export default function Student({
   //   // console.log(data);
   // };
 
+  const handleClickDetail = () => {
+    setExpanded("panel1");
+  };
+
+  const handleClickMember = () => {
+    setExpanded("panel2");
+  };
+
   const existing = () => {
     axios({
       method: "get",
@@ -480,8 +485,9 @@ export default function Student({
               </div>
             </TitleName>
             <Option>
-              <div>
-                <HelpIcon
+              <span>
+                <HelpOutlineIcon
+                  onClick={handleClickDetail}
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
@@ -489,9 +495,10 @@ export default function Student({
                     color: "#372476"
                   }}
                 />
-              </div>
-              <div>
-                <GroupIcon
+              </span>
+              <span>
+                <PeopleOutlineIcon
+                  onClick={handleClickMember}
                   style={{
                     fontSize: 30,
                     color: "#c4c4c4",
@@ -499,15 +506,14 @@ export default function Student({
                     color: "#372476"
                   }}
                 />
-              </div>
+              </span>
               <div>
                 <MoreVertIcon
                   onClick={handleMenu}
                   style={{
                     fontSize: 30,
-                    color: "#c4c4c4",
-                    cursor: "pointer",
-                    color: "#372476"
+                    color: "#372476",
+                    cursor: "pointer"
                   }}
                 />
               </div>
@@ -528,8 +534,7 @@ export default function Student({
             <div>
               {feed && active === true ? (
                 <div className={classes.cont2}>
-                  <div className={classes.prof}>
-                  </div>
+                  <div className={classes.prof}></div>
                   <div className={classes.receiver}>
                     <DivAnimation>
                       <span></span>
@@ -539,7 +544,6 @@ export default function Student({
                   </div>
                 </div>
               ) : null}
-              
             </div>
           </ScrollToBottom>
           <Message>
@@ -570,27 +574,27 @@ export default function Student({
                     }}
                     onChange={e => setConcernDescription(e.target.value)}
                   /> */}
-                   <Input
+                <Input
                   message={message}
                   setMessage={setMessage}
                   sendMessage={sendMessage}
                   username={username}
                 />
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "15px"
-                    }}
-                  >
-                    {requestOpen ? (
-                      <Request onClick={sendRequest}>NEW REQUEST</Request>
-                    ) : (
-                      ""
-                    )}
-                    <Send onClick={sendMessage}>SEND</Send>
-                  </div>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "15px"
+                  }}
+                >
+                  {requestOpen ? (
+                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                  ) : (
+                    ""
+                  )}
+                  <Send onClick={sendMessage}>SEND</Send>
+                </div>
                 {/* </form> */}
               </div>
             </Field>

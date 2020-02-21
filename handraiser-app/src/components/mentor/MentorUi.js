@@ -174,16 +174,18 @@ export default function Mentor({
   handleDone,
   selection,
   rowData,
-  setSelection
+  setSelection,
+  concernTitle,
+  concernUser
 }) {
   const classes = useStyles();
   let history = useHistory();
   // let { class_id } = useParams();
-  // const [rowData, setRowData] = useState([]);
+  // const [rowData, setRowData]   = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
-  const [concernTitle, setConcernTitle] = useState("");
+  // const [concernTitle, setConcernTitle] = useState("");
   // const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
@@ -408,7 +410,7 @@ console.log(messages)
                     fontSize: "12.4px"
                   }}
                 >
-                  From: {name}
+                  From: {concernUser}
                 </Typography>
               </TitleName>
               <Option>
