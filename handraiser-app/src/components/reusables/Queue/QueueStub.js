@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Handshake from "../../images/handshake.gif";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -24,7 +24,7 @@ export default function QueueStub(props) {
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-  // const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "172.60.62.113:5000";
   // // let socket = io(ENDPOINT);
 
   // useEffect(() => {
@@ -56,7 +56,6 @@ export default function QueueStub(props) {
       });
     }
     setAnchorEl(null);
-
 
     axios
       .patch(`/api/concern_list/${concern.concern_id}`, {

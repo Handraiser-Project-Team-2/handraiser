@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import { Paper } from "@material-ui/core";
@@ -14,18 +14,18 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
 
   useEffect(() => {
     // socket = io(ENDPOINT);
 
     socket.emit("join", {
-      userid:"null",
+      userid: "null",
       username: "Admin",
-      room: rowDatahandler.class_id,
+      room: rowDatahandler.class_id
     });
-    console.log("inqueue student",socket)
+    console.log("inqueue student", socket);
   }, []);
 
   useEffect(() => {
@@ -47,16 +47,18 @@ export default function InQueue(rowDatahandler) {
   }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
   const update = data => {
-    axios({
-      method: "get",
-      url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
-    })
-      .then(res => {
-        setConcernsData(res.data);
+    if (rowDatahandler.class_id) {
+      axios({
+        method: "get",
+        url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          setConcernsData(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   return (

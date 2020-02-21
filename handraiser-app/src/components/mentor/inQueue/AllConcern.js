@@ -49,9 +49,9 @@ export default function InQueue({ class_id, search }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const { cstate, getData,socket } = useContext(UserContext);
+  const { cstate, getData, socket } = useContext(UserContext);
 
-  // const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
 
   useEffect(() => {
