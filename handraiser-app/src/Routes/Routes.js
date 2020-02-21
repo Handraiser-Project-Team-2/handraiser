@@ -14,7 +14,7 @@ export default function Routes() {
       <Route path="/admin" />
       <Route path="/student/:class_id" component={Student} />
       <Route path="/class" component={Class} />
-      <Route path="/chat/:class_id" component={Chat} />
+      <Route path="/classroom/:class_id" component={Chat} />
       <Route path="/mentor/:class_id" component={Mentor} />
     </BrowserRouter>
   );

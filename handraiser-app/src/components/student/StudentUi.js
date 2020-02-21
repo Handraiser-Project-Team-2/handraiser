@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
   scrolltobottom: {
     padding: "5% 0",
     overflow: "auto",
-    height: "39.7em",
+    height: "40.9em",
     backgroundColor: "white",
     "@media (height: 894px)": {
       height: "35.4em"
@@ -144,7 +144,7 @@ const DivAnimation = styled.div`
 `;
 
 var jwtDecode = require("jwt-decode");
-// let socket;
+let socket;
 export default function Student({
   class_id,
   rowDatahandler,
@@ -156,18 +156,20 @@ export default function Student({
   userid,
   feed,
   username,
-  room
+  room,
+  concernTitle,
+  setConcernTitle
 }) {
+  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
   // let { class_id } = useParams();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
   const open = Boolean(anchorEl);
   const [concernDescription, setConcernDescription] = useState("");
-  const [concernTitle, setConcernTitle] = useState("");
+  // const [concernTitle, setConcernTitle] = useState("");
   const [userImage, setUserImage] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
@@ -177,15 +179,16 @@ export default function Student({
   // const [username, setUsername] = useState("");
   // const [room, setRoom] = useState("");
   // const [userid, setUserid] = useState("");
+  // const [message, setMessage] = useState("");
   // const [feed, setfeed] = useState("");
   // const [active, setActive] = useState(false);
-  const [avatar, setAvatar] = useState("");
-  const [emoji, setEmoji] = useState(false);
-  const [disable, setDisable] = useState(false);
-  // const [message, setMessage] = useState("");
   // const [messages, setMessages] = useState([]);
-  const [requestOpen, setRequestOpen] = useState(true);
+  // const [avatar, setAvatar] = useState("");
+  // const [emoji, setEmoji] = useState(false);
+  // const [disable, setDisable] = useState(false);
   const ENDPOINT = "localhost:5000";
+  // let socket = io(ENDPOINT);
+  const [requestOpen, setRequestOpen] = useState(true);
   let socket = io(ENDPOINT);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -196,6 +199,7 @@ export default function Student({
 
   // did mount
   useEffect(() => {
+    socket = io(ENDPOINT);
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     socket.on("updateComponents", data => {
@@ -257,29 +261,8 @@ export default function Student({
       getData();
     }
 
+    existing();
   }, [cstate]);
-
-  useEffect(() => {
-    const value = message;
-    if (active === true) {
-      if (value.length > 0) {
-        typing(avatar);
-      } else {
-        nottyping();
-      }
-    }
-  });
-
-  ///for typing
-  const typing = data => {
-    socket.emit("typing", data);
-  };
-
-  const nottyping = () => {
-    const data = "";
-    socket.emit("not typing", data);
-  };
-
   const sendRequest = () => {
     axios
       .post(`/api/student/request/assistance`, {
@@ -329,29 +312,104 @@ export default function Student({
         console.log(err);
       });
   };
-
   //send data of active queue where user interacted with from the queue panel
   // const rowDatahandler = rowData => {
+  //   setActive(true);
 
-  //   console.log(rowData);
+  //   socket.emit(
+  //     "join",
+  //     { userid, username, room: rowData.concern.concern_id, image: avatar },
+  //     message => {
+  //       console.log(message);
+  //     }
+  //   );
 
-  //   // setRoom(rowData.concern.concern_id);
+  //   setRoom(rowData.concern.concern_id);
   //   setConcernTitle(rowData.concern.concern_title);
 
   //   axios
-  //     .get(
-  //       `http://localhost:5000/api/userprofile/${rowData.concern.user_id}`,
-  //       {}
-  //     )
+  //     .get(`/api/userprofile/${rowData.concern.user_id}`, {})
   //     .then(data => {
   //       setName(data.data[0].first_name + " " + data.data[0].last_name);
-  //       setActive(true);
-
   //     })
   //     .catch(err => {
   //       console.log(err);
   //     });
   // };
+
+  ////join to room
+  // const join = () => {
+  //   setActive(true);
+  //   socket.emit("join", { username, room: "team2", image: avatar }, () => {});
+  // };
+  // useEffect(() => {
+  //   socket.on("message", message => {
+  //     setMessages([...messages, message]);
+  //   });
+
+  //   socket.on("old", ({ data }) => {
+  //     // console.log(data);
+  //     setMessages(data);
+  //   });
+
+  //   if (!cstate) {
+  //     getData();
+  //   }
+  //   if (cstate) {
+  //     // console.log(cstate);
+  //     setUserid(cstate.user_id);
+  //     setAvatar(cstate.image);
+  //     setUsername(cstate.first_name);
+  //   }
+
+  //   return () => {
+  //     socket.emit("disconnect");
+  //     socket.off();
+  //   };
+  // }, [messages, cstate]);
+
+  // const sendMessage = evt => {
+  //   evt.preventDefault();
+  //   const dateToday = new Date();
+  //   setTimeout(() => {
+  //     if (message) {
+  //       socket.emit("sendMessage", message, () => setMessage(""));
+  //       axios
+  //         .post(`/api/chat/send`, {
+  //           message: message,
+  //           chat_date_created: dateToday,
+  //           concern_id: room,
+  //           user_id: userid
+  //         })
+  //         .then(res => {
+  //           console.log(res);
+  //         });
+  //     }
+  //   }, 100);
+
+  //   setMessage("");
+  // };
+
+  // const emojiActive = () => {
+  //   if (emoji === true) {
+  //     setEmoji(false);
+  //   } else {
+  //     setEmoji(true);
+  //   }
+  //   // setEmoji(true)
+  // };
+
+  // const addEmoji = e => {
+  //   let sym = e.unified.split("-");
+  //   let codesArray = [];
+  //   sym.forEach(el => codesArray.push("0x" + el));
+  //   let emoji = String.fromCodePoint(...codesArray);
+  //   setMessage(message + emoji);
+  //   emojiActive();
+  // };
+  // console.log(messages);
+
+  const [expanded, setExpanded] = React.useState("");
 
   // useEffect(() => {
   //   socket.on("typing", data => {
@@ -458,15 +516,13 @@ export default function Student({
           <ScrollToBottom className={classes.scrolltobottom}>
             {messages.map((message, i) => (
               <div key={i} style={{ overflowWrap: "break-word" }}>
-                {/* {message.concern_id === room ? ( */}
-                  <Chatfield
-                    message={message}
-                    username={username}
-                    feed={feed}
-                    active={active}
-                    userid={userid}
-                  />
-                {/* ):null} */}
+                <Chatfield
+                  message={message}
+                  username={username}
+                  feed={feed}
+                  active={active}
+                  userid={userid}
+                />
               </div>
             ))}
             <div>
@@ -497,7 +553,11 @@ export default function Student({
                   width: "100%"
                 }}
               >
-                {/* <form onSubmit={sendMessage}>
+                {/* <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                  }}
+                >
                   <TextField
                     id="outlined-textarea"
                     multiline
@@ -510,7 +570,7 @@ export default function Student({
                     }}
                     onChange={e => setConcernDescription(e.target.value)}
                   /> */}
-                <Input
+                   <Input
                   message={message}
                   setMessage={setMessage}
                   sendMessage={sendMessage}

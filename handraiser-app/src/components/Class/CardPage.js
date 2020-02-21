@@ -32,10 +32,11 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
   }, [cstate, getData]);
 
   const cardClick = e => {
-    history.push(`/chat`)
+   
+    history.push(`/classroom`)
 
     if(cstate){
-      history.push(`/chat/${e}`)
+      history.push(`/classroom/${e}`)
     }
     // if (cstate) {
     //   if (cstate.user_type_id === 3) {

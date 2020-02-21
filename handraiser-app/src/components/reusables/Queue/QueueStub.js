@@ -27,7 +27,7 @@ export default function QueueStub(props) {
   let socket = io(ENDPOINT);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io({localhost:ENDPOINT, transports:['websocket']});
   }, [ENDPOINT]);
 
   const handleMenu = (event, concern) => {
@@ -47,6 +47,11 @@ export default function QueueStub(props) {
   };
 
   const handleBackQueue = () => {
+
+    setAnchorEl(null);
+    // props.setSelection(false)
+   props.rowDatahandler.setSelection(false);
+
     if (concern.length === 0) {
       Swal.fire({
         icon: "error",
@@ -91,6 +96,7 @@ export default function QueueStub(props) {
   };
 
   const handleDone = () => {
+
     setAnchorEl(null);
 
     axios

@@ -71,6 +71,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const ENDPOINT = "localhost:5000";
+let socket = "";
+
 export default function InQueue(props) {
   var jwtDecode = require("jwt-decode");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -85,18 +88,28 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const ENDPOINT = "localhost:5000";
-
-  let socket = io(ENDPOINT);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+
+    socket = io({
+      localhost: ENDPOINT,
+      query: {
+        fcomponent: "inQueue.js"
+      }
+    });
+
     socket.emit("join", {
       username: "Admin",
       room: props.classReference,
       image: ""
     });
-  }, [ENDPOINT]);
+
+    return () => {
+      console.log('closing connection of inqueue')
+      socket.close();
+    };
+    
+  }, []);
 
   useEffect(() => {
     if (props.search || !concernsData) {
@@ -183,7 +196,7 @@ export default function InQueue(props) {
     setAnchorEl(null);
 
     axios
-      .delete(`/api/student/request/${concern.concern.concern_id}`, {})
+      .patch(`/api/student/request/${concern.concern.concern_id}`, {})
       .then(data => {
         socket.emit("handshake", { room: props.classReference });
       })
@@ -246,7 +259,7 @@ export default function InQueue(props) {
                       onClose={handleClose}
                     >
                       <MenuItem onClick={() => handleRemoveReq()}>
-                        Remove request
+                        Close
                       </MenuItem>
                       <MenuItem onClick={() => handleClickOpen()}>
                         Edit Request

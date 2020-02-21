@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -15,11 +15,34 @@ import {
 } from "../../Styles/Styles";
 import io from "socket.io-client";
 
+const ENDPOINT = "localhost:5000";
+let socket = "";
+
+// let socket = io({
+//   localhost: ENDPOINT,
+//   query: {
+//     fcomponent: "Login.js"
+//   }
+// });
+
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
 
-  const ENDPOINT = "localhost:5000";
-  let socket = io(ENDPOINT);
+  useEffect(() => {
+    socket = io({
+      localhost: ENDPOINT,
+      query: {
+        fcomponent: "Login.js"
+      }
+    });
+
+    return () => {
+      socket.emit("disconnect");
+      socket.disconnect();
+      socket.off();
+    };
+  }, []);
+
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);

@@ -12,7 +12,7 @@ import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
 import HelpIcon from "@material-ui/icons/Help";
 import ScrollToBottom from "react-scroll-to-bottom";
-import { Conversation } from "../Styles/Styles";
+import styled from "styled-components";
 import {
   Div,
   // Nav,
@@ -39,7 +39,6 @@ import Input from "../reusables/Input";
 import io from "socket.io-client";
 // import ScrollToBottom from "react-scroll-to-bottom";
 import "emoji-mart/css/emoji-mart.css";
-import styled from "styled-components";
 var jwtDecode = require("jwt-decode");
 let socket;
 const useStyles = makeStyles(theme => ({
@@ -90,39 +89,6 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "100%",
     marginRight: "5px",
     animation: "bob 2s infinite"
-  },
-  interact: {
-    height: "96px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    "@media (height: 894px)": {
-      height: "86px"
-    },
-    "@media (height: 1625px)": {
-      height: "210px"
-    },
-    "@media (width: 360px) and (height: 640px)": {
-      height: "40px"
-    },
-    "@media (width: 411px) and (height: 731px)": {
-      height: "50px"
-    },
-    "@media (width: 411px) and (height: 823px)": {
-      height: "50px"
-    },
-    "@media (width: 320px) and (height: 568px)": {
-      height: "30px"
-    },
-    "@media (width: 375px) and (height: 667px)": {
-      height: "45px"
-    },
-    "@media (width: 414px) and (height: 736px)": {
-      height: "55px"
-    },
-    "@media (width: 375px) and (height: 812px)": {
-      height: "75px"
-    }
   }
 }));
 const DivAnimation = styled.div`
@@ -156,6 +122,39 @@ const DivAnimation = styled.div`
     }
   }
 `;
+ const interact = {
+    height: "96px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    "@media (height: 894px)": {
+      height: "86px"
+    },
+    "@media (height: 1625px)": {
+      height: "210px"
+    },
+    "@media (width: 360px) and (height: 640px)": {
+      height: "40px"
+    },
+    "@media (width: 411px) and (height: 731px)": {
+      height: "50px"
+    },
+    "@media (width: 411px) and (height: 823px)": {
+      height: "50px"
+    },
+    "@media (width: 320px) and (height: 568px)": {
+      height: "30px"
+    },
+    "@media (width: 375px) and (height: 667px)": {
+      height: "45px"
+    },
+    "@media (width: 414px) and (height: 736px)": {
+      height: "55px"
+    },
+    "@media (width: 375px) and (height: 812px)": {
+      height: "75px"
+    }
+  }
 
 
 export default function Mentor({
@@ -174,13 +173,13 @@ export default function Mentor({
   handleBackQueue,
   handleDone,
   selection,
-  rowData
+  rowData,
+  setSelection
 }) {
-  // const classes = useStyles();
   const classes = useStyles();
   let history = useHistory();
   // let { class_id } = useParams();
-
+  // const [rowData, setRowData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
@@ -188,7 +187,16 @@ export default function Mentor({
   // const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
 
-  const ENDPOINT = "localhost:5000";
+  ///for chat
+  // const [username, setUsername] = useState("");
+  // const [room, setRoom] = useState("");
+  // const [message, setMessage] = useState("");
+  // const [feed, setfeed] = useState("");
+  // const [active, setActive] = useState(false);
+  // const [messages, setMessages] = useState([]);
+  // const [avatar, setAvatar] = useState("");
+  // const [emoji, setEmoji] = useState(false);
+//   const ENDPOINT = "localhost:5000";
 
   // useEffect(() => {
   //   socket = io(ENDPOINT);
@@ -203,10 +211,10 @@ export default function Mentor({
     setAnchorEl(null);
   };
 
-  const sendMsg = evt => {
-    evt.preventDefault();
-    // console.log(name);
-  };
+  // const sendMsg = evt => {
+  //   evt.preventDefault();
+  //   // console.log(name);
+  // };
 
   // const handleClose = () => {
   //   setAnchorEl(null);
@@ -292,20 +300,14 @@ export default function Mentor({
   //     .then(data => {
   //       socket.emit("handshake", { room: class_id });
 
-  //       axios
-  //         .get(`/api/assisted_by/${data.data.user_id}`, {})
-  //         .then(data => {
-  //           axios.delete(
-  //             `/api/assisted_by/${data.data[0].user_student_id}`,
-  //             {}
-  //           );
-  //         });
+  //       axios.get(`/api/assisted_by/${data.data.user_id}`, {}).then(data => {
+  //         axios.delete(`/api/assisted_by/${data.data[0].user_student_id}`, {});
+  //       });
   //     });
   // };
 
   // const rowDatahandler = rowData => {
   //   setSelection(true);
-  //   console.log(rowData);
   //   setConcernTitle(rowData.concern_title);
   //   setRowData(rowData);
   //   axios
@@ -384,7 +386,7 @@ console.log(messages)
       </Menu>
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} class_id={class_id} />
+          <Tabs rowDatahandler={rowDatahandler} class_id={class_id} setSelection={setSelection}/>
         </Queue>
         <Help>
           {selection ? (
@@ -474,40 +476,40 @@ console.log(messages)
           )}
 
           {selection ? (
-         <ScrollToBottom className={classes.scrolltobottom}>
-         {messages.map((message, i) => (
-           <div key={i} style={{ overflowWrap: "break-word" }}>
-          
-               <Chatfield
-             
-                 message={message}
-                 username={username}
-                 feed={feed}
-                 active={active}
-                 userid={userid}
-               />
-           
-           </div>
-          
-         ))}
-
-         <div>
-           {feed && active === true ? (
-             <div className={classes.cont2}>
-               <div className={classes.prof}>
-                 {/* <Avatar src={feed} /> */}
+             <ScrollToBottom className={classes.scrolltobottom}>
+             {messages.map((message, i) => (
+               <div key={i} style={{ overflowWrap: "break-word" }}>
+              
+                   <Chatfield
+                 
+                     message={message}
+                     username={username}
+                     feed={feed}
+                     active={active}
+                     userid={userid}
+                   />
+               
                </div>
-               <div className={classes.receiver}>
-                 <DivAnimation>
-                   <span></span>
-                   <span></span>
-                   <span></span>
-                 </DivAnimation>
-               </div>
+              
+             ))}
+    
+             <div>
+               {feed && active === true ? (
+                 <div className={classes.cont2}>
+                   <div className={classes.prof}>
+                     {/* <Avatar src={feed} /> */}
+                   </div>
+                   <div className={classes.receiver}>
+                     <DivAnimation>
+                       <span></span>
+                       <span></span>
+                       <span></span>
+                     </DivAnimation>
+                   </div>
+                 </div>
+               ) : null}
              </div>
-           ) : null}
-         </div>
-       </ScrollToBottom>
+           </ScrollToBottom>
           ) : (
             <div
               style={{
@@ -541,13 +543,12 @@ console.log(messages)
                         fullWidth
                         rows="3"
                       /> */}
-                        <Input
+                      <Input
                       message={message}
                       setMessage={setMessage}
                       sendMessage={sendMessage}
                       username={username}
                     />
-
                       <div
                         style={{
                           display: "flex",

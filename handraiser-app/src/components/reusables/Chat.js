@@ -28,102 +28,139 @@ export default function Chat() {
 
   let { class_id } = useParams();
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
+  // useEffect(() => {
+  //     socket = io(ENDPOINT);
+  // }, [ENDPOINT])
 
-    socket.emit("joinRoom", { userid, username, room, image: avatar }, () => {});
+  useEffect(() => {
+  
+    socket = io({ localhost: ENDPOINT});
+
+    socket.emit("join", { userid, username, room, image: avatar }, () => {});
 
     socket.on("old", ({ data }) => {
-      // console.log(data);
       setMessages(data);
-    
     });
 
-    console.log(room);
+    // console.log(room);
     console.log(socket);
   }, [ENDPOINT, room]);
 
-//   useEffect(() => {
-//     socket.on("typing", data => {
-//       // console.log(data)
-//       setfeed(data);
-//     });
-//     socket.on("not typing", data => {
-//       setfeed(data);
-//     });
-//   });
+  //   useEffect(() => {
+  //     socket.on("typing", data => {
+  //       // console.log(data)
+  //       setfeed(data);
+  //     });
+  //     socket.on("not typing", data => {
+  //       setfeed(data);
+  //     });
+  //   });
 
-//   useEffect(() => {
-//     // console.log(username)
-//     const value = message;
-//     if (active === true) {
-//       if (value.length > 0 && room) {
-//         typing(avatar);
-//         // console.log(avatar)
-//       } else {
-//         nottyping();
-//       }
-//     }
-//   });
-//   ///for typing
-//   const typing = data => {
-//     socket.emit("typing", data);
-//     // console.log(data);
-//   };
+  //   useEffect(() => {
+  //     // console.log(username)
+  //     const value = message;
+  //     if (active === true) {
+  //       if (value.length > 0 && room) {
+  //         typing(avatar);
+  //         // console.log(avatar)
+  //       } else {
+  //         nottyping();
+  //       }
+  //     }
+  //   });
+  //   ///for typing
+  //   const typing = data => {
+  //     socket.emit("typing", data);
+  //     // console.log(data);
+  //   };
 
-//   const nottyping = () => {
-//     const data = "";
-//     socket.emit("not typing", data);
-//   };
-useEffect(() => {
-  if (!cstate) {
-    getData();
-  }
-  if (cstate) {
-    console.log(cstate.user_type_id);
-    setUsertypeid(cstate.user_type_id);
-    setUserid(cstate.user_id);
-    setAvatar(cstate.image);
-    setUsername(cstate.first_name);
-  }
+  //   const nottyping = () => {
+  //     const data = "";
+  //     socket.emit("not typing", data);
+  //   };
+  useEffect(() => {
+    if (!cstate) {
+      getData();
+    }
+    if (cstate) {
+      console.log(cstate.user_type_id);
+      setUsertypeid(cstate.user_type_id);
+      setUserid(cstate.user_id);
+      setAvatar(cstate.image);
+      setUsername(cstate.first_name);
+    }
+  }, [cstate]);
+  useEffect(() => {
+    socket.on("message", message => {
+      setMessages([...messages, message]);
+    });
 
-}, [cstate])
-useEffect(() => {
-  socket.on("message", message => {
-    setMessages([...messages, message]);
+    return () => {
+      socket.emit("disconnect");
+      socket.off();
+    };
+  }, [messages]);
+
+  const sendMessage = event => {
+
+    event.preventDefault();
+    const dateToday = new Date();
+    setTimeout(() => {
+      if (message) {
+        socket.emit("sendMessage", message, () => setMessage(""));
+        axios
+          .post(`/api/chat/send`, {
+            message: message,
+            chat_date_created: dateToday,
+            concern_id: room,
+            user_id: userid
+          })
+          .then(res => {
+            console.log(res);
+          });
+      }
+      // else{
+      //   // console.log(socket.connected)
+      //   window.location.reload();
+      // }
+    }, 100);
+
+    // setMessage("");
+  };
+
+  useEffect(() => {
+    socket.on("typing", data => {
+      // console.log(data)
+      setfeed(data);
+    });
+    socket.on("not typing", data => {
+      setfeed(data);
+    });
   });
 
-  return () => {
-    socket.emit("disconnect");
-    socket.off();
+  useEffect(() => {
+    const value = message;
+    if (active === true) {
+      console.log("asd");
+      if (value.length > 0) {
+        typing();
+      } else {
+        console.log("object");
+        nottyping();
+      }
+    }
+  });
+
+  ///for typing
+  const typing = data => {
+    socket.emit("typing", data);
   };
-}, [messages]);
 
-    const sendMessage = event => {
-      event.preventDefault();
-      const dateToday = new Date();
-      setTimeout(() => {
-        if (message) {
-          socket.emit("sendMessage", message, () => setMessage(""));
-          axios
-            .post(`/api/chat/send`, {
-              message: message,
-              chat_date_created: dateToday,
-              concern_id: room,
-              user_id: userid
-            })
-            .then(res => {
-              console.log(res);
-            });
-        }
-        // else{
-        //   // console.log(socket.connected)
-        //   window.location.reload();
-        // }
-      }, 100);
+  const nottyping = () => {
+    const data = "";
+    socket.emit("not typing", data);
+  };
 
-      // setMessage("");
-    };
   const emojiActive = () => {
     if (emoji === true) {
       setEmoji(false);
@@ -201,9 +238,11 @@ useEffect(() => {
         text: "Please select a concern."
       });
     }
+    
     setConcernTitle("");
     setName("");
     setAnchorEl(null);
+
     axios
       .patch(`/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
@@ -214,47 +253,24 @@ useEffect(() => {
       .then(data => {
         socket.emit("handshake", { room: class_id });
 
-        axios
-          .get(`/api/assisted_by/${data.data.user_id}`, {})
-          .then(data => {
-            axios.delete(
-              `/api/assisted_by/${data.data[0].user_student_id}`,
-              {}
-            );
-          });
+        axios.get(`/api/assisted_by/${data.data.user_id}`, {}).then(data => {
+          axios.delete(`/api/assisted_by/${data.data[0].user_student_id}`, {});
+        });
       });
   };
 
-
-
-
   const rowDatahandler = rowData => {
-    if(socket.connected === false){
-      // window.location.reload()
-    }
-    if (usertypeid === 3) {
-      socket.emit("disconnect");
-      socket.off();
+    if (usertypeid === 3 && rowData) {
       setRoom(rowData.concern.concern_id);
       console.log("here");
-
+      // localStorage.setItem("room",rowData.concern.concern_id)
       setActive(true);
-      // socket.emit(
-      //   "join",
-      //   { userid, username, room: rowData.concern.concern_id, image: avatar },
-      //   message => {
-      //     console.log(message);
-      //   }
-      // );
-  
+
       setRoom(rowData.concern.concern_id);
       setConcernTitle(rowData.concern.concern_title);
-  
+
       axios
-        .get(
-          `/api/userprofile/${rowData.concern.user_id}`,
-          {}
-        )
+        .get(`/api/userprofile/${rowData.concern.user_id}`, {})
         .then(data => {
           setName(data.data[0].first_name + " " + data.data[0].last_name);
         })
@@ -262,8 +278,7 @@ useEffect(() => {
           console.log(err);
         });
     } else {
-      socket.emit("disconnect");
-      socket.off();
+      socket.emit(`leave_room`, { room: room });
       setSelection(true);
       console.log(rowData);
       setConcernTitle(rowData.concern_title);
@@ -273,16 +288,21 @@ useEffect(() => {
         .then(data => {
           setRoom(rowData.concern_id);
           setName(data.data[0].first_name + " " + data.data[0].last_name);
+          // localStorage.setItem("room",rowData.concern_id)
         })
         .catch(err => {
           console.log(err);
         });
     }
 
+    if (socket.connected === false) {
+      alert("Oops! You're clicking too fast");
+      window.location.reload();
+    }
     // setRoom(rowData.concern.concern_id);
     // setConcernTitle(rowData.concern.concern_title);
   };
-console.log("nor",userid)
+  // console.log("nor")
   return (
     <div>
       {usertypeid === 3 ? (
@@ -300,6 +320,7 @@ console.log("nor",userid)
           name={name}
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
+          concernTitle={concernTitle}
         />
       ) : null}
       {usertypeid === 4 ? (
