@@ -11,7 +11,6 @@ import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { Avatar, ListItem } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
-import LockIcon from "@material-ui/icons/Lock";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -104,30 +103,34 @@ export default function SimpleExpansionPanel({
   }, []);
 
   const getClassMember = () => {
-    axios({
-      method: "get",
-      url: `/api/classes/members/${class_id}`
-    })
-      .then(res => {
-        setClassMem(res.data);
+    if (class_id) {
+      axios({
+        method: "get",
+        url: `/api/classes/members/${class_id}`
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          setClassMem(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   const getclassInfo = () => {
-    axios({
-      method: "post",
-      url: `/api/classinfo/${class_id}`
-    })
-      .then(res => {
-        setClassInfo(res.data);
-        setTempClassInfo(res.data);
+    if (class_id) {
+      axios({
+        method: "post",
+        url: `/api/classinfo/${class_id}`
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          setClassInfo(res.data);
+          setTempClassInfo(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   const [tempClassMem, setTempClassMem] = useState([]);

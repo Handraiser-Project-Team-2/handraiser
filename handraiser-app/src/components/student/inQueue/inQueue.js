@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import Badge from "@material-ui/core/Badge";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -17,10 +18,57 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { UserContext } from "../../Contexts/UserContext";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
-import { UserContext } from "../../Contexts/UserContext";
+
+const StyledBadgeGreen = withStyles(theme => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0
+    }
+  }
+}))(Badge);
+const StyledBadgeGrey = withStyles(theme => ({
+  badge: {
+    backgroundColor: "lightgrey",
+    color: "lightgrey",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  }
+}))(Badge);
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
@@ -88,7 +136,7 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   // let socket = io(ENDPOINT);
   const [initial, setInitial] = useState();
@@ -128,9 +176,6 @@ export default function InQueue(props) {
       url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
-      console.log(props.concernSelection);
-      // if (props.concernSelection) props.setConcernSelection(true);
-      // console.log(res.data.length);
     });
   };
 
@@ -152,9 +197,9 @@ export default function InQueue(props) {
 
   const handleSaveEdit = () => {
     setOpenEdit(false);
-
     axios
       .get(`/api/concern_list/${concern.concern.concern_id}`)
+
       .then(data => {
         axios
           .patch(`/api/concern_list/${data.data[0].concern_id}`, {
@@ -172,6 +217,7 @@ export default function InQueue(props) {
 
         // console.log(data);
       })
+
       .catch(err => {
         console.log(err);
       });
@@ -190,7 +236,6 @@ export default function InQueue(props) {
 
   const handleRemoveReq = () => {
     setAnchorEl(null);
-
     setTimeout(() => {
       console.log("removing");
       props.setConcernSelection(false);
@@ -198,7 +243,6 @@ export default function InQueue(props) {
       setConcernTitle("");
       setConcernDescription("");
       props.closeFlag();
-
       axios
         .patch(`/api/student/request/${concern.concern.concern_id}`, {})
         .then(data => {
@@ -231,26 +275,28 @@ export default function InQueue(props) {
                     <ListItemAvatar>
                       <div>
                         {concern.concern.user_status === 1 ? (
-                          <status-indicator
-                            positive
-                            pulse
-                            style={{
-                              position: "absolute",
-                              marginTop: "30px",
-                              marginLeft: "35px"
+                          <StyledBadgeGreen
+                            overlap="circle"
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right"
                             }}
-                          ></status-indicator>
+                            variant="dot"
+                          >
+                            <Avatar src={concern.concern.image} />
+                          </StyledBadgeGreen>
                         ) : (
-                          <status-indicator
-                            pulse
-                            style={{
-                              position: "absolute",
-                              marginTop: "30px",
-                              marginLeft: "35px"
+                          <StyledBadgeGrey
+                            overlap="circle"
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right"
                             }}
-                          ></status-indicator>
+                            variant="dot"
+                          >
+                            <Avatar src={concern.concern.image} />
+                          </StyledBadgeGrey>
                         )}
-                        <Avatar src={concern.concern.image}></Avatar>
                       </div>
                     </ListItemAvatar>
                     <Menu
@@ -382,15 +428,6 @@ export default function InQueue(props) {
                           cursor: "pointer"
                         }}
                       />
-                      <span
-                        style={{
-                          marginLeft: "10px",
-                          color: "grey",
-                          fontSize: "10px"
-                        }}
-                      >
-                        5:00 PM
-                      </span>
                     </ListItemSecondaryAction>
                   </ListItem>
                 </div>

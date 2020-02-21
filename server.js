@@ -17,6 +17,7 @@ const authorization = require("./controllers/authorization");
 const chat = require("./controllers/chat");
 
 const mail = require("./controllers/mail");
+const classCodeEmail = require("./controllers/classcodeEmail");
 
 require("dotenv").config();
 massive({
@@ -54,6 +55,7 @@ massive({
     app.post("/api/userprofile/", users.getUserProfileByEmail);
     app.post("/api/userprofile/student/", users.getUserProfileByStudentEmail);
     app.patch("/api/users/:user_id", users.patchUserStatus); //update user_status when logged out
+    app.put("/api/login/superadmin", users.patchSuperAdmin); //Update super admin
 
     // admins endpoints
     app.post("/api/admin/keygen/mentor", admin.add_mentor); //reference a mentor user type to an email
@@ -103,7 +105,7 @@ massive({
     app.post("/api/student/get/class", student.get_my_classroom);
     app.post("/api/student/get/class/:user_id", student.get_my_classroom_all);
     app.post("/api/classinfo/:class_id", classes.getClassDetails); //get class details including class mentor
-  
+
     // class endpoints
     app.get("/api/classes", classes.getAllClass); // get all available classes
     app.get("/api/classes/students/:class_id", classes.getStudentsByClass); // get students given a class id
@@ -116,11 +118,12 @@ massive({
 
     //sending email
     app.post("/api/sendMail", mail.sendEmail);
+    app.post("/api/sendClassCode", classCodeEmail.sendEmail);
 
     io.on("connection", socket => {
 
       const users = [];
-  
+
       socket.on("AddRequest", (data, callback) => {
 
         io.emit("consolidateRequest", data);
@@ -139,29 +142,26 @@ massive({
         });
       });
 
-
-      socket.on("join", ({userid, username, room }, callback) => {
+      socket.on("join", ({ userid, username, room }, callback) => {
         const user = {
           id: socket.id,
           userid: userid,
           name: username,
-          room: room,
-        
+          room: room
         };
 
-      console.log("Online");
+        console.log("Online");
 
         users.push(user);
         socket.on(`leave_room`, ({ room }) => {
           socket.leave(`${room}`);
        });
-        //console.log("user", user);
 
         // socket.emit("message", {
-        //   user: "admin", 
+        //   user: "admin",
         //   text: `${user.name},welcome to the room ${user.room} `
         // });
-        user &&
+         user &&
         db.chat
           .find({
             concern_id: user.room
@@ -185,10 +185,8 @@ massive({
         socket.broadcast.emit("not typing", data);
       });
 
-      
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
-        //console.log("send",user);
         io.to(user.room).emit("message", {
           user: user.name,
           message: message,
