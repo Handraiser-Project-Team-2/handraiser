@@ -32,6 +32,7 @@ import TextField from "@material-ui/core/TextField";
 import SchoolIcon from "@material-ui/icons/School";
 import ListItemText from "@material-ui/core/ListItemText";
 import StudentTabs from "../student/Tabs/Tabs";
+import Bkg from "../images/classroom-background-clipart-11.jpg";
 import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
   tab: {

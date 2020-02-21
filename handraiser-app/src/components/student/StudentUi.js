@@ -8,11 +8,14 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
 import { useHistory, useParams } from "react-router-dom";
+import SendIcon from "@material-ui/icons/Send";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Fab from "@material-ui/core/Fab";
+
 import Input from "../reusables/Input";
 import {
   Div,
@@ -523,9 +526,9 @@ export default function Student({
               <div
                 style={{
                   display: "flex",
-                  flexWrap: "wrap",
                   justifyContent: "space-between",
                   flexDirection: "column",
+                  alignItems: "center",
                   width: "100%"
                 }}
               >

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Badge from "@material-ui/core/Badge";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -18,6 +19,52 @@ import io from "socket.io-client";
 import { UserContext } from "../../Contexts/UserContext";
 
 var jwtDecode = require("jwt-decode");
+
+const StyledBadgeGreen = withStyles(theme => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0
+    }
+  }
+}))(Badge);
+const StyledBadgeGrey = withStyles(theme => ({
+  badge: {
+    backgroundColor: "lightgrey",
+    color: "lightgrey",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  }
+}))(Badge);
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -156,26 +203,28 @@ export default function InQueue(props) {
                 <ListItemAvatar>
                   <div>
                     {data.concern.user_status === 1 ? (
-                      <status-indicator
-                        positive
-                        pulse
-                        style={{
-                          position: "absolute",
-                          marginTop: "30px",
-                          marginLeft: "35px"
+                      <StyledBadgeGreen
+                        overlap="circle"
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right"
                         }}
-                      ></status-indicator>
+                        variant="dot"
+                      >
+                        <Avatar src={data.concern.image} />
+                      </StyledBadgeGreen>
                     ) : (
-                      <status-indicator
-                        pulse
-                        style={{
-                          position: "absolute",
-                          marginTop: "30px",
-                          marginLeft: "35px"
+                      <StyledBadgeGrey
+                        overlap="circle"
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "right"
                         }}
-                      ></status-indicator>
+                        variant="dot"
+                      >
+                        <Avatar src={data.concern.image} />
+                      </StyledBadgeGrey>
                     )}
-                    <Avatar src={data.concern.image}></Avatar>
                   </div>
                 </ListItemAvatar>
                 <Menu
@@ -211,29 +260,21 @@ export default function InQueue(props) {
                   }
                 />
                 <ListItemSecondaryAction style={{ display: "flex" }}>
-                  <Avatar
-                    variant="square"
-                    className={classes.small}
-                    style={{
-                      background: "transparent"
-                    }}
-                  >
-                    <div style={{ fontSize: 12 }}>
-                      {data.concern.concern_status === 3 ? (
-                        <DoneIcon style={{ color: "teal" }} />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </Avatar>
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    style={{ marginTop: "-5px" }}
-                    onClick={() => handleRemoveReq(data.concern)}
-                  >
-                    <DeleteIcon style={{ color: "grey" }} />
-                  </IconButton>
+                  <div style={{ display: "flex", fontSize: 12 }}>
+                    {data.concern.concern_status === 3 ? (
+                      <span
+                        style={{
+                          border: "1px solid red",
+                          padding: "5px",
+                          borderRadius: "5px"
+                        }}
+                      >
+                        <span style={{ color: "red" }}>Closed</span>
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </ListItemSecondaryAction>
               </ListItem>
             </div>

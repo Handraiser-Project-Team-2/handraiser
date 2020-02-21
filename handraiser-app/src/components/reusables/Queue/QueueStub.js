@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import Handshake from "../../images/handshake.gif";
+import Badge from "@material-ui/core/Badge";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -12,9 +13,56 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Swal from "sweetalert2";
 import axios from "axios";
 import io from "socket.io-client";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import DoneIcon from "@material-ui/icons/Done";
 import { UserContext } from "../../Contexts/UserContext";
+
+const StyledBadgeGreen = withStyles(theme => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0
+    }
+  }
+}))(Badge);
+const StyledBadgeGrey = withStyles(theme => ({
+  badge: {
+    backgroundColor: "lightgrey",
+    color: "lightgrey",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  }
+}))(Badge);
+
 export default function QueueStub(props) {
   const { socket } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -157,26 +205,28 @@ export default function QueueStub(props) {
         <ListItemAvatar>
           <div>
             {props.data.user_status === 1 ? (
-              <status-indicator
-                positive
-                pulse
-                style={{
-                  position: "absolute",
-                  marginTop: "30px",
-                  marginLeft: "35px"
+              <StyledBadgeGreen
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right"
                 }}
-              ></status-indicator>
+                variant="dot"
+              >
+                <Avatar src={props.data.image} />
+              </StyledBadgeGreen>
             ) : (
-              <status-indicator
-                pulse
-                style={{
-                  position: "absolute",
-                  marginTop: "30px",
-                  marginLeft: "35px"
+              <StyledBadgeGrey
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right"
                 }}
-              ></status-indicator>
+                variant="dot"
+              >
+                <Avatar src={props.data.image} />
+              </StyledBadgeGrey>
             )}
-            <Avatar src={props.data.image}></Avatar>
           </div>
         </ListItemAvatar>
         <Menu
@@ -228,15 +278,6 @@ export default function QueueStub(props) {
             alignItems: "center"
           }}
         >
-          <span
-            style={{
-              marginRight: "10px",
-              color: "grey",
-              fontSize: "10px"
-            }}
-          >
-            5:00 PM
-          </span>
           <Avatar
             variant="square"
             className={classes.small}

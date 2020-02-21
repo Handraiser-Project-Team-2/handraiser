@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     color: "white"
   },
   fab: {
-    display: "flex",
+    marginTop: "-40px",
     float: "right",
     backgroundColor: teal[500],
     "@media (max-width: 834px)": {
