@@ -22,15 +22,12 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
-import { Divider, Tooltip, Button } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import ClassIcon from "@material-ui/icons/Class";
 import CloseIcon from "@material-ui/icons/Close";
 import io from "socket.io-client";
-import LockIcon from "@material-ui/icons/Lock";
 import TextField from "@material-ui/core/TextField";
 import SchoolIcon from "@material-ui/icons/School";
-import ListItemText from "@material-ui/core/ListItemText";
 import StudentTabs from "../student/Tabs/Tabs";
 import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
@@ -59,6 +56,82 @@ const useStyles = makeStyles(theme => ({
     "@media (min-width: 770px)": {
       display: "none"
     }
+  },
+  info: {
+    padding: "10px 10px 8px 9px",
+    color: "darkblue",
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
+  },
+  title: {
+    display: "flex",
+    alignItems: "center",
+    padding: "10px 10px 5px 10px",
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
+  },
+  class: {
+    marginLeft: "10px",
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "150px"
+    }
+  },
+  name1: {
+    marginLeft: "8px",
+    fontWeight: "bold",
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "150px"
+    }
+  },
+  name2: {
+    marginLeft: "8px",
+    fontWeight: "bold",
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "150px"
+    }
   }
 }));
 
@@ -84,7 +157,7 @@ export default function Topbar({ showDiv }) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let socket = io(ENDPOINT);
 
@@ -244,7 +317,7 @@ export default function Topbar({ showDiv }) {
                           }}
                         >
                           <SchoolIcon style={{ color: "#372476" }} />
-                          <span style={{ paddingLeft: "10px" }}>
+                          <span className={classes.class}>
                             {classList.class_title}
                           </span>
                         </span>
@@ -254,7 +327,6 @@ export default function Topbar({ showDiv }) {
                 </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
-
             <ExpansionPanel
               expanded={expanded === "panel3"}
               onChange={panelDrawer("panel3")}
@@ -281,13 +353,7 @@ export default function Topbar({ showDiv }) {
                       >
                         Name
                       </span>
-                      <span
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "10px 10px 5px 5px"
-                        }}
-                      >
+                      <span className={classes.title}>
                         <span>{info.class_title}</span>
                       </span>
                       <span
@@ -295,12 +361,7 @@ export default function Topbar({ showDiv }) {
                       >
                         Description
                       </span>
-                      <span
-                        style={{
-                          padding: "10px 10px 8px 9px",
-                          color: "darkblue"
-                        }}
-                      >
+                      <span className={classes.info}>
                         {info.class_description}
                       </span>
                       <span
@@ -349,24 +410,14 @@ export default function Topbar({ showDiv }) {
                             ></Avatar>
 
                             {member.user_type_id === 4 ? (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
+                              <span className={classes.name1}>
                                 {member.first_name +
                                   " " +
                                   member.last_name +
                                   " (Mentor)"}
                               </span>
                             ) : (
-                              <span
-                                style={{
-                                  marginLeft: "8px",
-                                  fontWeight: "bold"
-                                }}
-                              >
+                              <span className={classes.name2}>
                                 {member.first_name + " " + member.last_name}
                               </span>
                             )}

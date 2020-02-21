@@ -232,8 +232,7 @@ const useStyles = makeStyles(theme => ({
   handshake_text_btn_2: {
     fontSize: "3em",
     color: "white",
-    fontWeight: "800",
-    fontWeight: "200"
+    fontWeight: "800"
   },
   handshake_img: {
     backgroundSize: "cover",

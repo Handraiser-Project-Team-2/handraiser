@@ -22,9 +22,9 @@ function getStudentsByClass(req, res) {
 
 function getAllClass(req, res) {
   const db = req.app.get("db");
-
-  db.class
-    .find()
+  db.query(
+    `SELECT * FROM class INNER JOIN users ON class.user_id = users.user_id INNER JOIN user_profile ON users.profile_id = user_profile.profile_id`
+  )
     .then(classes => res.status(200).send(classes))
     .catch(err => {
       console.error(err);

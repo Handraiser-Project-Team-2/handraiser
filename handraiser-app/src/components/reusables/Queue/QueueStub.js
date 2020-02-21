@@ -281,7 +281,7 @@ const useStyles = makeStyles(theme => ({
     "text-overflow": "ellipsis",
     "white-space": " nowrap",
     width: "250px",
-    fontWeight: "bold",
+
     "@media (max-width: 600px)": {
       display: "inline-block",
       overflow: " hidden",

@@ -29,10 +29,10 @@ export default function InQueue(rowDatahandler) {
   }, []);
 
   useEffect(() => {
-    if (rowDatahandler.search || !concernsData) {
-      update(rowDatahandler.search);
-    }
+    update(rowDatahandler.search);
+  }, [rowDatahandler.search]);
 
+  useEffect(() => {
     socket.on("updateComponents", message => {
       update("");
     });

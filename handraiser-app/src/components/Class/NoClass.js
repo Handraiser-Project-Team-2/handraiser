@@ -3,7 +3,7 @@ import Avatar from "@material-ui/core/Avatar";
 
 import ClassIcon from "../images/class_icon.png";
 import Typography from "@material-ui/core/Typography";
-import indigo from '@material-ui/core/colors/indigo';
+import indigo from "@material-ui/core/colors/indigo";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   errorCont: {
     display: "flex",
     backgroundColor: indigo[50],
-    color: 'black'
+    color: "black"
   }
 }));
 

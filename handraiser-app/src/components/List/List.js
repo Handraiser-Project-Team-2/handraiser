@@ -8,12 +8,12 @@ import { ListCont } from "../Styles/Styles2";
 export const UserList = () => {
   const [stud, setStud] = useState([]);
   const [men, setMen] = useState([]);
-  const [ad, setAd] = useState([]);
+  const [classes, setClasses] = useState([]);
 
   useEffect(() => {
     handleStudentList();
     handleMentorList();
-    handleAdminList();
+    handleClassList();
   }, []);
 
   const handleStudentList = () => {
@@ -40,13 +40,13 @@ export const UserList = () => {
         console.log(err);
       });
   };
-  const handleAdminList = () => {
+  const handleClassList = () => {
     axios({
       method: "get",
-      url: `/api/user/admin_list`
+      url: `/api/classes`
     })
       .then(res => {
-        setAd(res.data);
+        setClasses(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -63,7 +63,7 @@ export const UserList = () => {
             backgroundColor: "white",
             marginLeft: "5px",
             textAlign: "center",
-            border: "2px solid gray",
+            border: "2px solid #372476",
             borderRadius: "20px"
           }}
         >
@@ -72,10 +72,10 @@ export const UserList = () => {
             gutterBottom
             style={{ marginTop: "10px", marginBottom: "-5px" }}
           >
-            {ad.length}
+            {classes.length}
           </Typography>
           <Typography variant="h6" gutterBottom>
-            Admin
+            Classes
           </Typography>
         </Grid>
         <Grid
@@ -86,7 +86,7 @@ export const UserList = () => {
             backgroundColor: "white",
             marginLeft: "5px",
             textAlign: "center",
-            border: "2px solid gray",
+            border: "2px solid #372476",
             borderRadius: "20px"
           }}
         >
@@ -108,7 +108,7 @@ export const UserList = () => {
           style={{
             backgroundColor: "white",
             textAlign: "center",
-            border: "2px solid gray",
+            border: "2px solid #372476",
             borderRadius: "20px"
           }}
         >
