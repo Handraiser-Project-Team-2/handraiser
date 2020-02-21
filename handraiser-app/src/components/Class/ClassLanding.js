@@ -11,7 +11,6 @@ import VerificationDialog from "./VerificationDialog";
 import AddClassDialog from "./AddClassDialog";
 import Topbar from "../reusables/Topbar";
 import NoClass from "./NoClass";
-// import { UserContext } from "../Contexts/UserContext";
 import SearchComponent from "./SearchComponent";
 
 const useStyles = makeStyles(theme => ({
@@ -134,20 +133,22 @@ export default function ClassLanding(props) {
             ) : (
               ""
             )}
-            <Grid item xs={12}>
-              <SearchComponent
-                setTempClassData={setTempClassData}
-                classData={classData}
-              />
-              {userType === 3 ? (
-                <FindClassDialog />
-              ) : (
-                <AddClassDialog
-                  token={token}
-                  fetchMentorClass={fetchMentorClass}
+            <div>
+              <Grid item xs={12}>
+                <SearchComponent
+                  setTempClassData={setTempClassData}
+                  classData={classData}
                 />
-              )}
-            </Grid>
+                {userType === 3 ? (
+                  <FindClassDialog />
+                ) : (
+                  <AddClassDialog
+                    token={token}
+                    fetchMentorClass={fetchMentorClass}
+                  />
+                )}
+              </Grid>
+            </div>
             {classData.length === 0 ? (
               <NoClass />
             ) : (

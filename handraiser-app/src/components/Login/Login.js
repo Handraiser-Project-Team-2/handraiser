@@ -20,11 +20,6 @@ import SetSuperAdminDialog from "./SetSuperAdminDialog";
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
   const { socket } = useContext(UserContext);
-  const ENDPOINT = "localhost:5000";
-  // let socket ;
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-  // }, [ENDPOINT])
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);
@@ -47,6 +42,7 @@ export default function Login(props) {
               user_status: 1
             })
             .then(data => {
+              console.log("updating user activity");
               socket.emit("user_activity", {});
             })
             .catch(err => {

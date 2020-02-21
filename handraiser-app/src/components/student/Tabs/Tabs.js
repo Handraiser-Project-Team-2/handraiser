@@ -75,6 +75,9 @@ const TabBtn = props => {
           rowDatahandler={props.rowDatahandler}
           classReference={props.classReference}
           search={search}
+          closeFlag={props.closeFlag}
+          setConcernSelection={props.setConcernSelection}
+          concernSelection={props.concernSelection}
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>

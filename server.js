@@ -84,7 +84,7 @@ massive({
 
     // student endpoints
     app.get("/api/student/queue/order/:class_id", student.queue_order_all);
-    app.delete("/api/student/request/:concern_id", student.delete);
+    app.patch("/api/student/request/:concern_id", student.delete);
 
     app.patch("/api/concern_list/:concern_id", student.updateConcern);
     app.post("/api/assisted_by", student.assisted_by);
@@ -121,18 +121,17 @@ massive({
     app.post("/api/sendClassCode", classCodeEmail.sendEmail);
 
     io.on("connection", socket => {
+
       const users = [];
 
       socket.on("AddRequest", (data, callback) => {
-        io.to(data.room).emit("consolidateRequest", data);
 
+        io.emit("consolidateRequest", data);
         callback();
       });
 
       socket.on("handshake", data => {
-        console.log("handshake flag", data);
-
-        io.to(data.room).emit("updateComponents", {
+        io.emit("updateComponents", {
           message: "handshake succesful"
         });
       });
@@ -156,26 +155,25 @@ massive({
         users.push(user);
         socket.on(`leave_room`, ({ room }) => {
           socket.leave(`${room}`);
-        });
-        console.log("user", users);
+       });
 
         // socket.emit("message", {
         //   user: "admin",
         //   text: `${user.name},welcome to the room ${user.room} `
         // });
-        user &&
-          db.chat
-            .find({
-              concern_id: user.room
-            })
-            .then(data => {
-              io.to(user.room).emit("old", {
-                data
-              });
-            })
-            .catch(err => {
-              console.log(err);
+         user &&
+        db.chat
+          .find({
+            concern_id: user.room
+          })
+          .then(data => {
+            io.to(user.room).emit("old", {
+              data
             });
+          })
+          .catch(err => {
+            //console.log(err);
+          });
 
         socket.join(user.room);
       });
@@ -189,7 +187,6 @@ massive({
 
       socket.on("sendMessage", (message, callback) => {
         const user = users.find(user => user.id === socket.id);
-        console.log("send", user);
         io.to(user.room).emit("message", {
           user: user.name,
           message: message,
@@ -198,17 +195,15 @@ massive({
           user_id: user.userid
         });
 
-        // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",user.userid)
-
         callback();
       });
 
       socket.on("disconnect", () => {
-        console.log("user disconnected");
+        console.log("disconnected at" , socket.handshake.query.fcomponent)
       });
     });
     server.listen(PORT, () => {
-      console.log(`Server started on port ${PORT}`);
+      //console.log(`Server started on port ${PORT}`);
     });
   })
   .catch(err => {
