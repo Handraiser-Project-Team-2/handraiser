@@ -25,14 +25,7 @@ export default function InQueue(rowDatahandler) {
       username: "Admin",
       room: rowDatahandler.class_id
     });
-    console.log("inqueue student", socket);
-  }, []);
 
-  useEffect(() => {
-    update(rowDatahandler.search);
-  }, [rowDatahandler.search]);
-
-  useEffect(() => {
     socket.on("updateComponents", message => {
       update("");
     });
@@ -44,7 +37,16 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [rowDatahandler.rowDatahandler.search, concernsData]);
+    
+  }, []);
+
+  useEffect(() => {
+    update(rowDatahandler.search);
+  }, [rowDatahandler.search]);
+
+  // useEffect(() => {
+  
+  // }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
   const update = data => {
     if (rowDatahandler.class_id) {
@@ -70,6 +72,7 @@ export default function InQueue(rowDatahandler) {
                 <QueQueStub
                   update={update}
                   key={index}
+                  // setSelection={rowDatahandler.setSelection}
                   rowDatahandler={rowDatahandler}
                   data={data}
                   index={index}

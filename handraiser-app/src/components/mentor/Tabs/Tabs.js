@@ -3,30 +3,40 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import InQueue from "../inQueue/inQueue";
 import Done from "../inQueue/Done";
 import AllConcern from "../inQueue/AllConcern";
 import TextField from "@material-ui/core/TextField";
+import TabPanel from "./TabPanel";
 
 const useStyles = makeStyles(theme => ({}));
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box>{children}</Box>}
-    </Typography>
-  );
-}
+// function TabPanel(props) {
+
+//   const { children, value, index, ...other } = props;
+
+//   useEffect(() => {
+//     effect
+
+//     return () => {
+//       cleanup
+//     };
+
+//   }, [])
+
+//   return (
+//     <Typography
+//       component="div"
+//       role="tabpanel"
+//       hidden={value !== index}
+//       id={`full-width-tabpanel-${index}`}
+//       aria-labelledby={`full-width-tab-${index}`}
+//       {...other}
+//     >
+//       {value === index && <Box>{children}</Box>}
+//     </Typography>
+//   );
+// }
 
 const TabBtn = props => {
   const classes = useStyles();
@@ -73,6 +83,7 @@ const TabBtn = props => {
           rowDatahandler={props.rowDatahandler}
           class_id={props.class_id}
           search={search}
+          setSelection={props.setSelection}
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>

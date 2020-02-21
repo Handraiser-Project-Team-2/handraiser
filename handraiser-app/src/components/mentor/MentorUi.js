@@ -43,121 +43,6 @@ import Input from "../reusables/Input";
 import "emoji-mart/css/emoji-mart.css";
 var jwtDecode = require("jwt-decode");
 
-const useStyles = makeStyles(theme => ({
-  handshake: {
-    marginLeft: theme.spacing(3),
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-    backgroundColor: teal[500],
-    "&:hover": {
-      cursor: "pointer"
-    }
-  },
-  span: {
-    position: "fixed",
-    bottom: theme.spacing(2),
-    right: theme.spacing(5)
-  },
-  scrolltobottom: {
-    padding: "5% 0",
-    overflow: "auto",
-    height: "40.9em",
-    backgroundColor: "white"
-  },
-  cont2: {
-    display: " flex",
-    marginTop: "10px",
-    marginRight: "15px",
-    padding: "10px",
-    flexDirection: "row"
-  },
-  prof: {
-    display: "flex",
-    marginLeft: "10px",
-    alignItems: "flex-end"
-  },
-  receiver: {
-    marginLeft: "10px",
-    backgroundColor: "white",
-    maxWidth: "450px",
-    padding: "10px 20px 10px 20px",
-    borderRadius: "10px 10px 10px 0px"
-  },
-  animation: {
-    display: "inline-block",
-    backgroundColor: "white",
-    width: "5px",
-    height: "5px",
-    borderRadius: "100%",
-    marginRight: "5px",
-    animation: "bob 2s infinite"
-  },
-  interact: {
-    height: "100px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    "@media screen (height: 894px)": {
-      height: "86px"
-    },
-    "@media (height: 1625px)": {
-      height: "210px"
-    },
-    "@media (width: 360px) and (height: 640px)": {
-      height: "40px"
-    },
-    "@media (width: 411px) and (height: 731px)": {
-      height: "50px"
-    },
-    "@media (width: 411px) and (height: 823px)": {
-      height: "50px"
-    },
-    "@media (width: 320px) and (height: 568px)": {
-      height: "30px"
-    },
-    "@media (width: 375px) and (height: 667px)": {
-      height: "45px"
-    },
-    "@media (width: 414px) and (height: 736px)": {
-      height: "55px"
-    },
-    "@media (width: 375px) and (height: 812px)": {
-      height: "75px"
-    }
-  }
-}));
-const DivAnimation = styled.div`
-  span {
-    display: inline-block;
-    background-color: white;
-    width: 5px;
-    height: 5px;
-    border-radius: 100%;
-    margin-right: 5px;
-    animation: bob 2s infinite;
-  }
-  span:nth-child(1) {
-    animation-delay: -1s;
-  }
-  span:nth-child(2) {
-    animation-delay: -0.85s;
-  }
-  span:nth-child(3) {
-    animation-delay: -0.7s;
-    margin-right: 0;
-  }
-  @keyframes bob {
-    10% {
-      transform: translateY(-10px);
-      background-color: #9e9da2;
-    }
-    50% {
-      transform: translateY(0);
-      background-color: #b6b5ba;
-    }
-  }
-`;
-
 export default function Mentor({
   class_id,
   rowDatahandler,
@@ -174,34 +59,17 @@ export default function Mentor({
   handleBackQueue,
   handleDone,
   selection,
-  rowData
+  rowData,
+  dateTime,
+  setSelection,
+  concernTitle,
+  concernUser
 }) {
   const classes = useStyles();
   let history = useHistory();
-  // let { class_id } = useParams();
-  // const [rowData, setRowData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
-  const [concernTitle, setConcernTitle] = useState("");
-  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
-
-  ///for chat
-  // const [username, setUsername] = useState("");
-  // const [room, setRoom] = useState("");
-  // const [message, setMessage] = useState("");
-  // const [feed, setfeed] = useState("");
-  // const [active, setActive] = useState(false);
-  // const [messages, setMessages] = useState([]);
-  // const [avatar, setAvatar] = useState("");
-  // const [emoji, setEmoji] = useState(false);
-  //   const ENDPOINT = "172.60.62.113:5000";
-
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-  //   console.log(socket);
-  // }, [ENDPOINT]);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -210,115 +78,6 @@ export default function Mentor({
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  // const sendMsg = evt => {
-  //   evt.preventDefault();
-  //   // console.log(name);
-  // };
-
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  //   axios.patch(
-  //     `http://172.60.62.113:5001/api/concern_list/${rowData.concern_id}`,
-  //     {
-  //       concern_id: rowData.concern_id,
-  //       concern_status: 1
-  //     }
-  //   );
-  // };
-
-  // const handleDone = rowData => {
-  //   setSelection(false);
-
-  //   if (rowData.length === 0) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "No concern selected!",
-  //       text: "Please select a concern."
-  //     });
-  //   }
-  //   setConcernTitle("");
-  //   setName("");
-  //   setAnchorEl(null);
-
-  //   axios
-  //     .patch(`/api/concern_list/${rowData.concern_id}`, {
-  //       concern_id: rowData.concern_id,
-  //       concern_title: rowData.concern_title,
-  //       concern_description: rowData.concern_description,
-  //       concern_status: 3
-  //     })
-  //     .then(data => {
-  //       axios
-  //         .get(
-  //           `/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
-  //           {}
-  //         )
-  //         .then(data => {
-  //           axios
-  //             .patch(
-  //               `/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-  //               {
-  //                 assisted_id: data.data[0].assisted_id,
-  //                 user_student_id: data.data[0].user_id,
-  //                 class_id: data.data[0].class_id,
-  //                 assist_status: "done"
-  //               }
-  //             )
-  //             .then(data => {
-  //               socket.emit("handshake", { room: class_id });
-  //             })
-  //             .catch(err => {
-  //               console.log(err);
-  //             });
-  //         });
-  //     });
-  // };
-
-  // const [selection, setSelection] = useState(false);
-
-  // const handleBackQueue = rowData => {
-  //   setSelection(false);
-
-  //   if (rowData.length === 0) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "No concern selected!",
-  //       text: "Please select a concern."
-  //     });
-  //   }
-  //   setConcernTitle("");
-  //   setName("");
-  //   setAnchorEl(null);
-  //   axios
-  //     .patch(`/api/concern_list/${rowData.concern_id}`, {
-  //       concern_id: rowData.concern_id,
-  //       concern_title: rowData.concern_title,
-  //       concern_description: rowData.concern_description,
-  //       concern_status: 2
-  //     })
-  //     .then(data => {
-  //       socket.emit("handshake", { room: class_id });
-
-  //       axios.get(`/api/assisted_by/${data.data.user_id}`, {}).then(data => {
-  //         axios.delete(`/api/assisted_by/${data.data[0].user_student_id}`, {});
-  //       });
-  //     });
-  // };
-
-  // const rowDatahandler = rowData => {
-  //   setSelection(true);
-  //   setConcernTitle(rowData.concern_title);
-  //   setRowData(rowData);
-  //   axios
-  //     .get(`/api/userprofile/${rowData.user_id}`, {})
-  //     .then(data => {
-  //       setName(data.data[0].first_name + " " + data.data[0].last_name);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
@@ -335,7 +94,7 @@ export default function Mentor({
               title: "You cannot acces this page!"
             }).then(function() {
               if (user_type === 3) {
-                history.push("/student");
+                history.push("/class");
               } else if (user_type === 1) {
                 history.push("/superadmin");
               }
@@ -364,7 +123,9 @@ export default function Mentor({
   const handleClickMember = () => {
     setExpanded("panel2");
   };
-
+  console.log(messages);
+  let currDate = "";
+  let same = true;
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} class_id={class_id} />
@@ -385,7 +146,11 @@ export default function Mentor({
       </Menu>
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} class_id={class_id} />
+          <Tabs
+            rowDatahandler={rowDatahandler}
+            class_id={class_id}
+            setSelection={setSelection}
+          />
         </Queue>
         <Help>
           {selection ? (
@@ -406,38 +171,38 @@ export default function Mentor({
                     fontSize: "12.4px"
                   }}
                 >
-                  From: {name}
+                  From: {concernUser}
                 </Typography>
               </TitleName>
               <Option>
-                <span>
+                <div>
                   <HelpIcon
                     onClick={handleClickDetail}
                     style={{
                       fontSize: 30,
-
+                      color: "#c4c4c4",
                       cursor: "pointer",
                       color: "#372476"
                     }}
                   />
-                </span>
-                <span>
+                </div>
+                <div>
                   <GroupIcon
                     onClick={handleClickMember}
                     style={{
                       fontSize: 30,
-
+                      color: "#c4c4c4",
                       cursor: "pointer",
                       color: "#372476"
                     }}
                   />
-                </span>
+                </div>
                 <div>
                   <MoreVertIcon
                     onClick={handleMenu}
                     style={{
                       fontSize: 30,
-
+                      color: "#c4c4c4",
                       cursor: "pointer",
                       color: "#372476"
                     }}
@@ -446,7 +211,14 @@ export default function Mentor({
               </Option>
             </Subject>
           ) : (
-            <div className={classes.interact}>
+            <div
+              style={{
+                height: "96px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
               <Typography variant="h5" style={{ color: "#bcbcbc" }}>
                 Select any concern to interact
               </Typography>
@@ -465,17 +237,37 @@ export default function Mentor({
 
           {selection ? (
             <ScrollToBottom className={classes.scrolltobottom}>
-              {messages.map((message, i) => (
-                <div key={i} style={{ overflowWrap: "break-word" }}>
-                  <Chatfield
-                    message={message}
-                    username={username}
-                    feed={feed}
-                    active={active}
-                    userid={userid}
-                  />
-                </div>
-              ))}
+              {messages.map((message, i) => {
+                const ndate = new Date(
+                  message.chat_date_created
+                ).toLocaleDateString();
+
+                const ntime = new Date(
+                  message.chat_date_created
+                ).toLocaleTimeString();
+
+                console.log(ndate);
+                same = false;
+
+                if (ndate !== currDate) {
+                  currDate = ndate;
+                  same = true;
+                }
+
+                return (
+                  <div key={i} style={{ overflowWrap: "break-word" }}>
+                    <Chatfield
+                      message={message}
+                      username={username}
+                      feed={feed}
+                      active={active}
+                      userid={userid}
+                      date={same ? currDate : ""}
+                      time={ntime}
+                    />
+                  </div>
+                );
+              })}
 
               <div>
                 {feed && active === true ? (
@@ -575,3 +367,118 @@ export default function Mentor({
     </React.Fragment>
   );
 }
+
+const useStyles = makeStyles(theme => ({
+  handshake: {
+    marginLeft: theme.spacing(3),
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+    backgroundColor: teal[500],
+    "&:hover": {
+      cursor: "pointer"
+    }
+  },
+  span: {
+    position: "fixed",
+    bottom: theme.spacing(2),
+    right: theme.spacing(5)
+  },
+  scrolltobottom: {
+    padding: "5% 0",
+    overflow: "auto",
+    height: "39.7em",
+    backgroundColor: "white"
+  },
+  cont2: {
+    display: " flex",
+    marginTop: "10px",
+    marginRight: "15px",
+    padding: "10px",
+    flexDirection: "row"
+  },
+  prof: {
+    display: "flex",
+    marginLeft: "10px",
+    alignItems: "flex-end"
+  },
+  receiver: {
+    marginLeft: "10px",
+    backgroundColor: "white",
+    maxWidth: "450px",
+    padding: "10px 20px 10px 20px",
+    borderRadius: "10px 10px 10px 0px"
+  },
+  animation: {
+    display: "inline-block",
+    backgroundColor: "white",
+    width: "5px",
+    height: "5px",
+    borderRadius: "100%",
+    marginRight: "5px",
+    animation: "bob 2s infinite"
+  }
+}));
+const DivAnimation = styled.div`
+  span {
+    display: inline-block;
+    background-color: white;
+    width: 5px;
+    height: 5px;
+    border-radius: 100%;
+    margin-right: 5px;
+    animation: bob 2s infinite;
+  }
+  span:nth-child(1) {
+    animation-delay: -1s;
+  }
+  span:nth-child(2) {
+    animation-delay: -0.85s;
+  }
+  span:nth-child(3) {
+    animation-delay: -0.7s;
+    margin-right: 0;
+  }
+  @keyframes bob {
+    10% {
+      transform: translateY(-10px);
+      background-color: #9e9da2;
+    }
+    50% {
+      transform: translateY(0);
+      background-color: #b6b5ba;
+    }
+  }
+`;
+const interact = {
+  height: "96px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  "@media (height: 894px)": {
+    height: "86px"
+  },
+  "@media (height: 1625px)": {
+    height: "210px"
+  },
+  "@media (width: 360px) and (height: 640px)": {
+    height: "40px"
+  },
+  "@media (width: 411px) and (height: 731px)": {
+    height: "50px"
+  },
+  "@media (width: 411px) and (height: 823px)": {
+    height: "50px"
+  },
+  "@media (width: 320px) and (height: 568px)": {
+    height: "30px"
+  },
+  "@media (width: 375px) and (height: 667px)": {
+    height: "45px"
+  },
+  "@media (width: 414px) and (height: 736px)": {
+    height: "55px"
+  },
+  "@media (width: 375px) and (height: 812px)": {
+    height: "75px"
+  }
+};

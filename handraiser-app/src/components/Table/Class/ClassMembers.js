@@ -56,7 +56,7 @@ export default function MentorProfile({ classData }) {
         {classData.map((member, index) => {
           return (
             <ListItem key={index}>
-              <Avatar src={member.image}></Avatar>
+              <Avatar src={member.image} />
               <span
                 style={{
                   marginLeft: "10px"

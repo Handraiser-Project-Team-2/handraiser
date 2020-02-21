@@ -1,3 +1,4 @@
+
 import React, { useEffect, useContext } from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,6 +29,16 @@ export default function Handshake(props) {
       room: class_id
     });
   });
+  // useEffect(() => {
+  //   if (!cstate) {
+  //     getData();
+  //   }
+  //   if (cstate) {
+  //     console.log(cstate.user_type_id);
+  //     setUserid(cstate.user_id);
+  //     setUsername(cstate.first_name);
+  //   }
+  // }, [cstate]);
 
   const accept = highdata => {
     axios
@@ -40,7 +51,8 @@ export default function Handshake(props) {
       .then(data => {
         props.rowDatahandler(data.data);
         socket.emit("handshake", { room: highdata.class_id });
-
+        // socket.emit("join", { userid, username, room:data.data.concern_id }, () => {});
+      
         axios
           .get(`/api/assisted_by/${highdata.class_id}/${highdata.user_id}`, {})
           .then(data => {

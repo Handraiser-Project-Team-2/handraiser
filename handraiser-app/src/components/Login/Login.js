@@ -20,11 +20,6 @@ import SetSuperAdminDialog from "./SetSuperAdminDialog";
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
   const { socket } = useContext(UserContext);
-  const ENDPOINT = "172.60.62.113:5000";
-  // let socket ;
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-  // }, [ENDPOINT])
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);
@@ -47,6 +42,7 @@ export default function Login(props) {
               user_status: 1
             })
             .then(data => {
+              console.log("updating user activity");
               socket.emit("user_activity", {});
             })
             .catch(err => {
@@ -89,12 +85,15 @@ export default function Login(props) {
   const handleKeyDown = event => {
     if (event.ctrlKey && event.keyCode == 90) {
       setToggleDialog(true);
-      console.log('he')
+      // console.log('he')
     }
   };
   return (
     <LoginDiv onKeyDown={e => handleKeyDown(e)} tabIndex="0">
-      <SetSuperAdminDialog toggleDialog={toggleDialog} setToggleDialog={setToggleDialog} />
+      <SetSuperAdminDialog
+        toggleDialog={toggleDialog}
+        setToggleDialog={setToggleDialog}
+      />
       <LoginPic>
         <LinearProgress
           color="secondary"
@@ -145,7 +144,7 @@ export default function Login(props) {
             </LoginButton>
           )}
         />
-        
+
         <LoginFooter>
           <p>BOOM CAMP / BATCH 2 / TEAM 2 / 2020</p>
         </LoginFooter>

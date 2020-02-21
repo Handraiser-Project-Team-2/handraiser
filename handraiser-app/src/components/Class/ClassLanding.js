@@ -11,7 +11,6 @@ import VerificationDialog from "./VerificationDialog";
 import AddClassDialog from "./AddClassDialog";
 import Topbar from "../reusables/Topbar";
 import NoClass from "./NoClass";
-// import { UserContext } from "../Contexts/UserContext";
 import SearchComponent from "./SearchComponent";
 
 const useStyles = makeStyles(theme => ({

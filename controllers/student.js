@@ -41,8 +41,8 @@ module.exports = {
                         console.log(err);
                         res.status(422).end();
                       });
-                  }else{
-                    res.status(201).json({message:'Subject is now closed'});
+                  } else {
+                    res.status(201).json({ message: "Subject is now closed" });
                   }
                 })
                 .catch(err => {
@@ -65,6 +65,8 @@ module.exports = {
     const db = req.app.get("db");
 
     const { class_id, user_id, concern_title, concern_description } = req.body;
+
+    console.log("here", req.body);
 
     db.concern_list
       .save({
@@ -219,9 +221,14 @@ module.exports = {
     const db = req.app.get("db");
 
     db.concern_list
-      .destroy({
-        concern_id: req.params.concern_id
-      })
+      .update(
+        {
+          concern_id: req.params.concern_id
+        },
+        {
+          concern_status: 3
+        }
+      )
       .then(data => {
         res.status(201).json(data);
       })

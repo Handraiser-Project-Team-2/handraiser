@@ -118,6 +118,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const ENDPOINT = "localhost:5000";
+let socket = "";
+
 export default function InQueue(props) {
   var jwtDecode = require("jwt-decode");
   const { socket } = useContext(UserContext);
@@ -153,6 +156,7 @@ export default function InQueue(props) {
     }
 
     socket.on("updateComponents", message => {
+      console.log("update components");
       update("");
     });
 
@@ -167,15 +171,12 @@ export default function InQueue(props) {
   }, [props.search, concernsData]); //class_id
 
   const update = data => {
-    if (props.classReference) {
-      axios({
-        method: "get",
-        url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
-      }).then(res => {
-        setConcernsData(res.data);
-        // console.log(res.data.length);
-      });
-    }
+    axios({
+      method: "get",
+      url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
+    }).then(res => {
+      setConcernsData(res.data);
+    });
   };
 
   const handleMenu = (event, concern) => {
@@ -223,6 +224,9 @@ export default function InQueue(props) {
   };
 
   const handleConcernData = data => {
+    console.log("AA,inqueue.js(handleConcernData)");
+
+    props.setConcernSelection(true);
     props.rowDatahandler(data);
   };
 
@@ -232,14 +236,22 @@ export default function InQueue(props) {
 
   const handleRemoveReq = () => {
     setAnchorEl(null);
-    axios
-      .delete(`/api/student/request/${concern.concern.concern_id}`, {})
-      .then(data => {
-        socket.emit("handshake", { room: props.classReference });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    setTimeout(() => {
+      console.log("removing");
+      props.setConcernSelection(false);
+      console.log("AA,inqueue.js(handleRemoveReq)");
+      setConcernTitle("");
+      setConcernDescription("");
+      props.closeFlag();
+      axios
+        .patch(`/api/student/request/${concern.concern.concern_id}`, {})
+        .then(data => {
+          socket.emit("handshake", { room: props.classReference });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }, 350);
   };
 
   return (
@@ -298,7 +310,7 @@ export default function InQueue(props) {
                       onClose={handleClose}
                     >
                       <MenuItem onClick={() => handleRemoveReq()}>
-                        Remove request
+                        Close
                       </MenuItem>
                       <MenuItem onClick={() => handleClickOpen()}>
                         Edit Request
