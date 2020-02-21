@@ -78,18 +78,20 @@ export default function FormDialog({ data }) {
   };
 
   const handleConfirm = () => {
-    axios.post(`/api/sendClassCode`, {
-      emailTo: emailTo,
-      classroom_key: classroomKey,
-      adminEmail: adminEmail,
-      adminPass: adminPass,
-      class_title: className
-    });
-    toast.success("Classroom Key sent to the student", {
-      position: toast.POSITION.TOP_RIGHT
-    });
+    if (data) {
+      axios.post(`/api/sendClassCode`, {
+        emailTo: emailTo,
+        classroom_key: classroomKey,
+        adminEmail: adminEmail,
+        adminPass: adminPass,
+        class_title: className
+      });
+      toast.success("Classroom Key sent to the student", {
+        position: toast.POSITION.TOP_RIGHT
+      });
 
-    setOpen(false);
+      setOpen(false);
+    }
   };
 
   const [errorMsgEmail, setErrorMsgEmail] = useState("");
