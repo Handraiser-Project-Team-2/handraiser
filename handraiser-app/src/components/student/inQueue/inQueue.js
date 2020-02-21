@@ -128,9 +128,6 @@ export default function InQueue(props) {
       url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
-      console.log(props.concernSelection);
-      // if (props.concernSelection) props.setConcernSelection(true);
-      // console.log(res.data.length);
     });
   };
 

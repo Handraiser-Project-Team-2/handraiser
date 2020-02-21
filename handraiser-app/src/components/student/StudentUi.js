@@ -70,11 +70,11 @@ export default function Student({
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
-  const { cstate, getData } = useContext(UserContext);
+  const { cstate, getData, socket } = useContext(UserContext);
   const ENDPOINT = "localhost:5000";
   const [requestOpen, setRequestOpen] = useState(true);
   const [concernSelection, setConcernSelection] = useState(false);
-  let socket = io(ENDPOINT);
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -83,14 +83,12 @@ export default function Student({
   };
 
   useEffect(() => {
-    socket = io(ENDPOINT);
-
     socket.emit("join", { username: "Yow", room: class_id, image: "" });
 
     socket.on("updateComponents", data => {
       existing();
     });
-  }, []);
+  }, [ENDPOINT]);
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
@@ -162,9 +160,8 @@ export default function Student({
           title: "Request sent to the mentor"
         })
           .then(flag => {
-            
             setConcernSelection(false);
-            console.log("AA",concernSelection)
+            console.log("AA", concernSelection);
             existing();
 
             socket.emit(
@@ -211,13 +208,8 @@ export default function Student({
       .then(res => {
         if (res.data.length > 0) {
           setRequestOpen(false);
-          console.log("AA",concernSelection);
-          // if (concernSelection) setConcernSelection(false);
         } else {
           setRequestOpen(true);
-          console.log("AA",concernSelection);
-          // setConcernSelection(true);
-          // if (!concernSelection) setConcernSelection(true);
         }
       })
       .catch(err => {
