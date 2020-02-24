@@ -92,16 +92,14 @@ export default function QueueStub(props) {
     if (props.rowDatahandler.rowDatahandler) {
       props.rowDatahandler.rowDatahandler(data);
     }
+    props.setRoom(data.concern_id)
     setSelectedIndex(index);
-
-
   };
 
   const handleBackQueue = () => {
-
     setAnchorEl(null);
     // props.setSelection(false)
-   props.rowDatahandler.setSelection(false);
+    props.rowDatahandler.setSelection(false);
 
     if (concern.length === 0) {
       Swal.fire({
@@ -146,8 +144,12 @@ export default function QueueStub(props) {
   };
 
   const handleDone = () => {
-
     setAnchorEl(null);
+
+    setTimeout(() => {
+      props.setSelection(false);
+      props.closeFlag();
+    },350);
 
     axios
       .patch(`/api/concern_list/${concern.concern_id}`, {
