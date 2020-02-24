@@ -1,10 +1,10 @@
-import React, { useState, useEffect,useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect, useContext } from "react";
+import Badge from "@material-ui/core/Badge";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Handshake from "../../images/handshake.gif";
-import Bear from "../../images/bear.gif";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
@@ -18,58 +18,9 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { UserContext } from "../../Contexts/UserContext";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
-import io from "socket.io-client";
-import { UserContext } from "../../Contexts/UserContext";
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: "100%",
-    backgroundColor: theme.palette.background.paper
-  },
-  inline: {
-    display: "inline"
-  },
-  next: {
-    display: "flex",
-    backgroundColor: "white",
-    borderRadius: "10px",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-    width: "40px",
-    height: "40px",
-    border: "1px solid lightgrey",
-    borderTop: "10px solid #372476"
-  },
-  number: {
-    display: "flex",
-    backgroundColor: "white",
-    borderRadius: "10px",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-    width: "40px",
-    height: "40px",
-    border: "1px solid lightgrey",
-    borderTop: "10px solid #372476"
-  },
-  title: {
-    display: "inline-block",
-    overflow: " hidden",
-    "text-overflow": "ellipsis",
-    "white-space": " nowrap",
-    width: "250px",
-    fontWeight: "bold",
-    "@media (max-width: 600px)": {
-      display: "inline-block",
-      overflow: " hidden",
-      "text-overflow": "ellipsis",
-      "white-space": " nowrap",
-      width: "100px"
-    }
-  }
-}));
 
 export default function InQueue(props) {
   var jwtDecode = require("jwt-decode");
@@ -86,19 +37,12 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const ENDPOINT = "localhost:5000";
-
-  // let socket = io(ENDPOINT);
-  const [initial, setInitial] = useState();
 
   useEffect(() => {
-    // socket = io(ENDPOINT);
     socket.emit("join", {
       username: "Admin",
-      room: props.classReference,
-
+      room: props.classReference
     });
-    console.log("inqueue mentor",socket)
   }, []);
 
   useEffect(() => {
@@ -107,11 +51,11 @@ export default function InQueue(props) {
     }
 
     socket.on("updateComponents", message => {
+      console.log("update components");
       update("");
     });
 
     socket.on("consolidateRequest", message => {
-      console.log("message recieved", message);
       update("");
     });
 
@@ -126,7 +70,6 @@ export default function InQueue(props) {
       url: `/api/student/queue/order/${props.classReference}/${user_id}?search=${data}`
     }).then(res => {
       setConcernsData(res.data);
-      console.log(res.data.length);
     });
   };
 
@@ -148,9 +91,9 @@ export default function InQueue(props) {
 
   const handleSaveEdit = () => {
     setOpenEdit(false);
-
     axios
       .get(`/api/concern_list/${concern.concern.concern_id}`)
+
       .then(data => {
         axios
           .patch(`/api/concern_list/${data.data[0].concern_id}`, {
@@ -165,15 +108,15 @@ export default function InQueue(props) {
           .catch(err => {
             console.log(err);
           });
-
-        console.log(data);
       })
+
       .catch(err => {
         console.log(err);
       });
   };
 
   const handleConcernData = data => {
+    props.setConcernSelection(true);
     props.rowDatahandler(data);
   };
 
@@ -183,15 +126,20 @@ export default function InQueue(props) {
 
   const handleRemoveReq = () => {
     setAnchorEl(null);
-
-    axios
-      .delete(`/api/student/request/${concern.concern.concern_id}`, {})
-      .then(data => {
-        socket.emit("handshake", { room: props.classReference });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    setTimeout(() => {
+      props.setConcernSelection(false);
+      setConcernTitle("");
+      setConcernDescription("");
+      props.closeFlag();
+      axios
+        .patch(`/api/student/request/${concern.concern.concern_id}`, {})
+        .then(data => {
+          socket.emit("handshake", { room: props.classReference });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }, 350);
   };
 
   return (
@@ -215,26 +163,28 @@ export default function InQueue(props) {
                     <ListItemAvatar>
                       <div>
                         {concern.concern.user_status === 1 ? (
-                          <status-indicator
-                            positive
-                            pulse
-                            style={{
-                              position: "absolute",
-                              marginTop: "30px",
-                              marginLeft: "35px"
+                          <StyledBadgeGreen
+                            overlap="circle"
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right"
                             }}
-                          ></status-indicator>
+                            variant="dot"
+                          >
+                            <Avatar src={concern.concern.image} />
+                          </StyledBadgeGreen>
                         ) : (
-                          <status-indicator
-                            pulse
-                            style={{
-                              position: "absolute",
-                              marginTop: "30px",
-                              marginLeft: "35px"
+                          <StyledBadgeGrey
+                            overlap="circle"
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right"
                             }}
-                          ></status-indicator>
+                            variant="dot"
+                          >
+                            <Avatar src={concern.concern.image} />
+                          </StyledBadgeGrey>
                         )}
-                        <Avatar src={concern.concern.image}></Avatar>
                       </div>
                     </ListItemAvatar>
                     <Menu
@@ -248,7 +198,7 @@ export default function InQueue(props) {
                       onClose={handleClose}
                     >
                       <MenuItem onClick={() => handleRemoveReq()}>
-                        Remove request
+                        Close
                       </MenuItem>
                       <MenuItem onClick={() => handleClickOpen()}>
                         Edit Request
@@ -366,15 +316,6 @@ export default function InQueue(props) {
                           cursor: "pointer"
                         }}
                       />
-                      <span
-                        style={{
-                          marginLeft: "10px",
-                          color: "grey",
-                          fontSize: "10px"
-                        }}
-                      >
-                        5:00 PM
-                      </span>
                     </ListItemSecondaryAction>
                   </ListItem>
                 </div>
@@ -385,3 +326,98 @@ export default function InQueue(props) {
     </Paper>
   );
 }
+
+const StyledBadgeGreen = withStyles(theme => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0
+    }
+  }
+}))(Badge);
+const StyledBadgeGrey = withStyles(theme => ({
+  badge: {
+    backgroundColor: "lightgrey",
+    color: "lightgrey",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  }
+}))(Badge);
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "100%",
+    backgroundColor: theme.palette.background.paper
+  },
+  inline: {
+    display: "inline"
+  },
+  next: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
+  },
+  number: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
+  },
+  title: {
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
+  }
+}));

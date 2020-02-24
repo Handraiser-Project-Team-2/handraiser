@@ -31,7 +31,6 @@ function TabPanel(props) {
 const TabBtn = props => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
-  const [hide, setHide] = useState(false);
   const [search, setSearch] = useState("");
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -49,7 +48,7 @@ const TabBtn = props => {
             }}
           >
             <TextField
-              id="outlined-basic"
+              id="outlined-basic3"
               placeholder="Search"
               fullWidth
               onChange={e => setSearch(e.target.value)}
@@ -65,19 +64,9 @@ const TabBtn = props => {
             color: "white"
           }}
         >
-          <Tab
-            label="MY REQUESTS"
-            onClick={() => setHide(hide === false ? hide : !hide)}
-          />
-
-          <Tab
-            label="CLOSED"
-            onClick={() => setHide(hide === true ? hide : !hide)}
-          />
-          <Tab
-            label="ALL QUEUE"
-            onClick={() => setHide(hide === true ? hide : !hide)}
-          />
+          <Tab label="MY REQUESTS" />
+          <Tab label="CLOSED" />
+          <Tab label="ALL QUEUE" />
         </Tabs>
       </Paper>
 
@@ -86,6 +75,9 @@ const TabBtn = props => {
           rowDatahandler={props.rowDatahandler}
           classReference={props.classReference}
           search={search}
+          closeFlag={props.closeFlag}
+          setConcernSelection={props.setConcernSelection}
+          concernSelection={props.concernSelection}
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>

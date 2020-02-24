@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Logo from "../images/google.png";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -15,14 +15,12 @@ import {
 } from "../../Styles/Styles";
 import io from "socket.io-client";
 import { UserContext } from "../Contexts/UserContext";
+// COMPONENT
+import SetSuperAdminDialog from "./SetSuperAdminDialog";
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
-  const {socket } = useContext(UserContext);
-  const ENDPOINT = "localhost:5000";
-  // let socket ;
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-  // }, [ENDPOINT])
+  const { socket } = useContext(UserContext);
+  
   const responseGoogle = response => {
     if (response.googleId) {
       // console.log(response);
@@ -45,6 +43,7 @@ export default function Login(props) {
               user_status: 1
             })
             .then(data => {
+              console.log("updating user activity");
               socket.emit("user_activity", {});
             })
             .catch(err => {
@@ -83,8 +82,19 @@ export default function Login(props) {
     }
   };
 
+  const [toggleDialog, setToggleDialog] = useState(false);
+  const handleKeyDown = event => {
+    if (event.ctrlKey && event.keyCode == 90) {
+      setToggleDialog(true);
+      // console.log('he')
+    }
+  };
   return (
-    <LoginDiv>
+    <LoginDiv onKeyDown={e => handleKeyDown(e)} tabIndex="0">
+      <SetSuperAdminDialog
+        toggleDialog={toggleDialog}
+        setToggleDialog={setToggleDialog}
+      />
       <LoginPic>
         <LinearProgress
           color="secondary"

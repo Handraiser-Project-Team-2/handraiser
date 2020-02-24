@@ -8,11 +8,14 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
 import { useHistory, useParams } from "react-router-dom";
+import SendIcon from "@material-ui/icons/Send";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Fab from "@material-ui/core/Fab";
+
 import Input from "../reusables/Input";
 import {
   Div,
@@ -157,7 +160,8 @@ export default function Student({
   room,
   concernTitle,
   setConcernTitle,
-  time
+  closeFlag,
+  setMessages
 }) {
   const classes = useStyles();
   let history = useHistory();
@@ -167,8 +171,10 @@ export default function Student({
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
-  const [emoji, setEmoji] = useState(false);
   const { cstate, getData, socket } = useContext(UserContext);
+  const [emoji, setEmoji] = useState(false);
+  const [concernSelection, setConcernSelection] = useState();
+
   const ENDPOINT = "localhost:5000";
   const [requestOpen, setRequestOpen] = useState(true);
 
@@ -182,13 +188,12 @@ export default function Student({
   // did mount
   useEffect(() => {
     socket.emit("join", { username: "Yow", room: class_id });
-
     socket.on("updateComponents", data => {
-      console.log("updates");
       existing();
     });
   }, [ENDPOINT]);
 
+  //did update
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       axios
@@ -234,7 +239,6 @@ export default function Student({
 
     existing();
   }, [cstate]);
-
   const sendRequest = () => {
     axios
       .post(`/api/student/request/assistance`, {
@@ -244,6 +248,7 @@ export default function Student({
         concern_description: message
       })
       .then(data => {
+        setMessages("");
         setConcernTitle("");
         setMessage("");
 
@@ -252,6 +257,8 @@ export default function Student({
           title: "Request sent to the mentor"
         })
           .then(flag => {
+            setConcernSelection(false);
+            console.log("AA", concernSelection);
             existing();
 
             socket.emit(
@@ -300,6 +307,14 @@ export default function Student({
         } else {
           setRequestOpen(true);
         }
+        return res;
+      })
+      .then(res => {
+        if (res.data.length > 0) {
+          setRequestOpen(false);
+        } else {
+          setRequestOpen(true);
+        }
       })
       .catch(err => {
         console.log(err);
@@ -312,7 +327,6 @@ export default function Student({
     } else {
       setEmoji(true);
     }
-    // setEmoji(true)
   };
   const addEmoji = e => {
     let sym = e.unified.split("-");
@@ -326,17 +340,22 @@ export default function Student({
   let same = true;
   return (
     <React.Fragment>
-      <Topbar />
+      <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />
+          <Tabs
+            rowDatahandler={rowDatahandler}
+            classReference={class_id}
+            setConcernSelection={setConcernSelection}
+            closeFlag={closeFlag}
+          />
         </Queue>
         <Help>
           <Subject>
             <TitleName>
               <TextField
                 id="standard-basic"
-                value={concernTitle}
+                value={concernTitle ? concernTitle : ""}
                 fullWidth
                 onChange={e => setConcernTitle(e.target.value)}
                 inputProps={{
@@ -345,36 +364,38 @@ export default function Student({
               />
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography>Subject</Typography>
-                <Typography>{concernTitle.length}/50</Typography>
+                <Typography>
+                  {concernTitle ? concernTitle.length : "0"}/50
+                </Typography>
               </div>
             </TitleName>
             <Option>
-              <div>
+              <span>
                 <HelpOutlineIcon
                   onClick={handleClickDetail}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
-              </div>
-              <div>
+              </span>
+              <span>
                 <PeopleOutlineIcon
                   onClick={handleClickMember}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
-                    color: "grey"
+                    color: "#372476"
                   }}
                 />
-              </div>
+              </span>
               <div>
                 <MoreVertIcon
                   onClick={handleMenu}
                   style={{
                     fontSize: 30,
-                    color: "grey",
+                    color: "#372476",
                     cursor: "pointer"
                   }}
                 />
@@ -382,37 +403,39 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {messages.map((message, i) => {
-              const ndate = new Date(
-                message.chat_date_created
-              ).toLocaleDateString();
+            {!requestOpen &&
+              messages &&
+              messages.map((message, i) => {
+                const ndate = new Date(
+                  message.chat_date_created
+                ).toLocaleDateString();
 
-              const ntime = new Date(
-                message.chat_date_created
-              ).toLocaleTimeString();
+                const ntime = new Date(
+                  message.chat_date_created
+                ).toLocaleTimeString();
 
-              console.log(ndate);
-              same = false;
+                console.log(ndate);
+                same = false;
 
-              if (ndate !== currDate) {
-                currDate = ndate;
-                same = true;
-              }
+                if (ndate !== currDate) {
+                  currDate = ndate;
+                  same = true;
+                }
 
-              return (
-                <div key={i} style={{ overflowWrap: "break-word" }}>
-                  <Chatfield
-                    message={message}
-                    username={username}
-                    feed={feed}
-                    active={active}
-                    userid={userid}
-                    date={same ? currDate : ""}
-                    time={ntime}
-                  />
-                </div>
-              );
-            })}
+                return (
+                  <div key={i} style={{ overflowWrap: "break-word" }}>
+                    <Chatfield
+                      message={message}
+                      username={username}
+                      feed={feed}
+                      active={active}
+                      userid={userid}
+                      date={same ? currDate : ""}
+                      time={ntime}
+                    />
+                  </div>
+                );
+              })}
 
             <div>
               {feed && active === true ? (
@@ -436,22 +459,26 @@ export default function Student({
               <div
                 style={{
                   display: "flex",
-                  flexWrap: "wrap",
                   justifyContent: "space-between",
                   flexDirection: "column",
+                  alignItems: "center",
                   width: "100%"
                 }}
               >
-                <Input
-                  message={message}
-                  setMessage={setMessage}
-                  sendMessage={sendMessage}
-                  username={username}
-                  addEmoji={addEmoji}
-                  emoji={emoji}
-                  emojiActive={emojiActive}
-                  classes={classes}
-                />
+                {concernSelection || requestOpen ? (
+                  <Input
+                    message={message}
+                    setMessage={setMessage}
+                    sendMessage={sendMessage}
+                    username={username}
+                    addEmoji={addEmoji}
+                    emoji={emoji}
+                    emojiActive={emojiActive}
+                    classes={classes}
+                  />
+                ) : (
+                  ""
+                )}
                 <div
                   style={{
                     width: "100%",
@@ -461,12 +488,14 @@ export default function Student({
                   }}
                 >
                   {requestOpen ? (
-                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    <Request onClick={sendRequest}>SEND REQUEST</Request>
+                  ) : concernSelection ? (
+                    <Send onClick={sendMessage}>SEND</Send>
                   ) : (
                     ""
                   )}
-                  <Send onClick={sendMessage}>SEND</Send>
                 </div>
+                {/* </form> */}
               </div>
             </Field>
           </Message>

@@ -1,8 +1,21 @@
 import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
+import { fade, makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  search: {
+    marginLeft: "25px",
+    backgroundColor: "white",
+    borderRadius: "15px"
+  },
+  floatingLabelFocusStyle: {
+    color: "#372476"
+  }
+}));
 
 export default function SearchComponent({ setTempClassData, classData }) {
   const [searchValue, setSearchValue] = useState("");
+  const classes = useStyles();
 
   const handleChange = e => {
     setSearchValue(e.target.value);
@@ -17,11 +30,15 @@ export default function SearchComponent({ setTempClassData, classData }) {
 
   return (
     <TextField
+      className={classes.search}
+      variant="filled"
       id="standard-basic"
-      label="Search Class"
-      style={{ float: "left" }}
+      label="Search..."
       defaultValue={searchValue}
       onChange={e => handleChange(e)}
+      InputLabelProps={{
+        className: classes.floatingLabelFocusStyle
+      }}
     />
   );
 }

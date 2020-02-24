@@ -26,11 +26,19 @@ const useStyles = makeStyles(theme => ({
     color: "white"
   },
   fab: {
-    float: "right",
-    backgroundColor: teal[500]
+    backgroundColor: "white",
+    color: "#372476"
   },
-  extendedIcon: {
-    marginRight: theme.spacing(1)
+  cont: {
+    backgroundColor: "white",
+    borderRadius: "30px"
+  },
+  text: {
+    padding: "10px",
+    color: "#372476",
+    "@media (max-width: 665px)": {
+      display: "none"
+    }
   }
 }));
 
@@ -77,10 +85,10 @@ export default function ResponsiveDialog(props) {
         console.log(data.data.message);
         if (data.data.message === "Subject is now closed") {
           // handleClose();
-          setValid(true)
+          setValid(true);
         } else {
           handleClose();
-          history.push(`/student/${data.data.class_id}`);
+          history.push(`/classroom/${data.data.class_id}`);
         }
       })
       .catch(err => {
@@ -91,15 +99,12 @@ export default function ResponsiveDialog(props) {
 
   return (
     <div>
-      <Fab
-        variant="extended"
-        color="primary"
-        className={classes.fab}
-        onClick={handleClickOpen}
-      >
-        <SearchIcon className={classes.extendedIcon} />
-        Class Registration
-      </Fab>
+      <div className={classes.cont}>
+        <Fab className={classes.fab} onClick={handleClickOpen}>
+          <SearchIcon />
+        </Fab>
+        <span className={classes.text}>Register to a class</span>
+      </div>
       <Dialog
         fullScreen={fullScreen}
         open={open}

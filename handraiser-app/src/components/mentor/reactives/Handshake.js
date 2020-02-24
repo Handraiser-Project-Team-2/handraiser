@@ -1,4 +1,5 @@
-import React, { useEffect,useContext } from "react";
+
+import React, { useEffect, useContext } from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
@@ -15,17 +16,12 @@ export default function Handshake(props) {
   const classes = useStyles();
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
-  const {socket } = useContext(UserContext);
-  // const ENDPOINT = "localhost:5000";
-
-  // let socket = io(ENDPOINT);
+  const { socket } = useContext(UserContext);
 
   useEffect(() => {
-    // socket = io(ENDPOINT);
-
     socket.emit("join", {
       username: "hanshakes",
-      room: class_id,
+      room: class_id
     });
   });
 
@@ -46,14 +42,12 @@ export default function Handshake(props) {
           .get(`/api/assisted_by/${highdata.class_id}/${highdata.user_id}`, {})
           .then(data => {
             //get data of who assisted this concern
-
             // if none then reference this current mentor
             if (data.data.length === 0) {
               axios
                 .post(`/api/assisted_by`, {
                   assist_status: "ongoing",
                   class_id: highdata.class_id,
-                  // user_mentor_id: 3, //mock user_mentor_id data //used for checking
                   user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
                   user_student_id: highdata.user_id
                 })
@@ -233,8 +227,7 @@ const useStyles = makeStyles(theme => ({
   handshake_text_btn_2: {
     fontSize: "3em",
     color: "white",
-    fontWeight: "800",
-    fontWeight: "200"
+    fontWeight: "800"
   },
   handshake_img: {
     backgroundSize: "cover",

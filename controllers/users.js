@@ -225,5 +225,25 @@ module.exports = {
         });
       }
     });
+  },
+
+  patchSuperAdmin: (req, res) => {
+    const db = req.app.get("db");
+    const { email } = req.body;
+
+    db.users
+      .update(
+        {
+          user_id: 1
+        },
+        {
+          email: email
+        }
+      )
+      .then(user => res.status(201).send(user))
+      .catch(err => {
+        console.err(err);
+        res.status(500).end();
+      });
   }
 };

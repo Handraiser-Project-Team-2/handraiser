@@ -41,8 +41,8 @@ module.exports = {
                         console.log(err);
                         res.status(422).end();
                       });
-                  }else{
-                    res.status(201).json({message:'Subject is now closed'});
+                  } else {
+                    res.status(201).json({ message: "Subject is now closed" });
                   }
                 })
                 .catch(err => {
@@ -65,6 +65,8 @@ module.exports = {
     const db = req.app.get("db");
 
     const { class_id, user_id, concern_title, concern_description } = req.body;
+
+    console.log("here", req.body);
 
     db.concern_list
       .save({
@@ -219,9 +221,14 @@ module.exports = {
     const db = req.app.get("db");
 
     db.concern_list
-      .destroy({
-        concern_id: req.params.concern_id
-      })
+      .update(
+        {
+          concern_id: req.params.concern_id
+        },
+        {
+          concern_status: 3
+        }
+      )
       .then(data => {
         res.status(201).json(data);
       })
@@ -240,24 +247,6 @@ module.exports = {
       `SELECT class.class_id,  class.class_title, class.class_description, class.class_date_created, class.class_status, user_profile.first_name, user_profile.last_name, user_profile.image
       FROM class INNER JOIN classroom ON classroom.class_id = class.class_id INNER JOIN user_profile ON user_profile.profile_id = class.user_id
       WHERE classroom.user_id = ${parseToken.userid}`
-    )
-      .then(data => {
-        res.status(201).json(data);
-      })
-      .catch(err => {
-        res.status(401).end(err);
-      });
-  },
-
-  get_my_classroom_all: (req, res) => {
-    const db = req.app.get("db");
-
-    const { user_id } = req.params;
-
-    db.query(
-      `SELECT class.class_id,  class.class_title, class.class_description, class.class_date_created, class.class_status, user_profile.first_name, user_profile.last_name, user_profile.image
-      FROM class INNER JOIN classroom ON classroom.class_id = class.class_id INNER JOIN user_profile ON user_profile.profile_id = class.user_id
-      WHERE classroom.user_id = ${user_id}`
     )
       .then(data => {
         res.status(201).json(data);
