@@ -453,14 +453,17 @@ export default function Topbar(props) {
                 {userProfile.user_type_id === 3 ? (
                   <StudentTabs
                     className={classes.student}
-                    classReference={props.classReference}
                     rowDatahandler={props.rowDatahandler}
+                    setConcernSelection={props.setConcernSelection}
+                    closeFlag={props.closeFlag}
+                    classReference={props.classReference}
                   />
                 ) : (
                   <MentorTabs
                     className={classes.mentor}
                     rowDatahandler={props.rowDatahandler}
                     class_id={class_id}
+                    setSelection={props.setSelection}
                   />
                 )}
               </div>
@@ -472,7 +475,7 @@ export default function Topbar(props) {
       </List>
     </div>
   );
-
+  console.log(props);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -572,10 +575,10 @@ export default function Topbar(props) {
 
   const cardClick = e => {
     if (userProfile.user_type_id === 3) {
-      window.location = `/student/${e}`;
+      window.location = `/classroom/${e}`;
     }
     if (userProfile.user_type_id === 4) {
-      window.location = `/mentor/${e}`;
+      window.location = `/classroom/${e}`;
     }
   };
 

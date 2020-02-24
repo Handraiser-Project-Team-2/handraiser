@@ -135,16 +135,12 @@ const Div = styled.div`
   }
 `;
 
-const Chatfield = ({ message: { message, user_id }, userid, date,time }) => {
+const Chatfield = ({ message: { message, user_id }, userid, date, time }) => {
   let isSentByCurrecntUser = false;
+
   if (user_id === userid) {
     isSentByCurrecntUser = true;
   }
-  
-// console.log(time)
-  // const ndate = new Date(date).toLocaleDateString();
-  
-
   return isSentByCurrecntUser ? (
     // <Conversation>
     <div>
@@ -180,23 +176,23 @@ const Chatfield = ({ message: { message, user_id }, userid, date,time }) => {
     </div>
   ) : (
     <>
-    <h6
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      alignContent: "center",
-      alignItems: "center",
-      marginTop: "10px",
-      color: "grey",
-      fontSize: "10px"
-    }}
-  >
-    {date}
-  </h6>
-    <Cont2>
-      <Receiver>
-        <p className="from-them">{ReactEmoji.emojify(message)}</p>
-        <h6
+      <h6
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+          alignItems: "center",
+          marginTop: "10px",
+          color: "grey",
+          fontSize: "10px"
+        }}
+      >
+        {date}
+      </h6>
+      <Cont2>
+        <Receiver>
+          <p className="from-them">{ReactEmoji.emojify(message)}</p>
+          <h6
             style={{
               marginLeft: "35px",
               color: "lightgrey",
@@ -205,10 +201,8 @@ const Chatfield = ({ message: { message, user_id }, userid, date,time }) => {
           >
             {time}
           </h6>
-      </Receiver>
-      
-
-    </Cont2>
+        </Receiver>
+      </Cont2>
     </>
     // <Cont>
     //   <Sender>

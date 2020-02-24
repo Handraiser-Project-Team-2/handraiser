@@ -53,34 +53,34 @@ const useStyles = makeStyles(theme => ({
     height: "40.9em",
     backgroundColor: "white",
     "@media (height: 894px)": {
-      height: "35.4em"
+      height: "40.1em"
     },
     "@media (height: 1625px)": {
       height: "81em"
     },
     "@media (height: 1366px)": {
-      height: "64.8em"
+      height: "69.6em"
     },
     "@media (width: 360px) and (height: 640px)": {
-      height: "19.5em"
+      height: "24.2em"
     },
     "@media (width: 411px) and (height: 731px)": {
-      height: "25.2em"
+      height: "29.9em"
     },
     "@media (width: 411px) and (height: 823px)": {
-      height: "31em"
+      height: "35.7em"
     },
     "@media (width: 320px) and (height: 568px)": {
-      height: "15em"
+      height: "19.7em"
     },
     "@media (width: 375px) and (height: 667px)": {
-      height: "21.2em"
+      height: "25.9em"
     },
     "@media (width: 414px) and (height: 736px)": {
-      height: "25.5em"
+      height: "30.2em"
     },
     "@media (width: 375px) and (height: 812px)": {
-      height: "30.3em"
+      height: "35em"
     }
   },
   cont2: {
@@ -163,37 +163,19 @@ export default function Student({
   closeFlag,
   setMessages
 }) {
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
-  // let socket;
   const classes = useStyles();
   let history = useHistory();
-  // let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
-  // const open = Boolean(anchorEl);
-  const [concernDescription, setConcernDescription] = useState("");
-  // const [concernTitle, setConcernTitle] = useState("");
   const [userImage, setUserImage] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
   const { cstate, getData, socket } = useContext(UserContext);
-  ///for chat
-  // const [username, setUsername] = useState("");
-  // const [room, setRoom] = useState("");
-  // const [userid, setUserid] = useState("");
-  // const [message, setMessage] = useState("");
-  // const [feed, setfeed] = useState("");
-  // const [active, setActive] = useState(false);
-  // const [messages, setMessages] = useState([]);
-  // const [avatar, setAvatar] = useState("");
-  // const [emoji, setEmoji] = useState(false);
-  // const [disable, setDisable] = useState(false);
-
+  const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
   const ENDPOINT = "localhost:5000";
-  // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
@@ -213,8 +195,6 @@ export default function Student({
 
   //did update
   useEffect(() => {
-    // socket = io(ENDPOINT);
-
     if (sessionStorage.getItem("token")) {
       axios
         .post("/api/user/data", {
@@ -306,103 +286,6 @@ export default function Student({
         console.log(err);
       });
   };
-  //send data of active queue where user interacted with from the queue panel
-  // const rowDatahandler = rowData => {
-  //   setActive(true);
-
-  //   socket.emit(
-  //     "join",
-  //     { userid, username, room: rowData.concern.concern_id, image: avatar },
-  //     message => {
-  //       console.log(message);
-  //     }
-  //   );
-
-  //   setRoom(rowData.concern.concern_id);
-  //   setConcernTitle(rowData.concern.concern_title);
-
-  //   axios
-  //     .get(`/api/userprofile/${rowData.concern.user_id}`, {})
-  //     .then(data => {
-  //       setName(data.data[0].first_name + " " + data.data[0].last_name);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
-
-  ////join to room
-  // const join = () => {
-  //   setActive(true);
-  //   socket.emit("join", { username, room: "team2", image: avatar }, () => {});
-  // };
-  // useEffect(() => {
-  //   socket.on("message", message => {
-  //     setMessages([...messages, message]);
-  //   });
-
-  //   socket.on("old", ({ data }) => {
-  //     // console.log(data);
-  //     setMessages(data);
-  //   });
-
-  //   if (!cstate) {
-  //     getData();
-  //   }
-  //   if (cstate) {
-  //     // console.log(cstate);
-  //     setUserid(cstate.user_id);
-  //     setAvatar(cstate.image);
-  //     setUsername(cstate.first_name);
-  //   }
-
-  //   return () => {
-  //     socket.emit("disconnect");
-  //     socket.off();
-  //   };
-  // }, [messages, cstate]);
-
-  // const sendMessage = evt => {
-  //   evt.preventDefault();
-  //   const dateToday = new Date();
-  //   setTimeout(() => {
-  //     if (message) {
-  //       socket.emit("sendMessage", message, () => setMessage(""));
-  //       axios
-  //         .post(`/api/chat/send`, {
-  //           message: message,
-  //           chat_date_created: dateToday,
-  //           concern_id: room,
-  //           user_id: userid
-  //         })
-  //         .then(res => {
-  //           console.log(res);
-  //         });
-  //     }
-  //   }, 100);
-
-  //   setMessage("");
-  // };
-
-  // const emojiActive = () => {
-  //   if (emoji === true) {
-  //     setEmoji(false);
-  //   } else {
-  //     setEmoji(true);
-  //   }
-  //   // setEmoji(true)
-  // };
-
-  // const addEmoji = e => {
-  //   let sym = e.unified.split("-");
-  //   let codesArray = [];
-  //   sym.forEach(el => codesArray.push("0x" + el));
-  //   let emoji = String.fromCodePoint(...codesArray);
-  //   setMessage(message + emoji);
-  //   emojiActive();
-  // };
-  // console.log(messages);
-
   const [expanded, setExpanded] = React.useState("");
 
   const handleClickDetail = () => {
@@ -437,21 +320,42 @@ export default function Student({
         console.log(err);
       });
   };
-
+  const emojiActive = () => {
+    if (emoji === true) {
+      setEmoji(false);
+      console.log(emoji);
+    } else {
+      setEmoji(true);
+    }
+  };
+  const addEmoji = e => {
+    let sym = e.unified.split("-");
+    let codesArray = [];
+    sym.forEach(el => codesArray.push("0x" + el));
+    let emoji = String.fromCodePoint(...codesArray);
+    setMessage(message + emoji);
+    emojiActive();
+  };
   let currDate = "";
   let same = true;
 
-  const tabActivity = (id) => {
-    if(id===1 || id===2){
+  const tabActivity = id => {
+    if (id === 1 || id === 2) {
       setRequestOpen(false);
-    }else{
-      setRequestOpen(true)
+      setConcernSelection(false);
+    } else {
+      existing();
     }
-  }
+  };
 
   return (
     <React.Fragment>
-      <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
+      <Topbar
+        rowDatahandler={rowDatahandler}
+        classReference={class_id}
+        setConcernSelection={setConcernSelection}
+        closeFlag={closeFlag}
+      />
       <Div>
         <Queue>
           <Tabs
@@ -515,8 +419,8 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {messages && messages.map((message, i) => {
-                
+            {messages &&
+              messages.map((message, i) => {
                 const ndate = new Date(
                   message.chat_date_created
                 ).toLocaleDateString();
@@ -582,9 +486,19 @@ export default function Student({
                     setMessage={setMessage}
                     sendMessage={sendMessage}
                     username={username}
+                    addEmoji={addEmoji}
+                    emoji={emoji}
+                    emojiActive={emojiActive}
+                    classes={classes}
                   />
                 ) : (
-                  ""
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    multiline
+                    rows="2"
+                    disabled
+                  />
                 )}
                 <div
                   style={{
@@ -595,7 +509,7 @@ export default function Student({
                   }}
                 >
                   {requestOpen ? (
-                    <Request  onClick={sendRequest}>SEND REQUEST</Request>
+                    <Request onClick={sendRequest}>SEND REQUEST</Request>
                   ) : concernSelection ? (
                     <Send onClick={sendMessage}>SEND</Send>
                   ) : (
