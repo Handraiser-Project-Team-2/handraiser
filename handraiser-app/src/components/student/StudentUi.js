@@ -53,19 +53,19 @@ const useStyles = makeStyles(theme => ({
     height: "40.9em",
     backgroundColor: "white",
     "@media (height: 894px)": {
-      height: "40.1em"
+      height: "35.4em"
     },
     "@media (height: 1625px)": {
       height: "81em"
     },
     "@media (height: 1366px)": {
-      height: "69.6em"
+      height: "65em"
     },
     "@media (width: 360px) and (height: 640px)": {
-      height: "24.2em"
+      height: "19.5em"
     },
     "@media (width: 411px) and (height: 731px)": {
-      height: "29.9em"
+      height: "25.2em"
     },
     "@media (width: 411px) and (height: 823px)": {
       height: "35.7em"
@@ -175,7 +175,7 @@ export default function Student({
   const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
-  const ENDPOINT = "172.60.60.42:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
@@ -338,9 +338,24 @@ export default function Student({
   };
   let currDate = "";
   let same = true;
+
+  const tabActivity = id => {
+    if (id === 1 || id === 2) {
+      setRequestOpen(false);
+      setConcernSelection(false);
+    } else {
+      existing();
+    }
+  };
+
   return (
     <React.Fragment>
-      <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
+      <Topbar
+        rowDatahandler={rowDatahandler}
+        classReference={class_id}
+        setConcernSelection={setConcernSelection}
+        closeFlag={closeFlag}
+      />
       <Div>
         <Queue>
           <Tabs
@@ -348,6 +363,7 @@ export default function Student({
             classReference={class_id}
             setConcernSelection={setConcernSelection}
             closeFlag={closeFlag}
+            tabActivity={tabActivity}
           />
         </Queue>
         <Help>
@@ -403,8 +419,7 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {!requestOpen &&
-              messages &&
+            {messages &&
               messages.map((message, i) => {
                 const ndate = new Date(
                   message.chat_date_created

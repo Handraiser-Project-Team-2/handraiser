@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import io from "socket.io-client";
 
-const ENDPOINT = 172.60.60.42:5000;
+const ENDPOINT = "172.60.62.113:5000";
 const socket = io(ENDPOINT);
 
 export const UserContext = createContext({
@@ -18,9 +18,8 @@ const UserContextProvider = props => {
   };
 
   const fetchUserData = () => {
+    console.log(sessionStorage.getItem("token"));
 
-    console.log(sessionStorage.getItem("token"))
-    
     axios({
       method: "post",
       url: `/api/user/data`,

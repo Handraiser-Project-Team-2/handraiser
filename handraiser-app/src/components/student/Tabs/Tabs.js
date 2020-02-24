@@ -33,6 +33,8 @@ const TabBtn = props => {
   const [tabValue, setTabValue] = useState(0);
   const [search, setSearch] = useState("");
   const handleChange = (event, newValue) => {
+    props.tabActivity(newValue)
+    props.closeFlag();
     setTabValue(newValue);
   };
 
