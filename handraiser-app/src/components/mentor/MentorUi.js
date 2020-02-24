@@ -8,6 +8,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import Popover from "@material-ui/core/Popover";
 import SendIcon from "@material-ui/icons/Send";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
@@ -134,6 +135,16 @@ export default function Mentor({
   };
   let currDate = "";
   let same = true;
+
+  const [anchorElPop, setAnchorElPop] = React.useState(null);
+  const handleClick = event => {
+    setAnchorElPop(event.currentTarget);
+  };
+  const handleClosePop = event => {
+    setAnchorElPop(null);
+  };
+  const openPop = Boolean(anchorElPop);
+  const id = openPop ? "simple-popover" : undefined;
   return (
     <React.Fragment>
       <Topbar
@@ -189,7 +200,9 @@ export default function Mentor({
               <Option>
                 <div>
                   <HelpIcon
-                    onClick={handleClickDetail}
+                    onClick={data => {
+                      handleClick(data);
+                    }}
                     style={{
                       fontSize: 30,
                       color: "#c4c4c4",
@@ -197,6 +210,26 @@ export default function Mentor({
                       color: "#372476"
                     }}
                   />
+                  <Popover
+                    id={id}
+                    open={openPop}
+                    anchorEl={anchorElPop}
+                    onClose={handleClosePop}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center"
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center"
+                    }}
+                  >
+                    <Typography className={classes.typography}>
+                      {rowData.concern_description
+                        ? rowData.concern_description
+                        : "No description"}
+                    </Typography>
+                  </Popover>
                 </div>
                 <div>
                   <GroupIcon
@@ -378,6 +411,9 @@ export default function Mentor({
 }
 
 const useStyles = makeStyles(theme => ({
+  typography: {
+    padding: theme.spacing(2)
+  },
   handshake: {
     marginLeft: theme.spacing(3),
     width: theme.spacing(7),
