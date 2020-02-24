@@ -13,11 +13,10 @@ import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import Collapse from "@material-ui/core/Collapse";
 import EditClassDialog from "./EditClassDialog";
+import MuiAlert from "@material-ui/lab/Alert";
 import SendEmailClassCode from "./SendClassCodeEmail";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
-import MuiAlert from "@material-ui/lab/Alert";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -28,6 +27,20 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
   let history = useHistory();
 
   const { cstate, getData } = useContext(UserContext);
+
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
+  const loading = () => {
+    handleToggle();
+    setTimeout(() => {
+      setOpen(false);
+    }, 1000);
+  };
 
   useEffect(() => {
     if (!cstate) {
@@ -41,14 +54,6 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
     if (cstate) {
       history.push(`/classroom/${e}`);
     }
-    // if (cstate) {
-    //   if (cstate.user_type_id === 3) {
-    //     history.push(`/student/${e}`);
-    //   }
-    //   if (cstate.user_type_id === 4) {
-    //     history.push(`/mentor/${e}`);
-    //   }
-    // }
   };
 
   const [copied, setCopied] = useState(false);
@@ -61,6 +66,9 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
 
   return (
     <>
+      <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Collapse in={copied}>
         ;<Alert severity="success">Copied to clipboard!</Alert>
       </Collapse>

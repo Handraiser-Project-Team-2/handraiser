@@ -6,8 +6,10 @@ import QueQueStub from "../../reusables/Queue/QueueStub";
 import axios from "axios";
 import io from "socket.io-client";
 import { UserContext } from "../../Contexts/UserContext";
+import { useHistory, useParams } from "react-router-dom";
+
 // let socket;
-export default function InQueue({ rowDatahandler }) {
+export default function InQueue(props) {
   const { socket } = useContext(UserContext);
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState();
@@ -15,6 +17,8 @@ export default function InQueue({ rowDatahandler }) {
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
   const ENDPOINT = "172.60.62.113:5000";
+  let { class_id } = useParams();
+
   // let socket = io(ENDPOINT);
 
   useEffect(() => {
@@ -23,16 +27,9 @@ export default function InQueue({ rowDatahandler }) {
     socket.emit("join", {
       userid: "null",
       username: "Admin",
-      room: rowDatahandler.class_id
+      room: props.class_id
     });
-    console.log("inqueue student", socket);
-  }, []);
 
-  useEffect(() => {
-    update(rowDatahandler.search);
-  }, [rowDatahandler.search]);
-
-  useEffect(() => {
     socket.on("updateComponents", message => {
       update("");
     });
@@ -44,13 +41,21 @@ export default function InQueue({ rowDatahandler }) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [rowDatahandler.search, concernsData]);
+  }, []);
+
+  useEffect(() => {
+    update(props.search);
+  }, [props.search]);
+
+  // useEffect(() => {
+
+  // }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
   const update = data => {
-    if (rowDatahandler.class_id) {
+    if (props.class_id) {
       axios({
         method: "get",
-        url: `/api/classes/queue/${rowDatahandler.class_id}?search=${data}`
+        url: `/api/classes/queue/${props.class_id}?search=${data}`
       })
         .then(res => {
           setConcernsData(res.data);
@@ -70,7 +75,8 @@ export default function InQueue({ rowDatahandler }) {
                 <QueQueStub
                   update={update}
                   key={index}
-                  rowDatahandler={rowDatahandler}
+                  // setSelection={rowDatahandler.setSelection}
+                  rowDatahandler={props.rowDatahandler}
                   data={data}
                   index={index}
                 />

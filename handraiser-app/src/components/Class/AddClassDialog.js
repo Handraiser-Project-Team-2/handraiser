@@ -23,8 +23,14 @@ const useStyles = makeStyles(theme => ({
     color: "white"
   },
   fab: {
+    marginTop: "-40px",
     float: "right",
-    backgroundColor: teal[500]
+    backgroundColor: teal[500],
+    "@media (max-width: 834px)": {
+      marginLeft: "20px",
+      float: "left",
+      marginTop: "10px"
+    }
   },
   extendedIcon: {
     marginRight: theme.spacing(1)

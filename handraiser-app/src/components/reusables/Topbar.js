@@ -32,6 +32,7 @@ import TextField from "@material-ui/core/TextField";
 import SchoolIcon from "@material-ui/icons/School";
 import ListItemText from "@material-ui/core/ListItemText";
 import StudentTabs from "../student/Tabs/Tabs";
+import Bkg from "../images/classroom-background-clipart-11.jpg";
 import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
   tab: {
@@ -144,6 +145,8 @@ export default function Topbar(props) {
     setTempClassMem(filteredMembers);
   };
 
+  console.log(props.rowDatahandler);
+
   const sideList = side => (
     <div role="presentation">
       <List style={{ minWidth: 150, maxWidth: 500 }}>
@@ -157,10 +160,7 @@ export default function Topbar(props) {
             padding: "10px"
           }}
         >
-          <span style={{ marginLeft: "10px" }}>
-            {" "}
-            PRclassReference rowDatahandlerOFILE INFORMATION
-          </span>
+          <span style={{ marginLeft: "10px" }}> PROFILE INFORMATION</span>
           <CloseIcon
             style={{ cursor: "pointer" }}
             onClick={toggleDrawer("left", false)}
@@ -459,13 +459,12 @@ export default function Topbar(props) {
                     rowDatahandler={props.rowDatahandler}
                   />
                 ) : (
-                  +(
-                    <MentorTabs
-                      className={classes.mentor}
-                      rowDatahandler={props.rowDatahandler}
-                      class_id={class_id}
-                    />
-                  )
+                  <MentorTabs
+                    className={classes.mentor}
+                    rowDatahandler={props.rowDatahandler}
+                    class_id={props.class_id}
+                    setSelection={props.setSelection}
+                  />
                 )}
               </div>
             </div>
@@ -576,10 +575,10 @@ export default function Topbar(props) {
 
   const cardClick = e => {
     if (userProfile.user_type_id === 3) {
-      window.location = `/student/${e}`;
+      window.location = `/classroom/${e}`;
     }
     if (userProfile.user_type_id === 4) {
-      window.location = `/mentor/${e}`;
+      window.location = `/classroom/${e}`;
     }
   };
 

@@ -11,7 +11,6 @@ import VerificationDialog from "./VerificationDialog";
 import AddClassDialog from "./AddClassDialog";
 import Topbar from "../reusables/Topbar";
 import NoClass from "./NoClass";
-// import { UserContext } from "../Contexts/UserContext";
 import SearchComponent from "./SearchComponent";
 
 const useStyles = makeStyles(theme => ({
@@ -30,6 +29,21 @@ const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(2),
     textAlign: "center"
+  },
+  comps: {
+    display: "flex",
+    width: "100%",
+    flexDirection: "row",
+    backgroundColor: "#372476",
+    color: "white",
+    borderRadius: "10px",
+    justifyContent: "space-between",
+    padding: "10px",
+    "@media (max-width: 665px)": {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-around"
+    }
   }
 }));
 
@@ -134,7 +148,7 @@ export default function ClassLanding(props) {
             ) : (
               ""
             )}
-            <Grid item xs={12}>
+            <div className={classes.comps}>
               <SearchComponent
                 setTempClassData={setTempClassData}
                 classData={classData}
@@ -147,7 +161,7 @@ export default function ClassLanding(props) {
                   fetchMentorClass={fetchMentorClass}
                 />
               )}
-            </Grid>
+            </div>
             {classData.length === 0 ? (
               <NoClass />
             ) : (
