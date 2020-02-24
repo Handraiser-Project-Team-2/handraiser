@@ -47,12 +47,6 @@ export default function InQueue(props) {
       username: "Admin",
       room: props.classReference
     });
-  }, []);
-
-  useEffect(() => {
-    if (props.search || !concernsData) {
-      update(props.search);
-    }
 
     socket.on("updateComponents", message => {
       console.log("update components");
@@ -66,6 +60,14 @@ export default function InQueue(props) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
+
+  }, []);
+
+  useEffect(() => {
+    if (props.search || !concernsData) {
+      update(props.search);
+    }
+    
   }, [props.search, concernsData]); //class_id
 
   const update = data => {
