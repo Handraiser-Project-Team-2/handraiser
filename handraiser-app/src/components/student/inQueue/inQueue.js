@@ -23,101 +23,6 @@ import { toast, ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
 import io from "socket.io-client";
 
-const StyledBadgeGreen = withStyles(theme => ({
-  badge: {
-    backgroundColor: "#44b700",
-    color: "#44b700",
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    "&::after": {
-      position: "absolute",
-      top: -1,
-      left: -1,
-      width: "100%",
-      height: "100%",
-      borderRadius: "50%",
-      animation: "$ripple 1.2s infinite ease-in-out",
-      border: "1px solid currentColor",
-      content: '""'
-    }
-  },
-  "@keyframes ripple": {
-    "0%": {
-      transform: "scale(.8)",
-      opacity: 1
-    },
-    "100%": {
-      transform: "scale(2.4)",
-      opacity: 0
-    }
-  }
-}))(Badge);
-const StyledBadgeGrey = withStyles(theme => ({
-  badge: {
-    backgroundColor: "lightgrey",
-    color: "lightgrey",
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    "&::after": {
-      position: "absolute",
-      top: -1,
-      left: -1,
-      width: "100%",
-      height: "100%",
-      borderRadius: "50%",
-      border: "1px solid currentColor",
-      content: '""'
-    }
-  }
-}))(Badge);
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: "100%",
-    backgroundColor: theme.palette.background.paper
-  },
-  inline: {
-    display: "inline"
-  },
-  next: {
-    display: "flex",
-    backgroundColor: "white",
-    borderRadius: "10px",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-    width: "40px",
-    height: "40px",
-    border: "1px solid lightgrey",
-    borderTop: "10px solid #372476"
-  },
-  number: {
-    display: "flex",
-    backgroundColor: "white",
-    borderRadius: "10px",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-    width: "40px",
-    height: "40px",
-    border: "1px solid lightgrey",
-    borderTop: "10px solid #372476"
-  },
-  title: {
-    display: "inline-block",
-    overflow: " hidden",
-    "text-overflow": "ellipsis",
-    "white-space": " nowrap",
-    width: "250px",
-    fontWeight: "bold",
-    "@media (max-width: 600px)": {
-      display: "inline-block",
-      overflow: " hidden",
-      "text-overflow": "ellipsis",
-      "white-space": " nowrap",
-      width: "100px"
-    }
-  }
-}));
-
 const ENDPOINT = "172.60.62.208:5000";
 let socket = "";
 
@@ -136,18 +41,12 @@ export default function InQueue(props) {
 
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const ENDPOINT = "172.60.62.113:5000";
-
-  // let socket = io(ENDPOINT);
-  const [initial, setInitial] = useState();
 
   useEffect(() => {
-    // socket = io(ENDPOINT);
     socket.emit("join", {
       username: "Admin",
       room: props.classReference
     });
-    console.log("inqueue mentor", socket);
   }, []);
 
   useEffect(() => {
@@ -161,7 +60,6 @@ export default function InQueue(props) {
     });
 
     socket.on("consolidateRequest", message => {
-      // console.log("message recieved", message);
       update("");
     });
 
@@ -214,8 +112,6 @@ export default function InQueue(props) {
           .catch(err => {
             console.log(err);
           });
-
-        // console.log(data);
       })
 
       .catch(err => {
@@ -224,8 +120,6 @@ export default function InQueue(props) {
   };
 
   const handleConcernData = data => {
-
-
     props.setConcernSelection(true);
     props.rowDatahandler(data);
   };
@@ -436,3 +330,98 @@ export default function InQueue(props) {
     </Paper>
   );
 }
+
+const StyledBadgeGreen = withStyles(theme => ({
+  badge: {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "$ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0
+    }
+  }
+}))(Badge);
+const StyledBadgeGrey = withStyles(theme => ({
+  badge: {
+    backgroundColor: "lightgrey",
+    color: "lightgrey",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: -1,
+      left: -1,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      border: "1px solid currentColor",
+      content: '""'
+    }
+  }
+}))(Badge);
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "100%",
+    backgroundColor: theme.palette.background.paper
+  },
+  inline: {
+    display: "inline"
+  },
+  next: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
+  },
+  number: {
+    display: "flex",
+    backgroundColor: "white",
+    borderRadius: "10px",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    width: "40px",
+    height: "40px",
+    border: "1px solid lightgrey",
+    borderTop: "10px solid #372476"
+  },
+  title: {
+    display: "inline-block",
+    overflow: " hidden",
+    "text-overflow": "ellipsis",
+    "white-space": " nowrap",
+    width: "250px",
+    fontWeight: "bold",
+    "@media (max-width: 600px)": {
+      display: "inline-block",
+      overflow: " hidden",
+      "text-overflow": "ellipsis",
+      "white-space": " nowrap",
+      width: "100px"
+    }
+  }
+}));
