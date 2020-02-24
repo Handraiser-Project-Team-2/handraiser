@@ -34,7 +34,8 @@ export default function Chat() {
 
     socket.emit("join", { userid, username, room }, () => {});
 
-    socket.on("old", ({ data }) => {
+    socket.on("old", ({ data }) => { //retreiving old messages
+      console.log(data)
       setMessages(data);
     });
   }, [ENDPOINT, room]);
@@ -53,6 +54,7 @@ export default function Chat() {
 
   useEffect(() => {
     socket.on("message", message => {
+      console.log(message);
       setMessages([...messages, message]);
     });
 
@@ -95,11 +97,9 @@ export default function Chat() {
   useEffect(() => {
     const value = message;
     if (active === true) {
-      console.log("asd");
       if (value.length > 0) {
         typing();
       } else {
-        console.log("object");
         nottyping();
       }
     }
@@ -196,7 +196,10 @@ export default function Chat() {
 
   const rowDatahandler = rowData => {
     if (usertypeid === 3 && rowData) {
-      setRoom(rowData.concern.concern_id);
+      socket.emit(`leave_room`, { room: room });
+      console.log(rowData.concern.concern_id);
+
+      // localStorage.setItem("room",rowData.concern.concern_id)
       setActive(true);
       setRoom(rowData.concern.concern_id);
       setConcernTitle(rowData.concern.concern_title);
@@ -210,6 +213,8 @@ export default function Chat() {
           console.log(err);
         });
     } else {
+      console.log(rowData.concern_id);
+
       socket.emit(`leave_room`, { room: room });
       setSelection(true);
       console.log(rowData);
@@ -231,6 +236,14 @@ export default function Chat() {
       alert("Oops! You're clicking too fast");
       window.location.reload();
     }
+    // setRoom(rowData.concern.concern_id);
+    // setConcernTitle(rowData.concern.concern_title);
+  };
+
+  const closeFlag = () => {
+    setConcernTitle("");
+    // setMessages([]);
+    setRoom(0);
   };
   return (
     <div>
@@ -249,6 +262,8 @@ export default function Chat() {
           name={name}
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
+          closeFlag={closeFlag}
+          setMessages={setMessages}
         />
       ) : null}
       {usertypeid === 4 ? (

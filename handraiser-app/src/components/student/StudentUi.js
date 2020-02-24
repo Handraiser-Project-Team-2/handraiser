@@ -339,6 +339,15 @@ export default function Student({
   let currDate = "";
   let same = true;
 
+  const tabActivity = id => {
+    if (id === 1 || id === 2) {
+      setRequestOpen(false);
+      setConcernSelection(false);
+    } else {
+      existing();
+    }
+  };
+
   return (
     <React.Fragment>
       <Topbar
@@ -354,6 +363,7 @@ export default function Student({
             classReference={class_id}
             setConcernSelection={setConcernSelection}
             closeFlag={closeFlag}
+            tabActivity={tabActivity}
           />
         </Queue>
         <Help>
@@ -409,8 +419,7 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {!requestOpen &&
-              messages &&
+            {messages &&
               messages.map((message, i) => {
                 const ndate = new Date(
                   message.chat_date_created
