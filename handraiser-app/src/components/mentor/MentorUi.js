@@ -34,6 +34,7 @@ import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
 import Input from "../reusables/Input";
 import "emoji-mart/css/emoji-mart.css";
+
 var jwtDecode = require("jwt-decode");
 
 export default function Mentor({
@@ -56,7 +57,9 @@ export default function Mentor({
   dateTime,
   setSelection,
   concernTitle,
-  concernUser
+  concernUser,
+  handleChange,
+  handleUpload
 }) {
   const classes = useStyles();
   let history = useHistory();
@@ -67,6 +70,7 @@ export default function Mentor({
   const [name, setName] = useState("");
   const [emoji, setEmoji] = useState(false);
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
+ 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -143,6 +147,8 @@ export default function Mentor({
   const handleClosePop = event => {
     setAnchorElPop(null);
   };
+  
+
   const openPop = Boolean(anchorElPop);
   const id = openPop ? "simple-popover" : undefined;
   return (
@@ -368,6 +374,8 @@ export default function Mentor({
                       emojiActive={emojiActive}
                       classes={classes}
                     />
+                    <input type="file" onChange={handleChange} />
+                    <button onClick={handleUpload}>Upload</button>
                     <div
                       style={{
                         display: "flex",

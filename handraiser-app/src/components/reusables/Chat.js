@@ -6,6 +6,7 @@ import StudentUi from "../student/StudentUi";
 import MentorUi from "../mentor/MentorUi";
 import { useHistory, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { storage } from "../Firebase";
 let socket;
 export default function Chat() {
   let history = useHistory();
@@ -24,7 +25,9 @@ export default function Chat() {
   const [concernTitle, setConcernTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
-  const ENDPOINT = "172.60.62.113:5000";
+  const [image, setImage] = useState(null);
+  const [url, setUrl] = useState("");
+  const ENDPOINT = "localhost:5000";
 
   let { class_id } = useParams();
 
@@ -216,6 +219,45 @@ export default function Chat() {
     // setMessages([]);
     setRoom(0);
   };
+  const handleChange = e => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+  const handleUpload = e => {
+    const dateToday = new Date();
+   
+    const uploadTask = storage.ref(`images/${image.name}`).put(image);
+    uploadTask.on('state_changed', 
+    (snapshot) => {
+      // progrss function ....
+      // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+      // this.setState({progress});
+    }, 
+    (error) => {
+         // error function ....
+      console.log(error);
+    }, 
+  () => {
+      // complete function ....
+   
+      storage.ref('images').child(image.name).getDownloadURL().then(url => {
+        socket.emit("sendMessage", url, () => setMessage(""));
+          console.log(url);
+          axios
+          .post(`/api/chat/send`, {
+            message: url,
+            chat_date_created: dateToday,
+            concern_id: room,
+            user_id: userid
+          })
+          .then(res => {
+            console.log(res);
+          });
+      })
+  });
+  };
+ 
   return (
     <div>
       {usertypeid === 3 ? (
@@ -235,6 +277,8 @@ export default function Chat() {
           setConcernTitle={setConcernTitle}
           closeFlag={closeFlag}
           setMessages={setMessages}
+          handleChange={handleChange}
+          handleUpload={handleUpload}
         />
       ) : null}
       {usertypeid === 4 ? (
@@ -255,6 +299,8 @@ export default function Chat() {
           selection={selection}
           rowData={rowData}
           concernTitle={concernTitle}
+          handleChange={handleChange}
+          handleUpload={handleUpload}
         />
       ) : null}
     </div>
