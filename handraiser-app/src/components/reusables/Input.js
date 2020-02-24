@@ -5,12 +5,11 @@ import { Picker } from "emoji-mart";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
   span: {
-    position: "fixed",
-    bottom: theme.spacing(2),
-    right: theme.spacing(5)
-  },
+    position: "relative",
+    alignContent: "center",
+    alignItems: "center"
+  }
 }));
-
 
 const Input = ({
   message,
@@ -44,7 +43,7 @@ const Input = ({
       }}
     />
     <span className={classes.span}>
-      {emoji === true ? <Picker onClick={addEmoji} /> : null}
+      {emoji === true ? <Picker onClick={addEmoji} title="" /> : null}
     </span>
   </React.Fragment>
 );

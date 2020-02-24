@@ -175,7 +175,7 @@ export default function Student({
   const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.60.42:5000";
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
@@ -498,7 +498,19 @@ export default function Student({
                   ) : concernSelection ? (
                     <Send onClick={sendMessage}>SEND</Send>
                   ) : (
-                    ""
+                    <button
+                      disabled
+                      style={{
+                        backgroundColor: "gray",
+                        color: "black",
+                        border: "transparent",
+                        width: "150px",
+                        padding: "10px",
+                        borderRadius: "5px"
+                      }}
+                    >
+                      Send
+                    </button>
                   )}
                 </div>
                 {/* </form> */}

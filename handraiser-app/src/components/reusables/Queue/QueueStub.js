@@ -72,7 +72,7 @@ export default function QueueStub(props) {
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-  // const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = 172.60.60.42:5000;
   // // let socket = io(ENDPOINT);
 
   // useEffect(() => {

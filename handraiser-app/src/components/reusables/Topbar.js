@@ -85,7 +85,7 @@ export default function Topbar(props) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = 172.60.60.42:5000;
 
   let socket = io(ENDPOINT);
 
