@@ -85,7 +85,7 @@ export default function Topbar(props) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let socket = io(ENDPOINT);
 
@@ -461,6 +461,7 @@ export default function Topbar(props) {
                     className={classes.mentor}
                     rowDatahandler={props.rowDatahandler}
                     class_id={class_id}
+                    setSelection={props.setSelection}
                   />
                 )}
               </div>
@@ -572,10 +573,10 @@ export default function Topbar(props) {
 
   const cardClick = e => {
     if (userProfile.user_type_id === 3) {
-      window.location = `/student/${e}`;
+      window.location = `/classroom/${e}`;
     }
     if (userProfile.user_type_id === 4) {
-      window.location = `/mentor/${e}`;
+      window.location = `/classroom/${e}`;
     }
   };
 
