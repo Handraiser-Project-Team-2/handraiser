@@ -17,19 +17,13 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
 import {
   Div,
-  // Nav,
   Queue,
   Help,
   Subject,
   TitleName,
   Option,
-  // More,
-  // Conversation,
   Message,
-  Field,
-  Send
-  // Div2,
-  // Shared
+  Field
 } from "../../Styles/Styles";
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
@@ -38,8 +32,6 @@ import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
 import Input from "../reusables/Input";
-// import io from "socket.io-client";
-// import ScrollToBottom from "react-scroll-to-bottom";
 import "emoji-mart/css/emoji-mart.css";
 var jwtDecode = require("jwt-decode");
 
@@ -67,10 +59,13 @@ export default function Mentor({
 }) {
   const classes = useStyles();
   let history = useHistory();
+  // let { class_id } = useParams();
+  // const [rowData, setRowData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
-
+  const [emoji, setEmoji] = useState(false);
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -101,9 +96,7 @@ export default function Mentor({
             });
           }
         })
-        .catch(err => {
-          // console.log(err);
-        });
+        .catch(err => {});
     } else {
       Swal.fire({
         icon: "error",
@@ -123,7 +116,22 @@ export default function Mentor({
   const handleClickMember = () => {
     setExpanded("panel2");
   };
-  console.log(messages);
+  const emojiActive = () => {
+    if (emoji === true) {
+      setEmoji(false);
+      console.log(emoji);
+    } else {
+      setEmoji(true);
+    }
+  };
+  const addEmoji = e => {
+    let sym = e.unified.split("-");
+    let codesArray = [];
+    sym.forEach(el => codesArray.push("0x" + el));
+    let emoji = String.fromCodePoint(...codesArray);
+    setMessage(message + emoji);
+    emojiActive();
+  };
   let currDate = "";
   let same = true;
   return (
@@ -315,45 +323,40 @@ export default function Mentor({
                       width: "100%"
                     }}
                   >
-                    <form onSubmit={sendMessage}>
-                      {/* <TextField
-                        id="outlined-textarea"
-                        multiline
-                        variant="outlined"
-                        fullWidth
-                        rows="3"
-                      /> */}
-                      <Input
-                        message={message}
-                        setMessage={setMessage}
-                        sendMessage={sendMessage}
-                        username={username}
-                      />
-                      <div
+                    <Input
+                      message={message}
+                      setMessage={setMessage}
+                      sendMessage={sendMessage}
+                      username={username}
+                      addEmoji={addEmoji}
+                      emoji={emoji}
+                      emojiActive={emojiActive}
+                      classes={classes}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "15px"
+                      }}
+                    >
+                      <Fab
+                        variant="extended"
+                        size="small"
+                        className={classes.margin}
+                        onClick={sendMessage}
                         style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "15px"
+                          backgroundColor: "#372476",
+                          color: "white"
                         }}
                       >
-                        <Fab
-                          variant="extended"
-                          size="small"
-                          className={classes.margin}
-                          onClick={sendMessage}
-                          style={{
-                            backgroundColor: "#372476",
-                            color: "white"
-                          }}
-                        >
-                          <SendIcon
-                            className={classes.extendedIcon}
-                            style={{ marginRight: "5px", color: "white" }}
-                          />
-                          SEND
-                        </Fab>
-                      </div>
-                    </form>
+                        <SendIcon
+                          className={classes.extendedIcon}
+                          style={{ marginRight: "5px", color: "white" }}
+                        />
+                        SEND
+                      </Fab>
+                    </div>
                   </div>
                 </Field>
               </Message>

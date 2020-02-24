@@ -453,8 +453,10 @@ export default function Topbar(props) {
                 {userProfile.user_type_id === 3 ? (
                   <StudentTabs
                     className={classes.student}
-                    classReference={props.classReference}
                     rowDatahandler={props.rowDatahandler}
+                    setConcernSelection={props.setConcernSelection}
+                    closeFlag={props.closeFlag}
+                    classReference={props.classReference}
                   />
                 ) : (
                   <MentorTabs
@@ -473,7 +475,7 @@ export default function Topbar(props) {
       </List>
     </div>
   );
-
+  console.log(props);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };

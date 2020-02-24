@@ -24,13 +24,10 @@ export default function Chat() {
   const [concernTitle, setConcernTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
+  const [dateTime, setDateTime] = useState([]);
   const ENDPOINT = "172.60.62.113:5000";
 
   let { class_id } = useParams();
-
-  // useEffect(() => {
-  //     socket = io(ENDPOINT);
-  // }, [ENDPOINT])
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -40,43 +37,7 @@ export default function Chat() {
     socket.on("old", ({ data }) => {
       setMessages(data);
     });
-
-    // console.log(room);
-    console.log(socket);
   }, [ENDPOINT, room]);
-
-  //   useEffect(() => {
-  //     socket.on("typing", data => {
-  //       // console.log(data)
-  //       setfeed(data);
-  //     });
-  //     socket.on("not typing", data => {
-  //       setfeed(data);
-  //     });
-  //   });
-
-  //   useEffect(() => {
-  //     // console.log(username)
-  //     const value = message;
-  //     if (active === true) {
-  //       if (value.length > 0 && room) {
-  //         typing(avatar);
-  //         // console.log(avatar)
-  //       } else {
-  //         nottyping();
-  //       }
-  //     }
-  //   });
-  //   ///for typing
-  //   const typing = data => {
-  //     socket.emit("typing", data);
-  //     // console.log(data);
-  //   };
-
-  //   const nottyping = () => {
-  //     const data = "";
-  //     socket.emit("not typing", data);
-  //   };
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -118,13 +79,7 @@ export default function Chat() {
             console.log(res);
           });
       }
-      // else{
-      //   // console.log(socket.connected)
-      //   window.location.reload();
-      // }
     }, 100);
-
-    // setMessage("");
   };
 
   useEffect(() => {
@@ -159,24 +114,7 @@ export default function Chat() {
     const data = "";
     socket.emit("not typing", data);
   };
-
-  const emojiActive = () => {
-    if (emoji === true) {
-      setEmoji(false);
-    } else {
-      setEmoji(true);
-    }
-    // setEmoji(true)
-  };
-
-  //   const addEmoji = e => {
-  //     let sym = e.unified.split("-");
-  //     let codesArray = [];
-  //     sym.forEach(el => codesArray.push("0x" + el));
-  //     let emoji = String.fromCodePoint(...codesArray);
-  //     setMessage(message + emoji);
-  //     emojiActive();
-  //   };
+  console.log(messages);
   const handleDone = rowData => {
     setSelection(false);
 
@@ -259,10 +197,7 @@ export default function Chat() {
   const rowDatahandler = rowData => {
     if (usertypeid === 3 && rowData) {
       setRoom(rowData.concern.concern_id);
-      console.log("here");
-      // localStorage.setItem("room",rowData.concern.concern_id)
       setActive(true);
-
       setRoom(rowData.concern.concern_id);
       setConcernTitle(rowData.concern.concern_title);
 
@@ -285,8 +220,8 @@ export default function Chat() {
         .then(data => {
           setRoom(rowData.concern_id);
           setName(data.data[0].first_name + " " + data.data[0].last_name);
-          // localStorage.setItem("room",rowData.concern_id)
         })
+
         .catch(err => {
           console.log(err);
         });
@@ -296,16 +231,7 @@ export default function Chat() {
       alert("Oops! You're clicking too fast");
       window.location.reload();
     }
-    // setRoom(rowData.concern.concern_id);
-    // setConcernTitle(rowData.concern.concern_title);
   };
-
-
-  const closeFlag = () => {
-    setMessages([]);
-    setConcernTitle("");
-  };
-
   return (
     <div>
       {usertypeid === 3 ? (
@@ -323,9 +249,6 @@ export default function Chat() {
           name={name}
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
-          concernTitle={concernTitle}
-          closeFlag={closeFlag}
-          setMessages={setMessages}
         />
       ) : null}
       {usertypeid === 4 ? (
@@ -345,6 +268,7 @@ export default function Chat() {
           handleBackQueue={handleBackQueue}
           selection={selection}
           rowData={rowData}
+          concernTitle={concernTitle}
         />
       ) : null}
     </div>
