@@ -325,13 +325,13 @@ const useStyles = makeStyles(theme => ({
     "text-overflow": "ellipsis",
     "white-space": " nowrap",
     width: "250px",
-
-    "@media (max-width: 600px)": {
+    "@media (max-width: 900px)": {
       display: "inline-block",
       overflow: " hidden",
       "text-overflow": "ellipsis",
       "white-space": " nowrap",
-      width: "100px"
+      width: "150px",
+      color: "grey"
     }
   },
   queue: {
