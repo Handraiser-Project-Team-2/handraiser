@@ -27,10 +27,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function InQueue({ class_id, search, rowDatahandler}) {
+export default function InQueue({ class_id, search, rowDatahandler }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [room, setRoom] = useState();
 
   useEffect(() => {
     axios({
@@ -52,11 +53,14 @@ export default function InQueue({ class_id, search, rowDatahandler}) {
               return (
                 <QueueStub
                   rowDatahandler={{
-                    class_id,rowDatahandler
+                    class_id,
+                    rowDatahandler
                   }}
                   data={data}
                   index={index}
                   key={index}
+                  setRoom={setRoom}
+
                 />
               );
             })
