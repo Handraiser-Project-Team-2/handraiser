@@ -25,7 +25,7 @@ export default function Chat() {
   const [concernDescription, setConcernDescription] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   let { class_id } = useParams();
 
@@ -36,7 +36,6 @@ export default function Chat() {
 
     socket.on("old", ({ data }) => {
       //retreiving old messages
-      console.log(data);
       setMessages(data);
     });
   }, [ENDPOINT, room]);
@@ -86,7 +85,6 @@ export default function Chat() {
     }, 100);
   };
 
-  console.log(messages);
   const handleDone = rowData => {
     setSelection(false);
 
@@ -186,11 +184,9 @@ export default function Chat() {
           console.log(err);
         });
     } else {
-      console.log(rowData.concern_id);
 
       socket.emit(`leave_room`, { room: room });
       setSelection(true);
-      console.log(rowData);
       setConcernTitle(rowData.concern_title);
       setRowData(rowData);
       axios
@@ -217,6 +213,7 @@ export default function Chat() {
     setConcernTitle("");
     // setMessages([]);
     setRoom(0);
+    setSelection(false)
   };
   return (
     <div>
@@ -258,6 +255,7 @@ export default function Chat() {
           selection={selection}
           rowData={rowData}
           concernTitle={concernTitle}
+          closeFlag={closeFlag}
         />
       ) : null}
     </div>
