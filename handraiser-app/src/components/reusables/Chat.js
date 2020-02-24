@@ -24,7 +24,7 @@ export default function Chat() {
   const [concernTitle, setConcernTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   let { class_id } = useParams();
 
@@ -299,7 +299,13 @@ export default function Chat() {
     // setRoom(rowData.concern.concern_id);
     // setConcernTitle(rowData.concern.concern_title);
   };
-  // console.log("nor")
+
+
+  const closeFlag = () => {
+    setMessages([]);
+    setConcernTitle("");
+  };
+
   return (
     <div>
       {usertypeid === 3 ? (
@@ -318,6 +324,8 @@ export default function Chat() {
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
           concernTitle={concernTitle}
+          closeFlag={closeFlag}
+          setMessages={setMessages}
         />
       ) : null}
       {usertypeid === 4 ? (
