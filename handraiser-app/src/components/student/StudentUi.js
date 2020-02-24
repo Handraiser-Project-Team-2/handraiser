@@ -420,7 +420,7 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {messages &&
+            {messages &&      
               messages.map((message, i) => {
                 const ndate = new Date(
                   message.chat_date_created
