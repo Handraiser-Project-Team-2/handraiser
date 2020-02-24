@@ -18,9 +18,8 @@ const UserContextProvider = props => {
   };
 
   const fetchUserData = () => {
+    console.log(sessionStorage.getItem("token"));
 
-    console.log(sessionStorage.getItem("token"))
-    
     axios({
       method: "post",
       url: `/api/user/data`,

@@ -8,6 +8,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import Popover from "@material-ui/core/Popover";
 import SendIcon from "@material-ui/icons/Send";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
@@ -134,6 +135,16 @@ export default function Mentor({
   };
   let currDate = "";
   let same = true;
+
+  const [anchorElPop, setAnchorElPop] = React.useState(null);
+  const handleClick = event => {
+    setAnchorElPop(event.currentTarget);
+  };
+  const handleClosePop = event => {
+    setAnchorElPop(null);
+  };
+  const openPop = Boolean(anchorElPop);
+  const id = openPop ? "simple-popover" : undefined;
   return (
     <React.Fragment>
       <Topbar
@@ -189,7 +200,9 @@ export default function Mentor({
               <Option>
                 <div>
                   <HelpIcon
-                    onClick={handleClickDetail}
+                    onClick={data => {
+                      handleClick(data);
+                    }}
                     style={{
                       fontSize: 30,
                       color: "#c4c4c4",
@@ -197,6 +210,26 @@ export default function Mentor({
                       color: "#372476"
                     }}
                   />
+                  <Popover
+                    id={id}
+                    open={openPop}
+                    anchorEl={anchorElPop}
+                    onClose={handleClosePop}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center"
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center"
+                    }}
+                  >
+                    <Typography className={classes.typography}>
+                      {rowData.concern_description
+                        ? rowData.concern_description
+                        : "No description"}
+                    </Typography>
+                  </Popover>
                 </div>
                 <div>
                   <GroupIcon
@@ -301,7 +334,7 @@ export default function Mentor({
           ) : (
             <div
               style={{
-                height: "83vh",
+                height: "83.5vh",
                 width: "100%",
                 background: "#f5f5f5"
               }}
@@ -376,6 +409,9 @@ export default function Mentor({
 }
 
 const useStyles = makeStyles(theme => ({
+  typography: {
+    padding: theme.spacing(2)
+  },
   handshake: {
     marginLeft: theme.spacing(3),
     width: theme.spacing(7),
@@ -393,8 +429,38 @@ const useStyles = makeStyles(theme => ({
   scrolltobottom: {
     padding: "5% 0",
     overflow: "auto",
-    height: "39.7em",
-    backgroundColor: "white"
+    height: "40.9em",
+    backgroundColor: "white",
+    "@media (height: 894px)": {
+      height: "35.5em"
+    },
+    "@media (height: 1366px)": {
+      height: "65em"
+    },
+    "@media (width: 768px) and (height: 1024px)": {
+      height: "43.6em"
+    },
+    "@media (width: 360px) and (height: 640px)": {
+      height: "19.6em"
+    },
+    "@media (width: 411px) and (height: 731px)": {
+      height: "25.3em"
+    },
+    "@media (width: 411px) and (height: 823px)": {
+      height: "31em"
+    },
+    "@media (width: 320px) and (height: 568px)": {
+      height: "15.9em"
+    },
+    "@media (width: 375px) and (height: 667px)": {
+      height: "21.3em"
+    },
+    "@media (width: 414px) and (height: 736px)": {
+      height: "25.6em"
+    },
+    "@media (width: 375px) and (height: 812px)": {
+      height: "30.4em"
+    }
   },
   cont2: {
     display: " flex",
@@ -456,36 +522,3 @@ const DivAnimation = styled.div`
     }
   }
 `;
-const interact = {
-  height: "96px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  "@media (height: 894px)": {
-    height: "86px"
-  },
-  "@media (height: 1625px)": {
-    height: "210px"
-  },
-  "@media (width: 360px) and (height: 640px)": {
-    height: "40px"
-  },
-  "@media (width: 411px) and (height: 731px)": {
-    height: "50px"
-  },
-  "@media (width: 411px) and (height: 823px)": {
-    height: "50px"
-  },
-  "@media (width: 320px) and (height: 568px)": {
-    height: "30px"
-  },
-  "@media (width: 375px) and (height: 667px)": {
-    height: "45px"
-  },
-  "@media (width: 414px) and (height: 736px)": {
-    height: "55px"
-  },
-  "@media (width: 375px) and (height: 812px)": {
-    height: "75px"
-  }
-};

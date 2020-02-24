@@ -37,7 +37,6 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-    
   }, []);
 
   useEffect(() => {
@@ -45,7 +44,7 @@ export default function InQueue(rowDatahandler) {
   }, [rowDatahandler.search]);
 
   // useEffect(() => {
-  
+
   // }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
   const update = data => {

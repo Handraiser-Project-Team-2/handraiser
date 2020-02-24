@@ -93,15 +93,12 @@ export default function QueueStub(props) {
       props.rowDatahandler.rowDatahandler(data);
     }
     setSelectedIndex(index);
-
-
   };
 
   const handleBackQueue = () => {
-
     setAnchorEl(null);
     // props.setSelection(false)
-   props.rowDatahandler.setSelection(false);
+    props.rowDatahandler.setSelection(false);
 
     if (concern.length === 0) {
       Swal.fire({
@@ -146,7 +143,6 @@ export default function QueueStub(props) {
   };
 
   const handleDone = () => {
-
     setAnchorEl(null);
 
     axios
