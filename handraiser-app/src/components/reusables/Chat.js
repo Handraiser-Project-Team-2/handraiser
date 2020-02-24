@@ -33,8 +33,9 @@ export default function Chat() {
 
     socket.emit("join", { userid, username, room }, () => {});
 
-    socket.on("old", ({ data }) => { //retreiving old messages
-      console.log(data)
+    socket.on("old", ({ data }) => {
+      //retreiving old messages
+      console.log(data);
       setMessages(data);
     });
   }, [ENDPOINT, room]);
