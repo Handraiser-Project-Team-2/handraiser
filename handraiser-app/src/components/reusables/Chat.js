@@ -25,13 +25,9 @@ export default function Chat() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
   const [dateTime, setDateTime] = useState([]);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   let { class_id } = useParams();
-
-  // useEffect(() => {
-  //     socket = io(ENDPOINT);
-  // }, [ENDPOINT])
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -40,45 +36,8 @@ export default function Chat() {
 
     socket.on("old", ({ data }) => {
       setMessages(data);
-      console.log(data);
     });
-
-    // console.log(room);
-    console.log(socket);
   }, [ENDPOINT, room]);
-
-  //   useEffect(() => {
-  //     socket.on("typing", data => {
-  //       // console.log(data)
-  //       setfeed(data);
-  //     });
-  //     socket.on("not typing", data => {
-  //       setfeed(data);
-  //     });
-  //   });
-
-  //   useEffect(() => {
-  //     // console.log(username)
-  //     const value = message;
-  //     if (active === true) {
-  //       if (value.length > 0 && room) {
-  //         typing(avatar);
-  //         // console.log(avatar)
-  //       } else {
-  //         nottyping();
-  //       }
-  //     }
-  //   });
-  //   ///for typing
-  //   const typing = data => {
-  //     socket.emit("typing", data);
-  //     // console.log(data);
-  //   };
-
-  //   const nottyping = () => {
-  //     const data = "";
-  //     socket.emit("not typing", data);
-  //   };
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -104,13 +63,11 @@ export default function Chat() {
   }, [messages]);
 
   const sendMessage = event => {
-    // event.preventDefault();
+    event.preventDefault();
     const dateToday = new Date();
     setTimeout(() => {
       if (message) {
         socket.emit("sendMessage", message, () => setMessage(""));
-      
-        // socket.emit("sendMessage",dateTime,() => setDateTime(""))
         axios
           .post(`/api/chat/send`, {
             message: message,
@@ -124,7 +81,6 @@ export default function Chat() {
       }
     }, 100);
 
-    // setMessage("");
   };
 
   useEffect(() => {
@@ -159,24 +115,6 @@ export default function Chat() {
     const data = "";
     socket.emit("not typing", data);
   };
-
-  const emojiActive = () => {
-    if (emoji === true) {
-      setEmoji(false);
-    } else {
-      setEmoji(true);
-    }
-    // setEmoji(true)
-  };
-
-  //   const addEmoji = e => {
-  //     let sym = e.unified.split("-");
-  //     let codesArray = [];
-  //     sym.forEach(el => codesArray.push("0x" + el));
-  //     let emoji = String.fromCodePoint(...codesArray);
-  //     setMessage(message + emoji);
-  //     emojiActive();
-  //   };
   console.log(messages)
   const handleDone = rowData => {
     setSelection(false);
@@ -261,10 +199,7 @@ export default function Chat() {
   const rowDatahandler = rowData => {
     if (usertypeid === 3 && rowData) {
       setRoom(rowData.concern.concern_id);
-      console.log("here");
-      // localStorage.setItem("room",rowData.concern.concern_id)
       setActive(true);
-
       setRoom(rowData.concern.concern_id);
       setConcernTitle(rowData.concern.concern_title);
 
@@ -299,10 +234,7 @@ export default function Chat() {
       alert("Oops! You're clicking too fast");
       window.location.reload();
     }
-    // setRoom(rowData.concern.concern_id);
-    // setConcernTitle(rowData.concern.concern_title);
   };
-  // console.log("nor")
   return (
     <div>
       {usertypeid === 3 ? (

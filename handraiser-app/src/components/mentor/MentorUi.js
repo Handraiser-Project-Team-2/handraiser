@@ -177,31 +177,14 @@ export default function Mentor({
   concernTitle
 }) {
   const classes = useStyles();
-  let history = useHistory(); 
+  let history = useHistory();
   // let { class_id } = useParams();
   // const [rowData, setRowData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
+  const [emoji, setEmoji] = useState(false);
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
-  // const user_id = decoded.userid; //mentor_user_id if mentor is logged in
-
-  ///for chat
-  // const [username, setUsername] = useState("");
-  // const [room, setRoom] = useState("");
-  // const [message, setMessage] = useState("");
-  // const [feed, setfeed] = useState("");
-  // const [active, setActive] = useState(false);
-  // const [messages, setMessages] = useState([]);
-  // const [avatar, setAvatar] = useState("");
-  // const [emoji, setEmoji] = useState(false);
-  // const ENDPOINT = "172.60.62.113:5000";
-
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-  //   console.log(socket);
-  // }, [ENDPOINT]);
-
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -209,115 +192,6 @@ export default function Mentor({
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  // const sendMsg = evt => {
-  //   evt.preventDefault();
-  //   // console.log(name);
-  // };
-
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  //   axios.patch(
-  //     `http://172.60.62.113:5001/api/concern_list/${rowData.concern_id}`,
-  //     {
-  //       concern_id: rowData.concern_id,
-  //       concern_status: 1
-  //     }
-  //   );
-  // };
-
-  // const handleDone = rowData => {
-  //   setSelection(false);
-
-  //   if (rowData.length === 0) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "No concern selected!",
-  //       text: "Please select a concern."
-  //     });
-  //   }
-  //   setConcernTitle("");
-  //   setName("");
-  //   setAnchorEl(null);
-
-  //   axios
-  //     .patch(`/api/concern_list/${rowData.concern_id}`, {
-  //       concern_id: rowData.concern_id,
-  //       concern_title: rowData.concern_title,
-  //       concern_description: rowData.concern_description,
-  //       concern_status: 3
-  //     })
-  //     .then(data => {
-  //       axios
-  //         .get(
-  //           `/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
-  //           {}
-  //         )
-  //         .then(data => {
-  //           axios
-  //             .patch(
-  //               `/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-  //               {
-  //                 assisted_id: data.data[0].assisted_id,
-  //                 user_student_id: data.data[0].user_id,
-  //                 class_id: data.data[0].class_id,
-  //                 assist_status: "done"
-  //               }
-  //             )
-  //             .then(data => {
-  //               socket.emit("handshake", { room: class_id });
-  //             })
-  //             .catch(err => {
-  //               console.log(err);
-  //             });
-  //         });
-  //     });
-  // };
-
-  // const [selection, setSelection] = useState(false);
-
-  // const handleBackQueue = rowData => {
-  //   setSelection(false);
-
-  //   if (rowData.length === 0) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "No concern selected!",
-  //       text: "Please select a concern."
-  //     });
-  //   }
-  //   setConcernTitle("");
-  //   setName("");
-  //   setAnchorEl(null);
-  //   axios
-  //     .patch(`/api/concern_list/${rowData.concern_id}`, {
-  //       concern_id: rowData.concern_id,
-  //       concern_title: rowData.concern_title,
-  //       concern_description: rowData.concern_description,
-  //       concern_status: 2
-  //     })
-  //     .then(data => {
-  //       socket.emit("handshake", { room: class_id });
-
-  //       axios.get(`/api/assisted_by/${data.data.user_id}`, {}).then(data => {
-  //         axios.delete(`/api/assisted_by/${data.data[0].user_student_id}`, {});
-  //       });
-  //     });
-  // };
-
-  // const rowDatahandler = rowData => {
-  //   setSelection(true);
-  //   setConcernTitle(rowData.concern_title);
-  //   setRowData(rowData);
-  //   axios
-  //     .get(`/api/userprofile/${rowData.user_id}`, {})
-  //     .then(data => {
-  //       setName(data.data[0].first_name + " " + data.data[0].last_name);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
@@ -341,9 +215,7 @@ export default function Mentor({
             });
           }
         })
-        .catch(err => {
-          // console.log(err);
-        });
+        .catch(err => {});
     } else {
       Swal.fire({
         icon: "error",
@@ -363,9 +235,25 @@ export default function Mentor({
   const handleClickMember = () => {
     setExpanded("panel2");
   };
-  console.log(messages)
+  const emojiActive = () => {
+    if (emoji === true) {
+      setEmoji(false);
+      console.log(emoji);
+    } else {
+      setEmoji(true);
+    }
+    // setEmoji(true)
+  };
+  const addEmoji = e => {
+    let sym = e.unified.split("-");
+    let codesArray = [];
+    sym.forEach(el => codesArray.push("0x" + el));
+    let emoji = String.fromCodePoint(...codesArray);
+    setMessage(message + emoji);
+    emojiActive();
+  };
   let currDate = "";
-let same = true;
+  let same = true;
   return (
     <React.Fragment>
       <Topbar />
@@ -471,7 +359,9 @@ let same = true;
                   message.chat_date_created
                 ).toLocaleDateString();
 
-                const ntime = new Date(message.chat_date_created).toLocaleTimeString();
+                const ntime = new Date(
+                  message.chat_date_created
+                ).toLocaleTimeString();
 
                 console.log(ndate);
                 same = false;
@@ -489,7 +379,7 @@ let same = true;
                       feed={feed}
                       active={active}
                       userid={userid}
-                      date={same?currDate:""}
+                      date={same ? currDate : ""}
                       time={ntime}
                     />
                   </div>
@@ -538,19 +428,15 @@ let same = true;
                       width: "100%"
                     }}
                   >
-                    <form onSubmit={sendMessage}>
-                      {/* <TextField
-                        id="outlined-textarea"
-                        multiline
-                        variant="outlined"
-                        fullWidth
-                        rows="3"
-                      /> */}
                       <Input
                         message={message}
                         setMessage={setMessage}
                         sendMessage={sendMessage}
                         username={username}
+                        addEmoji={addEmoji}
+                        emoji={emoji}
+                        emojiActive={emojiActive}
+                        classes={classes}
                       />
                       <div
                         style={{
@@ -561,7 +447,6 @@ let same = true;
                       >
                         <Send onClick={sendMessage}>SEND</Send>
                       </div>
-                    </form>
                   </div>
                 </Field>
               </Message>

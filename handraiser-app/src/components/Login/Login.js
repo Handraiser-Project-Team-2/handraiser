@@ -18,7 +18,7 @@ import { UserContext } from "../Contexts/UserContext";
 export default function Login(props) {
   const [logged, setLogged] = useState(false);
   const {socket } = useContext(UserContext);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   // let socket ;
   // useEffect(() => {
   //   socket = io(ENDPOINT);

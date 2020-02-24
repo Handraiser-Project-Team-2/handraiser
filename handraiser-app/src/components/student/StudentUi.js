@@ -169,7 +169,7 @@ export default function Student({
   const [name, setName] = useState("");
   const [emoji, setEmoji] = useState(false);
   const { cstate, getData, socket } = useContext(UserContext);
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
