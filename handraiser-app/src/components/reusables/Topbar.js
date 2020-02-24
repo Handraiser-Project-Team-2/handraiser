@@ -475,7 +475,7 @@ export default function Topbar(props) {
       </List>
     </div>
   );
-
+  console.log(props);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };

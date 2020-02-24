@@ -37,6 +37,7 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
+    
   }, []);
 
   useEffect(() => {
@@ -44,29 +45,8 @@ export default function InQueue(rowDatahandler) {
   }, [rowDatahandler.search]);
 
   // useEffect(() => {
-
+  
   // }, [rowDatahandler.rowDatahandler.search, concernsData]);
-
-  const [concernCheck, setConcernCheck] = useState();
-  const [room, setRoom] = useState();
-
-  // check if the current room was removed from the queue list
-
-  const check_if_removed = data => {
-    console.log(data);
-
-    if (!concernCheck) {
-      rowDatahandler.closeFlag();
-      setConcernCheck(data);
-    } else {
-
-      if (concernCheck.indexOf(room) < 0) {
-        rowDatahandler.closeFlag();
-      }
-
-      setConcernCheck(data);
-    }
-  };
 
   const update = data => {
     if (rowDatahandler.class_id) {
@@ -76,16 +56,6 @@ export default function InQueue(rowDatahandler) {
       })
         .then(res => {
           setConcernsData(res.data);
-          return res;
-        })
-        .then(res => {
-          let presentId = [];
-
-          res.data.map((data, index) => {
-            presentId.push(data.concern_id);
-          });
-
-          check_if_removed(presentId);
         })
         .catch(err => {
           console.log(err);
@@ -102,12 +72,10 @@ export default function InQueue(rowDatahandler) {
                 <QueQueStub
                   update={update}
                   key={index}
-                  setSelection={rowDatahandler.setSelection}
+                  // setSelection={rowDatahandler.setSelection}
                   rowDatahandler={rowDatahandler}
                   data={data}
                   index={index}
-                  closeFlag={rowDatahandler.closeFlag}
-                  setRoom={setRoom}
                 />
               );
             })

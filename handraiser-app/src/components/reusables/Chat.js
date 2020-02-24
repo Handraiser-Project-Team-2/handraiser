@@ -34,13 +34,11 @@ export default function Chat() {
 
     socket.emit("join", { userid, username, room }, () => {});
 
-    socket.on("old", ({ data }) => {
-      //retreiving old messages
-      console.log(data);
+    socket.on("old", ({ data }) => { //retreiving old messages
+      console.log(data)
       setMessages(data);
     });
   }, [ENDPOINT, room]);
-
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -116,7 +114,7 @@ export default function Chat() {
     const data = "";
     socket.emit("not typing", data);
   };
-
+  console.log(messages);
   const handleDone = rowData => {
     setSelection(false);
 
@@ -238,14 +236,15 @@ export default function Chat() {
       alert("Oops! You're clicking too fast");
       window.location.reload();
     }
+    // setRoom(rowData.concern.concern_id);
+    // setConcernTitle(rowData.concern.concern_title);
   };
 
   const closeFlag = () => {
     setConcernTitle("");
+    // setMessages([]);
     setRoom(0);
-    setSelection(false)
   };
-
   return (
     <div>
       {usertypeid === 3 ? (
@@ -285,7 +284,6 @@ export default function Chat() {
           selection={selection}
           rowData={rowData}
           concernTitle={concernTitle}
-          closeFlag={closeFlag}
         />
       ) : null}
     </div>

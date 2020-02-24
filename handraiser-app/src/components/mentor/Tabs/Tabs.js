@@ -11,14 +11,38 @@ import TabPanel from "./TabPanel";
 
 const useStyles = makeStyles(theme => ({}));
 
+// function TabPanel(props) {
+
+//   const { children, value, index, ...other } = props;
+
+//   useEffect(() => {
+//     effect
+
+//     return () => {
+//       cleanup
+//     };
+
+//   }, [])
+
+//   return (
+//     <Typography
+//       component="div"
+//       role="tabpanel"
+//       hidden={value !== index}
+//       id={`full-width-tabpanel-${index}`}
+//       aria-labelledby={`full-width-tab-${index}`}
+//       {...other}
+//     >
+//       {value === index && <Box>{children}</Box>}
+//     </Typography>
+//   );
+// }
+
 const TabBtn = props => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [search, setSearch] = useState("");
-
   const handleChange = (event, newValue) => {
-    props.tabActivity(newValue);
-    props.closeFlag();
     setTabValue(newValue);
   };
 
@@ -60,7 +84,6 @@ const TabBtn = props => {
           class_id={props.class_id}
           search={search}
           setSelection={props.setSelection}
-          closeFlag={props.closeFlag}
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>

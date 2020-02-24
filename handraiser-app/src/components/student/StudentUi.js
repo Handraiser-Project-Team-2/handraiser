@@ -170,14 +170,12 @@ export default function Student({
   const [userImage, setUserImage] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-
   const [name, setName] = useState("");
   const { cstate, getData, socket } = useContext(UserContext);
   const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
   const ENDPOINT = "localhost:5000";
-
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
@@ -316,14 +314,12 @@ export default function Student({
           setRequestOpen(false);
         } else {
           setRequestOpen(true);
-          closeFlag();
         }
       })
       .catch(err => {
         console.log(err);
       });
   };
-
   const emojiActive = () => {
     if (emoji === true) {
       setEmoji(false);
