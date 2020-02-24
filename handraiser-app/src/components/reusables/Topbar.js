@@ -611,6 +611,9 @@ export default function Topbar(props) {
               onClick={handleMenu}
               color="inherit"
             >
+              <Tooltip title="All Class">
+                <ClassIcon style={{ marginRight: "10px", fontSize: "30px" }} />
+              </Tooltip>
               <Avatar alt="" src={userProfile.image} />
             </IconButton>
           </div>

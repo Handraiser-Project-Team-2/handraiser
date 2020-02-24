@@ -38,7 +38,8 @@ const Input = ({
       style={{
         position: "absolute",
         alignItems: "center",
-        bottom: 130
+        bottom: 130,
+        marginLeft: 270
       }}
     >
       {emoji === true ? <Picker onClick={addEmoji} title="" /> : null}

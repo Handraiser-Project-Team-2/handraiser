@@ -59,7 +59,10 @@ const useStyles = makeStyles(theme => ({
       height: "81em"
     },
     "@media (height: 1366px)": {
-      height: "65em"
+      height: "64.9em"
+    },
+    "@media (width: 768px) and (height: 1024px)": {
+      height: "43.5em"
     },
     "@media (width: 360px) and (height: 640px)": {
       height: "19.5em"
@@ -68,19 +71,19 @@ const useStyles = makeStyles(theme => ({
       height: "25.2em"
     },
     "@media (width: 411px) and (height: 823px)": {
-      height: "35.7em"
+      height: "31em"
     },
     "@media (width: 320px) and (height: 568px)": {
-      height: "19.7em"
+      height: "15em"
     },
     "@media (width: 375px) and (height: 667px)": {
-      height: "25.9em"
+      height: "21.2em"
     },
     "@media (width: 414px) and (height: 736px)": {
-      height: "30.2em"
+      height: "25.5em"
     },
     "@media (width: 375px) and (height: 812px)": {
-      height: "35em"
+      height: "30.3em"
     }
   },
   cont2: {
