@@ -72,7 +72,7 @@ export default function QueueStub(props) {
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-  // const ENDPOINT = "172.60.62.113:5000";
+  // const ENDPOINT = "localhost:5000";
   // // let socket = io(ENDPOINT);
 
   // useEffect(() => {
@@ -92,6 +92,10 @@ export default function QueueStub(props) {
     if (props.rowDatahandler.rowDatahandler) {
       props.rowDatahandler.rowDatahandler(data);
     }
+    // if (props.setRoom) {
+      props.setRoom(data.concern_id);
+    // }
+
     setSelectedIndex(index);
   };
 
@@ -144,6 +148,11 @@ export default function QueueStub(props) {
 
   const handleDone = () => {
     setAnchorEl(null);
+
+    setTimeout(() => {
+      props.setSelection(false);
+      props.closeFlag();
+    }, 350);
 
     axios
       .patch(`/api/concern_list/${concern.concern_id}`, {
