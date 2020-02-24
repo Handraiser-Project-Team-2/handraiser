@@ -53,34 +53,34 @@ const useStyles = makeStyles(theme => ({
     height: "40.9em",
     backgroundColor: "white",
     "@media (height: 894px)": {
-      height: "35.4em"
+      height: "40.1em"
     },
     "@media (height: 1625px)": {
       height: "81em"
     },
     "@media (height: 1366px)": {
-      height: "64.8em"
+      height: "69.6em"
     },
     "@media (width: 360px) and (height: 640px)": {
-      height: "19.5em"
+      height: "24.2em"
     },
     "@media (width: 411px) and (height: 731px)": {
-      height: "25.2em"
+      height: "29.9em"
     },
     "@media (width: 411px) and (height: 823px)": {
-      height: "31em"
+      height: "35.7em"
     },
     "@media (width: 320px) and (height: 568px)": {
-      height: "15em"
+      height: "19.7em"
     },
     "@media (width: 375px) and (height: 667px)": {
-      height: "21.2em"
+      height: "25.9em"
     },
     "@media (width: 414px) and (height: 736px)": {
-      height: "25.5em"
+      height: "30.2em"
     },
     "@media (width: 375px) and (height: 812px)": {
-      height: "30.3em"
+      height: "35em"
     }
   },
   cont2: {
@@ -426,17 +426,17 @@ export default function Student({
           setRequestOpen(true);
         }
       })
-        .then(res => {
-          if (res.data.length > 0) {
-            setRequestOpen(false);
-          } else {
-            setRequestOpen(true);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    };
+      .then(res => {
+        if (res.data.length > 0) {
+          setRequestOpen(false);
+        } else {
+          setRequestOpen(true);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   let currDate = "";
   let same = true;
@@ -445,7 +445,11 @@ export default function Student({
       <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} setConcernSelection={setConcernSelection} />
+          <Tabs
+            rowDatahandler={rowDatahandler}
+            classReference={class_id}
+            setConcernSelection={setConcernSelection}
+          />
         </Queue>
         <Help>
           <Subject>
@@ -531,10 +535,9 @@ export default function Student({
                       time={ntime}
                     />
                   </div>
-                )
-              })
-            }
-            
+                );
+              })}
+
             <div>
               {feed && active === true ? (
                 <div className={classes.cont2}>
@@ -571,7 +574,13 @@ export default function Student({
                     username={username}
                   />
                 ) : (
-                  ""
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    multiline
+                    rows="2"
+                    disabled
+                  />
                 )}
                 <div
                   style={{

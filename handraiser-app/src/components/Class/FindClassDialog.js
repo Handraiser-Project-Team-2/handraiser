@@ -14,7 +14,6 @@ import MuiAlert from "@material-ui/lab/Alert";
 import indigo from "@material-ui/core/colors/indigo";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import teal from "@material-ui/core/colors/teal";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
