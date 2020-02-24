@@ -271,12 +271,12 @@ export const Request = styled.button`
   color: white;
   border: transparent;
   width: 150px;
+  padding: 10px;
   border-radius: 5px;
-  margin-right: 15px;
   cursor: pointer;
   @media screen and (max-width: 1024px) {
-    width: 100%;
     box-sizing: border-box;
+    width: 100%;
   }
 `;
 //Login Styles
