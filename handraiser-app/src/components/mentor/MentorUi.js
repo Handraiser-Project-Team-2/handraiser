@@ -195,7 +195,7 @@ export default function Mentor({
   // const [messages, setMessages] = useState([]);
   // const [avatar, setAvatar] = useState("");
   // const [emoji, setEmoji] = useState(false);
-  // const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "172.60.62.113:5000";
 
   // useEffect(() => {
   //   socket = io(ENDPOINT);

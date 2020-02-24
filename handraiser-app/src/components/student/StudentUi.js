@@ -159,22 +159,17 @@ export default function Student({
   setConcernTitle,
   time
 }) {
-  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
-  // let socket;
   const classes = useStyles();
   let history = useHistory();
-  // let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
-  // const open = Boolean(anchorEl);
-  const [concernDescription, setConcernDescription] = useState("");
-  // const [concernTitle, setConcernTitle] = useState("");
   const [userImage, setUserImage] = useState("");
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const [name, setName] = useState("");
-  const { cstate, getData,socket } = useContext(UserContext);
-  const ENDPOINT = "localhost:5000";
+  const [emoji, setEmoji] = useState(false);
+  const { cstate, getData, socket } = useContext(UserContext);
+  const ENDPOINT = "172.60.62.113:5000";
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
@@ -186,7 +181,7 @@ export default function Student({
 
   // did mount
   useEffect(() => {
-    socket.emit("join", { username: "Yow", room: class_id});
+    socket.emit("join", { username: "Yow", room: class_id });
 
     socket.on("updateComponents", data => {
       console.log("updates");
@@ -195,7 +190,6 @@ export default function Student({
   }, [ENDPOINT]);
 
   useEffect(() => {
-
     if (sessionStorage.getItem("token")) {
       axios
         .post("/api/user/data", {
@@ -250,10 +244,6 @@ export default function Student({
         concern_description: message
       })
       .then(data => {
-        // console.log(data.data);
-
-        // add websocket here to reflect new request;
-
         setConcernTitle("");
         setMessage("");
 
@@ -289,103 +279,6 @@ export default function Student({
         console.log(err);
       });
   };
-  //send data of active queue where user interacted with from the queue panel
-  // const rowDatahandler = rowData => {
-  //   setActive(true);
-
-  //   socket.emit(
-  //     "join",
-  //     { userid, username, room: rowData.concern.concern_id, image: avatar },
-  //     message => {
-  //       console.log(message);
-  //     }
-  //   );
-
-  //   setRoom(rowData.concern.concern_id);
-  //   setConcernTitle(rowData.concern.concern_title);
-
-  //   axios
-  //     .get(`/api/userprofile/${rowData.concern.user_id}`, {})
-  //     .then(data => {
-  //       setName(data.data[0].first_name + " " + data.data[0].last_name);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
-
-  ////join to room
-  // const join = () => {
-  //   setActive(true);
-  //   socket.emit("join", { username, room: "team2", image: avatar }, () => {});
-  // };
-  // useEffect(() => {
-  //   socket.on("message", message => {
-  //     setMessages([...messages, message]);
-  //   });
-
-  //   socket.on("old", ({ data }) => {
-  //     // console.log(data);
-  //     setMessages(data);
-  //   });
-
-  //   if (!cstate) {
-  //     getData();
-  //   }
-  //   if (cstate) {
-  //     // console.log(cstate);
-  //     setUserid(cstate.user_id);
-  //     setAvatar(cstate.image);
-  //     setUsername(cstate.first_name);
-  //   }
-
-  //   return () => {
-  //     socket.emit("disconnect");
-  //     socket.off();
-  //   };
-  // }, [messages, cstate]);
-
-  // const sendMessage = evt => {
-  //   evt.preventDefault();
-  //   const dateToday = new Date();
-  //   setTimeout(() => {
-  //     if (message) {
-  //       socket.emit("sendMessage", message, () => setMessage(""));
-  //       axios
-  //         .post(`/api/chat/send`, {
-  //           message: message,
-  //           chat_date_created: dateToday,
-  //           concern_id: room,
-  //           user_id: userid
-  //         })
-  //         .then(res => {
-  //           console.log(res);
-  //         });
-  //     }
-  //   }, 100);
-
-  //   setMessage("");
-  // };
-
-  // const emojiActive = () => {
-  //   if (emoji === true) {
-  //     setEmoji(false);
-  //   } else {
-  //     setEmoji(true);
-  //   }
-  //   // setEmoji(true)
-  // };
-
-  // const addEmoji = e => {
-  //   let sym = e.unified.split("-");
-  //   let codesArray = [];
-  //   sym.forEach(el => codesArray.push("0x" + el));
-  //   let emoji = String.fromCodePoint(...codesArray);
-  //   setMessage(message + emoji);
-  //   emojiActive();
-  // };
-  // console.log(messages);
-
   const [expanded, setExpanded] = React.useState("");
 
   const handleClickDetail = () => {
@@ -412,8 +305,25 @@ export default function Student({
         console.log(err);
       });
   };
+  const emojiActive = () => {
+    if (emoji === true) {
+      setEmoji(false);
+      console.log(emoji);
+    } else {
+      setEmoji(true);
+    }
+    // setEmoji(true)
+  };
+  const addEmoji = e => {
+    let sym = e.unified.split("-");
+    let codesArray = [];
+    sym.forEach(el => codesArray.push("0x" + el));
+    let emoji = String.fromCodePoint(...codesArray);
+    setMessage(message + emoji);
+    emojiActive();
+  };
   let currDate = "";
-let same = true;
+  let same = true;
   return (
     <React.Fragment>
       <Topbar />
@@ -472,53 +382,55 @@ let same = true;
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-              {messages.map((message, i) => {
-                const ndate = new Date(
-                  message.chat_date_created
-                ).toLocaleDateString();
+            {messages.map((message, i) => {
+              const ndate = new Date(
+                message.chat_date_created
+              ).toLocaleDateString();
 
-                const ntime = new Date(message.chat_date_created).toLocaleTimeString();
+              const ntime = new Date(
+                message.chat_date_created
+              ).toLocaleTimeString();
 
-                console.log(ndate);
-                same = false;
+              console.log(ndate);
+              same = false;
 
-                if (ndate !== currDate) {
-                  currDate = ndate;
-                  same = true;
-                }
+              if (ndate !== currDate) {
+                currDate = ndate;
+                same = true;
+              }
 
-                return (
-                  <div key={i} style={{ overflowWrap: "break-word" }}>
-                    <Chatfield
-                      message={message}
-                      username={username}
-                      feed={feed}
-                      active={active}
-                      userid={userid}
-                      date={same?currDate:""}
-                      time={ntime}
-                    />
+              return (
+                <div key={i} style={{ overflowWrap: "break-word" }}>
+                  <Chatfield
+                    message={message}
+                    username={username}
+                    feed={feed}
+                    active={active}
+                    userid={userid}
+                    date={same ? currDate : ""}
+                    time={ntime}
+                  />
+                </div>
+              );
+            })}
+
+            <div>
+              {feed && active === true ? (
+                <div className={classes.cont2}>
+                  <div className={classes.prof}>
+                    {/* <Avatar src={feed} /> */}
                   </div>
-                );
-              })}
-
-              <div>
-                {feed && active === true ? (
-                  <div className={classes.cont2}>
-                    <div className={classes.prof}>
-                      {/* <Avatar src={feed} /> */}
-                    </div>
-                    <div className={classes.receiver}>
-                      <DivAnimation>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                      </DivAnimation>
-                    </div>
+                  <div className={classes.receiver}>
+                    <DivAnimation>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </DivAnimation>
                   </div>
-                ) : null}
-              </div>
-            </ScrollToBottom>
+                </div>
+              ) : null}
+            </div>
+          </ScrollToBottom>
           <Message>
             <Field>
               <div
@@ -530,28 +442,31 @@ let same = true;
                   width: "100%"
                 }}
               >
-          
-                   <Input
+                <Input
                   message={message}
                   setMessage={setMessage}
                   sendMessage={sendMessage}
                   username={username}
+                  addEmoji={addEmoji}
+                  emoji={emoji}
+                  emojiActive={emojiActive}
+                  classes={classes}
                 />
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      marginTop: "15px"
-                    }}
-                  >
-                    {requestOpen ? (
-                      <Request onClick={sendRequest}>NEW REQUEST</Request>
-                    ) : (
-                      ""
-                    )}
-                    <Send onClick={sendMessage}>SEND</Send>
-                  </div>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginTop: "15px"
+                  }}
+                >
+                  {requestOpen ? (
+                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                  ) : (
+                    ""
+                  )}
+                  <Send onClick={sendMessage}>SEND</Send>
+                </div>
               </div>
             </Field>
           </Message>

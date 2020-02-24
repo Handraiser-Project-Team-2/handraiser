@@ -25,7 +25,7 @@ export default function Chat() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
   const [dateTime, setDateTime] = useState([]);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let { class_id } = useParams();
 
@@ -96,9 +96,7 @@ export default function Chat() {
     socket.on("message", message => {
       setMessages([...messages, message]);
     });
-    // socket.on("date", date =>{
-    //   setMessages([...date, date]);
-    // })
+ 
     return () => {
       socket.emit("disconnect");
       socket.off();

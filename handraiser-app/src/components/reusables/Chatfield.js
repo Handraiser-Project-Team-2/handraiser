@@ -136,16 +136,11 @@ const Div = styled.div`
 `;
 
 const Chatfield = ({ message: { message, user_id }, userid, date,time }) => {
-  console.log(date)
+
   let isSentByCurrecntUser = false;
   if (user_id === userid) {
     isSentByCurrecntUser = true;
   }
-  
-// console.log(time)
-  // const ndate = new Date(date).toLocaleDateString();
-  
-
   return isSentByCurrecntUser ? (
     // <Conversation>
     <div>
