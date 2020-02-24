@@ -136,7 +136,11 @@ export default function Mentor({
   let same = true;
   return (
     <React.Fragment>
-      <Topbar rowDatahandler={rowDatahandler} class_id={class_id} />
+      <Topbar
+        rowDatahandler={rowDatahandler}
+        class_id={class_id}
+        setSelection={setSelection}
+      />
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}

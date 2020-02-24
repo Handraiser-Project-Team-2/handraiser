@@ -175,7 +175,7 @@ export default function Student({
   const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
@@ -338,9 +338,15 @@ export default function Student({
   };
   let currDate = "";
   let same = true;
+
   return (
     <React.Fragment>
-      <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
+      <Topbar
+        rowDatahandler={rowDatahandler}
+        classReference={class_id}
+        setConcernSelection={setConcernSelection}
+        closeFlag={closeFlag}
+      />
       <Div>
         <Queue>
           <Tabs

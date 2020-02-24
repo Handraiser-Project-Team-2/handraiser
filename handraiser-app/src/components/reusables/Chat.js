@@ -25,7 +25,7 @@ export default function Chat() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
   const [dateTime, setDateTime] = useState([]);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let { class_id } = useParams();
 
@@ -55,7 +55,7 @@ export default function Chat() {
     socket.on("message", message => {
       setMessages([...messages, message]);
     });
- 
+
     return () => {
       socket.emit("disconnect");
       socket.off();
@@ -80,7 +80,6 @@ export default function Chat() {
           });
       }
     }, 100);
-
   };
 
   useEffect(() => {
@@ -115,7 +114,7 @@ export default function Chat() {
     const data = "";
     socket.emit("not typing", data);
   };
-  console.log(messages)
+  console.log(messages);
   const handleDone = rowData => {
     setSelection(false);
 
@@ -156,7 +155,6 @@ export default function Chat() {
               )
               .then(data => {
                 socket.emit("handshake", { room: class_id });
-               
               })
               .catch(err => {
                 console.log(err);
@@ -222,9 +220,8 @@ export default function Chat() {
         .then(data => {
           setRoom(rowData.concern_id);
           setName(data.data[0].first_name + " " + data.data[0].last_name);
+        })
 
-        }) 
-   
         .catch(err => {
           console.log(err);
         });
@@ -252,7 +249,6 @@ export default function Chat() {
           name={name}
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
-  
         />
       ) : null}
       {usertypeid === 4 ? (
