@@ -8,6 +8,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import TextField from "@material-ui/core/TextField";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
 export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
@@ -24,8 +25,6 @@ export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
   };
 
   const handleSubmitEmail = e => {
-    e.preventDefault();
-
     axios({
       method: "put",
       url: `/api/login/superadmin`,
@@ -33,7 +32,11 @@ export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
     })
       .then(data => {
         handleClose();
+
         setText("");
+        toast.success("Email Successfully Set", {
+          position: toast.POSITION.TOP_RIGHT
+        });
       })
       .catch(err => {
         console.log(err);
@@ -90,6 +93,7 @@ export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
           </DialogActions>
         </form>
       </Dialog>
+      <ToastContainer autoClose={1300} />
     </div>
   );
 }

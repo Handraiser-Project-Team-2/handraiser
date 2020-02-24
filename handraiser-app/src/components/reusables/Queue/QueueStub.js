@@ -96,6 +96,10 @@ export default function QueueStub(props) {
   };
 
   const handleBackQueue = () => {
+    setAnchorEl(null);
+    // props.setSelection(false)
+    props.rowDatahandler.setSelection(false);
+
     if (concern.length === 0) {
       Swal.fire({
         icon: "error",

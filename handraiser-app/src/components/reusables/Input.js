@@ -1,7 +1,6 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
-
 const Input = ({ message, sendMessage, setMessage }) => (
   <React.Fragment>
     <TextField
@@ -17,7 +16,7 @@ const Input = ({ message, sendMessage, setMessage }) => (
         backgroundColor: "white"
       }}
       InputProps={{
-        endAdornment: <InsertEmoticonIcon style={{ color: "grey" }} />
+        endAdornment: <InsertEmoticonIcon style={{ color: "grey" ,cursor:"pointer"}} />
       }}
     />
   </React.Fragment>
