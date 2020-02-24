@@ -73,8 +73,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   inline: {
-    display: "inline",
-    overflow: " hidden",
+    display: "inline-block",
+    overflow: "hidden",
     "text-overflow": "ellipsis",
     "white-space": " nowrap",
     width: "250px",
@@ -114,7 +114,7 @@ export default function InQueue(props) {
   const [concern, setConcern] = useState("");
   const open = Boolean(anchorEl);
 
-  // const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
   const { cstate, getData, socket } = useContext(UserContext);
 

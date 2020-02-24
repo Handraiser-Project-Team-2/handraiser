@@ -44,7 +44,7 @@ export default function Login(props) {
               user_status: 1
             })
             .then(data => {
-              console.log(response.profileObj.familyName);
+              // console.log(response.profileObj.familyName);
               socket.emit("user_activity", {});
             })
             .catch(err => {

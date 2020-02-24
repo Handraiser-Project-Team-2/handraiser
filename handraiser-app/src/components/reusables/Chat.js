@@ -25,7 +25,7 @@ export default function Chat() {
   const [concernDescription, setConcernDescription] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let { class_id } = useParams();
 
@@ -184,7 +184,6 @@ export default function Chat() {
           console.log(err);
         });
     } else {
-
       socket.emit(`leave_room`, { room: room });
       setSelection(true);
       setConcernTitle(rowData.concern_title);
@@ -213,7 +212,7 @@ export default function Chat() {
     setConcernTitle("");
     // setMessages([]);
     setRoom(0);
-    setSelection(false)
+    setSelection(false);
   };
   return (
     <div>
