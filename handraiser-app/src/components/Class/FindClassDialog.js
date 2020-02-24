@@ -30,8 +30,12 @@ const useStyles = makeStyles(theme => ({
     color: "#372476"
   },
   cont: {
+    marginRight: "25px",
     backgroundColor: "white",
-    borderRadius: "30px"
+    borderRadius: "30px",
+    "@media (max-width: 665px)": {
+      marginRight: "-15px"
+    }
   },
   text: {
     padding: "10px",
