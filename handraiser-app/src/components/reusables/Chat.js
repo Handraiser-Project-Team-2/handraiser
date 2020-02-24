@@ -39,6 +39,7 @@ export default function Chat() {
       setMessages(data);
     });
   }, [ENDPOINT, room]);
+  
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -84,36 +85,7 @@ export default function Chat() {
     }, 100);
   };
 
-  useEffect(() => {
-    socket.on("typing", data => {
-      // console.log(data)
-      setfeed(data);
-    });
-    socket.on("not typing", data => {
-      setfeed(data);
-    });
-  });
-
-  useEffect(() => {
-    const value = message;
-    if (active === true) {
-      if (value.length > 0) {
-        typing();
-      } else {
-        nottyping();
-      }
-    }
-  });
-
-  ///for typing
-  const typing = data => {
-    socket.emit("typing", data);
-  };
-
-  const nottyping = () => {
-    const data = "";
-    socket.emit("not typing", data);
-  };
+  
   console.log(messages);
   const handleDone = rowData => {
     setSelection(false);
