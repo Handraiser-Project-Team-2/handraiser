@@ -159,9 +159,11 @@ export default function Student({
   username,
   room,
   concernTitle,
-  setConcernTitle
+  setConcernTitle,
+  closeFlag,
+  setMessages
 }) {
-  // let socket = io("ws://172.60.62.113:5000", { transports: ["websocket"] });
+  // let socket = io("ws://localhost:5000", { transports: ["websocket"] });
   // let socket;
   const classes = useStyles();
   let history = useHistory();
@@ -190,7 +192,7 @@ export default function Student({
 
   const [concernSelection, setConcernSelection] = useState();
 
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
@@ -266,10 +268,7 @@ export default function Student({
         concern_description: message
       })
       .then(data => {
-        // console.log(data.data);
-
-        // add websocket here to reflect new request;
-
+        setMessages("");
         setConcernTitle("");
         setMessage("");
 
@@ -425,6 +424,7 @@ export default function Student({
         } else {
           setRequestOpen(true);
         }
+        return res;
       })
       .then(res => {
         if (res.data.length > 0) {
@@ -453,6 +453,7 @@ export default function Student({
             rowDatahandler={rowDatahandler}
             classReference={class_id}
             setConcernSelection={setConcernSelection}
+            closeFlag={closeFlag}
           />
         </Queue>
         <Help>
@@ -589,11 +590,12 @@ export default function Student({
                   }}
                 >
                   {requestOpen ? (
-                    <Request onClick={sendRequest}>NEW REQUEST</Request>
+                    <Request onClick={sendRequest}>SEND REQUEST</Request>
+                  ) : concernSelection ? (
+                    <Send onClick={sendMessage}>SEND</Send>
                   ) : (
                     ""
                   )}
-                  <Send onClick={sendMessage}>SEND</Send>
                 </div>
                 {/* </form> */}
               </div>

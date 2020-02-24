@@ -133,7 +133,7 @@ export default function InQueue(props) {
 
   const { cstate, getData, socket } = useContext(UserContext);
 
-  // const ENDPOINT = "172.60.62.113:5000";
+  // const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
 
   useEffect(() => {
