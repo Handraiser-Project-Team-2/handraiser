@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
 import { useHistory, useParams } from "react-router-dom";
 import SendIcon from "@material-ui/icons/Send";
+import Popover from "@material-ui/core/Popover";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
@@ -42,6 +43,9 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(theme => ({
+  typography: {
+    padding: theme.spacing(2)
+  },
   span: {
     position: "fixed",
     bottom: theme.spacing(2),
@@ -161,7 +165,8 @@ export default function Student({
   concernTitle,
   setConcernTitle,
   closeFlag,
-  setMessages
+  setMessages,
+  concernDescription
 }) {
   const classes = useStyles();
   let history = useHistory();
@@ -349,6 +354,16 @@ export default function Student({
     }
   };
 
+  const [anchorElPop, setAnchorElPop] = React.useState(null);
+  const handleClick = event => {
+    setAnchorElPop(event.currentTarget);
+  };
+  const handleClosePop = event => {
+    setAnchorElPop(null);
+  };
+  const openPop = Boolean(anchorElPop);
+  const id = openPop ? "simple-popover" : undefined;
+
   return (
     <React.Fragment>
       <Topbar
@@ -389,13 +404,33 @@ export default function Student({
             <Option>
               <span>
                 <HelpOutlineIcon
-                  onClick={handleClickDetail}
+                  onClick={data => {
+                    handleClick(data);
+                  }}
                   style={{
                     fontSize: 30,
                     cursor: "pointer",
                     color: "#372476"
                   }}
                 />
+                <Popover
+                  id={id}
+                  open={openPop}
+                  anchorEl={anchorElPop}
+                  onClose={handleClosePop}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center"
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center"
+                  }}
+                >
+                  <Typography className={classes.typography}>
+                    {concernDescription ? concernDescription : "No description"}
+                  </Typography>
+                </Popover>
               </span>
               <span>
                 <PeopleOutlineIcon
@@ -420,7 +455,7 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {messages &&      
+            {messages &&
               messages.map((message, i) => {
                 const ndate = new Date(
                   message.chat_date_created
