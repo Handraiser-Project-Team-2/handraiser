@@ -39,7 +39,7 @@ export default function Chat() {
       setMessages(data);
     });
   }, [ENDPOINT, room]);
-  
+
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -85,7 +85,6 @@ export default function Chat() {
     }, 100);
   };
 
-  
   console.log(messages);
   const handleDone = rowData => {
     setSelection(false);
