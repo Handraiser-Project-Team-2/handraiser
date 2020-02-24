@@ -175,7 +175,8 @@ export default function Student({
   const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
+  // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
@@ -451,7 +452,6 @@ export default function Student({
                   </div>
                 );
               })}
-
             <div>
               {feed && active === true ? (
                 <div className={classes.cont2}>

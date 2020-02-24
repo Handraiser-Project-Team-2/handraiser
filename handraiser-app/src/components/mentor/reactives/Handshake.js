@@ -1,4 +1,3 @@
-
 import React, { useEffect, useContext } from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
@@ -36,7 +35,7 @@ export default function Handshake(props) {
       .then(data => {
         props.rowDatahandler(data.data);
         socket.emit("handshake", { room: highdata.class_id });
-        window.location.reload()
+        window.location.reload();
 
         axios
           .get(`/api/assisted_by/${highdata.class_id}/${highdata.user_id}`, {})
@@ -52,7 +51,7 @@ export default function Handshake(props) {
                   user_student_id: highdata.user_id
                 })
                 .then(data => {
-                  console.log(data);
+                  // console.log(data);
                 })
                 .catch(err => {
                   console.log(err);
@@ -71,7 +70,7 @@ export default function Handshake(props) {
                   }
                 )
                 .then(data => {
-                  console.log(data);
+                  // console.log(data);
                 })
                 .catch(err => {
                   console.log(err);
