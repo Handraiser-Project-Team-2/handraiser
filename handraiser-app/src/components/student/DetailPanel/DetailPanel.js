@@ -12,6 +12,7 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import { Avatar, ListItem } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import LockIcon from "@material-ui/icons/Lock";
+import { useHistory, useParams } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -83,7 +84,7 @@ const ExpansionPanelDetails = withStyles(theme => ({
 }))(MuiExpansionPanelDetails);
 
 export default function SimpleExpansionPanel({
-  class_id,
+  // class_id,
   expanded,
   setExpanded
 }) {
@@ -91,6 +92,7 @@ export default function SimpleExpansionPanel({
   const [classInfo, setClassInfo] = useState([]);
   const [classMem, setClassMem] = useState([]);
   const [search, setSearch] = useState("");
+  let { class_id } = useParams();
 
   const handleChange = panel => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);

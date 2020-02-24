@@ -7,7 +7,7 @@ import axios from "axios";
 import io from "socket.io-client";
 import { UserContext } from "../../Contexts/UserContext";
 // let socket;
-export default function InQueue(rowDatahandler) {
+export default function InQueue({ rowDatahandler }) {
   const { socket } = useContext(UserContext);
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState();
@@ -44,7 +44,7 @@ export default function InQueue(rowDatahandler) {
     socket.on("disconnect", () => {
       console.log("Disconnected to server");
     });
-  }, [rowDatahandler.rowDatahandler.search, concernsData]);
+  }, [rowDatahandler.search, concernsData]);
 
   const update = data => {
     if (rowDatahandler.class_id) {

@@ -363,6 +363,7 @@ export default function Mentor({
     setExpanded("panel2");
   };
 
+  console.log(rowDatahandler);
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} class_id={class_id} />

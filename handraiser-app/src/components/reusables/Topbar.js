@@ -157,7 +157,10 @@ export default function Topbar(props) {
             padding: "10px"
           }}
         >
-          <span style={{ marginLeft: "10px" }}> PROFILE INFORMATION</span>
+          <span style={{ marginLeft: "10px" }}>
+            {" "}
+            PRclassReference rowDatahandlerOFILE INFORMATION
+          </span>
           <CloseIcon
             style={{ cursor: "pointer" }}
             onClick={toggleDrawer("left", false)}
@@ -456,11 +459,13 @@ export default function Topbar(props) {
                     rowDatahandler={props.rowDatahandler}
                   />
                 ) : (
-                  <MentorTabs
-                    className={classes.mentor}
-                    rowDatahandler={props.rowDatahandler}
-                    class_id={class_id}
-                  />
+                  +(
+                    <MentorTabs
+                      className={classes.mentor}
+                      rowDatahandler={props.rowDatahandler}
+                      class_id={class_id}
+                    />
+                  )
                 )}
               </div>
             </div>

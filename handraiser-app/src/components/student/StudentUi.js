@@ -144,7 +144,7 @@ const DivAnimation = styled.div`
 var jwtDecode = require("jwt-decode");
 let socket;
 export default function Student({
-  class_id,
+  // class_id,
   rowDatahandler,
   messages,
   sendMessage,
@@ -162,7 +162,7 @@ export default function Student({
   // let socket;
   const classes = useStyles();
   let history = useHistory();
-  // let { class_id } = useParams();
+  let { class_id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
   const [state, setState] = useState({ user_type: "" });
   // const open = Boolean(anchorEl);
