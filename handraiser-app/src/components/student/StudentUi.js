@@ -187,6 +187,9 @@ export default function Student({
   // const [avatar, setAvatar] = useState("");
   // const [emoji, setEmoji] = useState(false);
   // const [disable, setDisable] = useState(false);
+
+  const [concernSelection, setConcernSelection] = useState();
+
   const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
@@ -200,9 +203,7 @@ export default function Student({
 
   // did mount
   useEffect(() => {
-    // socket = io(ENDPOINT);
     socket.emit("join", { username: "Yow", room: class_id });
-
     socket.on("updateComponents", data => {
       existing();
     });
@@ -277,6 +278,8 @@ export default function Student({
           title: "Request sent to the mentor"
         })
           .then(flag => {
+            setConcernSelection(false);
+            console.log("AA", concernSelection);
             existing();
 
             socket.emit(
@@ -412,10 +415,16 @@ export default function Student({
   };
 
   const existing = () => {
-    if (class_id) {
-      axios({
-        method: "get",
-        url: `/api/student/queue/order/${class_id}/${user_id}?search=${""}`
+    axios({
+      method: "get",
+      url: `/api/student/queue/order/${class_id}/${user_id}?search=${""}`
+    })
+      .then(res => {
+        if (res.data.length > 0) {
+          setRequestOpen(false);
+        } else {
+          setRequestOpen(true);
+        }
       })
         .then(res => {
           if (res.data.length > 0) {
@@ -427,15 +436,16 @@ export default function Student({
         .catch(err => {
           console.log(err);
         });
-    }
-  };
+    };
 
+  let currDate = "";
+  let same = true;
   return (
     <React.Fragment>
       <Topbar rowDatahandler={rowDatahandler} classReference={class_id} />
       <Div>
         <Queue>
-          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} />
+          <Tabs rowDatahandler={rowDatahandler} classReference={class_id} setConcernSelection={setConcernSelection} />
         </Queue>
         <Help>
           <Subject>
@@ -490,8 +500,26 @@ export default function Student({
             </Option>
           </Subject>
           <ScrollToBottom className={classes.scrolltobottom}>
-            {messages
-              ? messages.map((message, i) => (
+            {!requestOpen &&
+              messages &&
+              messages.map((message, i) => {
+                const ndate = new Date(
+                  message.chat_date_created
+                ).toLocaleDateString();
+
+                const ntime = new Date(
+                  message.chat_date_created
+                ).toLocaleTimeString();
+
+                console.log(ndate);
+                same = false;
+
+                if (ndate !== currDate) {
+                  currDate = ndate;
+                  same = true;
+                }
+
+                return (
                   <div key={i} style={{ overflowWrap: "break-word" }}>
                     <Chatfield
                       message={message}
@@ -499,16 +527,19 @@ export default function Student({
                       feed={feed}
                       active={active}
                       userid={userid}
+                      date={same ? currDate : ""}
+                      time={ntime}
                     />
                   </div>
-                ))
-              : ""}
-
+                )
+              })
+            }
+            
             <div>
               {feed && active === true ? (
                 <div className={classes.cont2}>
                   <div className={classes.prof}>
-                    <Avatar src={feed} />
+                    {/* <Avatar src={feed} /> */}
                   </div>
                   <div className={classes.receiver}>
                     <DivAnimation>
@@ -532,12 +563,16 @@ export default function Student({
                   width: "100%"
                 }}
               >
-                <Input
-                  message={message}
-                  setMessage={setMessage}
-                  sendMessage={sendMessage}
-                  username={username}
-                />
+                {concernSelection || requestOpen ? (
+                  <Input
+                    message={message}
+                    setMessage={setMessage}
+                    sendMessage={sendMessage}
+                    username={username}
+                  />
+                ) : (
+                  ""
+                )}
                 <div
                   style={{
                     width: "100%",

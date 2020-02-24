@@ -92,7 +92,7 @@ export default function ResponsiveDialog(props) {
           setValid(true);
         } else {
           handleClose();
-          history.push(`/student/${data.data.class_id}`);
+          history.push(`/classroom/${data.data.class_id}`);
         }
       })
       .catch(err => {

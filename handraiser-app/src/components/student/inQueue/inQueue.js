@@ -224,7 +224,7 @@ export default function InQueue(props) {
   };
 
   const handleConcernData = data => {
-    console.log("AA,inqueue.js(handleConcernData)");
+
 
     props.setConcernSelection(true);
     props.rowDatahandler(data);
@@ -237,9 +237,7 @@ export default function InQueue(props) {
   const handleRemoveReq = () => {
     setAnchorEl(null);
     setTimeout(() => {
-      console.log("removing");
       props.setConcernSelection(false);
-      console.log("AA,inqueue.js(handleRemoveReq)");
       setConcernTitle("");
       setConcernDescription("");
       props.closeFlag();
