@@ -194,7 +194,9 @@ const Chatfield = ({ message: { message, user_id }, userid, date, time }) => {
           <p className="from-them">{ReactEmoji.emojify(message)}</p>
           <h6
             style={{
-              marginLeft: "35px",
+              display: "flex",
+              justifyContent: "flex-start",
+              marginTop: "10px",
               color: "lightgrey",
               fontSize: "10px"
             }}

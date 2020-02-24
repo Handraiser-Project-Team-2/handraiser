@@ -183,7 +183,7 @@ export default function Mentor({
                   paddingTop: "25px"
                 }}
               >
-                <Typography variant="h5">
+                <Typography variant="h5" className={classes.title}>
                   {selection
                     ? `Concern: ${concernTitle}`
                     : `Select any concern to interact`}
@@ -411,6 +411,9 @@ export default function Mentor({
 }
 
 const useStyles = makeStyles(theme => ({
+  title: {
+    wordBreak: "break-all"
+  },
   typography: {
     padding: theme.spacing(2)
   },
