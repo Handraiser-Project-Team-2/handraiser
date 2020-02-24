@@ -2,15 +2,6 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import { Picker } from "emoji-mart";
-import { makeStyles } from "@material-ui/core/styles";
-const useStyles = makeStyles(theme => ({
-  span: {
-    position: "fixed",
-    bottom: theme.spacing(2),
-    right: theme.spacing(5)
-  },
-}));
-
 
 const Input = ({
   message,
@@ -43,8 +34,15 @@ const Input = ({
         )
       }}
     />
-    <span className={classes.span}>
-      {emoji === true ? <Picker onClick={addEmoji} /> : null}
+    <span
+      style={{
+        position: "absolute",
+        alignItems: "center",
+        bottom: 130,
+        marginLeft: 270
+      }}
+    >
+      {emoji === true ? <Picker onClick={addEmoji} title="" /> : null}
     </span>
   </React.Fragment>
 );

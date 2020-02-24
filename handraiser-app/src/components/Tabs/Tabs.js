@@ -14,7 +14,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Fade from "@material-ui/core/Fade";
 
 import { TabBox, BtnBox } from "../../Styles/Styles";
 
@@ -104,12 +103,8 @@ export const TabBtn = props => {
         setKey(res.data.data.validation_key);
         setOpen(false);
       })
-      .catch(errors => {
-        try {
-          toast.error(errors.res.data.error);
-        } catch {
-          console.log(errors);
-        }
+      .catch(err => {
+        console.log(err);
       });
   };
 

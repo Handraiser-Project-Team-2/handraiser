@@ -24,8 +24,7 @@ export default function Chat() {
   const [concernTitle, setConcernTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
-  const [dateTime, setDateTime] = useState([]);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let { class_id } = useParams();
 
@@ -34,11 +33,13 @@ export default function Chat() {
 
     socket.emit("join", { userid, username, room }, () => {});
 
-    socket.on("old", ({ data }) => { //retreiving old messages
-      console.log(data)
+    socket.on("old", ({ data }) => {
+      //retreiving old messages
+      console.log(data);
       setMessages(data);
     });
   }, [ENDPOINT, room]);
+
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -84,36 +85,6 @@ export default function Chat() {
     }, 100);
   };
 
-  useEffect(() => {
-    socket.on("typing", data => {
-      // console.log(data)
-      setfeed(data);
-    });
-    socket.on("not typing", data => {
-      setfeed(data);
-    });
-  });
-
-  useEffect(() => {
-    const value = message;
-    if (active === true) {
-      if (value.length > 0) {
-        typing();
-      } else {
-        nottyping();
-      }
-    }
-  });
-
-  ///for typing
-  const typing = data => {
-    socket.emit("typing", data);
-  };
-
-  const nottyping = () => {
-    const data = "";
-    socket.emit("not typing", data);
-  };
   console.log(messages);
   const handleDone = rowData => {
     setSelection(false);
