@@ -238,6 +238,8 @@ export default function Mentor({
           {selection ? (
             <ScrollToBottom className={classes.scrolltobottom}>
               {messages.map((message, i) => {
+                console.log(messages);
+
                 const ndate = new Date(
                   message.chat_date_created
                 ).toLocaleDateString();
