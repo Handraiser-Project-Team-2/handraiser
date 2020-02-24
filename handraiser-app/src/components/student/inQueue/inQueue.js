@@ -21,6 +21,10 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { UserContext } from "../../Contexts/UserContext";
 import { toast, ToastContainer } from "react-toastify";
 import Button from "@material-ui/core/Button";
+import io from "socket.io-client";
+
+const ENDPOINT = "172.60.62.208:5000";
+let socket = "";
 
 export default function InQueue(props) {
   var jwtDecode = require("jwt-decode");

@@ -17,19 +17,13 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
 import {
   Div,
-  // Nav,
   Queue,
   Help,
   Subject,
   TitleName,
   Option,
-  // More,
-  // Conversation,
   Message,
-  Field,
-  Send
-  // Div2,
-  // Shared
+  Field
 } from "../../Styles/Styles";
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
@@ -38,8 +32,6 @@ import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import Handshake from "./reactives/Handshake";
 import Input from "../reusables/Input";
-// import io from "socket.io-client";
-// import ScrollToBottom from "react-scroll-to-bottom";
 import "emoji-mart/css/emoji-mart.css";
 var jwtDecode = require("jwt-decode");
 
@@ -67,10 +59,13 @@ export default function Mentor({
 }) {
   const classes = useStyles();
   let history = useHistory();
+  // let { class_id } = useParams();
+  // const [rowData, setRowData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [name, setName] = useState("");
-
+  const [emoji, setEmoji] = useState(false);
+  const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -101,9 +96,7 @@ export default function Mentor({
             });
           }
         })
-        .catch(err => {
-          // console.log(err);
-        });
+        .catch(err => {});
     } else {
       Swal.fire({
         icon: "error",
@@ -123,12 +116,31 @@ export default function Mentor({
   const handleClickMember = () => {
     setExpanded("panel2");
   };
-  console.log(messages);
+  const emojiActive = () => {
+    if (emoji === true) {
+      setEmoji(false);
+      console.log(emoji);
+    } else {
+      setEmoji(true);
+    }
+  };
+  const addEmoji = e => {
+    let sym = e.unified.split("-");
+    let codesArray = [];
+    sym.forEach(el => codesArray.push("0x" + el));
+    let emoji = String.fromCodePoint(...codesArray);
+    setMessage(message + emoji);
+    emojiActive();
+  };
   let currDate = "";
   let same = true;
   return (
     <React.Fragment>
-      <Topbar rowDatahandler={rowDatahandler} class_id={class_id} />
+      <Topbar
+        rowDatahandler={rowDatahandler}
+        class_id={class_id}
+        setSelection={setSelection}
+      />
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
@@ -238,6 +250,8 @@ export default function Mentor({
           {selection ? (
             <ScrollToBottom className={classes.scrolltobottom}>
               {messages.map((message, i) => {
+                console.log(messages);
+
                 const ndate = new Date(
                   message.chat_date_created
                 ).toLocaleDateString();
@@ -289,7 +303,7 @@ export default function Mentor({
           ) : (
             <div
               style={{
-                height: "83vh",
+                height: "83.5vh",
                 width: "100%",
                 background: "#f5f5f5"
               }}
@@ -311,45 +325,40 @@ export default function Mentor({
                       width: "100%"
                     }}
                   >
-                    <form onSubmit={sendMessage}>
-                      {/* <TextField
-                        id="outlined-textarea"
-                        multiline
-                        variant="outlined"
-                        fullWidth
-                        rows="3"
-                      /> */}
-                      <Input
-                        message={message}
-                        setMessage={setMessage}
-                        sendMessage={sendMessage}
-                        username={username}
-                      />
-                      <div
+                    <Input
+                      message={message}
+                      setMessage={setMessage}
+                      sendMessage={sendMessage}
+                      username={username}
+                      addEmoji={addEmoji}
+                      emoji={emoji}
+                      emojiActive={emojiActive}
+                      classes={classes}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "15px"
+                      }}
+                    >
+                      <Fab
+                        variant="extended"
+                        size="small"
+                        className={classes.margin}
+                        onClick={sendMessage}
                         style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          marginTop: "15px"
+                          backgroundColor: "#372476",
+                          color: "white"
                         }}
                       >
-                        <Fab
-                          variant="extended"
-                          size="small"
-                          className={classes.margin}
-                          onClick={sendMessage}
-                          style={{
-                            backgroundColor: "#372476",
-                            color: "white"
-                          }}
-                        >
-                          <SendIcon
-                            className={classes.extendedIcon}
-                            style={{ marginRight: "5px", color: "white" }}
-                          />
-                          SEND
-                        </Fab>
-                      </div>
-                    </form>
+                        <SendIcon
+                          className={classes.extendedIcon}
+                          style={{ marginRight: "5px", color: "white" }}
+                        />
+                        SEND
+                      </Fab>
+                    </div>
                   </div>
                 </Field>
               </Message>
@@ -386,8 +395,38 @@ const useStyles = makeStyles(theme => ({
   scrolltobottom: {
     padding: "5% 0",
     overflow: "auto",
-    height: "39.7em",
-    backgroundColor: "white"
+    height: "40.9em",
+    backgroundColor: "white",
+    "@media (height: 894px)": {
+      height: "35.5em"
+    },
+    "@media (height: 1366px)": {
+      height: "65em"
+    },
+    "@media (width: 768px) and (height: 1024px)": {
+      height: "43.6em"
+    },
+    "@media (width: 360px) and (height: 640px)": {
+      height: "19.6em"
+    },
+    "@media (width: 411px) and (height: 731px)": {
+      height: "25.3em"
+    },
+    "@media (width: 411px) and (height: 823px)": {
+      height: "31em"
+    },
+    "@media (width: 320px) and (height: 568px)": {
+      height: "15.9em"
+    },
+    "@media (width: 375px) and (height: 667px)": {
+      height: "21.3em"
+    },
+    "@media (width: 414px) and (height: 736px)": {
+      height: "25.6em"
+    },
+    "@media (width: 375px) and (height: 812px)": {
+      height: "30.4em"
+    }
   },
   cont2: {
     display: " flex",
@@ -449,36 +488,3 @@ const DivAnimation = styled.div`
     }
   }
 `;
-const interact = {
-  height: "96px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  "@media (height: 894px)": {
-    height: "86px"
-  },
-  "@media (height: 1625px)": {
-    height: "210px"
-  },
-  "@media (width: 360px) and (height: 640px)": {
-    height: "40px"
-  },
-  "@media (width: 411px) and (height: 731px)": {
-    height: "50px"
-  },
-  "@media (width: 411px) and (height: 823px)": {
-    height: "50px"
-  },
-  "@media (width: 320px) and (height: 568px)": {
-    height: "30px"
-  },
-  "@media (width: 375px) and (height: 667px)": {
-    height: "45px"
-  },
-  "@media (width: 414px) and (height: 736px)": {
-    height: "55px"
-  },
-  "@media (width: 375px) and (height: 812px)": {
-    height: "75px"
-  }
-};

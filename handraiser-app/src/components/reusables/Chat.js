@@ -28,55 +28,16 @@ export default function Chat() {
 
   let { class_id } = useParams();
 
-  // useEffect(() => {
-  //     socket = io(ENDPOINT);
-  // }, [ENDPOINT])
-
   useEffect(() => {
     socket = io(ENDPOINT);
 
     socket.emit("join", { userid, username, room }, () => {});
 
-    socket.on("old", ({ data }) => {
+    socket.on("old", ({ data }) => { //retreiving old messages
+      console.log(data)
       setMessages(data);
     });
-
-    // console.log(room);
-    console.log(socket);
   }, [ENDPOINT, room]);
-
-  //   useEffect(() => {
-  //     socket.on("typing", data => {
-  //       // console.log(data)
-  //       setfeed(data);
-  //     });
-  //     socket.on("not typing", data => {
-  //       setfeed(data);
-  //     });
-  //   });
-
-  //   useEffect(() => {
-  //     // console.log(username)
-  //     const value = message;
-  //     if (active === true) {
-  //       if (value.length > 0 && room) {
-  //         typing(avatar);
-  //         // console.log(avatar)
-  //       } else {
-  //         nottyping();
-  //       }
-  //     }
-  //   });
-  //   ///for typing
-  //   const typing = data => {
-  //     socket.emit("typing", data);
-  //     // console.log(data);
-  //   };
-
-  //   const nottyping = () => {
-  //     const data = "";
-  //     socket.emit("not typing", data);
-  //   };
   useEffect(() => {
     if (!cstate) {
       getData();
@@ -92,6 +53,7 @@ export default function Chat() {
 
   useEffect(() => {
     socket.on("message", message => {
+      console.log(message);
       setMessages([...messages, message]);
     });
 
@@ -118,13 +80,7 @@ export default function Chat() {
             console.log(res);
           });
       }
-      // else{
-      //   // console.log(socket.connected)
-      //   window.location.reload();
-      // }
     }, 100);
-
-    // setMessage("");
   };
 
   useEffect(() => {
@@ -140,11 +96,9 @@ export default function Chat() {
   useEffect(() => {
     const value = message;
     if (active === true) {
-      console.log("asd");
       if (value.length > 0) {
         typing();
       } else {
-        console.log("object");
         nottyping();
       }
     }
@@ -159,24 +113,7 @@ export default function Chat() {
     const data = "";
     socket.emit("not typing", data);
   };
-
-  const emojiActive = () => {
-    if (emoji === true) {
-      setEmoji(false);
-    } else {
-      setEmoji(true);
-    }
-    // setEmoji(true)
-  };
-
-  //   const addEmoji = e => {
-  //     let sym = e.unified.split("-");
-  //     let codesArray = [];
-  //     sym.forEach(el => codesArray.push("0x" + el));
-  //     let emoji = String.fromCodePoint(...codesArray);
-  //     setMessage(message + emoji);
-  //     emojiActive();
-  //   };
+  console.log(messages);
   const handleDone = rowData => {
     setSelection(false);
 
@@ -258,11 +195,11 @@ export default function Chat() {
 
   const rowDatahandler = rowData => {
     if (usertypeid === 3 && rowData) {
-      setRoom(rowData.concern.concern_id);
-      console.log("here");
+      socket.emit(`leave_room`, { room: room });
+      console.log(rowData.concern.concern_id);
+
       // localStorage.setItem("room",rowData.concern.concern_id)
       setActive(true);
-
       setRoom(rowData.concern.concern_id);
       setConcernTitle(rowData.concern.concern_title);
 
@@ -275,6 +212,8 @@ export default function Chat() {
           console.log(err);
         });
     } else {
+      console.log(rowData.concern_id);
+
       socket.emit(`leave_room`, { room: room });
       setSelection(true);
       console.log(rowData);
@@ -285,8 +224,8 @@ export default function Chat() {
         .then(data => {
           setRoom(rowData.concern_id);
           setName(data.data[0].first_name + " " + data.data[0].last_name);
-          // localStorage.setItem("room",rowData.concern_id)
         })
+
         .catch(err => {
           console.log(err);
         });
@@ -301,10 +240,10 @@ export default function Chat() {
   };
 
   const closeFlag = () => {
-    setMessages([]);
     setConcernTitle("");
+    // setMessages([]);
+    setRoom(0);
   };
-
   return (
     <div>
       {usertypeid === 3 ? (
@@ -322,7 +261,6 @@ export default function Chat() {
           name={name}
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
-          concernTitle={concernTitle}
           closeFlag={closeFlag}
           setMessages={setMessages}
         />
@@ -344,6 +282,7 @@ export default function Chat() {
           handleBackQueue={handleBackQueue}
           selection={selection}
           rowData={rowData}
+          concernTitle={concernTitle}
         />
       ) : null}
     </div>

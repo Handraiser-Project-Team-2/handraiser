@@ -6,6 +6,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import teal from "@material-ui/core/colors/teal";
@@ -23,17 +24,23 @@ const useStyles = makeStyles(theme => ({
     color: "white"
   },
   fab: {
-    marginTop: "-40px",
-    float: "right",
-    backgroundColor: teal[500],
-    "@media (max-width: 834px)": {
-      marginLeft: "20px",
-      float: "left",
-      marginTop: "10px"
+    backgroundColor: "white",
+    color: "#372476"
+  },
+  cont: {
+    backgroundColor: "white",
+    borderRadius: "30px",
+    "@media (max-width: 665px)": {
+      backgroundColor: "#372476",
+      float: "right"
     }
   },
-  extendedIcon: {
-    marginRight: theme.spacing(1)
+  text: {
+    padding: "10px",
+    color: "#372476",
+    "@media (max-width: 665px)": {
+      display: "none"
+    }
   }
 }));
 
@@ -106,15 +113,12 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
 
   return (
     <div>
-      <Fab
-        variant="extended"
-        color="primary"
-        className={classes.fab}
-        onClick={handleClickOpen}
-      >
-        <AddCircleOutlineIcon className={classes.extendedIcon} />
-        Create new class
-      </Fab>
+      <div className={classes.cont}>
+        <Fab className={classes.fab} onClick={handleClickOpen}>
+          <AddIcon />
+        </Fab>
+        <span className={classes.text}>Add a class</span>
+      </div>
       <Collapse in={add}>
         <Alert
           severity="success"
