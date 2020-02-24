@@ -21,7 +21,6 @@ import { UserContext } from "../Contexts/UserContext";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { toast, ToastContainer } from "react-toastify";
-import Swal from "sweetalert2";
 import { Divider, Tooltip, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ClassIcon from "@material-ui/icons/Class";
@@ -475,7 +474,6 @@ export default function Topbar(props) {
       </List>
     </div>
   );
-  console.log(props);
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -492,9 +490,8 @@ export default function Topbar(props) {
     axios
       .patch(`/api/users/${user_id}`)
       .then(res => {
-        Swal.fire({
-          icon: "success",
-          title: "Logged out successfully!"
+        toast.success("Logout Successful", {
+          position: toast.POSITION.TOP_RIGHT
         });
       })
       .then(data => {
@@ -604,19 +601,45 @@ export default function Topbar(props) {
             </Drawer>
             <Typography variant="h6">Handraiser</Typography>
           </div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <IconButton
-              aria-label="account of current user"
-              edge="end"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <Tooltip title="All Class">
-                <ClassIcon style={{ marginRight: "10px", fontSize: "30px" }} />
-              </Tooltip>
-              <Avatar alt="" src={userProfile.image} />
-            </IconButton>
-          </div>
+
+          {class_id ? (
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <IconButton
+                aria-label="account of current user"
+                edge="end"
+                onClick={() => {
+                  window.location = "/class";
+                }}
+                color="inherit"
+              >
+                <Tooltip title="All Class">
+                  <ClassIcon
+                    style={{ marginRight: "10px", fontSize: "30px" }}
+                  />
+                </Tooltip>
+              </IconButton>
+              <IconButton
+                aria-label="account of current user"
+                edge="end"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <Avatar alt="" src={userProfile.image} />
+              </IconButton>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <IconButton
+                aria-label="account of current user"
+                edge="end"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <Avatar alt="" src={userProfile.image} />
+              </IconButton>
+            </div>
+          )}
+
           <Menu
             id="menu-appbar"
             anchorEl={anchorEl}
