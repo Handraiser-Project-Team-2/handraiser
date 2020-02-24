@@ -6,7 +6,9 @@ import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+import SendIcon from "@material-ui/icons/Send";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
@@ -330,7 +332,22 @@ export default function Mentor({
                           marginTop: "15px"
                         }}
                       >
-                        <Send onClick={sendMessage}>SEND</Send>
+                        <Fab
+                          variant="extended"
+                          size="small"
+                          className={classes.margin}
+                          onClick={sendMessage}
+                          style={{
+                            backgroundColor: "#372476",
+                            color: "white"
+                          }}
+                        >
+                          <SendIcon
+                            className={classes.extendedIcon}
+                            style={{ marginRight: "5px", color: "white" }}
+                          />
+                          SEND
+                        </Fab>
                       </div>
                     </form>
                   </div>

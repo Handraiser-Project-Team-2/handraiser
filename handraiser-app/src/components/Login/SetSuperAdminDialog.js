@@ -25,6 +25,7 @@ export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
   };
 
   const handleSubmitEmail = e => {
+    e.preventDefault();
     axios({
       method: "put",
       url: `/api/login/superadmin`,
@@ -32,9 +33,8 @@ export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
     })
       .then(data => {
         handleClose();
-
         setText("");
-        toast.success("Email Successfully Set", {
+        toast.success("Email Set Successful ", {
           position: toast.POSITION.TOP_RIGHT
         });
       })
@@ -53,7 +53,7 @@ export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
         <DialogTitle id="responsive-dialog-title">
           {"Update Superadmin Email"}
         </DialogTitle>
-        <form autoComplete="off" onSubmit={handleSubmit(handleSubmitEmail)}>
+        <form autoComplete="off" onSubmit={handleSubmitEmail}>
           <DialogContent>
             <TextField
               error={!!errors.email}

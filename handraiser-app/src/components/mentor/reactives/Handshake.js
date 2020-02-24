@@ -16,13 +16,8 @@ export default function Handshake(props) {
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid; //mentor_user_id if mentor is logged in
   const { socket } = useContext(UserContext);
-  // const ENDPOINT = "172.60.62.113:5000";
-
-  // let socket = io(ENDPOINT);
 
   useEffect(() => {
-    // socket = io(ENDPOINT);
-
     socket.emit("join", {
       username: "hanshakes",
       room: class_id
@@ -56,14 +51,12 @@ export default function Handshake(props) {
           .get(`/api/assisted_by/${highdata.class_id}/${highdata.user_id}`, {})
           .then(data => {
             //get data of who assisted this concern
-
             // if none then reference this current mentor
             if (data.data.length === 0) {
               axios
                 .post(`/api/assisted_by`, {
                   assist_status: "ongoing",
                   class_id: highdata.class_id,
-                  // user_mentor_id: 3, //mock user_mentor_id data //used for checking
                   user_mentor_id: user_id, //<<----------- correct way: uncomment if data is available
                   user_student_id: highdata.user_id
                 })

@@ -299,7 +299,12 @@ export default function Chat() {
     // setRoom(rowData.concern.concern_id);
     // setConcernTitle(rowData.concern.concern_title);
   };
-  // console.log("nor")
+
+  const closeFlag = () => {
+    setMessages([]);
+    setConcernTitle("");
+  };
+
   return (
     <div>
       {usertypeid === 3 ? (
@@ -318,6 +323,8 @@ export default function Chat() {
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
           concernTitle={concernTitle}
+          closeFlag={closeFlag}
+          setMessages={setMessages}
         />
       ) : null}
       {usertypeid === 4 ? (

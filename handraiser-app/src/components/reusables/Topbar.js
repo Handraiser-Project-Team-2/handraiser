@@ -21,7 +21,6 @@ import { UserContext } from "../Contexts/UserContext";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { toast, ToastContainer } from "react-toastify";
-import Swal from "sweetalert2";
 import { Divider, Tooltip, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ClassIcon from "@material-ui/icons/Class";
@@ -489,9 +488,8 @@ export default function Topbar(props) {
     axios
       .patch(`/api/users/${user_id}`)
       .then(res => {
-        Swal.fire({
-          icon: "success",
-          title: "Logged out successfully!"
+        toast.success("Logout Successful", {
+          position: toast.POSITION.TOP_RIGHT
         });
       })
       .then(data => {

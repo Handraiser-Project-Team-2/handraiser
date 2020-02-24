@@ -89,7 +89,13 @@ const TabBtn = props => {
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <Done class_id={props.class_id} search={search} />
+        <Done
+          rowDatahandler={props.rowDatahandler}
+          classReference={props.classReference}
+          search={search}
+          class_id={props.class_id}
+          search={search}
+        />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
         <AllConcern class_id={props.class_id} search={search} />
