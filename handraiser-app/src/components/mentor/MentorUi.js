@@ -59,7 +59,8 @@ export default function Mentor({
   concernTitle,
   concernUser,
   handleChange,
-  handleUpload
+  handleUpload,
+  closeFlag
 }) {
   const classes = useStyles();
   let history = useHistory();
@@ -70,13 +71,47 @@ export default function Mentor({
   const [name, setName] = useState("");
   const [emoji, setEmoji] = useState(false);
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
- 
+
+  const user_id = decoded.userid;
+
+  const [requestOpen, setRequestOpen] = useState(true);
+  const [concernSelection, setConcernSelection] = useState();
+  const [onClose, setOnClose] = useState(false);
+
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const existing = () => {
+    axios({
+      method: "get",
+      url: `/api/student/queue/order/${class_id}/${user_id}?search=${""}`
+    })
+      .then(res => {
+        if (res.data.length > 0) {
+          setRequestOpen(false);
+        } else {
+          setRequestOpen(true);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const tabActivity = id => {
+    if (id === 1 || id === 2) {
+      setRequestOpen(false);
+      setConcernSelection(false);
+      setOnClose(true);
+    } else {
+      existing();
+      setOnClose(false);
+    }
   };
 
   useEffect(() => {
@@ -147,7 +182,6 @@ export default function Mentor({
   const handleClosePop = event => {
     setAnchorElPop(null);
   };
-  
 
   const openPop = Boolean(anchorElPop);
   const id = openPop ? "simple-popover" : undefined;
@@ -158,27 +192,36 @@ export default function Mentor({
         class_id={class_id}
         setSelection={setSelection}
       />
-      <Menu
-        id="menu-appbar"
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right"
-        }}
-        open={open}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={e => handleDone(rowData)}>Mark as Done</MenuItem>
-        <MenuItem onClick={e => handleBackQueue(rowData)}>
-          Back to Queue
-        </MenuItem>
-      </Menu>
+
+      {selection && requestOpen && (
+        <>
+          {" "}
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right"
+            }}
+            open={open}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={e => handleDone(rowData)}>Mark as Done</MenuItem>
+            <MenuItem onClick={e => handleBackQueue(rowData)}>
+              Back to Queue
+            </MenuItem>
+          </Menu>
+        </>
+      )}
+
       <Div>
         <Queue>
           <Tabs
             rowDatahandler={rowDatahandler}
             class_id={class_id}
             setSelection={setSelection}
+            tabActivity={tabActivity}
+            closeFlag={closeFlag}
           />
         </Queue>
         <Help>
@@ -249,15 +292,17 @@ export default function Mentor({
                   />
                 </div>
                 <div>
-                  <MoreVertIcon
-                    onClick={handleMenu}
-                    style={{
-                      fontSize: 30,
-                      color: "#c4c4c4",
-                      cursor: "pointer",
-                      color: "#372476"
-                    }}
-                  />
+                  {!onClose && (
+                    <MoreVertIcon
+                      onClick={handleMenu}
+                      style={{
+                        fontSize: 30,
+                        color: "#c4c4c4",
+                        cursor: "pointer",
+                        color: "#372476"
+                      }}
+                    />
+                  )}
                 </div>
               </Option>
             </Subject>
@@ -289,8 +334,6 @@ export default function Mentor({
           {selection ? (
             <ScrollToBottom className={classes.scrolltobottom}>
               {messages.map((message, i) => {
-                console.log(messages);
-
                 const ndate = new Date(
                   message.chat_date_created
                 ).toLocaleDateString();
@@ -299,7 +342,6 @@ export default function Mentor({
                   message.chat_date_created
                 ).toLocaleTimeString();
 
-                console.log(ndate);
                 same = false;
 
                 if (ndate !== currDate) {
@@ -364,42 +406,46 @@ export default function Mentor({
                       width: "100%"
                     }}
                   >
-                    <Input
-                      message={message}
-                      setMessage={setMessage}
-                      sendMessage={sendMessage}
-                      username={username}
-                      addEmoji={addEmoji}
-                      emoji={emoji}
-                      emojiActive={emojiActive}
-                      classes={classes}
-                    />
-                    <input type="file" onChange={handleChange} />
-                    <button onClick={handleUpload}>Upload</button>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: "15px"
-                      }}
-                    >
-                      <Fab
-                        variant="extended"
-                        size="small"
-                        className={classes.margin}
-                        onClick={sendMessage}
-                        style={{
-                          backgroundColor: "#372476",
-                          color: "white"
-                        }}
-                      >
-                        <SendIcon
-                          className={classes.extendedIcon}
-                          style={{ marginRight: "5px", color: "white" }}
+                    {requestOpen && selection && (
+                      <>
+                        <Input
+                          message={message}
+                          setMessage={setMessage}
+                          sendMessage={sendMessage}
+                          username={username}
+                          addEmoji={addEmoji}
+                          emoji={emoji}
+                          emojiActive={emojiActive}
+                          classes={classes}
                         />
-                        SEND
-                      </Fab>
-                    </div>
+                        <input type="file" onChange={handleChange} />
+                        <button onClick={handleUpload}>Upload</button>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            marginTop: "15px"
+                          }}
+                        >
+                          <Fab
+                            variant="extended"
+                            size="small"
+                            className={classes.margin}
+                            onClick={sendMessage}
+                            style={{
+                              backgroundColor: "#372476",
+                              color: "white"
+                            }}
+                          >
+                            <SendIcon
+                              className={classes.extendedIcon}
+                              style={{ marginRight: "5px", color: "white" }}
+                            />
+                            SEND
+                          </Fab>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </Field>
               </Message>

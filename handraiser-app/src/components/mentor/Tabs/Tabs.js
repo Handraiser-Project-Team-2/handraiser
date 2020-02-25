@@ -45,6 +45,8 @@ const TabBtn = props => {
 
   const handleChange = (event, newValue) => {
     event.preventDefault();
+    props.tabActivity(newValue);
+    props.closeFlag();
     setTabValue(newValue);
   };
 
@@ -86,6 +88,7 @@ const TabBtn = props => {
           class_id={props.class_id}
           search={search}
           setSelection={props.setSelection}
+          closeFlag={props.closeFlag}
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>

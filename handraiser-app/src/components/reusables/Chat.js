@@ -23,6 +23,7 @@ export default function Chat() {
   const [usertypeid, setUsertypeid] = useState("");
   const [name, setName] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
+  const [concernDescription, setConcernDescription] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
   const [image, setImage] = useState(null);
@@ -38,7 +39,6 @@ export default function Chat() {
 
     socket.on("old", ({ data }) => {
       //retreiving old messages
-      console.log(data);
       setMessages(data);
     });
   }, [ENDPOINT, room]);
@@ -88,7 +88,6 @@ export default function Chat() {
     }, 100);
   };
 
-  console.log(messages);
   const handleDone = rowData => {
     setSelection(false);
 
@@ -177,6 +176,7 @@ export default function Chat() {
       setActive(true);
       setRoom(rowData.concern.concern_id);
       setConcernTitle(rowData.concern.concern_title);
+      setConcernDescription(rowData.concern.concern_description);
 
       axios
         .get(`/api/userprofile/${rowData.concern.user_id}`, {})
@@ -187,11 +187,9 @@ export default function Chat() {
           console.log(err);
         });
     } else {
-      console.log(rowData.concern_id);
 
       socket.emit(`leave_room`, { room: room });
       setSelection(true);
-      console.log(rowData);
       setConcernTitle(rowData.concern_title);
       setRowData(rowData);
       axios
@@ -218,6 +216,7 @@ export default function Chat() {
     setConcernTitle("");
     // setMessages([]);
     setRoom(0);
+    setSelection(false)
   };
   const handleChange = e => {
     if (e.target.files[0]) {
@@ -275,6 +274,7 @@ export default function Chat() {
           name={name}
           concernTitle={concernTitle}
           setConcernTitle={setConcernTitle}
+          concernDescription={concernDescription}
           closeFlag={closeFlag}
           setMessages={setMessages}
           handleChange={handleChange}
@@ -301,6 +301,7 @@ export default function Chat() {
           concernTitle={concernTitle}
           handleChange={handleChange}
           handleUpload={handleUpload}
+          closeFlag={closeFlag}
         />
       ) : null}
     </div>

@@ -6,6 +6,9 @@ import QueQueStub from "../../reusables/Queue/QueueStub";
 import axios from "axios";
 import io from "socket.io-client";
 import { UserContext } from "../../Contexts/UserContext";
+
+let room2 = "";
+let prevdata = [];
 // let socket;
 export default function InQueue(rowDatahandler) {
   const { socket } = useContext(UserContext);
@@ -16,6 +19,8 @@ export default function InQueue(rowDatahandler) {
   const open = Boolean(anchorEl);
   const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
+  const [concernCheck, setConcernCheck] = useState();
+  // const [room, setRoom] = useState();
 
   useEffect(() => {
     // socket = io(ENDPOINT);
@@ -47,6 +52,25 @@ export default function InQueue(rowDatahandler) {
 
   // }, [rowDatahandler.rowDatahandler.search, concernsData]);
 
+  // check if the current room was removed from the queue list
+
+  const check_if_removed = (data, room) => {
+    
+    if (!prevdata) {
+      prevdata = data;
+    } else {
+
+      prevdata = data;
+
+      if (prevdata.indexOf(room) < 0) {
+        rowDatahandler.closeFlag();
+      }
+
+      console.log(prevdata.indexOf(room), prevdata, room)
+
+    }
+  };
+
   const update = data => {
     if (rowDatahandler.class_id) {
       axios({
@@ -55,6 +79,16 @@ export default function InQueue(rowDatahandler) {
       })
         .then(res => {
           setConcernsData(res.data);
+          return res;
+        })
+        .then(res => {
+          let presentId = [];
+
+          res.data.map((data, index) => {
+            presentId.push(data.concern_id);
+          });
+
+          check_if_removed(presentId, room2);
         })
         .catch(err => {
           console.log(err);
@@ -71,10 +105,14 @@ export default function InQueue(rowDatahandler) {
                 <QueQueStub
                   update={update}
                   key={index}
-                  // setSelection={rowDatahandler.setSelection}
+                  setSelection={rowDatahandler.setSelection}
                   rowDatahandler={rowDatahandler}
                   data={data}
                   index={index}
+                  closeFlag={rowDatahandler.closeFlag}
+                  setRoom={data => {
+                    room2 = data;
+                  }}
                 />
               );
             })
