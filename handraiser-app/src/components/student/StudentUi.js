@@ -186,7 +186,7 @@ export default function Student({
   const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
@@ -378,6 +378,7 @@ export default function Student({
         classReference={class_id}
         setConcernSelection={setConcernSelection}
         closeFlag={closeFlag}
+        tabActivity={tabActivity}
       />
       <Div>
         <Queue>
@@ -524,17 +525,17 @@ export default function Student({
               >
                 {concernSelection || requestOpen ? (
                   <>
-                  <Input
-                    message={message}
-                    setMessage={setMessage}
-                    sendMessage={sendMessage}
-                    username={username}
-                    addEmoji={addEmoji}
-                    emoji={emoji}
-                    emojiActive={emojiActive}
-                    classes={classes}
-                  />
-                  <input type="file" onChange={handleChange} />
+                    <Input
+                      message={message}
+                      setMessage={setMessage}
+                      sendMessage={sendMessage}
+                      username={username}
+                      addEmoji={addEmoji}
+                      emoji={emoji}
+                      emojiActive={emojiActive}
+                      classes={classes}
+                    />
+                    <input type="file" onChange={handleChange} />
                     <button onClick={handleUpload}>Upload</button>
                   </>
                 ) : (

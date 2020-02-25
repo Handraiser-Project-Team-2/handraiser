@@ -28,7 +28,7 @@ export default function Chat() {
   const [rowData, setRowData] = useState([]);
   const [image, setImage] = useState(null);
   const [url, setUrl] = useState("");
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
 
   let { class_id } = useParams();
 
@@ -187,7 +187,6 @@ export default function Chat() {
           console.log(err);
         });
     } else {
-
       socket.emit(`leave_room`, { room: room });
       setSelection(true);
       setConcernTitle(rowData.concern_title);
@@ -216,7 +215,7 @@ export default function Chat() {
     setConcernTitle("");
     // setMessages([]);
     setRoom(0);
-    setSelection(false)
+    setSelection(false);
   };
   const handleChange = e => {
     if (e.target.files[0]) {
@@ -225,38 +224,44 @@ export default function Chat() {
   };
   const handleUpload = e => {
     const dateToday = new Date();
-   
+
     const uploadTask = storage.ref(`images/${image.name}`).put(image);
-    uploadTask.on('state_changed', 
-    (snapshot) => {
-      // progrss function ....
-      // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-      // this.setState({progress});
-    }, 
-    (error) => {
-         // error function ....
-      console.log(error);
-    }, 
-  () => {
-      // complete function ....
-   
-      storage.ref('images').child(image.name).getDownloadURL().then(url => {
-        socket.emit("sendMessage", url, () => setMessage(""));
-          console.log(url);
-          axios
-          .post(`/api/chat/send`, {
-            message: url,
-            chat_date_created: dateToday,
-            concern_id: room,
-            user_id: userid
-          })
-          .then(res => {
-            console.log(res);
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        // progrss function ....
+        // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        // this.setState({progress});
+      },
+      error => {
+        // error function ....
+        console.log(error);
+      },
+      () => {
+        // complete function ....
+
+        storage
+          .ref("images")
+          .child(image.name)
+          .getDownloadURL()
+          .then(url => {
+            socket.emit("sendMessage", url, () => setMessage(""));
+            console.log(url);
+            axios
+              .post(`/api/chat/send`, {
+                message: url,
+                chat_date_created: dateToday,
+                concern_id: room,
+                user_id: userid
+              })
+              .then(res => {
+                console.log(res);
+              });
           });
-      })
-  });
+      }
+    );
   };
- 
+
   return (
     <div>
       {usertypeid === 3 ? (
