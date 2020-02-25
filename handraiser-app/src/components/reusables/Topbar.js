@@ -465,6 +465,7 @@ export default function Topbar(props) {
                     class_id={class_id}
                     setSelection={props.setSelection}
                     tabActivity={props.tabActivity}
+                    closeFlag={props.closeFlag}
                   />
                 )}
               </div>
