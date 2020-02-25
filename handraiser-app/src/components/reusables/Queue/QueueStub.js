@@ -167,9 +167,7 @@ export default function QueueStub(props) {
             `/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
             {}
           )
-          .then(data2 => {
-            console.log("115", data);
-
+          .then(data => {
             socket.emit("handshake", {
               room: props.rowDatahandler.class_id
             });
