@@ -34,16 +34,14 @@ const Input = ({
         )
       }}
     />
-    <span
-      style={{
-        position: "absolute",
-        alignItems: "center",
-        bottom: 130,
-        marginLeft: 270
-      }}
-    >
-      {emoji === true ? <Picker onClick={addEmoji} title="" /> : null}
-    </span>
+
+    {emoji === true ? (
+      <Picker
+        onClick={addEmoji}
+        title=""
+        style={{ position: "absolute", bottom: 120, marginLeft: 270 }}
+      />
+    ) : null}
   </React.Fragment>
 );
 
