@@ -131,12 +131,15 @@ export default function InQueue(props) {
   };
 
   const handleRemoveReq = () => {
+
     setAnchorEl(null);
+
     setTimeout(() => {
       props.setConcernSelection(false);
       setConcernTitle("");
       setConcernDescription("");
       props.closeFlag();
+    
       axios
         .patch(`/api/student/request/${concern.concern.concern_id}`, {})
         .then(data => {

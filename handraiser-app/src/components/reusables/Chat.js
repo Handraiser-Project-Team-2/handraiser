@@ -116,23 +116,11 @@ export default function Chat() {
             {}
           )
           .then(data => {
-            axios
-              .patch(
-                `/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-                {
-                  assisted_id: data.data[0].assisted_id,
-                  user_student_id: data.data[0].user_id,
-                  class_id: data.data[0].class_id,
-                  assist_status: "done"
-                }
-              )
-              .then(data => {
-                socket.emit("handshake", { room: class_id });
-              })
-              .catch(err => {
-                console.log(err);
-              });
-          });
+            socket.emit("handshake", { room: class_id });
+          })
+          .catch(err=>{
+            console.log(err)
+          })
       });
   };
 
@@ -213,8 +201,8 @@ export default function Chat() {
 
   const closeFlag = () => {
     setConcernTitle("");
-    // setMessages([]);
-    setRoom(0);
+    setMessages([]);
+    setRoom('');
     setSelection(false);
   };
   const handleChange = e => {
