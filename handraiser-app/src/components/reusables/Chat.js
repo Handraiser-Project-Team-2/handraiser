@@ -9,25 +9,20 @@ import Swal from "sweetalert2";
 import { storage } from "../Firebase";
 let socket;
 export default function Chat() {
-  let history = useHistory();
   const { cstate, getData } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
   const [userid, setUserid] = useState("");
   const [message, setMessage] = useState("");
-  const [feed, setfeed] = useState("");
+  const [feed] = useState("");
   const [active, setActive] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [avatar, setAvatar] = useState("");
-  const [emoji, setEmoji] = useState(false);
   const [usertypeid, setUsertypeid] = useState("");
   const [name, setName] = useState("");
   const [concernTitle, setConcernTitle] = useState("");
   const [concernDescription, setConcernDescription] = useState("");
-  const [anchorEl, setAnchorEl] = useState(null);
   const [rowData, setRowData] = useState([]);
   const [image, setImage] = useState(null);
-  const [url, setUrl] = useState("");
   const ENDPOINT = "localhost:5000";
 
   let { class_id } = useParams();
@@ -51,7 +46,6 @@ export default function Chat() {
       console.log(cstate.user_type_id);
       setUsertypeid(cstate.user_type_id);
       setUserid(cstate.user_id);
-      setAvatar(cstate.image);
       setUsername(cstate.first_name);
     }
   }, [cstate]);
@@ -100,7 +94,6 @@ export default function Chat() {
     }
     setConcernTitle("");
     setName("");
-    setAnchorEl(null);
 
     axios
       .patch(`/api/concern_list/${rowData.concern_id}`, {
@@ -138,7 +131,6 @@ export default function Chat() {
     }
     setConcernTitle("");
     setName("");
-    setAnchorEl(null);
     axios
       .patch(`/api/concern_list/${rowData.concern_id}`, {
         concern_id: rowData.concern_id,
