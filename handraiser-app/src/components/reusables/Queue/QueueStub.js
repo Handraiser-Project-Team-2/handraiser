@@ -93,7 +93,7 @@ export default function QueueStub(props) {
       props.rowDatahandler.rowDatahandler(data);
     }
     // if (props.setRoom) {
-      props.setRoom(data.concern_id);
+    props.setRoom(data.concern_id);
     // }
 
     setSelectedIndex(index);

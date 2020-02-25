@@ -199,14 +199,16 @@ const Chatfield = ({ message: { message, user_id }, userid, date, time }) => {
           {/* <p className="from-them">{ReactEmoji.emojify(message)}</p> */}
           {message.includes("https") ? (
             <a target="_blank" href={message}>
-              <im/g src={message} height="250" width="250" />
+              <img src={message} height="250" width="250" />
             </a>
           ) : (
             <p className="from-them">{ReactEmoji.emojify(message)}</p>
           )}
           <h6
             style={{
-              marginLeft: "35px",
+              display: "flex",
+              justifyContent: "flex-start",
+              marginTop: "10px",
               color: "lightgrey",
               fontSize: "10px"
             }}
