@@ -201,8 +201,8 @@ export default function Chat() {
 
   const closeFlag = () => {
     setConcernTitle("");
-    // setMessages([]);
-    setRoom(0);
+    setMessages([]);
+    setRoom('');
     setSelection(false);
   };
   const handleChange = e => {
