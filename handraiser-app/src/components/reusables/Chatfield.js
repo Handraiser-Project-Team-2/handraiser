@@ -162,7 +162,9 @@ const Chatfield = ({ message: { message, user_id }, userid, date, time }) => {
           <Div>
             {/* <p className="from-me">{ReactEmoji.emojify(message)}</p> */}
             {message.includes("https") ? (
-              <img src={message} height="250" width="200" />
+              <a target="_blank" href={message}>
+                <img src={message} height="250" width="250" />
+              </a>
             ) : (
               <p className="from-me">{ReactEmoji.emojify(message)}</p>
             )}
