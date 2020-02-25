@@ -186,6 +186,7 @@ export default function Mentor({
         rowDatahandler={rowDatahandler}
         class_id={class_id}
         setSelection={setSelection}
+        tabActivity={tabActivity}
       />
 
       {selection && requestOpen && (
@@ -203,7 +204,6 @@ export default function Mentor({
           >
             <MenuItem onClick={e => handleDone(rowData)}>Mark as Done</MenuItem>
             <MenuItem onClick={e => handleBackQueue(rowData)}>
-
               Back to Queue
             </MenuItem>
           </Menu>
@@ -330,7 +330,6 @@ export default function Mentor({
           {selection ? (
             <ScrollToBottom className={classes.scrolltobottom}>
               {messages.map((message, i) => {
-
                 const ndate = new Date(
                   message.chat_date_created
                 ).toLocaleDateString();

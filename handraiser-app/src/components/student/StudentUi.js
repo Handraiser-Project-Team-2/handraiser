@@ -375,6 +375,7 @@ export default function Student({
         classReference={class_id}
         setConcernSelection={setConcernSelection}
         closeFlag={closeFlag}
+        tabActivity={tabActivity}
       />
       <Div>
         <Queue>
