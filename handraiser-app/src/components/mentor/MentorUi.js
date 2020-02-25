@@ -191,6 +191,8 @@ export default function Mentor({
         rowDatahandler={rowDatahandler}
         class_id={class_id}
         setSelection={setSelection}
+        tabActivity={tabActivity}
+        closeFlag={closeFlag}
       />
 
       {selection && requestOpen && (
