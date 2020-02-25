@@ -17,7 +17,7 @@ export default function InQueue(rowDatahandler) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState();
   const open = Boolean(anchorEl);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
   const [concernCheck, setConcernCheck] = useState();
   // const [room, setRoom] = useState();
@@ -55,7 +55,6 @@ export default function InQueue(rowDatahandler) {
   // check if the current room was removed from the queue list
 
   const check_if_removed = (data, room) => {
-    
     if (!prevdata) {
       prevdata = data;
     } else {
