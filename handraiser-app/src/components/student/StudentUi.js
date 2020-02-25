@@ -5,6 +5,7 @@ import TextField from "@material-ui/core/TextField";
 // import AccountCircle from "@material-ui/icons/AccountCircle";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import ImageIcon from "@material-ui/icons/Image";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
 import { useHistory, useParams } from "react-router-dom";
@@ -186,7 +187,7 @@ export default function Student({
   const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "172.60.62.113:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
@@ -524,18 +525,16 @@ export default function Student({
               >
                 {concernSelection || requestOpen ? (
                   <>
-                  <Input
-                    message={message}
-                    setMessage={setMessage}
-                    sendMessage={sendMessage}
-                    username={username}
-                    addEmoji={addEmoji}
-                    emoji={emoji}
-                    emojiActive={emojiActive}
-                    classes={classes}
-                  />
-                  <input type="file" onChange={handleChange} />
-                    <button onClick={handleUpload}>Upload</button>
+                    <Input
+                      message={message}
+                      setMessage={setMessage}
+                      sendMessage={sendMessage}
+                      username={username}
+                      addEmoji={addEmoji}
+                      emoji={emoji}
+                      emojiActive={emojiActive}
+                      classes={classes}
+                    />
                   </>
                 ) : (
                   <TextField
@@ -554,6 +553,19 @@ export default function Student({
                     marginTop: "15px"
                   }}
                 >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <input
+                      type="file"
+                      onChange={handleChange}
+                      style={{ position: "relative", marginRight: 500 }}
+                    />
+                    <ImageIcon
+                      onClick={handleUpload}
+                      style={{ fontSize: "40px" }}
+                    >
+                      Upload
+                    </ImageIcon>
+                  </div>
                   {requestOpen ? (
                     <Request onClick={sendRequest}>SEND REQUEST</Request>
                   ) : concernSelection ? (
