@@ -160,7 +160,8 @@ const Chatfield = ({ message: { message, user_id }, userid, date, time }) => {
       <Cont>
         <Sender>
           <Div>
-            <p className="from-me">{ReactEmoji.emojify(message)}</p>
+            {/* <p className="from-me">{ReactEmoji.emojify(message)}</p> */}
+            {message.includes('https')? <img src={message} height="250" width="200"/> :<p className="from-me">{ReactEmoji.emojify(message)}</p>}
           </Div>
           <h6
             style={{
@@ -191,7 +192,8 @@ const Chatfield = ({ message: { message, user_id }, userid, date, time }) => {
       </h6>
       <Cont2>
         <Receiver>
-          <p className="from-them">{ReactEmoji.emojify(message)}</p>
+          {/* <p className="from-them">{ReactEmoji.emojify(message)}</p> */}
+          {message.includes('https')? <img src={message} height="250" width="250"/> :<p className="from-me">{ReactEmoji.emojify(message)}</p>}
           <h6
             style={{
               display: "flex",
