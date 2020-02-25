@@ -1,9 +1,9 @@
 #  Handraiser Project
 # Getting Started
 1. Clone this repository
-2. Run `docker-compose up db` as initial setup for the backend.
+2. On the root directory, Run `docker-compose up db` as initial setup for the backend.
 3. Next, execute `npm run migrate up` to setup the database.
-4. Run `npm run dev` in the root folder to start the react-app.
+4. Then run `npm run dev` to start the react-app.
 ## Prerequisites
    - Web Browser
    - Terminal
