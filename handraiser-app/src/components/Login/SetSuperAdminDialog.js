@@ -12,7 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
 export default function ResponsiveDialog({ toggleDialog, setToggleDialog }) {
-  const { register, handleSubmit, errors, setError, clearError } = useForm();
+  const { register, errors, setError, clearError } = useForm();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [text, setText] = useState("");

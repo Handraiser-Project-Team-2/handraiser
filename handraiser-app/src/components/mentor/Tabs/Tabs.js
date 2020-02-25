@@ -97,7 +97,6 @@ const TabBtn = props => {
           classReference={props.classReference}
           search={search}
           class_id={props.class_id}
-          search={search}
         />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>

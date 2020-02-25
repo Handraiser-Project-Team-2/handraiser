@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Logo from "../images/google.png";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { GoogleLogin } from "react-google-login";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import axios from "axios";
 import {
@@ -13,7 +13,6 @@ import {
   Continue,
   Title
 } from "../../Styles/Styles";
-import io from "socket.io-client";
 import { UserContext } from "../Contexts/UserContext";
 // COMPONENT
 import SetSuperAdminDialog from "./SetSuperAdminDialog";
@@ -84,9 +83,8 @@ export default function Login(props) {
 
   const [toggleDialog, setToggleDialog] = useState(false);
   const handleKeyDown = event => {
-    if (event.ctrlKey && event.keyCode == 90) {
+    if (event.ctrlKey && event.keyCode === 90) {
       setToggleDialog(true);
-      // console.log('he')
     }
   };
   return (

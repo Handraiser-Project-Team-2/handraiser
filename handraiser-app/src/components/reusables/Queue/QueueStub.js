@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Handshake from "../../images/handshake.gif";
 import Badge from "@material-ui/core/Badge";
 import ListItem from "@material-ui/core/ListItem";
@@ -6,13 +6,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
-import { Typography, Paper } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Swal from "sweetalert2";
 import axios from "axios";
-import io from "socket.io-client";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import DoneIcon from "@material-ui/icons/Done";
 import { UserContext } from "../../Contexts/UserContext";
@@ -66,13 +65,11 @@ const StyledBadgeGrey = withStyles(theme => ({
 export default function QueueStub(props) {
   const { socket } = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState();
-  const [concernsData, setConcernsData] = useState();
   const [concern, setConcern] = useState("");
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-  // const ENDPOINT = "172.60.62.113:5000";
+  // const ENDPOINT = "localhost:5000";
   // // let socket = io(ENDPOINT);
 
   // useEffect(() => {
@@ -96,7 +93,6 @@ export default function QueueStub(props) {
     props.setRoom(data.concern_id);
     // }
 
-    setSelectedIndex(index);
   };
 
   const handleBackQueue = () => {

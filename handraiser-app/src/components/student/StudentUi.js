@@ -187,7 +187,7 @@ export default function Student({
   const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
