@@ -169,6 +169,9 @@ export default function Student({
   setConcernTitle,
   closeFlag,
   setMessages,
+  handleUpload,
+  handleChange,
+
   concernDescription
 }) {
   const classes = useStyles();
@@ -520,6 +523,7 @@ export default function Student({
                 }}
               >
                 {concernSelection || requestOpen ? (
+                  <>
                   <Input
                     message={message}
                     setMessage={setMessage}
@@ -530,6 +534,9 @@ export default function Student({
                     emojiActive={emojiActive}
                     classes={classes}
                   />
+                  <input type="file" onChange={handleChange} />
+                    <button onClick={handleUpload}>Upload</button>
+                  </>
                 ) : (
                   <TextField
                     fullWidth
