@@ -425,18 +425,17 @@ export default function Mentor({
                         <div
                           style={{
                             display: "flex",
-                            justifyContent: "flex-end",
+                            justifyContent: "space-between",
                             marginTop: "15px"
                           }}
                         >
                           <div
-                            style={{ display: "flex", flexDirection: "row" }}
+                            style={{
+                              display: "flex",
+                              flexDirection: "row"
+                            }}
                           >
-                            <input
-                              type="file"
-                              onChange={handleChange}
-                              style={{ position: "relative", marginRight: 550 }}
-                            />
+                            <input type="file" onChange={handleChange} />
                             <ImageIcon
                               onClick={handleUpload}
                               style={{ fontSize: "40px" }}
