@@ -5,6 +5,7 @@ import TextField from "@material-ui/core/TextField";
 // import AccountCircle from "@material-ui/icons/AccountCircle";
 import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import ImageIcon from "@material-ui/icons/Image";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
 import { useHistory, useParams } from "react-router-dom";
@@ -535,8 +536,6 @@ export default function Student({
                       emojiActive={emojiActive}
                       classes={classes}
                     />
-                    <input type="file" onChange={handleChange} />
-                    <button onClick={handleUpload}>Upload</button>
                   </>
                 ) : (
                   <TextField
@@ -555,6 +554,19 @@ export default function Student({
                     marginTop: "15px"
                   }}
                 >
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <input
+                      type="file"
+                      onChange={handleChange}
+                      style={{ position: "relative", marginRight: 500 }}
+                    />
+                    <ImageIcon
+                      onClick={handleUpload}
+                      style={{ fontSize: "40px" }}
+                    >
+                      Upload
+                    </ImageIcon>
+                  </div>
                   {requestOpen ? (
                     <Request onClick={sendRequest}>SEND REQUEST</Request>
                   ) : concernSelection ? (

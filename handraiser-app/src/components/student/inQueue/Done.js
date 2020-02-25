@@ -74,10 +74,10 @@ const useStyles = makeStyles(theme => ({
   },
   inline: {
     display: "inline-block",
-    overflow: "hidden",
+    overflow: " hidden",
     "text-overflow": "ellipsis",
     "white-space": " nowrap",
-    width: "250px",
+    width: "300px",
     color: "grey",
     "@media (max-width: 600px)": {
       display: "inline-block",
