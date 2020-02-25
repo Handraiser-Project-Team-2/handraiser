@@ -167,28 +167,15 @@ export default function QueueStub(props) {
             `/api/assisted_by/${data.data.class_id}/${data.data.user_id}`,
             {}
           )
-          .then(data => {
-            axios
-              .patch(
-                `/api/assistance/${data.data[0].assisted_id}/${data.data[0].class_id}/${data.data[0].user_student_id}`,
-                {
-                  assisted_id: data.data[0].assisted_id,
-                  user_student_id: data.data[0].user_id,
-                  class_id: data.data[0].class_id,
-                  assist_status: "done"
-                }
-              )
-              .then(data => {
-                socket.emit("handshake", {
-                  room: props.rowDatahandler.class_id
-                });
+          .then(data2 => {
+            console.log("115", data);
 
-                if (props.update) props.update("");
-              })
-              .catch(err => {
-                console.log(err);
-              });
-          });
+            socket.emit("handshake", {
+              room: props.rowDatahandler.class_id
+            });
+          }).catch(err=>{
+            console.log(err)
+          })
       });
   };
 
