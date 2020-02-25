@@ -192,8 +192,8 @@ const Chatfield = ({ message: { message, user_id }, userid, date, time }) => {
       </h6>
       <Cont2>
         <Receiver>
-          <p className="from-them">{ReactEmoji.emojify(message)}</p>
-         
+          {/* <p className="from-them">{ReactEmoji.emojify(message)}</p> */}
+          {message.includes('https')? <img src={message} height="250" width="250"/> :<p className="from-me">{ReactEmoji.emojify(message)}</p>}
           <h6
             style={{
               marginLeft: "35px",
