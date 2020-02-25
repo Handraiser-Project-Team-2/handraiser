@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import ImageIcon from "@material-ui/icons/Image";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import Popover from "@material-ui/core/Popover";
@@ -420,8 +421,7 @@ export default function Mentor({
                           emojiActive={emojiActive}
                           classes={classes}
                         />
-                        <input type="file" onChange={handleChange} />
-                        <button onClick={handleUpload}>Upload</button>
+
                         <div
                           style={{
                             display: "flex",
@@ -429,6 +429,21 @@ export default function Mentor({
                             marginTop: "15px"
                           }}
                         >
+                          <div
+                            style={{ display: "flex", flexDirection: "row" }}
+                          >
+                            <input
+                              type="file"
+                              onChange={handleChange}
+                              style={{ position: "relative", marginRight: 550 }}
+                            />
+                            <ImageIcon
+                              onClick={handleUpload}
+                              style={{ fontSize: "40px" }}
+                            >
+                              Upload
+                            </ImageIcon>
+                          </div>
                           <Fab
                             variant="extended"
                             size="small"
