@@ -465,6 +465,7 @@ export default function Topbar(props) {
                     setConcernSelection={props.setConcernSelection}
                     closeFlag={props.closeFlag}
                     classReference={props.classReference}
+                    tabActivity={props.tabActivity}
                   />
                 ) : (
                   <MentorTabs
@@ -472,6 +473,8 @@ export default function Topbar(props) {
                     rowDatahandler={props.rowDatahandler}
                     class_id={class_id}
                     setSelection={props.setSelection}
+                    tabActivity={props.tabActivity}
+                    closeFlag={props.closeFlag}
                   />
                 )}
               </div>

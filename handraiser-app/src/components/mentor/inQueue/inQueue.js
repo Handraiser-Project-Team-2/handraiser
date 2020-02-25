@@ -59,15 +59,13 @@ export default function InQueue(rowDatahandler) {
     if (!prevdata) {
       prevdata = data;
     } else {
-
       prevdata = data;
 
       if (prevdata.indexOf(room) < 0) {
         rowDatahandler.closeFlag();
       }
 
-      console.log(prevdata.indexOf(room), prevdata, room)
-
+      console.log(prevdata.indexOf(room), prevdata, room);
     }
   };
 
