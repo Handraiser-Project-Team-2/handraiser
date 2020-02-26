@@ -6,15 +6,15 @@ import Swal from "sweetalert2";
 import { useHistory, useParams } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import ImageIcon from "@material-ui/icons/Image";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import Popover from "@material-ui/core/Popover";
 import SendIcon from "@material-ui/icons/Send";
 import { makeStyles } from "@material-ui/core/styles";
 import teal from "@material-ui/core/colors/teal";
 import GroupIcon from "@material-ui/icons/Group";
 import HelpIcon from "@material-ui/icons/Help";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
+import SendRoundedIcon from "@material-ui/icons/SendRounded";
 import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
 import {
@@ -425,24 +425,11 @@ export default function Mentor({
                         <div
                           style={{
                             display: "flex",
-                            justifyContent: "space-between",
-                            marginTop: "15px"
+                            justifyContent: "flex-end",
+                            marginTop: "15px",
+                            alignItems: "center"
                           }}
                         >
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "row"
-                            }}
-                          >
-                            <input type="file" onChange={handleChange} />
-                            <ImageIcon
-                              onClick={handleUpload}
-                              style={{ fontSize: "40px" }}
-                            >
-                              Upload
-                            </ImageIcon>
-                          </div>
                           <Fab
                             variant="extended"
                             size="small"
@@ -459,6 +446,27 @@ export default function Mentor({
                             />
                             SEND
                           </Fab>
+                          <label htmlFor={"file"}>
+                            <AttachFileIcon
+                              style={{
+                                color: "#372476",
+                                fontSize: "30px",
+                                cursor: "pointer"
+                              }}
+                            />
+                          </label>
+                          <input
+                            id="file"
+                            className={classes.input}
+                            type="file"
+                            onChange={handleChange}
+                          />
+                          <SendRoundedIcon
+                            style={{ color: "#372476", cursor: "pointer" }}
+                            onClick={handleUpload}
+                          >
+                            Upload
+                          </SendRoundedIcon>
                         </div>
                       </>
                     )}
@@ -481,6 +489,11 @@ export default function Mentor({
 }
 
 const useStyles = makeStyles(theme => ({
+  input: {
+    position: "absolute",
+    zIndex: -1,
+    opacity: 0
+  },
   title: {
     wordBreak: "break-all"
   },
