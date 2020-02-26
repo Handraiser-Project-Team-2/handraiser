@@ -1,9 +1,20 @@
 #  Handraiser Project
 # Getting Started
-1. Clone this repository
-2. On the root directory, Run `docker-compose up db` as initial setup for the backend.
-3. Next, execute `npm run migrate up` to setup the database.
-4. Then run `npm run dev` to start the react-app.
+1. Clone this repository.
+2. Run `npm install` on both root directory and handraiser-app folder.
+3. On the root and handraiser app directory, create `.env` file with the template:
+
+> DB_HOST = localhost  
+> DB_USER = postgres   
+> DB_PORT = port  
+> DB_NAME = handraiser
+> DB_PASS = handraiser
+4. On the root directory, create a file `secret.js` with the template:
+>module.exports = ' sample token';
+5. Next, run `docker-compose up db` as initial setup for the back end.
+6. Create a database named as `handraiser` within `postgres`
+7. Next, execute `npm run migrate up` to setup the database.
+8. Finally run `npm run dev` to start the react-app.
 ## Prerequisites
    - Web Browser
    - Terminal
@@ -27,7 +38,7 @@
 - Socket.IO
 - Node JS
 ## Members
-- Christian Frecia
+- Christian Ray Frecia
 - Jeffrey Molleno
 - Lyza Mirabete
 - Jaymard Menor
