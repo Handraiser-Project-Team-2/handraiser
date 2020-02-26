@@ -16,7 +16,6 @@
 6. Create a database named as `handraiser` within `postgres`
 7. Next, execute `npm run migrate up` to setup the database.
 8. Finally run `npm run dev` to start the react-app.
->>>>>>> e79c5db8a21b51baec49d9e92cbb27e81c1ac383
 ## Prerequisites
 
 - Web Browser
