@@ -1,14 +1,6 @@
 # Handraiser Project
 
 # Getting Started
-<<<<<<< HEAD
-
-1. Clone this repository
-2. On the root directory, Run `docker-compose up db` as initial setup for the backend.
-3. Next, execute `npm run migrate up` to setup the database.
-4. Then run `npm run dev` to start the react-app.
-
-=======
 1. Clone this repository.
 2. Run `npm install` on both root directory and handraiser-app folder.
 3. On the root and handraiser app directory, create `.env` file with the template:
@@ -54,12 +46,7 @@
 - Node JS
 
 ## Members
-<<<<<<< HEAD
-
-- Christian Frecia
-=======
 - Christian Ray Frecia
->>>>>>> e79c5db8a21b51baec49d9e92cbb27e81c1ac383
 - Jeffrey Molleno
 - Lyza Mirabete
 - Jaymard Menor
