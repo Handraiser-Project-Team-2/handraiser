@@ -1,22 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-// import IconButton from "@material-ui/core/IconButton";
-// import AccountCircle from "@material-ui/icons/AccountCircle";
-import Avatar from "@material-ui/core/Avatar";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ImageIcon from "@material-ui/icons/Image";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { useHistory, useParams } from "react-router-dom";
-import SendIcon from "@material-ui/icons/Send";
 import Popover from "@material-ui/core/Popover";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
 import Chatfield from "../reusables/Chatfield";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import Fab from "@material-ui/core/Fab";
+import SendRoundedIcon from "@material-ui/icons/SendRounded";
 
 import Input from "../reusables/Input";
 import {
@@ -118,6 +115,11 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "100%",
     marginRight: "5px",
     animation: "bob 2s infinite"
+  },
+  input: {
+    position: "absolute",
+    zIndex: -1,
+    opacity: 0
   }
 }));
 const DivAnimation = styled.div`
@@ -554,23 +556,40 @@ export default function Student({
                     marginTop: "15px"
                   }}
                 >
-                  <div style={{ display: "flex", flexDirection: "row" }}>
-                    <input
-                      type="file"
-                      onChange={handleChange}
-                      style={{ position: "relative", marginRight: 500 }}
-                    />
-                    <ImageIcon
-                      onClick={handleUpload}
-                      style={{ fontSize: "40px" }}
-                    >
-                      Upload
-                    </ImageIcon>
-                  </div>
                   {requestOpen ? (
                     <Request onClick={sendRequest}>SEND REQUEST</Request>
                   ) : concernSelection ? (
-                    <Send onClick={sendMessage}>SEND</Send>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      <Send onClick={sendMessage}>SEND</Send>
+                      <label htmlFor={"file"}>
+                        <AttachFileIcon
+                          style={{
+                            color: "forestgreen",
+                            fontSize: "30px",
+                            cursor: "pointer"
+                          }}
+                        />
+                      </label>
+                      <input
+                        id="file"
+                        className={classes.input}
+                        type="file"
+                        onChange={handleChange}
+                      />
+                      <SendRoundedIcon
+                        style={{ color: "forestgreen", cursor: "pointer" }}
+                        onClick={handleUpload}
+                      >
+                        Upload
+                      </SendRoundedIcon>
+                    </div>
                   ) : (
                     <button
                       disabled
