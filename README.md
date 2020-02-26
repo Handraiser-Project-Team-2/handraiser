@@ -43,6 +43,7 @@
 - React
 - Socket.IO
 - Node JS
+- Firebase
 
 ## Members
 - Christian Ray Frecia
