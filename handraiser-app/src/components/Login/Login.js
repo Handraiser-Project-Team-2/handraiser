@@ -14,6 +14,7 @@ import {
   Title
 } from "../../Styles/Styles";
 import io from "socket.io-client";
+import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../Contexts/UserContext";
 // COMPONENT
 import SetSuperAdminDialog from "./SetSuperAdminDialog";
@@ -43,7 +44,7 @@ export default function Login(props) {
               user_status: 1
             })
             .then(data => {
-              console.log("updating user activity");
+              // console.log(response.profileObj.familyName);
               socket.emit("user_activity", {});
             })
             .catch(err => {

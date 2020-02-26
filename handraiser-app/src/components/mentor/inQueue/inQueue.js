@@ -55,7 +55,6 @@ export default function InQueue(rowDatahandler) {
   // check if the current room was removed from the queue list
 
   const check_if_removed = (data, room) => {
-    
     if (!prevdata) {
       prevdata = data;
     } else {
