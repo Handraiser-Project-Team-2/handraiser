@@ -134,6 +134,7 @@ export default function Login(props) {
                   background:`url(${Logo}) 61% 7% / cover`,
                   height:'40px',
                   width:'40px',
+                  marginTop: '1px'
                 }}/>
                 <Continue>LOGIN WITH GOOGLE</Continue>
               </LoginCont>
