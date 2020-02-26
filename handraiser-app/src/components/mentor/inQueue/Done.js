@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 export default function InQueue({ class_id, search, rowDatahandler }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
-  const [setRoom] = useState();
+  const [room, setRoom] = useState();
 
   useEffect(() => {
     axios({
