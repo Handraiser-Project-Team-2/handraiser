@@ -176,7 +176,7 @@ export default function Student({
 }) {
   const classes = useStyles();
   let history = useHistory();
-  const [setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
   const { cstate, getData, socket } = useContext(UserContext);
