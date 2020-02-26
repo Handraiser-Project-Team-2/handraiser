@@ -94,7 +94,6 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log("token", token);
     axios({
       method: "post",
       url: `/api/mentor/classroom/add`,
@@ -118,6 +117,7 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
     <React.Fragment>
       <Collapse in={add}>
         <Alert
+          className={classes.alert}
           severity="success"
           onClose={() => {
             setAdd(false);

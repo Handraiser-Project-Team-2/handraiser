@@ -2,7 +2,8 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import { Picker } from "emoji-mart";
-
+import ImageIcon from "@material-ui/icons/Image";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
 const Input = ({
   message,
   sendMessage,
@@ -27,10 +28,12 @@ const Input = ({
       }}
       InputProps={{
         endAdornment: (
-          <InsertEmoticonIcon
-            onClick={emojiActive}
-            style={{ color: "grey", cursor: "pointer", float: "left" }}
-          />
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <InsertEmoticonIcon
+              onClick={emojiActive}
+              style={{ color: "grey", cursor: "pointer", float: "left" }}
+            />
+          </div>
         )
       }}
     />
@@ -38,6 +41,8 @@ const Input = ({
     {emoji === true ? (
       <Picker
         onClick={addEmoji}
+        showPreview={false}
+        showSkinTones={false}
         title=""
         style={{ position: "absolute", bottom: 120, marginLeft: 270 }}
       />
