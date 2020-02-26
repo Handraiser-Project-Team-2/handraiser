@@ -61,7 +61,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function Topbar(props) {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
 
   const [state, setState] = React.useState({
     left: false
@@ -112,7 +111,6 @@ export default function Topbar(props) {
   };
 
   const [classMem, setClassMem] = useState([]);
-  const [search, setSearch] = useState("");
 
   const getClassMember = () => {
     if (class_id) {
@@ -131,7 +129,6 @@ export default function Topbar(props) {
   const [tempClassMem, setTempClassMem] = useState([]);
   const classMembers = classMem.concat(classInfo);
   const handleSearch = e => {
-    setSearch(e.target.value);
     const filteredMembers = classMembers.filter(
       el =>
         el.first_name.toLowerCase().indexOf(e.target.value.toLowerCase()) !==

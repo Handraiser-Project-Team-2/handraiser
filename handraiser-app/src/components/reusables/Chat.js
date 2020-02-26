@@ -4,7 +4,7 @@ import { UserContext } from "../Contexts/UserContext";
 import io from "socket.io-client";
 import StudentUi from "../student/StudentUi";
 import MentorUi from "../mentor/MentorUi";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { storage } from "../Firebase";
 let socket;

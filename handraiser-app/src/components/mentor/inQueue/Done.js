@@ -30,8 +30,7 @@ const useStyles = makeStyles(theme => ({
 export default function InQueue({ class_id, search, rowDatahandler }) {
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [room, setRoom] = useState();
+  const [setRoom] = useState();
 
   useEffect(() => {
     axios({
@@ -60,7 +59,6 @@ export default function InQueue({ class_id, search, rowDatahandler }) {
                   index={index}
                   key={index}
                   setRoom={setRoom}
-
                 />
               );
             })

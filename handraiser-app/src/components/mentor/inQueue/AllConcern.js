@@ -4,7 +4,6 @@ import List from "@material-ui/core/List";
 import { Paper } from "@material-ui/core";
 import axios from "axios";
 import "status-indicator/styles.css";
-import io from "socket.io-client";
 import { UserContext } from "../../Contexts/UserContext";
 import QueueStub from "../../reusables/Queue/QueueStub";
 
@@ -46,8 +45,6 @@ export default function InQueue({ class_id, search }) {
   // const { socket } = useContext(UserContext);
   const classes = useStyles();
   const [concernsData, setConcernsData] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
 
   const { cstate, getData, socket } = useContext(UserContext);
 

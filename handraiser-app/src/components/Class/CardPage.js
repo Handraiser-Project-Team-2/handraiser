@@ -35,12 +35,6 @@ export default function CardPage({ classData, data, fetchMentorClass }) {
   const handleToggle = () => {
     setOpen(!open);
   };
-  const loading = () => {
-    handleToggle();
-    setTimeout(() => {
-      setOpen(false);
-    }, 1000);
-  };
 
   useEffect(() => {
     if (!cstate) {

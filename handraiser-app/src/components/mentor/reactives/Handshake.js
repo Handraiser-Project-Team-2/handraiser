@@ -2,9 +2,7 @@ import React, { useEffect, useContext } from "react";
 import HandShakeImage from "../../images/HandshakeEmoji.png";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import io from "socket.io-client";
-import { useHistory, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useParams } from "react-router-dom";
 import { UserContext } from "../../Contexts/UserContext";
 
 var jwtDecode = require("jwt-decode");
@@ -103,7 +101,7 @@ export default function Handshake(props) {
                 // window.location.reload();
               }}
             >
-              <img className={classes.handshake_img} src={HandShakeImage} />
+              <img className={classes.handshake_img} src={HandShakeImage} alt="" />
               <p className={classes.handshake_text_btn}>ACCEPT</p>
             </div>
           </div>

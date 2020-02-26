@@ -2,8 +2,6 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import { Picker } from "emoji-mart";
-import ImageIcon from "@material-ui/icons/Image";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
 const Input = ({
   message,
   sendMessage,
