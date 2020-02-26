@@ -270,8 +270,8 @@ export default function Topbar(props) {
                         <span
                           style={{
                             overflow: " hidden",
-                            "text-overflow": "ellipsis",
-                            "white-space": " nowrap",
+                            textOverflow: "ellipsis",
+                            whiteSpace: " nowrap",
                             width: "250px",
                             display: "flex",
                             alignItems: "center",
@@ -292,8 +292,8 @@ export default function Topbar(props) {
                           style={{
                             display: "inline-block",
                             overflow: "hidden",
-                            "text-overflow": "ellipsis",
-                            "white-space": " nowrap",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
                             width: "300px",
                             padding: "10px 10px 8px 9px",
                             color: "darkblue"
