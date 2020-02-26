@@ -109,7 +109,8 @@ export default function Login(props) {
         <p
           style={{
             color: "#BDBDBD",
-            fontSize: 15
+            fontSize: 15,
+            paddingTop:'26.5px'
           }}
         >
           Login to continue
@@ -128,16 +129,12 @@ export default function Login(props) {
               disabled={renderProps.disabled}
             >
               <LoginCont>
-                <img
-                  src={Logo}
-                  alt=""
-                  style={{
-                    paddingTop: 8,
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "100px"
-                  }}
-                />
+
+                <div style={{
+                  background:`url(${Logo}) 61% 7% / cover`,
+                  height:'40px',
+                  width:'40px',
+                }}/>
                 <Continue>LOGIN WITH GOOGLE</Continue>
               </LoginCont>
             </LoginButton>
