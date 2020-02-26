@@ -22,7 +22,6 @@ export default function Login(props) {
 
   const responseGoogle = response => {
     if (response.googleId) {
-      // console.log(response);
       setLogged(true);
       axios({
         method: "post",
@@ -42,7 +41,6 @@ export default function Login(props) {
               user_status: 1
             })
             .then(data => {
-              console.log("updating user activity");
               socket.emit("user_activity", {});
             })
             .catch(err => {

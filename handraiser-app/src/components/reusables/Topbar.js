@@ -571,7 +571,6 @@ export default function Topbar(props) {
       data: tokState
     })
       .then(data => {
-        // console.log(data.data);
         setClassData(data.data);
       })
       .catch(err => {

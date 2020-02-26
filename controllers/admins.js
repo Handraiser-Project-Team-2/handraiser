@@ -14,7 +14,6 @@ module.exports = {
       db.validations
         .find({ validation_email: email })
         .then(data => {
-          console.log(!data);
 
           if (!data || data.length === 0) {
             // register then

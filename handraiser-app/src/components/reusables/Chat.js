@@ -43,7 +43,6 @@ export default function Chat() {
       getData();
     }
     if (cstate) {
-      console.log(cstate.user_type_id);
       setUsertypeid(cstate.user_type_id);
       setUserid(cstate.user_id);
       setUsername(cstate.first_name);
@@ -52,7 +51,6 @@ export default function Chat() {
 
   useEffect(() => {
     socket.on("message", message => {
-      console.log(message);
       setMessages([...messages, message]);
     });
 
@@ -76,7 +74,10 @@ export default function Chat() {
             user_id: userid
           })
           .then(res => {
-            console.log(res);
+            // console.log(res);
+          })
+          .catch(err => {
+            console.log(err);
           });
       }
     }, 100);
@@ -111,9 +112,9 @@ export default function Chat() {
           .then(data => {
             socket.emit("handshake", { room: class_id });
           })
-          .catch(err=>{
-            console.log(err)
-          })
+          .catch(err => {
+            console.log(err);
+          });
       });
   };
 
@@ -150,7 +151,6 @@ export default function Chat() {
   const rowDatahandler = rowData => {
     if (usertypeid === 3 && rowData) {
       socket.emit(`leave_room`, { room: room });
-      console.log(rowData.concern.concern_id);
 
       // localStorage.setItem("room",rowData.concern.concern_id)
       setActive(true);
@@ -194,7 +194,7 @@ export default function Chat() {
   const closeFlag = () => {
     setConcernTitle("");
     setMessages([]);
-    setRoom('');
+    setRoom("");
     setSelection(false);
   };
   const handleChange = e => {

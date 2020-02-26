@@ -66,7 +66,6 @@ export default function EditClassDialog({ data, fetchMentorClass }) {
 
   const handleClickOpen = () => {
     setOpen(true);
-    console.log(data.class_id);
   };
 
   const [text, setText] = useState({

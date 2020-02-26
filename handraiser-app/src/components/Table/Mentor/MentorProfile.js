@@ -45,7 +45,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MentorProfile({ profileData, classData }) {
-  // console.log(profileData);
   const classes = useStyles();
   return (
     <div className={classes.root}>

@@ -46,7 +46,6 @@ export default function InQueue(props) {
     });
 
     socket.on("updateComponents", message => {
-      console.log("update components");
       update("");
     });
 

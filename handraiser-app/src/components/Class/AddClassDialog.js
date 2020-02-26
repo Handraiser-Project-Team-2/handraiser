@@ -86,21 +86,18 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
       ...text,
       [e.target.name]: e.target.value.length
     });
-    console.log(text);
   };
 
   const [add, setAdd] = useState(false);
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log("token", token);
     axios({
       method: "post",
       url: `/api/mentor/classroom/add`,
       data: state
     })
       .then(data => {
-        console.log(data);
         fetchMentorClass();
         handleClose();
         setAdd(true);

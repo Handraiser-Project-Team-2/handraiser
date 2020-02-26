@@ -69,13 +69,6 @@ export default function QueueStub(props) {
   const classes = useStyles();
   const open = Boolean(anchorEl);
 
-  // const ENDPOINT = "localhost:5000";
-  // // let socket = io(ENDPOINT);
-
-  // useEffect(() => {
-  //   console.log("asdsad",socket)
-  // }, [ENDPOINT]);
-
   const handleMenu = (event, concern) => {
     setConcern(concern);
     setAnchorEl(event.currentTarget);

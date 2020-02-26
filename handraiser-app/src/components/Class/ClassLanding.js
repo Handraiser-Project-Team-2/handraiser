@@ -122,7 +122,6 @@ export default function ClassLanding(props) {
       data: tokState
     })
       .then(data => {
-        // console.log(data.data);
         setClassData(data.data);
         setTempClassData(data.data);
       })
