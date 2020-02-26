@@ -12,7 +12,6 @@ import { Typography, Paper } from "@material-ui/core";
 
 import axios from "axios";
 import { UserContext } from "../../Contexts/UserContext";
-import io from "socket.io-client";
 
 const StyledBadgeGreen = withStyles(theme => ({
   badge: {
@@ -241,7 +240,7 @@ export default function InQueue(props) {
                     <div>
                       {concern.concern.concern_status === 1 ? (
                         <Avatar variant="square" src={Handshake} />
-                      ) : concern.queue_order_num == 0 ? (
+                      ) : concern.queue_order_num === 0 ? (
                         <div className={classes.next}>
                           <span
                             style={{

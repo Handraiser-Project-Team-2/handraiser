@@ -21,17 +21,14 @@ import { UserContext } from "../Contexts/UserContext";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { toast, ToastContainer } from "react-toastify";
-import { Divider, Tooltip, Button } from "@material-ui/core";
+import { Divider, Tooltip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ClassIcon from "@material-ui/icons/Class";
 import CloseIcon from "@material-ui/icons/Close";
 import io from "socket.io-client";
-import LockIcon from "@material-ui/icons/Lock";
 import TextField from "@material-ui/core/TextField";
 import SchoolIcon from "@material-ui/icons/School";
-import ListItemText from "@material-ui/core/ListItemText";
 import StudentTabs from "../student/Tabs/Tabs";
-import Bkg from "../images/classroom-background-clipart-11.jpg";
 import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
   tab: {
@@ -574,7 +571,6 @@ export default function Topbar(props) {
       data: tokState
     })
       .then(data => {
-        // console.log(data.data);
         setClassData(data.data);
       })
       .catch(err => {

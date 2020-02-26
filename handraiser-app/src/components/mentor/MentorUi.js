@@ -160,7 +160,6 @@ export default function Mentor({
   const emojiActive = () => {
     if (emoji === true) {
       setEmoji(false);
-      console.log(emoji);
     } else {
       setEmoji(true);
     }

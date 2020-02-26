@@ -273,7 +273,6 @@ export default function Student({
         })
           .then(flag => {
             setConcernSelection(false);
-            console.log("AA", concernSelection);
             existing();
 
             socket.emit(
@@ -339,7 +338,6 @@ export default function Student({
   const emojiActive = () => {
     if (emoji === true) {
       setEmoji(false);
-      console.log(emoji);
     } else {
       setEmoji(true);
     }
@@ -475,8 +473,7 @@ export default function Student({
                 const ntime = new Date(
                   message.chat_date_created
                 ).toLocaleTimeString();
-
-                console.log(ndate);
+                
                 same = false;
 
                 if (ndate !== currDate) {
