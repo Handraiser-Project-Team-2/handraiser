@@ -1,116 +1,6 @@
 import styled from "styled-components";
 import backgroundImg from "../components/images/programmer_1.png";
-//Table Styles
-export const TabBox = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  @media screen and (max-width: 425px) {
-    flex-direction: column;
-  }
-`;
-export const BtnBox = styled.div`
-  display: flex;
-  @media screen and (max-width: 425px) {
-    flex-direction: column;
-    padding-top: 10px;
-  }
-`;
-export const RowCont = styled.div`
-  margin-top: -5px;
-`;
-export const TableStyle = styled.div`
-  @media only screen and (max-width: 750px) {
-    table,
-    thead,
-    tbody,
-    th,
-    td,
-    tr {
-      display: block;
-    }
-    thead tr {
-      display: none;
-    }
-    tr {
-      border: 1px solid lightgray;
-      border-radius: 10px;
-    }
-    td {
-      display: flex;
-      flex-direction: row;
-      border: none;
-      position: relative;
-      padding-left: 65px;
-    }
-    td:before {
-      position: absolute;
-      align-items: center;
-      top: 6px;
-      left: 6px;
-      width: 20%;
-      padding: 10px;
-    }
-    td:nth-of-type(2):before {
-      content: "Email: ";
-    }
-    td:nth-of-type(3):before {
-      content: "Key: ";
-    }
-    td:nth-of-type(4):before {
-      content: "Email Status: ";
-    }
-    td:nth-of-type(5):before {
-      content: "Status: ";
-    }
-  }
-`;
-export const TableStyle2 = styled.div`
-  @media only screen and (max-width: 750px) {
-    table,
-    thead,
-    tbody,
-    th,
-    td,
-    tr {
-      display: block;
-    }
-    thead tr {
-      display: none;
-    }
-    tr {
-      border: 1px solid lightgray;
-      border-radius: 10px;
-    }
-    td {
-      display: flex;
-      flex-direction: row;
-      border: none;
-      position: relative;
-      padding-left: 65px;
-    }
-    td:before {
-      position: absolute;
-      align-items: center;
-      top: 1px;
-      left: 6px;
-      width: 20%;
-      padding: 10px;
-    }
-    td:nth-of-type(2):before {
-      content: "Name: ";
-    }
-    td:nth-of-type(3):before {
-      content: "Email: ";
-    }
-    td:nth-of-type(4):before {
-      content: "Status: ";
-    }
-    td:nth-of-type(5):before {
-      content: "Action: ";
-    }
-  }
-`;
+
 //Student and Mentor Ui Styles
 export const Nav = styled.div`
   width: 100%;
@@ -224,7 +114,7 @@ export const Option = styled.div`
   align-content: center;
   align-items: center;
   width: 145px;
-  @media (max-width: 780px) {
+  @media (max-width: 1418px) {
     span {
       display: none;
     }

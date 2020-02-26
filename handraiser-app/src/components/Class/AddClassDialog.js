@@ -104,6 +104,9 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
         fetchMentorClass();
         handleClose();
         setAdd(true);
+        setTimeout(() => {
+          setAdd(false);
+        }, 1500);
       })
       .catch(err => {
         console.log(err);
@@ -111,13 +114,7 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
   };
 
   return (
-    <div>
-      <div className={classes.cont}>
-        <Fab className={classes.fab} onClick={handleClickOpen}>
-          <AddIcon />
-        </Fab>
-        <span className={classes.text}>Add a class</span>
-      </div>
+    <React.Fragment>
       <Collapse in={add}>
         <Alert
           className={classes.alert}
@@ -129,72 +126,83 @@ export default function AddClassDialog({ token, fetchMentorClass }) {
           Class Added!
         </Alert>
       </Collapse>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title" className={classes.title}>
-          Create new Class
-        </DialogTitle>
-        <form onSubmit={handleSubmit}>
-          <DialogContent>
-            {/* VISUAL ONLY */}
-            <TextField
-              margin="dense"
-              label="Date"
-              defaultValue={dateToday.data}
-              style={{ float: "right" }}
-              InputProps={{
-                readOnly: true
-              }}
-            />
-            {/* END */}
+      <div>
+        <div className={classes.cont}>
+          <Fab className={classes.fab} onClick={handleClickOpen}>
+            <AddIcon />
+          </Fab>
+          <span className={classes.text}>Add a class</span>
+        </div>
 
-            <TextField
-              autoFocus
-              required
-              margin="dense"
-              label="Class Title"
-              fullWidth
-              name="class_title"
-              defaultValue={state.class_title}
-              onChange={e => handleChange(e)}
-              inputProps={{
-                maxLength: 25
-              }}
-            />
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title" className={classes.title}>
+            Create new Class
+          </DialogTitle>
+          <form onSubmit={handleSubmit}>
+            <DialogContent>
+              {/* VISUAL ONLY */}
+              <TextField
+                margin="dense"
+                label="Date"
+                defaultValue={dateToday.data}
+                style={{ float: "right" }}
+                InputProps={{
+                  readOnly: true
+                }}
+              />
+              {/* END */}
 
-            <span className={classes.span}>{text.class_title}/25</span>
+              <TextField
+                autoFocus
+                required
+                margin="dense"
+                label="Class Title"
+                fullWidth
+                name="class_title"
+                defaultValue={state.class_title}
+                onChange={e => handleChange(e)}
+                inputProps={{
+                  maxLength: 25
+                }}
+              />
 
-            <TextField
-              required
-              id="outlined-multiline-static"
-              label="Class Description"
-              multiline
-              rows="4"
-              variant="outlined"
-              fullWidth
-              name="class_description"
-              defaultValue={state.class_description}
-              onChange={e => handleChange(e)}
-              inputProps={{
-                maxLength: 60
-              }}
-            />
+              <span className={classes.span}>{text.class_title}/25</span>
 
-            <span style={{ float: "right" }}>{text.class_description}/60</span>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button color="primary" type="submit">
-              Submit
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </div>
+              <TextField
+                required
+                id="outlined-multiline-static"
+                label="Class Description"
+                multiline
+                rows="4"
+                variant="outlined"
+                fullWidth
+                name="class_description"
+                defaultValue={state.class_description}
+                onChange={e => handleChange(e)}
+                inputProps={{
+                  maxLength: 60
+                }}
+              />
+
+              <span style={{ float: "right" }}>
+                {text.class_description}/60
+              </span>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button color="primary" type="submit">
+                Submit
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+      </div>
+    </React.Fragment>
   );
 }
