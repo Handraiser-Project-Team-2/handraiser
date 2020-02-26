@@ -85,7 +85,6 @@ export default function ResponsiveDialog(props) {
       data: { token: sessionStorage.getItem("token"), supplied_key: input }
     })
       .then(data => {
-        console.log(data.data.message);
         if (data.data.message === "Subject is now closed") {
           // handleClose();
           setValid(true);

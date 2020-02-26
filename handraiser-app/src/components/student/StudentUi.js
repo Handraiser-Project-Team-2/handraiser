@@ -2,11 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import ImageIcon from "@material-ui/icons/Image";
 import Swal from "sweetalert2";
 import "emoji-mart/css/emoji-mart.css";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Popover from "@material-ui/core/Popover";
 import DetailPanel from "./DetailPanel/DetailPanel";
 import Topbar from "../reusables/Topbar";
@@ -36,7 +35,6 @@ import {
 import axios from "axios";
 import Tabs from "./Tabs/Tabs";
 import { UserContext } from "../Contexts/UserContext";
-import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
@@ -155,7 +153,6 @@ const DivAnimation = styled.div`
 `;
 
 var jwtDecode = require("jwt-decode");
-let socket;
 export default function Student({
   class_id,
   rowDatahandler,
@@ -179,25 +176,19 @@ export default function Student({
 }) {
   const classes = useStyles();
   let history = useHistory();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [state, setState] = useState({ user_type: "" });
-  const [userImage, setUserImage] = useState("");
+  const [setAnchorEl] = useState(null);
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
   const user_id = decoded.userid;
-  const [name, setName] = useState("");
   const { cstate, getData, socket } = useContext(UserContext);
   const [emoji, setEmoji] = useState(false);
   const [concernSelection, setConcernSelection] = useState();
 
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
   const [requestOpen, setRequestOpen] = useState(true);
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   // did mount
@@ -216,11 +207,6 @@ export default function Student({
           token: sessionStorage.getItem("token").split(" ")[1]
         })
         .then(data => {
-          setUserImage(data.data.image);
-          setState({
-            user_type: data.data.user_type_id
-          });
-
           const user_type = data.data.user_type_id;
 
           if (user_type !== 3) {
@@ -273,7 +259,6 @@ export default function Student({
         })
           .then(flag => {
             setConcernSelection(false);
-            console.log("AA", concernSelection);
             existing();
 
             socket.emit(
@@ -302,10 +287,6 @@ export default function Student({
       });
   };
   const [expanded, setExpanded] = React.useState("");
-
-  const handleClickDetail = () => {
-    setExpanded("panel1");
-  };
 
   const handleClickMember = () => {
     setExpanded("panel2");
@@ -339,7 +320,6 @@ export default function Student({
   const emojiActive = () => {
     if (emoji === true) {
       setEmoji(false);
-      console.log(emoji);
     } else {
       setEmoji(true);
     }
@@ -476,7 +456,6 @@ export default function Student({
                   message.chat_date_created
                 ).toLocaleTimeString();
 
-                console.log(ndate);
                 same = false;
 
                 if (ndate !== currDate) {

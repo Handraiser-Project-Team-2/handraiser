@@ -23,7 +23,6 @@ module.exports = {
             } else {
               //if not check availability , if open then register
 
-              console.log(data);
               db.class
                 .findOne({ class_id: data.class_id })
                 .then(data => {
@@ -65,8 +64,6 @@ module.exports = {
     const db = req.app.get("db");
 
     const { class_id, user_id, concern_title, concern_description } = req.body;
-
-    console.log("here", req.body);
 
     db.concern_list
       .save({
@@ -119,7 +116,6 @@ module.exports = {
       `SELECT * FROM concern_list INNER JOIN user_profile ON concern_list.user_id = user_profile.profile_id inner join users on user_profile.profile_id = users.profile_id WHERE concern_status <= 2 AND class_id = ${req.params.class_id} and concern_title ILIKE '%${search}%' order by concern_id ASC`
     )
       .then(data => {
-        console.log(data);
         let order_data = [];
 
         if (data) {

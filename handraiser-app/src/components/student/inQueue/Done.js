@@ -6,16 +6,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import DoneIcon from "@material-ui/icons/Done";
 import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { Typography, Paper } from "@material-ui/core";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
-import io from "socket.io-client";
+import { ToastContainer } from "react-toastify";
 import { UserContext } from "../../Contexts/UserContext";
 
 var jwtDecode = require("jwt-decode");
@@ -114,7 +110,7 @@ export default function InQueue(props) {
   const [concern, setConcern] = useState("");
   const open = Boolean(anchorEl);
 
-  // const ENDPOINT = "172.60.62.113:5000";
+  // const ENDPOINT = "localhost:5000";
   // let socket = io(ENDPOINT);
   const { cstate, getData, socket } = useContext(UserContext);
 
@@ -155,10 +151,6 @@ export default function InQueue(props) {
     });
   };
 
-  const handleMenu = (event, concern) => {
-    setConcern(concern);
-    setAnchorEl(event.currentTarget);
-  };
   const handleClose = () => {
     setAnchorEl(null);
   };

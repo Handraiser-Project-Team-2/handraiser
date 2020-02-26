@@ -295,17 +295,18 @@ export const LoginButton = styled.button`
 export const LoginCont = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: center;
+  align-items:center;
 `;
 export const LoginFooter = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
   text-align: center;
+  margin-bottom: 20px;
   p {
     font-size: 13px;
-    color: grey;
+    color: rgb(189, 189, 189);
   }
   @media screen and (max-width: 1024px) {
     display: none;
@@ -315,10 +316,9 @@ export const Continue = styled.p`
   font-family: Roboto;
   color: white;
   font-size: 15px;
-  margin-top: 13px;
+  margin-left: 8px;
   @media screen and (max-width: 300px) {
     font-size: 13px;
-    margin-top: 7px;
   }
 `;
 export const Title = styled.h1`

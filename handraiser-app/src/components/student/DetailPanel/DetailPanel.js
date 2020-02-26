@@ -89,13 +89,10 @@ export default function SimpleExpansionPanel({
   const classes = useStyles();
   const [classInfo, setClassInfo] = useState([]);
   const [classMem, setClassMem] = useState([]);
-  const [search, setSearch] = useState("");
 
   const handleChange = panel => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
-
-  const [tempClassInfo, setTempClassInfo] = useState([]);
 
   useEffect(() => {
     getClassMember();
@@ -125,7 +122,6 @@ export default function SimpleExpansionPanel({
       })
         .then(res => {
           setClassInfo(res.data);
-          setTempClassInfo(res.data);
         })
         .catch(err => {
           console.log(err);
@@ -136,7 +132,6 @@ export default function SimpleExpansionPanel({
   const [tempClassMem, setTempClassMem] = useState([]);
   const classMembers = classMem.concat(classInfo);
   const handleSearch = e => {
-    setSearch(e.target.value);
     const filteredMembers = classMembers.filter(
       el =>
         el.first_name.toLowerCase().indexOf(e.target.value.toLowerCase()) !==

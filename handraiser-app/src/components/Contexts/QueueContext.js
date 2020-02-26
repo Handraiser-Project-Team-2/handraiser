@@ -14,7 +14,6 @@ const QueueContextProvider = props => {
 
   const setQueueData = data => {
     setQdata(data);
-    console.log(qdata)
   };
 
   return (

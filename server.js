@@ -150,8 +150,6 @@ massive({
           room: room
         };
 
-        console.log("Online");
-
         users.push(user);
         socket.on(`leave_room`, ({ room }) => {
           socket.leave(`${room}`);
@@ -169,7 +167,7 @@ massive({
             });
           })
           .catch(err => {
-            //console.log(err);
+            console.log(err);
           });
 
         socket.join(user.room);
@@ -199,8 +197,9 @@ massive({
         console.log("disconnected at" , socket.handshake.query.fcomponent)
       });
     });
+
     server.listen(PORT, () => {
-      //console.log(`Server started on port ${PORT}`);
+      console.log(`Server started on port ${PORT}`);
     });
   })
   .catch(err => {

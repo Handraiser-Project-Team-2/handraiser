@@ -44,7 +44,7 @@ export default function StudentClass({ classData, profileData }) {
         field: "first_name",
         render: row => (
           <React.Fragment>
-            <span>{row.last_name + "," + " " + row.first_name}</span>
+            <span>{`${row.last_name}, ${row.first_name}`}</span>
           </React.Fragment>
         )
       },

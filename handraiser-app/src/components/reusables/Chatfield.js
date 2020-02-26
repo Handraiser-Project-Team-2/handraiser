@@ -1,5 +1,4 @@
 import React from "react";
-import { Conversation } from "../Styles/Styles";
 import styled from "styled-components";
 import ReactEmoji from "react-emoji";
 const Cont = styled.div`

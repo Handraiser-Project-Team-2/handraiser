@@ -1,8 +1,8 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 import axios from "axios";
 import io from "socket.io-client";
 
-const ENDPOINT = "172.60.62.113:5000";
+const ENDPOINT = "localhost:5000";
 const socket = io(ENDPOINT);
 
 export const UserContext = createContext({
@@ -18,7 +18,6 @@ const UserContextProvider = props => {
   };
 
   const fetchUserData = () => {
-    console.log(sessionStorage.getItem("token"));
 
     axios({
       method: "post",
@@ -26,7 +25,6 @@ const UserContextProvider = props => {
       data: { token: sessionStorage.getItem("token") }
     })
       .then(data => {
-        // console.log(data);
         setData(data.data);
       })
       .catch(err => {

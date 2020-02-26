@@ -52,7 +52,6 @@ export default function ClassLanding(props) {
   const classes = useStyles();
   const [verfication, setVerification] = useState(false);
   const [userType, setUserType] = useState();
-  const [completed, setCompleted] = React.useState(0);
 
   const changeUserType = e => {
     setUserType(e.data.user_type_id);
@@ -122,7 +121,6 @@ export default function ClassLanding(props) {
       data: tokState
     })
       .then(data => {
-        // console.log(data.data);
         setClassData(data.data);
         setTempClassData(data.data);
       })

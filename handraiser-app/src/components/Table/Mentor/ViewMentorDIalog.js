@@ -35,7 +35,6 @@ export default function ViewMentorDialog({ data }) {
       data: { email: data.validation_email }
     })
       .then(data => {
-        // console.log(data.data);
         setProfileData(data.data);
       })
       .catch(err => {
@@ -50,7 +49,6 @@ export default function ViewMentorDialog({ data }) {
       data: { email: data.validation_email }
     })
       .then(data => {
-        // console.log(data.data);
         setClassData(data.data);
       })
       .catch(err => {

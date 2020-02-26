@@ -21,17 +21,14 @@ import { UserContext } from "../Contexts/UserContext";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import { toast, ToastContainer } from "react-toastify";
-import { Divider, Tooltip, Button } from "@material-ui/core";
+import { Divider, Tooltip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ClassIcon from "@material-ui/icons/Class";
 import CloseIcon from "@material-ui/icons/Close";
 import io from "socket.io-client";
-import LockIcon from "@material-ui/icons/Lock";
 import TextField from "@material-ui/core/TextField";
 import SchoolIcon from "@material-ui/icons/School";
-import ListItemText from "@material-ui/core/ListItemText";
 import StudentTabs from "../student/Tabs/Tabs";
-import Bkg from "../images/classroom-background-clipart-11.jpg";
 import MentorTabs from "../mentor/Tabs/Tabs";
 const useStyles = makeStyles(theme => ({
   tab: {
@@ -64,7 +61,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function Topbar(props) {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
 
   const [state, setState] = React.useState({
     left: false
@@ -84,7 +80,7 @@ export default function Topbar(props) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const ENDPOINT = "172.60.62.113:5000";
+  const ENDPOINT = "localhost:5000";
 
   let socket = io(ENDPOINT);
 
@@ -115,7 +111,6 @@ export default function Topbar(props) {
   };
 
   const [classMem, setClassMem] = useState([]);
-  const [search, setSearch] = useState("");
 
   const getClassMember = () => {
     if (class_id) {
@@ -134,7 +129,6 @@ export default function Topbar(props) {
   const [tempClassMem, setTempClassMem] = useState([]);
   const classMembers = classMem.concat(classInfo);
   const handleSearch = e => {
-    setSearch(e.target.value);
     const filteredMembers = classMembers.filter(
       el =>
         el.first_name.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
@@ -574,7 +568,6 @@ export default function Topbar(props) {
       data: tokState
     })
       .then(data => {
-        // console.log(data.data);
         setClassData(data.data);
       })
       .catch(err => {

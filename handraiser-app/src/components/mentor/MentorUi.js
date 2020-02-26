@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
-// import TextField from "@material-ui/core/TextField";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Swal from "sweetalert2";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fab from "@material-ui/core/Fab";
@@ -69,14 +68,12 @@ export default function Mentor({
   // const [rowData, setRowData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [name, setName] = useState("");
   const [emoji, setEmoji] = useState(false);
   const decoded = jwtDecode(sessionStorage.getItem("token").split(" ")[1]);
 
   const user_id = decoded.userid;
 
   const [requestOpen, setRequestOpen] = useState(true);
-  const [concernSelection, setConcernSelection] = useState();
   const [onClose, setOnClose] = useState(false);
 
   const handleMenu = event => {
@@ -107,7 +104,6 @@ export default function Mentor({
   const tabActivity = id => {
     if (id === 1 || id === 2) {
       setRequestOpen(false);
-      setConcernSelection(false);
       setOnClose(true);
     } else {
       existing();
@@ -150,17 +146,12 @@ export default function Mentor({
 
   const [expanded, setExpanded] = React.useState("");
 
-  const handleClickDetail = () => {
-    setExpanded("panel1");
-  };
-
   const handleClickMember = () => {
     setExpanded("panel2");
   };
   const emojiActive = () => {
     if (emoji === true) {
       setEmoji(false);
-      console.log(emoji);
     } else {
       setEmoji(true);
     }
@@ -257,7 +248,6 @@ export default function Mentor({
                     }}
                     style={{
                       fontSize: 30,
-                      color: "#c4c4c4",
                       cursor: "pointer",
                       color: "#372476"
                     }}
@@ -288,7 +278,6 @@ export default function Mentor({
                     onClick={handleClickMember}
                     style={{
                       fontSize: 30,
-                      color: "#c4c4c4",
                       cursor: "pointer",
                       color: "#372476"
                     }}
@@ -300,7 +289,6 @@ export default function Mentor({
                       onClick={handleMenu}
                       style={{
                         fontSize: 30,
-                        color: "#c4c4c4",
                         cursor: "pointer",
                         color: "#372476"
                       }}

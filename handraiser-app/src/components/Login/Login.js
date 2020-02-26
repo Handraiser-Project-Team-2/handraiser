@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Logo from "../images/google.png";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { GoogleLogin } from "react-google-login";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import axios from "axios";
 import {
@@ -13,8 +13,6 @@ import {
   Continue,
   Title
 } from "../../Styles/Styles";
-import io from "socket.io-client";
-import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../Contexts/UserContext";
 // COMPONENT
 import SetSuperAdminDialog from "./SetSuperAdminDialog";
@@ -24,7 +22,6 @@ export default function Login(props) {
 
   const responseGoogle = response => {
     if (response.googleId) {
-      // console.log(response);
       setLogged(true);
       axios({
         method: "post",
@@ -44,7 +41,6 @@ export default function Login(props) {
               user_status: 1
             })
             .then(data => {
-              // console.log(response.profileObj.familyName);
               socket.emit("user_activity", {});
             })
             .catch(err => {
@@ -85,9 +81,8 @@ export default function Login(props) {
 
   const [toggleDialog, setToggleDialog] = useState(false);
   const handleKeyDown = event => {
-    if (event.ctrlKey && event.keyCode == 90) {
+    if (event.ctrlKey && event.keyCode === 90) {
       setToggleDialog(true);
-      // console.log('he')
     }
   };
   return (
@@ -112,7 +107,8 @@ export default function Login(props) {
         <p
           style={{
             color: "#BDBDBD",
-            fontSize: 15
+            fontSize: 15,
+            paddingTop:'26.5px'
           }}
         >
           Login to continue
@@ -131,16 +127,13 @@ export default function Login(props) {
               disabled={renderProps.disabled}
             >
               <LoginCont>
-                <img
-                  src={Logo}
-                  alt=""
-                  style={{
-                    paddingTop: 8,
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "100px"
-                  }}
-                />
+
+                <div style={{
+                  background:`url(${Logo}) 61% 7% / cover`,
+                  height:'40px',
+                  width:'40px',
+                  marginTop: '1px'
+                }}/>
                 <Continue>LOGIN WITH GOOGLE</Continue>
               </LoginCont>
             </LoginButton>
