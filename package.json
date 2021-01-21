@@ -33,7 +33,7 @@
     "react-hook-form": "^4.8.2",
     "react-scroll-to-bottom": "^1.3.2",
     "react-text-mask": "^5.4.3",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.0",
     "status-indicator": "^1.0.9",
     "sweetalert2": "^9.7.1"
   },
