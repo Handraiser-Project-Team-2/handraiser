@@ -27,7 +27,7 @@
     "jwt-decode": "^2.2.0",
     "massive": "^5.11.2",
     "node-pg-migrate": "^4.2.1",
-    "nodemailer": "^6.4.2",
+    "nodemailer": "^6.4.16",
     "pg": "^7.17.0",
     "react-copy-to-clipboard": "^5.0.2",
     "react-hook-form": "^4.8.2",
